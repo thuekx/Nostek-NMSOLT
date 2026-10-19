@@ -1,42 +1,99 @@
 # Session handoff — Nostek-NMSOLT
 
 **Canonical restart page:** https://github.com/thuekx/Nostek-NMSOLT/blob/main/docs/nostek/HANDOFF.md  
-**Companion files:** [ROADMAP.md](ROADMAP.md), [STATUS-TREE.md](STATUS-TREE.md), [PROJECT-STATUS.yaml](PROJECT-STATUS.yaml).  
-**Snapshot date:** 20 October 2026 (Asia/Jakarta). Refresh CI evidence before resuming.
+**Companion files:** [ROADMAP.md](ROADMAP.md), [STATUS-TREE.md](STATUS-TREE.md),
+[PROJECT-STATUS.yaml](PROJECT-STATUS.yaml).  
+**Snapshot date:** 20 October 2026 (Asia/Jakarta). Always refresh main, open
+PRs and CI before resuming.
 
-## Mission
+## Mission and safety boundary
 
-Finish an independently Dockerized Nostek-NMSOLT web application, GenieACS lab, Maung WO/CRM integration, and separately configured Nostek AI installation, through NMS-12 gates. Same source, separate tenant/site data and secrets; no new VM until resource check. User wants tasks to progress automatically between VERIFIED checkpoints **within each active chat** without repeated confirmations for safe work; user accepts explicit approvals for infrastructure changes and device writes.
+Continue through NMS-12 using dependency gates and GitHub PR/CI evidence. Safe,
+independent source work may continue automatically. Do not deploy to production,
+touch a live OLT/ONT, inspect unauthorized secrets, modify Maung WO/CRM, change
+Caddy, expose CWMP, or bypass an approval. A source-readiness PASS is not runtime
+verification.
 
-## Current live state (verified)
+## Verified phases
 
-- Public GitHub `thuekx/Nostek-NMSOLT`; main initial commit `24332a2b4144cff03f04f64e4711ce7938d992ae`, author `thuekx <thuekx@kolu.web.id>`. Initial import 678 files, mobile excluded, no staged web PNG/SVG/ICO. MIT upstream attribution remains.
-- Windows clone `D:\Github Repo\Nostek-NMSOLT` and local backup copies exist; Windows source changes were pushed successfully by owner. **Do not assume local Windows state is accessible via GitHub or container.**
-- Existing stack draft: Laravel 12 / Vue / Inertia + Go SNMP poller, PostgreSQL16, Redis7, Nginx/PHP-FPM/worker; `docker-compose.yml` binds web to `127.0.0.1:18080`. Optional `compose.acs.yaml`: GenieACS 1.2.16 + MongoDB7; CWMP and UI loopback, NBI/FS private. These are lab drafts, not running Maung services.
-- Target Maung VM `maung-apps` historically at `192.168.48.99`; current CPU/RAM/storage/ports **not yet audited**. No authorized Docker deployment at Maung; do not alter other Maung services.
-- Target second site: existing Nostek AI VM (choose after resource study, likely nostek-platform vs nostek-ops); no new VM presumed.
-- User requested Flutter/mobile deferred because inherited logo resembled 'K'; the mobile files remain physically in Windows checkout but `/mobile/` is Git-ignored and absent in initial commit.
-- Gitleaks 8.30.1 and PowerShell prepush static scan passed on Windows at initial commit. This does not equal a full third-party security audit.
-- NMS-01 PR #1 https://github.com/thuekx/Nostek-NMSOLT/pull/1 is merged. Verified head `b20149cad1aff4087108f7dc4cd1433da307495b`; successful integration run https://github.com/thuekx/Nostek-NMSOLT/actions/runs/39278668150; squash merge `63f4b77b002fa5ef9b1189d4a4c982c0246a1354`.
-- NMS-01 evidence: Compose base/ACS PASS, loopback publishing PASS, both images build without push, Go test/vet PASS, Vue 12 files/57 tests PASS, Laravel 122 tests/4,505 assertions/0 failures. The 660 non-fatal PHPUnit warnings and runner action deprecations remain visible backlog; they were not reported as clean output.
-- NMS-02 PR #2 https://github.com/thuekx/Nostek-NMSOLT/pull/2 is merged and VERIFIED. Verified head `0fcb962347c20873f75ba54273e346247db5c613`; successful run https://github.com/thuekx/Nostek-NMSOLT/actions/runs/39284353892; squash merge `732debb348ca62d74df256a7f233c3601d48710a`. Evidence: all five jobs passed; Vue 57 tests; Laravel 122 passed / 4,603 assertions / 665 non-fatal warnings / 0 failures; default-off route/queue/Telegram device-write boundary reviewed.
-- NMS-03 readiness PR #3 https://github.com/thuekx/Nostek-NMSOLT/pull/3 is merged as `f925529ef0b41026a08e8bd9639cedbe3ff6e22b`. Head `61e6ca45c20504e12f3ada619e52e4638eaa9534` passed run https://github.com/thuekx/Nostek-NMSOLT/actions/runs/39290385687, including `bash -n` for the read-only collector. No host connection occurred. NMS-03 remains BLOCKED on authorized execution and sanitized host evidence.
+- **NMS-00 VERIFIED:** initial source commit
+  [24332a2](https://github.com/thuekx/Nostek-NMSOLT/commit/24332a2b4144cff03f04f64e4711ce7938d992ae);
+  public source baseline, mobile excluded, MIT attribution retained.
+- **NMS-01 VERIFIED:** [PR #1](https://github.com/thuekx/Nostek-NMSOLT/pull/1),
+  exact head b20149cad1aff4087108f7dc4cd1433da307495b, successful
+  [run 39278668150](https://github.com/thuekx/Nostek-NMSOLT/actions/runs/39278668150),
+  merge 63f4b77b002fa5ef9b1189d4a4c982c0246a1354. Five jobs passed:
+  Compose base/ACS, both image builds, Go test/vet, Vue 57, Laravel 122 /
+  4,505 assertions / 660 non-fatal warnings / 0 failures.
+- **NMS-02 VERIFIED:** [PR #2](https://github.com/thuekx/Nostek-NMSOLT/pull/2),
+  exact head 0fcb962347c20873f75ba54273e346247db5c613, successful
+  [run 39284353892](https://github.com/thuekx/Nostek-NMSOLT/actions/runs/39284353892),
+  merge 732debb348ca62d74df256a7f233c3601d48710a. Default-off request,
+  queue and Telegram device-write boundaries passed; Laravel 122 / 4,603
+  assertions / 665 non-fatal warnings / 0 failures.
 
-## Next concrete actions without owner input
+## Blocked phases and completed safe preparation
 
-1. To complete NMS-03, obtain owner authorization to run `scripts/nostek/collect-maung-r0.sh` on the intended Maung host as an ordinary account. Do not use sudo, inspect secrets, or change host state.
-2. Review and sanitize the output, then record CPU/RAM/disk, port/network/Compose collisions, reverse-proxy ownership, backups and a bounded staging budget.
-3. NMS-04 and later infrastructure stages remain blocked until NMS-03 evidence and any required human approval exist. Continue only source-level documentation, design, fixtures and tests that cannot affect production.
-4. Never infer OLT/ONT or host state from historical details, and never mark a phase VERIFIED without the cited run/log/artifact.
+- **NMS-03 BLOCKED:** [PR #3](https://github.com/thuekx/Nostek-NMSOLT/pull/3)
+  passed [run 39290385687](https://github.com/thuekx/Nostek-NMSOLT/actions/runs/39290385687)
+  and merged f925529ef0b41026a08e8bd9639cedbe3ff6e22b. The read-only
+  collector and sanitization checklist exist. No host connection occurred.
+  Blocker: owner-authorized execution on the intended Maung host and sanitized
+  CPU/RAM/disk/ports/Docker/proxy/backup evidence.
+- **NMS-04 BLOCKED:** [PR #5](https://github.com/thuekx/Nostek-NMSOLT/pull/5),
+  head a548131e3aa51901727a5105865e91363f695793, successful
+  [run 39291789107](https://github.com/thuekx/Nostek-NMSOLT/actions/runs/39291789107),
+  merge f3823666b78f6eb5bc840ff3f4217858b0c691d3. Rendered base and
+  ACS topology policies passed. No staging deployment occurred.
+- **NMS-05 BLOCKED:** [PR #6](https://github.com/thuekx/Nostek-NMSOLT/pull/6),
+  head 97377e53d7532e6d02e257e315b302b6d47215b7, successful
+  [run 39294335613](https://github.com/thuekx/Nostek-NMSOLT/actions/runs/39294335613),
+  merge f5917c06b05b10a1f727a79dd2b5ce0a4b120008. GenieACS lab
+  source policy passed. No ONT was contacted; approved inform/read evidence is
+  still required.
+- **NMS-06 BLOCKED:** [PR #7](https://github.com/thuekx/Nostek-NMSOLT/pull/7),
+  head 2a565b0e5647cf65d1ca0a98f387149c886ec24f, successful
+  [run 39295106373](https://github.com/thuekx/Nostek-NMSOLT/actions/runs/39295106373),
+  merge 9c6722c218e1e7d6cd0d581b3f8f29ad0fbffdfe. Reviewed OLT family
+  routing and unsupported-vendor fail-closed tests executed; Laravel 122 /
+  4,620 assertions / 667 non-fatal warnings / 0 failures. Per-model lab
+  polling/RX/stale/alarm/ODP/UI evidence is still required.
+- **NMS-07 through NMS-12 BLOCKED:** contracts, approvals, negative evidence and
+  stop rules are in [NMS-07-12-GATED-READINESS.md](NMS-07-12-GATED-READINESS.md).
+  They remain blocked on upstream gates, external contracts, runtime evidence
+  and explicit approvals. No Maung, CRM/WO, production or device mutation was
+  performed.
 
-## Safety
+## Exact next action requiring owner authority
 
-**No production OLT/ONT writes.** Original code retains Telnet/SNMP SET, ONU provisioning and other mutating endpoints; not broker-governed yet. Lab only with explicit owner-approved targets. Do not expose CWMP to customer networks or default wildcard. All admin/DB/JWT secrets local/private; no GitHub plaintext secrets. Preserve upstream MIT copyright and evaluate GenieACS AGPL obligations before distribution. GitHub public repo explicitly user-approved, not an error to undo. Maung WO/CRM remain independent source repositories and are not modified implicitly.
+Authorize execution of scripts/nostek/collect-maung-r0.sh on the intended Maung
+host as an ordinary account. The executor must not use sudo, read environment
+secrets, deploy, restart services, change firewall/proxy configuration, or
+contact devices. Sanitize the output before it enters GitHub, then record the
+bounded staging resource budget and collisions.
 
-## User style / interaction
+Historical target information is maung-apps / 192.168.48.99, but current state
+is unverified and must not be inferred from history.
 
-Owner communicates Indonesian, prefers complete executable one-block scripts if host input is unavoidable; does not want to manually patch code. Checkpoint-driven continuous execution is expected **within active session**. Summaries and decisions should be durable in GitHub rather than only in chat. Do not claim work can happen autonomously between chat sessions. When session ends, share these file links and a concise new-chat prompt.
+## After NMS-03 evidence
 
-## New-session prompt to paste
+1. Review the sanitized inventory and set a bounded NMSOLT staging budget.
+2. Obtain an explicit staging deployment window; execute NMS-04 deploy,
+   migration, health, backup/restore and rollback rehearsal.
+3. Obtain separate approval for one exact lab ONT; execute only the NMS-05
+   inform/read matrix.
+4. Continue NMS-06 read-only lab validation, then negotiate the Maung SSO and
+   WO/CRM contracts before NMS-07/NMS-08.
+5. Production and every device write remain independently approval-gated.
 
-> Lanjutkan proyek Nostek-NMSOLT dari checkpoint GitHub. Baca `docs/nostek/HANDOFF.md`, `ROADMAP.md`, `PROJECT-STATUS.yaml`, dan `STATUS-TREE.md`; verifikasi `main` serta CI terbaru. NMS-01 dan NMS-02 sudah VERIFIED (`63f4b77`, `732debb`). Readiness NMS-03 sudah merged sebagai `f925529`, tetapi fase tetap BLOCKED sampai inventaris Maung read-only diotorisasi dan hasilnya disanitasi. Jangan menyentuh produksi atau OLT/ONT live dan jangan melewati approval. Lanjutkan pekerjaan source-level aman serta catat seluruh bukti dan blocker di GitHub. Bahasa Indonesia.
+## New-session prompt
+
+> Lanjutkan thuekx/Nostek-NMSOLT dari GitHub. Baca HANDOFF.md, ROADMAP.md,
+> PROJECT-STATUS.yaml dan STATUS-TREE.md; verifikasi main, PR dan CI terbaru.
+> NMS-00..02 VERIFIED. NMS-03..12 BLOCKED dengan source-readiness sampai NMS-06
+> dan kontrak gate NMS-07..12 sudah terdokumentasi. Kerjakan semua langkah aman
+> secara berurutan, tetapi jangan menyentuh produksi/live OLT/ONT, Maung WO/CRM,
+> Caddy atau rahasia, dan jangan melewati approval. Tahap berikut yang membutuhkan
+> otorisasi adalah collector read-only NMS-03 pada host Maung yang dimaksud;
+> sanitasi hasil sebelum GitHub. Jangan klaim VERIFIED tanpa bukti exact-head CI
+> dan artifact runtime yang diwajibkan.

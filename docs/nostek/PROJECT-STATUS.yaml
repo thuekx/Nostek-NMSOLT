@@ -1,6 +1,6 @@
 schema: nostek-nmsolt-status/v1
 project: Nostek-NMSOLT
-updated_at: "2026-10-19"
+updated_at: "2026-10-20"
 source_of_truth:
   repo: https://github.com/thuekx/Nostek-NMSOLT
   default_branch: main
@@ -11,8 +11,13 @@ source_of_truth:
   ci_run: https://github.com/thuekx/Nostek-NMSOLT/actions/runs/39278668150
   ci_merged_sha: 63f4b77b002fa5ef9b1189d4a4c982c0246a1354
   security_pr: https://github.com/thuekx/Nostek-NMSOLT/pull/2
-  security_head: ac425b7d827ae83ca96daa7a4a67289bf0da1b5a
+  security_verified_sha: 0fcb962347c20873f75ba54273e346247db5c613
+  security_run: https://github.com/thuekx/Nostek-NMSOLT/actions/runs/39284353892
+  security_merged_sha: 732debb348ca62d74df256a7f233c3601d48710a
   discovery_pr: https://github.com/thuekx/Nostek-NMSOLT/pull/3
+  discovery_readiness_sha: 61e6ca45c20504e12f3ada619e52e4638eaa9534
+  discovery_run: https://github.com/thuekx/Nostek-NMSOLT/actions/runs/39290385687
+  discovery_merged_sha: f925529ef0b41026a08e8bd9639cedbe3ff6e22b
 policy:
   automatic_next_task_within_session: true
   production_write_requires_approval: true
@@ -21,7 +26,7 @@ policy:
 status:
   NMS-00: VERIFIED
   NMS-01: VERIFIED
-  NMS-02: IN_PROGRESS
+  NMS-02: VERIFIED
   NMS-03: BLOCKED
   NMS-04: PENDING
   NMS-05: PENDING
@@ -52,15 +57,20 @@ latest_evidence:
     laravel_result: "122 tests passed, 4505 assertions, 660 non-fatal warnings"
     warning_backlog: "PHPUnit fixture/path warnings and runner action deprecation warnings remain visible; no failure was masked."
   NMS-02:
-    status: IN_PROGRESS
+    status: VERIFIED
     pr: https://github.com/thuekx/Nostek-NMSOLT/pull/2
-    head: ac425b7d827ae83ca96daa7a4a67289bf0da1b5a
-    controls: ["fail-closed device-write gate", "conditional dry-run/cache-only paths", "queued write recheck", "decision audit without request payloads", "mutation-route inventory tests"]
-    verification: "Full CI pending; do not merge or mark VERIFIED until green."
+    verified_head: 0fcb962347c20873f75ba54273e346247db5c613
+    verified_run: https://github.com/thuekx/Nostek-NMSOLT/actions/runs/39284353892
+    merged_main_sha: 732debb348ca62d74df256a7f233c3601d48710a
+    controls: ["fail-closed device-write gate", "conditional dry-run/cache-only paths", "queued write recheck", "decision audit without request payloads", "mutation-route inventory tests", "Telegram reboot boundary"]
+    verification: "Five CI jobs passed; Laravel 122 passed / 4603 assertions / 665 non-fatal warnings; Vue 57 passed; Compose, images, Go test/vet passed."
   NMS-03:
     status: BLOCKED
     pr: https://github.com/thuekx/Nostek-NMSOLT/pull/3
-    preparation: "Read-only collector and sanitized evidence checklist prepared."
+    readiness_head: 61e6ca45c20504e12f3ada619e52e4638eaa9534
+    readiness_run: https://github.com/thuekx/Nostek-NMSOLT/actions/runs/39290385687
+    readiness_merged_sha: f925529ef0b41026a08e8bd9639cedbe3ff6e22b
+    preparation: "Read-only collector, sanitized evidence checklist, and bash syntax gate merged."
     blocker: "Authorized execution on the intended Maung host and sanitized capacity/network/backup evidence are required."
 environment:
   maung_host: "maung-apps, 192.168.48.99 (unverified current state)"
@@ -69,8 +79,8 @@ environment:
   genieacs_lab: NOT_STARTED
   live_olt_write: PROHIBITED_WITHOUT_APPROVAL
 next_action:
-  id: NMS-02-CI-REVIEW
-  instruction: "Wait for and inspect all five jobs in PR #2 at ac425b7; fix failures without weakening tests. Merge only when the NMS-02 acceptance evidence is complete. Keep PR #3 draft and request authorized sanitized Maung collector output when host facts become necessary."
-  owner: "executor in current or next active session"
-  approval_required: false
+  id: NMS-03-HOST-DISCOVERY
+  instruction: "Obtain owner authorization to run scripts/nostek/collect-maung-r0.sh on the intended Maung host, review and sanitize the output, then record CPU/RAM/disk, ports, Docker projects/networks/volumes, reverse-proxy ownership, backups, collisions and a bounded NMSOLT staging budget. Do not deploy or access secrets."
+  owner: "owner for host authorization; executor for evidence review"
+  approval_required: true
 references: ["docs/nostek/ROADMAP.md", "docs/nostek/STATUS-TREE.md", "docs/nostek/HANDOFF.md"]

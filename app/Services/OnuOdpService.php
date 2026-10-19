@@ -1,0 +1,315 @@
+<?php
+
+namespace App\Services;
+
+use App\Models\Odp;
+use App\Models\OnuMapPin;
+use App\Models\OnuOdpLink;
+use App\Models\SnmpOlt;
+use App\Support\OdpColors;
+use Illuminate\Support\Collection;
+use RuntimeException;
+
+/**
+ * Relasi ONU↔ODP. ONU tak punya tabel — identitas = komposit
+ * (snmp_olt_id, slot, port, onu_id), disimpan di `onu_odp_links`. Dipakai bersama
+ * oleh 3 halaman Port ONU (kolom ODP di tabel) dan Peta ONU (garis ODP→ONU + kartu ODP).
+ */
+class OnuOdpService
+{
+    public function __construct(private readonly OnuInventoryService $inventory) {}
+
+    /**
+     * Daftar ODP satu OLT untuk dropdown kolom tabel ONU.
+     *
+     * Bila $slot/$port diberikan, hanya ODP di port itu yang ditampilkan — ODP
+     * terkunci ke satu port (ONU dalam satu ODP pasti se-port). ODP yang belum
+     * punya port (belum ada ONU) tetap muncul di semua port; portnya terisi otomatis
+     * saat ONU pertama di-assign (lihat assign()).
+     *
+     * @return array<int, array{id:int, name:string, slot:?int, port:?int, color:?string}>
+     */
+    public function odpsForOlt(SnmpOlt $olt, ?int $slot = null, ?int $port = null): array
+    {
+        return Odp::query()
+            ->where('snmp_olt_id', $olt->id)
+            ->when($slot !== null && $port !== null, fn ($query) => $query->where(function ($group) use ($slot, $port) {
+                $group->where(fn ($m) => $m->where('slot', $slot)->where('port', $port))
+                    ->orWhere(fn ($n) => $n->whereNull('slot')->whereNull('port'));
+            }))
+            ->orderBy('name')
+            ->get(['id', 'name', 'slot', 'port', 'color'])
+            ->map(fn (Odp $odp) => [
+                'id' => $odp->id,
+                'name' => $odp->name,
+                // slot/port ikut supaya form registrasi bisa menyaring dropdown per-port di klien.
+                'slot' => $odp->slot,
+                'port' => $odp->port,
+                // Warna pin ODP (null = default) — untuk titik warna di kolom ODP tabel ONU.
+                'color' => $odp->color,
+            ])
+            ->all();
+    }
+
+    /**
+     * Opsi ODP lintas-OLT untuk dropdown filter (halaman Monitoring ONU).
+     *
+     * @param  Collection<int, SnmpOlt>|null  $olts  null = seluruh OLT dalam scope
+     * @return array<int, array{id:int, snmp_olt_id:int, name:string, slot:?int, port:?int}>
+     */
+    public function optionsForOlts(?Collection $olts = null): array
+    {
+        return Odp::query()
+            ->when($olts !== null, fn ($query) => $query->whereIn('snmp_olt_id', $olts->pluck('id')->all()))
+            ->orderBy('name')
+            ->get(['id', 'snmp_olt_id', 'name', 'slot', 'port'])
+            ->map(fn (Odp $odp) => [
+                'id' => $odp->id,
+                'snmp_olt_id' => $odp->snmp_olt_id,
+                'name' => $odp->name,
+                'slot' => $odp->slot,
+                'port' => $odp->port,
+            ])
+            ->all();
+    }
+
+    /**
+     * Assignment ODP untuk ONU di satu PON port, di-key onu_id (untuk baris tabel).
+     *
+     * @return array<int, array{odp_id:int, odp_name:?string}>
+     */
+    public function linksForPort(SnmpOlt $olt, int $slot, int $port): array
+    {
+        return OnuOdpLink::query()
+            ->where('snmp_olt_id', $olt->id)
+            ->where('slot', $slot)
+            ->where('port', $port)
+            ->with('odp:id,name')
+            ->get()
+            ->mapWithKeys(fn (OnuOdpLink $link) => [
+                $link->onu_id => ['odp_id' => $link->odp_id, 'odp_name' => $link->odp?->name],
+            ])
+            ->all();
+    }
+
+    /**
+     * Assign / ganti / lepas ODP satu ONU. $odpId null ⇒ hapus link.
+     */
+    public function assign(SnmpOlt $olt, int $slot, int $port, int $onuId, ?string $serial, ?int $odpId, ?int $userId): void
+    {
+        $key = [
+            'snmp_olt_id' => $olt->id,
+            'slot' => $slot,
+            'port' => $port,
+            'onu_id' => $onuId,
+        ];
+
+        if ($odpId === null) {
+            OnuOdpLink::query()->where($key)->delete();
+
+            return;
+        }
+
+        // ODP harus milik OLT yang sama (dan dalam scope partner — Odp ber-PartnerOltScope).
+        $odp = Odp::query()->where('id', $odpId)->where('snmp_olt_id', $olt->id)->first();
+        if ($odp === null) {
+            throw new RuntimeException(__('odp.odp_not_found_for_olt'));
+        }
+
+        // ODP terkunci ke satu port — tolak assign ONU dari port lain (jaga integritas,
+        // konsisten dgn dropdown yang sudah difilter per-port di odpsForOlt).
+        if ($odp->slot !== null && ($odp->slot !== $slot || $odp->port !== $port)) {
+            throw new RuntimeException(__('odp.odp_port_mismatch', [
+                'odp_slot' => (string) $odp->slot,
+                'odp_port' => (string) $odp->port,
+                'slot' => $slot,
+                'port' => $port,
+            ]));
+        }
+
+        // ONU dalam satu ODP pasti di port yang sama → isi port ODP otomatis saat
+        // ONU pertama di-assign (kalau ODP dibuat tanpa port).
+        if ($odp->slot === null && $odp->port === null) {
+            $odp->forceFill([
+                'slot' => $slot,
+                'port' => $port,
+                'color' => $this->portColor($olt->id, $slot, $port, $odp->id) ?? $odp->color,
+            ])->save();
+        }
+
+        OnuOdpLink::query()->updateOrCreate($key, [
+            'odp_id' => $odp->id,
+            'serial_number' => $serial,
+            'created_by' => $userId,
+        ]);
+    }
+
+    /**
+     * Warna yang sudah dipakai ODP lain di PON port ini — ODP yang baru masuk ke port itu
+     * (dibuat, dipindah, atau port-nya terisi otomatis) ikut warnanya supaya satu port tetap
+     * sewarna di peta. Port berwarna campur → warna terbanyak. null = port belum diwarnai.
+     */
+    public function portColor(int $oltId, ?int $slot, ?int $port, ?int $exceptOdpId = null): ?string
+    {
+        if ($slot === null || $port === null) {
+            return null;
+        }
+
+        return Odp::query()
+            ->where('snmp_olt_id', $oltId)
+            ->where('slot', $slot)
+            ->where('port', $port)
+            ->whereNotNull('color')
+            ->when($exceptOdpId !== null, fn ($query) => $query->whereKeyNot($exceptOdpId))
+            ->groupBy('color')
+            ->orderByRaw('count(*) desc')
+            ->orderByRaw('max(updated_at) desc')
+            ->value('color');
+    }
+
+    /**
+     * Lepas kaitan ONU yang tak lagi cocok dengan OLT/port ODP — dipanggil setelah ODP
+     * dipindah OLT atau diganti port-nya. ONU di OLT lain tak mungkin ada di ODP ini,
+     * dan ODP ber-port hanya berisi ONU se-port (aturan yang sama dengan assign()).
+     * ODP tanpa slot/port hanya dicek OLT-nya.
+     *
+     * @return int jumlah kaitan yang dilepas
+     */
+    public function releaseMismatchedLinks(Odp $odp): int
+    {
+        return $odp->links()
+            ->where(function ($query) use ($odp) {
+                $query->where('snmp_olt_id', '!=', $odp->snmp_olt_id);
+                if ($odp->slot !== null && $odp->port !== null) {
+                    $query->orWhere('slot', '!=', $odp->slot)->orWhere('port', '!=', $odp->port);
+                }
+            })
+            ->delete();
+    }
+
+    /**
+     * assign() versi "tidak melempar" — mengembalikan pesan error, atau null bila sukses.
+     *
+     * Dipakai jalur provisioning: ONU sudah nyata teregister di OLT saat ini dipanggil, jadi
+     * gagal mengaitkan ODP tak boleh menggagalkan/merollback registrasi — cukup jadi peringatan.
+     */
+    public function assignQuietly(SnmpOlt $olt, int $slot, int $port, int $onuId, ?string $serial, ?int $odpId, ?int $userId): ?string
+    {
+        try {
+            $this->assign($olt, $slot, $port, $onuId, $serial, $odpId, $userId);
+
+            return null;
+        } catch (\Throwable $e) {
+            return $e->getMessage();
+        }
+    }
+
+    /**
+     * Terapkan payload ganti warna (hasil validasi `OdpColors::RULES`) — jembatan bersama
+     * rute web `map.odps.color` dan REST API v1 `api.odps.color`.
+     *
+     * @param  array<string, mixed>  $data
+     * @return array{color: ?string, updated: int}
+     */
+    public function applyColorInput(Odp $odp, array $data): array
+    {
+        $color = ($data['random'] ?? false)
+            ? OdpColors::randomFor($odp->snmp_olt_id, $odp->slot, $odp->port)
+            : OdpColors::normalize($data['color'] ?? null);
+
+        // Bawaan true = perilaku UI: mewarnai satu port sekaligus.
+        $updated = $this->setColor($odp, $color, (bool) ($data['apply_to_port'] ?? true));
+
+        return ['color' => $color, 'updated' => $updated];
+    }
+
+    /**
+     * Set warna pin ODP. $color null ⇒ kembali ke warna default (amber).
+     *
+     * $applyToPort = true (bawaan UI) mewarnai SEMUA ODP di PON port yang sama — warna
+     * dipakai untuk mengelompokkan ODP per port di peta, jadi satu port normalnya sewarna.
+     * ODP yang belum punya slot/port (belum ada ONU) hanya bisa diwarnai sendiri.
+     *
+     * @return int jumlah ODP yang terwarnai
+     */
+    public function setColor(Odp $odp, ?string $color, bool $applyToPort): int
+    {
+        if ($applyToPort && $odp->slot !== null && $odp->port !== null) {
+            // Bulk update tetap lewat Odp::query() supaya PartnerOltScope ikut membatasi
+            // baris yang tersentuh (partner hanya OLT miliknya).
+            return Odp::query()
+                ->where('snmp_olt_id', $odp->snmp_olt_id)
+                ->where('slot', $odp->slot)
+                ->where('port', $odp->port)
+                ->update(['color' => $color]);
+        }
+
+        $odp->color = $color;
+        $odp->save();
+
+        return 1;
+    }
+
+    /**
+     * ONU terhubung tiap ODP (di-key odp_id), dienrich status live + koordinat pin.
+     * Dipakai peta (garis ODP→ONU) & kartu detail ODP.
+     *
+     * @param  Collection<int, Odp>  $odps
+     * @return array<int, array<int, array<string, mixed>>>
+     */
+    public function connectedOnus(Collection $odps): array
+    {
+        if ($odps->isEmpty()) {
+            return [];
+        }
+
+        $links = OnuOdpLink::query()->whereIn('odp_id', $odps->pluck('id')->all())->get();
+        if ($links->isEmpty()) {
+            return [];
+        }
+
+        $oltIds = $links->pluck('snmp_olt_id')->unique()->all();
+        $olts = SnmpOlt::query()->whereIn('id', $oltIds)->get()->keyBy('id');
+
+        $pinKey = fn ($oltId, $slot, $port, $onu) => "{$oltId}/{$slot}/{$port}/{$onu}";
+        $pins = OnuMapPin::query()
+            ->whereIn('snmp_olt_id', $oltIds)
+            ->get()
+            ->keyBy(fn (OnuMapPin $pin) => $pinKey($pin->snmp_olt_id, $pin->slot, $pin->port, $pin->onu_id));
+
+        $result = [];
+        foreach ($links as $link) {
+            $olt = $olts->get($link->snmp_olt_id);
+            $live = $olt ? $this->inventory->findOne($olt, $link->slot, $link->port, $link->onu_id) : null;
+            $pin = $pins->get($pinKey($link->snmp_olt_id, $link->slot, $link->port, $link->onu_id));
+
+            $result[$link->odp_id][] = [
+                'snmp_olt_id' => $link->snmp_olt_id,
+                'slot' => $link->slot,
+                'port' => $link->port,
+                'onu_id' => $link->onu_id,
+                'serial_number' => $link->serial_number ?? ($live['serial_number'] ?? null),
+                'interface' => $live['interface'] ?? null,
+                'name' => $live['customer_name'] ?? null,
+                'online' => (bool) ($live['online'] ?? false),
+                // Sebab ONU turun (LOS / DyingGasp / Nonaktif) ikut, supaya daftar
+                // ONU di dalam ODP tak berhenti di kata "offline" — datanya sudah
+                // ada di hasil findOne(), jadi tak menambah query/dekode.
+                'phase_state' => $live['phase_state'] ?? null,
+                'last_down_cause' => $live['last_down_cause'] ?? null,
+                'admin_state' => $live['admin_state'] ?? null,
+                'has_live' => $live !== null,
+                // RX ikut supaya kartu ODP (web) & daftar ONU dalam ODP (aplikasi Android)
+                // bisa menampilkan level sinyal tanpa request tambahan — datanya sudah ada
+                // di hasil normalize() findOne(), jadi tidak menambah query/dekode.
+                'rx_power_dbm' => $live['rx_power_dbm'] ?? null,
+                'rx_power_label' => $live['rx_power_label'] ?? null,
+                // Koordinat dari pin ONU (null bila ONU belum di-pin → tak ada garis di peta).
+                'latitude' => $pin ? (float) $pin->latitude : null,
+                'longitude' => $pin ? (float) $pin->longitude : null,
+            ];
+        }
+
+        return $result;
+    }
+}

@@ -1,0 +1,57 @@
+<?php
+
+namespace App\Enums;
+
+enum UserRole: string
+{
+    case Admin = 'admin';
+    case Operator = 'operator';
+    case Partner = 'partner';
+    case Demo = 'demo';
+
+    public function label(): string
+    {
+        return match ($this) {
+            self::Admin => 'Administrator',
+            self::Operator => 'Operator',
+            self::Partner => 'Partner',
+            self::Demo => 'Demo',
+        };
+    }
+
+    /**
+     * Peringkat hierarki role — angka kecil = wewenang lebih tinggi.
+     *
+     * Dipakai untuk mengurutkan daftar user (Administrator di paling atas). Sengaja
+     * eksplisit, bukan diturunkan dari urutan `cases()`, supaya urutan case bisa diubah
+     * tanpa diam-diam mengubah hierarki.
+     */
+    public function rank(): int
+    {
+        return match ($this) {
+            self::Admin => 0,
+            self::Operator => 1,
+            self::Partner => 2,
+            self::Demo => 3,
+        };
+    }
+
+    /**
+     * @return array<int, string>
+     */
+    public static function values(): array
+    {
+        return array_map(fn (self $role) => $role->value, self::cases());
+    }
+
+    /**
+     * @return array<int, array{value:string, label:string}>
+     */
+    public static function options(): array
+    {
+        return array_map(fn (self $role) => [
+            'value' => $role->value,
+            'label' => $role->label(),
+        ], self::cases());
+    }
+}

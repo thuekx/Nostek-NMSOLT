@@ -1,0 +1,498 @@
+<?php
+
+namespace App\Http\Controllers;
+
+use App\Models\Odp;
+use App\Models\OnuMapPin;
+use App\Models\SnmpOlt;
+use App\Services\CData\CDataCliWriteService;
+use App\Services\Hioso\HiosoCliWriteService;
+use App\Services\Hioso\HiosoEponSnmpService;
+use App\Services\Map\OnuMapPayloadService;
+use App\Services\ZteRemoteOnuService;
+use App\Support\OdpColors;
+use App\Support\SmartOltSupport;
+use Illuminate\Http\JsonResponse;
+use Illuminate\Http\RedirectResponse;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Http;
+use Inertia\Inertia;
+use Inertia\Response;
+
+class OnuMapController extends Controller
+{
+    public function __construct(
+        private readonly OnuMapPayloadService $payload,
+    ) {}
+
+    public function index(): Response
+    {
+        $olts = SnmpOlt::query()->orderBy('name')->get();
+
+        // Perakitan payload (pin + ODP + titik tengah) dipakai bersama REST API v1 —
+        // lihat App\Services\Map\OnuMapPayloadService (termasuk catatan kinerjanya).
+        $pins = $this->payload->pins($olts);
+
+        // ODP + ONU terhubung (untuk pin ODP kuning + garis animasi ODP→ONU di peta).
+        $odps = Odp::query()
+            ->whereIn('snmp_olt_id', $olts->pluck('id')->all())
+            ->orderBy('name')
+            ->get();
+        // Closure: enrich ONU per ODP (baca snapshot semua OLT) hanya dijalankan bila prop
+        // `odps` memang diminta — partial reload `only: ['pins']` melewatinya.
+        $odpsPayload = fn () => $this->payload->odps($odps, $olts);
+
+        // Fokus ke pin tertentu (dari tombol "Lihat di Peta" di Port ONUs).
+        $focus = $this->focusFromRequest();
+        $focusPin = $focus
+            ? $pins->first(fn (array $p) => $p['snmp_olt_id'] === $focus['snmp_olt_id']
+                && $p['slot'] === $focus['slot']
+                && $p['port'] === $focus['port']
+                && $p['onu_id'] === $focus['onu_id'])
+            : null;
+
+        // Fokus ke pin ODP tertentu (link "koordinat" dari halaman ODP).
+        $focusOdpId = (int) request()->query('focus_odp', 0);
+        $focusOdp = $focusOdpId > 0
+            ? $odps->first(fn (Odp $o) => $o->id === $focusOdpId)
+            : null;
+
+        return Inertia::render('Map/Index', [
+            'pins' => $pins,
+            'odps' => $odpsPayload,
+            'olts' => $olts->map(fn (SnmpOlt $olt) => [
+                'id' => $olt->id,
+                'name' => $olt->name,
+                'ip' => $olt->ip,
+            ])->values(),
+            // Daftar ONU untuk dropdown/pencarian modal "Tambah Pin" — ~4.500 baris, jadi
+            // sengaja optional: hanya dikirim saat frontend memintanya (masuk mode tambah pin),
+            // bukan di tiap kunjungan/partial reload peta.
+            'onus' => Inertia::optional(fn () => $this->payload->onuOptions($olts)),
+            'default_center' => match (true) {
+                $focusPin !== null => ['lat' => $focusPin['latitude'], 'lng' => $focusPin['longitude'], 'zoom' => 17],
+                $focusOdp !== null => ['lat' => (float) $focusOdp->latitude, 'lng' => (float) $focusOdp->longitude, 'zoom' => 17],
+                default => $this->payload->defaultCenter($pins->all()),
+            },
+            'placement' => $this->placementFromRequest(),
+            'focus_pin_id' => $focusPin['id'] ?? null,
+            'focus_odp_id' => $focusOdp?->id,
+            // Palet warna pin ODP (sumber kebenaran App\Support\OdpColors) untuk modal warna.
+            'odp_color_palette' => OdpColors::PALETTE,
+            'odp_color_default' => OdpColors::DEFAULT,
+        ]);
+    }
+
+    public function store(Request $request): RedirectResponse
+    {
+        $data = $this->validatePin($request);
+
+        OnuMapPin::query()->updateOrCreate(
+            [
+                'snmp_olt_id' => $data['snmp_olt_id'],
+                'slot' => $data['slot'],
+                'port' => $data['port'],
+                'onu_id' => $data['onu_id'],
+            ],
+            [
+                'serial_number' => $data['serial_number'] ?? null,
+                'latitude' => $data['latitude'],
+                'longitude' => $data['longitude'],
+                'customer_name' => $data['customer_name'] ?? null,
+                'address' => $data['address'] ?? null,
+                'phone' => $data['phone'] ?? null,
+                'notes' => $data['notes'] ?? null,
+                'created_by' => $request->user()?->id,
+            ],
+        );
+
+        return redirect()
+            ->route('map.index')
+            ->with('success', __('flash.pin_saved'));
+    }
+
+    public function update(Request $request, OnuMapPin $pin): RedirectResponse
+    {
+        $data = $request->validate([
+            'latitude' => ['nullable', 'numeric', 'between:-90,90'],
+            'longitude' => ['nullable', 'numeric', 'between:-180,180'],
+            'locked' => ['nullable', 'boolean'],
+            'customer_name' => ['nullable', 'string', 'max:191'],
+            'address' => ['nullable', 'string', 'max:255'],
+            'phone' => ['nullable', 'string', 'max:32'],
+            'notes' => ['nullable', 'string', 'max:2000'],
+        ]);
+
+        $pin->fill(array_filter(
+            $data,
+            fn ($value, $key) => in_array($key, ['latitude', 'longitude', 'locked'], true) ? $value !== null : true,
+            ARRAY_FILTER_USE_BOTH,
+        ));
+        // 'locked' lewat array_filter di atas hanya kalau dikirim non-null; false pun ikut
+        // (filter membandingkan terhadap null, bukan falsy) — perlu supaya Unlock tersimpan.
+        $pin->save();
+
+        // Geser pin (payload koordinat saja) sengaja TIDAK memunculkan flash: tiap kali marker
+        // dilepas akan menyimpan otomatis, dan toast tiap geser cuma jadi kebisingan.
+        if (! $request->hasAny(['locked', 'customer_name', 'address', 'phone', 'notes'])) {
+            return back();
+        }
+
+        return back()->with(
+            'success',
+            $request->has('locked')
+                ? ($pin->locked ? __('flash.pin_locked') : __('flash.pin_unlocked'))
+                : __('flash.pin_updated'),
+        );
+    }
+
+    public function destroy(OnuMapPin $pin): RedirectResponse
+    {
+        $pin->delete();
+
+        return redirect()
+            ->route('map.index')
+            ->with('success', __('flash.pin_deleted'));
+    }
+
+    /**
+     * Reboot ONU dari detail pin — delegasi ke service ZTE / C-Data, lalu balik ke peta
+     * (berbeda dari rute smartolt/cdata yang redirect ke halaman Port ONUs).
+     */
+    public function rebootPin(OnuMapPin $pin, ZteRemoteOnuService $zte, CDataCliWriteService $cdata, HiosoCliWriteService $hioso): RedirectResponse
+    {
+        $olt = $pin->olt;
+        $back = redirect()->route('map.index');
+        $this->assertPinCapability($olt, 'supports_reboot');
+
+        try {
+            if ($this->isHioso($olt)) {
+                $result = $hioso->reboot($olt, $pin->port, $pin->onu_id);
+                $ok = (bool) ($result['ok'] ?? false);
+                $error = $result['error'] ?? null;
+            } elseif ($this->isCdata($olt)) {
+                $result = $cdata->reboot($olt, $this->ifaceKeyword($olt), $pin->slot, $pin->port, $pin->onu_id);
+                $ok = (bool) ($result['ok'] ?? false);
+                $error = $result['error'] ?? null;
+            } else {
+                $result = $zte->reboot($olt, $pin->slot, $pin->port, $pin->onu_id);
+                $ok = (bool) ($result['ok'] ?? false);
+                $error = $result['error'] ?? null;
+            }
+
+            return $back->with(
+                $ok ? 'success' : 'error',
+                $ok ? __('flash.reboot_sent') : __('flash.reboot_warn').$error,
+            );
+        } catch (\Throwable $exception) {
+            return $back->with('error', __('flash.onu_reboot_failed').$exception->getMessage());
+        }
+    }
+
+    /**
+     * Ganti nama ONU dari detail pin — delegasi ke service ZTE / C-Data, lalu balik ke peta.
+     */
+    public function renamePin(Request $request, OnuMapPin $pin, ZteRemoteOnuService $zte, CDataCliWriteService $cdata, HiosoCliWriteService $hioso, HiosoEponSnmpService $hiosoSnmp): RedirectResponse
+    {
+        $olt = $pin->olt;
+        $back = redirect()->route('map.index');
+        $this->assertPinCapability($olt, 'supports_onu_info_write');
+
+        $data = $request->validate(['name' => ['nullable', 'string', 'max:128']]);
+        $name = trim((string) ($data['name'] ?? ''));
+
+        try {
+            if ($this->isHioso($olt)) {
+                // HA7302 (`description_mode='snmp'`): rename via SNMP SET, bukan CLI.
+                $result = (string) (SmartOltSupport::capabilities($this->driverOf($olt), $olt)['description_mode'] ?? 'cli_hioso') === 'snmp'
+                    ? $hiosoSnmp->setOnuName($olt, $pin->port, $pin->onu_id, $name)
+                    : $hioso->setName($olt, $pin->port, $pin->onu_id, $name);
+                if (! ($result['ok'] ?? false)) {
+                    return $back->with('error', __('flash.onu_rename_failed').($result['error'] ?? ''));
+                }
+            } elseif ($this->isCdata($olt)) {
+                $result = $cdata->setDescription($olt, $this->ifaceKeyword($olt), $pin->slot, $pin->port, $pin->onu_id, $name);
+                if (! ($result['ok'] ?? false)) {
+                    return $back->with('error', __('flash.onu_rename_failed').($result['error'] ?? ''));
+                }
+            } else {
+                $ifIndex = $this->resolveOnuIfIndex($olt, $pin->slot, $pin->port, $pin->onu_id);
+                $zte->setInfo($olt, $ifIndex, $pin->onu_id, $name !== '' ? $name : null, null);
+            }
+
+            $this->mutateCachedOnuName($olt, $pin->slot, $pin->port, $pin->onu_id, $name !== '' ? $name : null);
+
+            return $back->with('success', $name !== '' ? __('flash.onu_renamed') : __('flash.onu_name_cleared'));
+        } catch (\Throwable $exception) {
+            return $back->with('error', __('flash.onu_rename_failed').$exception->getMessage());
+        }
+    }
+
+    /**
+     * Ekstrak koordinat dari URL Google Maps yang di-paste (termasuk link pendek
+     * maps.app.goo.gl / goo.gl yang di-resolve via redirect server-side).
+     */
+    public function resolveLink(Request $request): JsonResponse
+    {
+        $data = $request->validate([
+            'url' => ['required', 'string', 'max:2048'],
+        ]);
+
+        $url = trim($data['url']);
+
+        // Link pendek perlu di-follow dulu agar koordinat muncul di URL final.
+        // Hanya HOST allowlist yang boleh di-fetch server-side (anti-SSRF): dicek via
+        // parse_url — bukan substring regex yang bisa di-bypass, mis.
+        // `http://169.254.169.254/#https://goo.gl/maps` (metadata cloud/host internal).
+        $host = strtolower((string) parse_url($url, PHP_URL_HOST));
+        if (in_array($host, ['maps.app.goo.gl', 'goo.gl'], true)) {
+            $url = $this->expandShortLink($url) ?? $url;
+        }
+
+        $coords = $this->parseCoordinates($url);
+
+        if ($coords === null) {
+            return response()->json([
+                'ok' => false,
+                'error' => __('flash.gmaps_no_coords'),
+            ], 422);
+        }
+
+        return response()->json([
+            'ok' => true,
+            'latitude' => $coords['lat'],
+            'longitude' => $coords['lng'],
+        ]);
+    }
+
+    /**
+     * @return array{lat: float, lng: float}|null
+     */
+    private function parseCoordinates(string $url): ?array
+    {
+        $url = urldecode($url);
+
+        $patterns = [
+            '/@(-?\d+\.\d+),(-?\d+\.\d+)/',          // .../@lat,lng,zoom
+            '/[?&]q=(-?\d+\.\d+),(-?\d+\.\d+)/',      // ?q=lat,lng
+            '/[?&]ll=(-?\d+\.\d+),(-?\d+\.\d+)/',     // ?ll=lat,lng
+            '/!3d(-?\d+\.\d+)!4d(-?\d+\.\d+)/',       // !3dlat!4dlng
+            '/(-?\d+\.\d+),\s*(-?\d+\.\d+)/',         // bare "lat, lng"
+        ];
+
+        foreach ($patterns as $pattern) {
+            if (preg_match($pattern, $url, $m)) {
+                $lat = (float) $m[1];
+                $lng = (float) $m[2];
+
+                if ($lat >= -90 && $lat <= 90 && $lng >= -180 && $lng <= 180) {
+                    return ['lat' => $lat, 'lng' => $lng];
+                }
+            }
+        }
+
+        return null;
+    }
+
+    /**
+     * Follow link pendek Google Maps ke URL final, MEM-VALIDASI tiap hop agar tak
+     * menembak host internal (anti-SSRF). Redirect otomatis Guzzle dimatikan; tiap
+     * Location dicek host-nya resolve ke IP publik dulu sebelum di-fetch — mencegah
+     * short-link (atau open-redirect) membelokkan request ke IP privat/link-local.
+     */
+    private function expandShortLink(string $url): ?string
+    {
+        $current = $url;
+
+        try {
+            for ($hop = 0; $hop < 5; $hop++) {
+                if (! $this->hostResolvesPublic($current)) {
+                    return null;
+                }
+
+                $response = Http::withHeaders([
+                    'User-Agent' => 'Mozilla/5.0 (NostekNMSOLT Map Link Resolver)',
+                ])->timeout(8)->withOptions(['allow_redirects' => false])->get($current);
+
+                $location = (string) $response->header('Location');
+                if ($location === '') {
+                    return $current; // tak ada redirect lagi → URL final.
+                }
+
+                // Redirect relatif → resolve terhadap origin URL saat ini.
+                $current = str_contains($location, '://')
+                    ? $location
+                    : rtrim((string) preg_replace('#(https?://[^/]+).*#', '$1', $current), '/').'/'.ltrim($location, '/');
+            }
+
+            return $current;
+        } catch (\Throwable) {
+            return null;
+        }
+    }
+
+    /**
+     * True bila host URL me-resolve ke IP publik semua. Menolak scheme non-http(s),
+     * host kosong, dan IP privat/loopback/link-local/reserved (mis. metadata cloud
+     * 169.254.169.254). Gerbang tiap hop di expandShortLink().
+     */
+    private function hostResolvesPublic(string $url): bool
+    {
+        $parts = parse_url($url);
+        if (! is_array($parts)) {
+            return false;
+        }
+
+        $scheme = strtolower($parts['scheme'] ?? '');
+        $host = $parts['host'] ?? '';
+        if (! in_array($scheme, ['http', 'https'], true) || $host === '') {
+            return false;
+        }
+
+        $ips = filter_var($host, FILTER_VALIDATE_IP) ? [$host] : (gethostbynamel($host) ?: []);
+        if ($ips === []) {
+            return false;
+        }
+
+        foreach ($ips as $ip) {
+            // 127/8 (loopback) & 169.254/16 (link-local) tak selalu tercakup NO_RES_RANGE.
+            if (str_starts_with($ip, '127.') || str_starts_with($ip, '169.254.') || $ip === '::1') {
+                return false;
+            }
+            if (filter_var($ip, FILTER_VALIDATE_IP, FILTER_FLAG_NO_PRIV_RANGE | FILTER_FLAG_NO_RES_RANGE) === false) {
+                return false;
+            }
+        }
+
+        return true;
+    }
+
+    /**
+     * Mode placement dari Port ONUs ("klik langsung di map") — pre-target ONU tertentu.
+     *
+     * @return array<string, int>|null
+     */
+    private function placementFromRequest(): ?array
+    {
+        return $this->onuKeyFromRequest('place');
+    }
+
+    /**
+     * Fokus ke pin ONU tertentu ("Lihat di Peta" dari Port ONUs).
+     *
+     * @return array<string, int>|null
+     */
+    private function focusFromRequest(): ?array
+    {
+        return $this->onuKeyFromRequest('focus');
+    }
+
+    /**
+     * @return array<string, int>|null
+     */
+    private function onuKeyFromRequest(string $prefix): ?array
+    {
+        $values = [];
+
+        foreach (['olt', 'slot', 'port', 'onu'] as $part) {
+            $value = request()->query("{$prefix}_{$part}");
+            if ($value === null || ! is_numeric($value)) {
+                return null;
+            }
+            $values[$part] = (int) $value;
+        }
+
+        return [
+            'snmp_olt_id' => $values['olt'],
+            'slot' => $values['slot'],
+            'port' => $values['port'],
+            'onu_id' => $values['onu'],
+        ];
+    }
+
+    private function driverOf(SnmpOlt $olt): string
+    {
+        return SmartOltSupport::driverKey(
+            $olt,
+            data_get($olt->last_test_result, 'system.sys_descr'),
+            data_get($olt->last_test_result, 'system.sys_object_id'),
+        );
+    }
+
+    private function isCdata(SnmpOlt $olt): bool
+    {
+        return SmartOltSupport::isCData($this->driverOf($olt));
+    }
+
+    private function isHioso(SnmpOlt $olt): bool
+    {
+        return SmartOltSupport::isHioso($this->driverOf($olt));
+    }
+
+    private function ifaceKeyword(SnmpOlt $olt): string
+    {
+        return $this->driverOf($olt) === SmartOltSupport::DRIVER_CDATA_EPON ? 'epon' : 'gpon';
+    }
+
+    private function assertPinCapability(SnmpOlt $olt, string $capability): void
+    {
+        abort_unless(
+            (bool) (SmartOltSupport::capabilities($this->driverOf($olt), $olt)[$capability] ?? false),
+            403,
+            __('odp.action_unsupported'),
+        );
+    }
+
+    private function resolveOnuIfIndex(SnmpOlt $olt, int $slot, int $port, int $onuId): int
+    {
+        $onus = data_get($olt->last_test_result ?? [], "port_onus.{$slot}_{$port}.onus", []);
+
+        foreach ($onus as $onu) {
+            if ((int) ($onu['onu_id'] ?? 0) === $onuId && ($onu['if_index'] ?? null) !== null) {
+                return (int) $onu['if_index'];
+            }
+        }
+
+        return 0x10000000 | ($slot << 16) | ($port << 8);
+    }
+
+    private function mutateCachedOnuName(SnmpOlt $olt, int $slot, int $port, int $onuId, ?string $name): void
+    {
+        $snapshot = $olt->last_test_result ?? [];
+        $path = "port_onus.{$slot}_{$port}.onus";
+        $onus = data_get($snapshot, $path);
+
+        if (! is_array($onus)) {
+            return;
+        }
+
+        foreach ($onus as $index => $onu) {
+            if ((int) ($onu['onu_id'] ?? 0) === $onuId) {
+                $onus[$index]['name'] = $name;
+            }
+        }
+
+        data_set($snapshot, $path, $onus);
+        $olt->forceFill(['last_test_result' => $snapshot])->save();
+    }
+
+    /**
+     * @return array<string, mixed>
+     */
+    private function validatePin(Request $request): array
+    {
+        return $request->validate([
+            'snmp_olt_id' => ['required', 'integer', 'exists:snmp_olts,id'],
+            'slot' => ['required', 'integer', 'min:0'],
+            'port' => ['required', 'integer', 'min:0'],
+            'onu_id' => ['required', 'integer', 'min:0'],
+            'serial_number' => ['nullable', 'string', 'max:64'],
+            'latitude' => ['required', 'numeric', 'between:-90,90'],
+            'longitude' => ['required', 'numeric', 'between:-180,180'],
+            'customer_name' => ['nullable', 'string', 'max:191'],
+            'address' => ['nullable', 'string', 'max:255'],
+            'phone' => ['nullable', 'string', 'max:32'],
+            'notes' => ['nullable', 'string', 'max:2000'],
+        ]);
+    }
+}

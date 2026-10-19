@@ -1,0 +1,98 @@
+<?php
+
+namespace App\Http\Controllers\Api\V1;
+
+use App\Http\Controllers\Controller;
+use App\Models\FcmDeviceToken;
+use App\Services\Fcm\FcmAlarmNotifier;
+use Illuminate\Http\JsonResponse;
+use Illuminate\Http\Request;
+use Laravel\Sanctum\PersonalAccessToken;
+
+/**
+ * Registrasi & pencabutan token perangkat FCM (aplikasi Android).
+ * Setiap user yang login boleh mendaftarkan perangkatnya (termasuk demo).
+ */
+class DeviceController extends Controller
+{
+    /**
+     * POST /api/v1/devices — daftarkan/segarkan token perangkat.
+     * Token unik: bila sudah ada, di-rebind ke user & sesi login saat ini —
+     * sesi itulah yang menentukan kapan ponsel ini berhenti dikirimi alarm.
+     */
+    public function store(Request $request): JsonResponse
+    {
+        $data = $request->validate([
+            'token' => ['required', 'string', 'max:255'],
+            'device_name' => ['nullable', 'string', 'max:255'],
+            'platform' => ['nullable', 'string', 'max:32'],
+        ]);
+
+        $session = $request->user()->currentAccessToken();
+
+        FcmDeviceToken::updateOrCreate(
+            ['token' => $data['token']],
+            [
+                'user_id' => $request->user()->id,
+                'personal_access_token_id' => $session instanceof PersonalAccessToken ? $session->getKey() : null,
+                'device_name' => $data['device_name'] ?? null,
+                'platform' => $data['platform'] ?? 'android',
+                'last_seen_at' => now(),
+            ],
+        );
+
+        return response()->json(['data' => ['registered' => true]]);
+    }
+
+    /**
+     * DELETE /api/v1/devices — cabut token (dipanggil saat logout).
+     */
+    public function destroy(Request $request): JsonResponse
+    {
+        $token = (string) $request->input('token', '');
+
+        FcmDeviceToken::query()
+            ->where('token', $token)
+            ->where('user_id', $request->user()->id)
+            ->delete();
+
+        return response()->json(['data' => ['removed' => true]]);
+    }
+
+    /**
+     * POST /api/v1/devices/test — kirim notifikasi tes ke perangkat user saat ini.
+     * Untuk memverifikasi pipeline FCM end-to-end dari halaman Akun.
+     */
+    public function test(Request $request, FcmAlarmNotifier $notifier): JsonResponse
+    {
+        if (! $notifier->enabled()) {
+            return response()->json(['data' => [
+                'ok' => false,
+                'message' => __('flash.fcm_not_configured'),
+            ]]);
+        }
+
+        $tokens = FcmDeviceToken::query()
+            ->deliverable()
+            ->where('user_id', $request->user()->id)
+            ->pluck('token')
+            ->all();
+
+        if ($tokens === []) {
+            return response()->json(['data' => [
+                'ok' => false,
+                'message' => __('common.fcm_device_not_registered'),
+            ]]);
+        }
+
+        $res = $notifier->sendTest($tokens, __('common.fcm_test_title'), __('common.fcm_test_body'));
+
+        return response()->json(['data' => [
+            'ok' => $res['ok'],
+            'sent' => $res['sent'],
+            'message' => $res['ok']
+                ? __('common.fcm_test_sent', ['count' => $res['sent']])
+                : __('flash.fcm_send_failed').($res['error'] ?? $res['reason'] ?? __('flash.unknown')),
+        ]]);
+    }
+}

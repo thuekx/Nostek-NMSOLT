@@ -1,0 +1,305 @@
+<?php
+
+namespace App\Services\Zte;
+
+use App\Models\AcsSetting;
+use App\Models\SmartOltOnuRegistration;
+use App\Models\SmartOltProfile;
+use App\Models\SnmpOlt;
+use App\Services\OnuOdpService;
+use App\Services\ZteC600ProvisioningScriptBuilder;
+use App\Services\ZteCliProvisioningExecutor;
+use App\Services\ZteProvisioningScriptBuilder;
+use App\Support\CliOutputSanitizer;
+use App\Support\SmartOltSupport;
+use Illuminate\Validation\Rule;
+
+/**
+ * Inti registrasi ONU ZTE (mode dasar / single-service template): validasi,
+ * bangun script CLI, simpan audit ({@see SmartOltOnuRegistration}), dan opsional
+ * eksekusi ke OLT via Telnet. Diekstrak agar dipakai bersama REST API mobile
+ * (dan sejajar dengan alur web `SmartOltController::storeOnu`).
+ */
+class OnuRegistrationService
+{
+    public function __construct(
+        private readonly ZteProvisioningScriptBuilder $builder,
+        private readonly ZteC600ProvisioningScriptBuilder $c600Builder,
+        private readonly ZteCliProvisioningExecutor $executor,
+        private readonly OnuOdpService $odps,
+    ) {}
+
+    /**
+     * Aturan validasi payload registrasi (mode dasar), scoped profil per-OLT.
+     * C600 memakai skema field berbeda (Model B TR069 dua-service) → {@see c600Rules()}.
+     *
+     * @return array<string, mixed>
+     */
+    public function rules(SnmpOlt $olt): array
+    {
+        if (SmartOltSupport::isC600($olt)) {
+            return $this->c600Rules();
+        }
+
+        return [
+            'serial_number' => ['required', 'string', 'max:64', 'regex:/^[A-Za-z0-9:_.-]+\z/'],
+            'slot' => ['required', 'integer', 'between:1,255'],
+            'port' => ['required', 'integer', 'between:1,255'],
+            'onu_id' => ['required', 'integer', 'between:1,4096'],
+            'oid_index' => ['nullable', 'string', 'max:191'],
+            // Blokir CR/LF & karakter kontrol (anti-injeksi CLI); spasi/karakter cetak lain sah utk nama.
+            'customer_name' => ['required', 'string', 'max:191', 'not_regex:/[\x00-\x1F\x7F]/'],
+            // ODP opsional. 'exists' tak melewati PartnerOltScope, tapi aman: OnuOdpService::assign()
+            // memverifikasi ulang ODP milik OLT ini (di bawah scope) dan menolak bila bukan.
+            'odp_id' => ['nullable', 'integer', 'exists:odps,id'],
+            'onu_type' => ['required', 'string', 'max:120', 'regex:/^[A-Za-z0-9._-]+$/', $this->activeProfileRule($olt, 'onu_type')],
+            'tcont_profile' => ['required', 'string', 'max:120', 'regex:/^[A-Za-z0-9._-]+$/', $this->activeProfileRule($olt, 'tcont')],
+            'vlan' => ['required', 'integer', 'between:1,4094'],
+            'vlan_profile' => ['nullable', 'string', 'max:120', 'regex:/^[A-Za-z0-9._-]+$/', $this->activeProfileRule($olt, 'vlan')],
+            'service_name' => ['required', 'string', 'max:120', 'regex:/^[A-Za-z0-9._-]+$/'],
+            'service_mode' => ['nullable', Rule::in(['vlanpri', 'transparent'])],
+            'wan_mode' => ['required', Rule::in(['pppoe', 'dhcp', 'static', 'bridge'])],
+            'pppoe_username' => ['nullable', 'string', 'max:120', 'regex:/^\S+\z/'],
+            'pppoe_password' => ['nullable', 'string', 'max:120', 'regex:/^\S+\z/'],
+            'ip_profile' => ['nullable', 'required_if:wan_mode,static', 'string', 'max:120', 'regex:/^[A-Za-z0-9._-]+$/', $this->activeProfileRule($olt, 'ip')],
+            'static_ip' => ['nullable', 'required_if:wan_mode,static', 'ip'],
+            'static_netmask' => ['nullable', 'required_if:wan_mode,static', 'integer', 'between:1,32'],
+            'tr069_enabled' => ['boolean'],
+            'acs_url' => ['nullable', 'required_if:tr069_enabled,true,1', 'url', 'max:255'],
+            'acs_username' => ['nullable', 'required_if:tr069_enabled,true,1', 'string', 'max:120', 'regex:/^\S+\z/'],
+            'acs_password' => ['nullable', 'required_if:tr069_enabled,true,1', 'string', 'max:120', 'regex:/^\S+\z/'],
+            'remote_ont_enabled' => ['boolean'],
+            'remote_ont_id' => ['nullable', 'required_if:remote_ont_enabled,true,1', 'integer', 'between:1,4095'],
+            'remote_ont_mode' => ['nullable', 'required_if:remote_ont_enabled,true,1', Rule::in(['forward', 'discard'])],
+            'remote_ont_protocol' => ['nullable', 'required_if:remote_ont_enabled,true,1', Rule::in(['web', 'telnet', 'ssh', 'ftp', 'tftp', 'snmp'])],
+        ];
+    }
+
+    /**
+     * Aturan validasi C600 (Model B / SmartOLT TR069): dua layanan (internet + manajemen),
+     * mgmt-ip in-band unik per ONU, ACS. Profil TCONT/qos divalidasi format saja (bukan
+     * keberadaan di katalog) supaya tak terblok bila katalog C600 belum tersinkron.
+     *
+     * @return array<string, mixed>
+     */
+    private function c600Rules(): array
+    {
+        return [
+            'serial_number' => ['required', 'string', 'max:64', 'regex:/^[A-Za-z0-9:_.-]+\z/'],
+            'slot' => ['required', 'integer', 'between:1,255'],
+            'port' => ['required', 'integer', 'between:1,255'],
+            'onu_id' => ['required', 'integer', 'between:1,4096'],
+            'oid_index' => ['nullable', 'string', 'max:191'],
+            'customer_name' => ['required', 'string', 'max:191', 'not_regex:/[\x00-\x1F\x7F]/'],
+            'onu_type' => ['required', 'string', 'max:120', 'regex:/^[A-Za-z0-9._-]+$/'],
+            'zone' => ['nullable', 'string', 'max:120', 'not_regex:/[\x00-\x1F\x7F]/'],
+            'odp_id' => ['nullable', 'integer', 'exists:odps,id'],
+            'description' => ['nullable', 'string', 'max:191', 'not_regex:/[\x00-\x1F\x7F]/'],
+            'authd_date' => ['nullable', 'string', 'max:16', 'regex:/^\d{8}$/'],
+            'internet_vlan' => ['required', 'integer', 'between:1,4094'],
+            'internet_tcont_profile' => ['required', 'string', 'max:120', 'regex:/^[A-Za-z0-9._-]+$/'],
+            'mgmt_vlan' => ['required', 'integer', 'between:1,4094', 'different:internet_vlan'],
+            'mgmt_tcont_profile' => ['required', 'string', 'max:120', 'regex:/^[A-Za-z0-9._-]+$/'],
+            'egress_traffic_policy' => ['nullable', 'string', 'max:120', 'regex:/^[A-Za-z0-9._-]+$/'],
+            'mgmt_ip' => ['required', 'ipv4'],
+            'mgmt_mask' => ['required', 'ipv4'],
+            'mgmt_gateway' => ['required', 'ipv4'],
+            'mgmt_priority' => ['nullable', 'integer', 'between:0,7'],
+            'mgmt_host' => ['nullable', 'integer', 'between:1,16'],
+            'acs_url' => ['required', 'url', 'max:255'],
+            'acs_username' => ['required', 'string', 'max:120', 'regex:/^\S+\z/'],
+            'acs_password' => ['required', 'string', 'max:120', 'regex:/^\S+\z/'],
+            'remote_ont_enabled' => ['boolean'],
+        ];
+    }
+
+    /**
+     * Pilih builder sesuai family: C600 (Model B) atau C300/C320.
+     *
+     * @param  array<string, mixed>  $data
+     */
+    private function buildFor(SnmpOlt $olt, array $data): string
+    {
+        return SmartOltSupport::isC600($olt)
+            ? $this->c600Builder->build($data)
+            : $this->builder->build($data);
+    }
+
+    /**
+     * Bangun script CLI dari payload (untuk preview & eksekusi).
+     *
+     * @param  array<string, mixed>  $data
+     */
+    public function buildScript(SnmpOlt $olt, array $data): string
+    {
+        return $this->buildFor($olt, $this->prepare($olt, $data));
+    }
+
+    /**
+     * Simpan audit + (opsional) eksekusi ke OLT.
+     *
+     * @param  array<string, mixed>  $validated
+     * @return array{status:string, registration_id:int, script:string, output:?string, error:?string, odp_error?:?string}
+     */
+    public function register(SnmpOlt $olt, array $validated, bool $execute, ?int $userId): array
+    {
+        $data = $this->prepare($olt, $validated);
+        $script = $this->buildFor($olt, $data);
+
+        $base = [
+            ...$data,
+            'snmp_olt_id' => $olt->id,
+            'pon_port' => SmartOltSupport::onuInterfaceId(
+                (int) $data['slot'],
+                (int) $data['port'],
+                (int) $data['onu_id'],
+                SmartOltSupport::isC600($olt),
+            ),
+            'cli_script' => $script,
+            'created_by' => $userId,
+        ];
+
+        if (! $execute) {
+            $registration = SmartOltOnuRegistration::create([...$base, 'status' => 'generated']);
+
+            return [
+                'status' => 'generated',
+                'registration_id' => $registration->id,
+                'script' => AcsSetting::maskScript($script),
+                'output' => null,
+                'error' => null,
+            ];
+        }
+
+        // Blok try ini HANYA membungkus eksekusi Telnet + penulisan baris audit. Assign ODP
+        // sengaja di LUAR (lihat di bawah) supaya kegagalan menyimpan kaitan tak pernah
+        // ter-catch di sini dan menghasilkan baris 'failed' kedua untuk ONU yang sebenarnya
+        // sudah teregister di OLT.
+        try {
+            $result = $this->executor->execute($olt, $script);
+            $output = CliOutputSanitizer::clean($result['output']);
+            $error = $result['error'] === null ? null : CliOutputSanitizer::clean($result['error']);
+
+            $registration = SmartOltOnuRegistration::create([
+                ...$base,
+                'status' => $result['ok'] ? 'executed' : 'failed',
+                'execution_output' => $output,
+                'execution_error' => $error,
+                'executed_at' => now(),
+                'executed_by' => $userId,
+            ]);
+        } catch (\Throwable $exception) {
+            $error = CliOutputSanitizer::clean($exception->getMessage());
+            $registration = SmartOltOnuRegistration::create([
+                ...$base,
+                'status' => 'failed',
+                'execution_error' => $error,
+                'executed_at' => now(),
+                'executed_by' => $userId,
+            ]);
+
+            return [
+                'status' => 'failed',
+                'registration_id' => $registration->id,
+                'script' => AcsSetting::maskScript($script),
+                'output' => null,
+                'error' => AcsSetting::maskScript($error),
+            ];
+        }
+
+        // Kaitkan ODP HANYA setelah CLI benar-benar sukses — kalau di-assign lebih awal,
+        // preview/generate atau eksekusi gagal bisa menimpa kaitan ODP milik ONU lain yang
+        // kebetulan sudah menempati slot/port/onu_id yang sama. Kegagalan di sini TIDAK
+        // membatalkan registrasi: ONU sudah nyata ada di OLT, jadi status tetap 'executed'
+        // dan operator cuma diberi peringatan untuk memasang ODP manual.
+        $odpError = $result['ok'] && ($data['odp_id'] ?? null) !== null
+            ? $this->odps->assignQuietly(
+                $olt,
+                (int) $data['slot'],
+                (int) $data['port'],
+                (int) $data['onu_id'],
+                (string) $data['serial_number'],
+                (int) $data['odp_id'],
+                $userId,
+            )
+            : null;
+
+        return [
+            'status' => $result['ok'] ? 'executed' : 'failed',
+            'registration_id' => $registration->id,
+            'script' => AcsSetting::maskScript($script),
+            'output' => AcsSetting::maskScript($output),
+            'error' => AcsSetting::maskScript($error),
+            'odp_error' => $odpError,
+        ];
+    }
+
+    /**
+     * @param  array<string, mixed>  $data
+     * @return array<string, mixed>
+     */
+    private function prepare(SnmpOlt $olt, array $data): array
+    {
+        $data['is_c600'] = SmartOltSupport::isC600($olt);
+        // Password ACS disisipkan di server: klien hanya tahu `acs_password_set`. OLT privat
+        // partner & OLT demo tidak menerima password ACS Pengaturan (AcsSetting::resolved).
+        $data = AcsSetting::fillPassword($data, olt: $olt);
+
+        if ($data['is_c600']) {
+            // Petakan ke kolom audit bersama (builder C600 membaca key spesifiknya sendiri).
+            $data['vlan'] = (int) ($data['internet_vlan'] ?? 0);
+            $data['tcont_profile'] = $data['internet_tcont_profile'] ?? null;
+            $data['service_name'] = 'vlan'.(int) ($data['internet_vlan'] ?? 0);
+            $data['wan_mode'] = 'tr069';
+            $data['tr069_enabled'] = true;
+
+            return $data;
+        }
+
+        return $this->hydrateProfiles($olt, $data);
+    }
+
+    /**
+     * @param  array<string, mixed>  $data
+     * @return array<string, mixed>
+     */
+    private function hydrateProfiles(SnmpOlt $olt, array $data): array
+    {
+        // Mode bridge memakai VLAN ID numerik apa adanya (mis. 100) — jangan
+        // ditimpa oleh vlan-profile (yang cuma relevan untuk baris wan-ip routed).
+        if (strtolower((string) ($data['wan_mode'] ?? '')) === 'bridge') {
+            return $data;
+        }
+
+        if (($data['vlan_profile'] ?? null) === null || $data['vlan_profile'] === '') {
+            return $data;
+        }
+
+        $profile = SmartOltProfile::query()
+            ->where('profile_type', 'vlan')
+            ->where('is_active', true)
+            ->where(function ($query) use ($olt) {
+                $query->where('snmp_olt_id', $olt->id)
+                    ->orWhereNull('snmp_olt_id');
+            })
+            ->where('name', $data['vlan_profile'])
+            ->first();
+
+        if ($profile) {
+            $data['vlan'] = $profile->vlan;
+        }
+
+        return $data;
+    }
+
+    private function activeProfileRule(SnmpOlt $olt, string $type): mixed
+    {
+        return Rule::exists('smartolt_profiles', 'name')
+            ->where('profile_type', $type)
+            ->where('is_active', true)
+            ->where(function ($query) use ($olt) {
+                $query->where('snmp_olt_id', $olt->id)
+                    ->orWhereNull('snmp_olt_id');
+            });
+    }
+}

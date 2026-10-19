@@ -1,0 +1,330 @@
+<script setup>
+import ConfirmModal from '@/Components/ConfirmModal.vue';
+import IconButton from '@/Components/IconButton.vue';
+import SecondaryButton from '@/Components/SecondaryButton.vue';
+import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
+import { useConfirm } from '@/Composables/useConfirm';
+import { formatDateTime } from '@/lib/datetime';
+import { Head, Link, router, usePage } from '@inertiajs/vue3';
+import { useI18n } from 'vue-i18n';
+import { ArrowLeft, CheckCircle2, ClipboardList, Clock3, Eye, EyeOff, History, Play, Trash2, XCircle } from '@lucide/vue';
+import { computed, ref } from 'vue';
+
+const { t } = useI18n({ useScope: 'global' });
+
+const props = defineProps({
+    olt: {
+        type: Object,
+        required: true,
+    },
+    registrations: {
+        type: Array,
+        required: true,
+    },
+});
+
+const page = usePage();
+const flash = computed(() => page.props.flash ?? {});
+const { confirmState, confirm, handleConfirm, handleCancel } = useConfirm();
+
+const pendingRegistrations = computed(() =>
+    props.registrations.filter((registration) => registration.status === 'generated'),
+);
+
+const loggedRegistrations = computed(() =>
+    props.registrations.filter((registration) => registration.status !== 'generated'),
+);
+
+const expandedLogs = ref([]);
+
+const isLogExpanded = (id) => expandedLogs.value.includes(id);
+
+const toggleLogScript = (id) => {
+    expandedLogs.value = isLogExpanded(id)
+        ? expandedLogs.value.filter((logId) => logId !== id)
+        : [...expandedLogs.value, id];
+};
+
+const statuses = computed(() => ({
+    generated: {
+        label: t('registrations.status_generated'),
+        pillClass: 'bg-amber-500/15 text-amber-300 ring-1 ring-amber-500/30',
+        textClass: 'text-amber-300',
+        icon: Clock3,
+    },
+    executed: {
+        label: t('registrations.status_executed'),
+        pillClass: 'bg-emerald-500/15 text-emerald-300 ring-1 ring-emerald-500/30',
+        textClass: 'text-emerald-300',
+        icon: CheckCircle2,
+    },
+    reconfigured: {
+        label: t('registrations.status_reconfigured'),
+        pillClass: 'bg-sky-500/15 text-sky-300 ring-1 ring-sky-500/30',
+        textClass: 'text-sky-300',
+        icon: CheckCircle2,
+    },
+    failed: {
+        label: t('registrations.status_failed'),
+        pillClass: 'bg-red-500/15 text-red-300 ring-1 ring-red-500/30',
+        textClass: 'text-red-300',
+        icon: XCircle,
+    },
+    reconfig_failed: {
+        label: t('registrations.status_reconfig_failed'),
+        pillClass: 'bg-red-500/15 text-red-300 ring-1 ring-red-500/30',
+        textClass: 'text-red-300',
+        icon: XCircle,
+    },
+}));
+
+// Pre-register: status ONU di posisinya, dari cache polling port (lihat OnuPreregisterService).
+const preregStatuses = computed(() => ({
+    waiting: { label: t('registrations.prereg_waiting'), pillClass: 'bg-amber-500/15 text-amber-300 ring-1 ring-amber-500/30' },
+    online: { label: t('registrations.prereg_online'), pillClass: 'bg-emerald-500/15 text-emerald-300 ring-1 ring-emerald-500/30' },
+    offline: { label: t('registrations.prereg_offline'), pillClass: 'bg-slate-500/15 text-slate-300 ring-1 ring-white/10' },
+    missing: { label: t('registrations.prereg_missing'), pillClass: 'bg-red-500/15 text-red-300 ring-1 ring-red-500/30' },
+}));
+
+const formatDate = (value) => formatDateTime(value);
+
+const statusMeta = (status) => statuses.value[status] ?? statuses.value.generated;
+
+const isDone = (registration) => registration.status === 'executed' || registration.status === 'reconfigured';
+
+const isFailed = (registration) => registration.status === 'failed' || registration.status === 'reconfig_failed';
+
+const canExecute = (registration) => !isDone(registration);
+
+const canDelete = (registration) => !isDone(registration);
+
+const statusDescription = (registration) => {
+    if (registration.status === 'executed') {
+        return registration.executed_at
+            ? t('registrations.desc_registered_at', { date: formatDate(registration.executed_at) })
+            : t('registrations.desc_registered');
+    }
+
+    if (registration.status === 'reconfigured') {
+        return registration.executed_at
+            ? t('registrations.desc_reconfigured_at', { date: formatDate(registration.executed_at) })
+            : t('registrations.desc_reconfigured');
+    }
+
+    if (isFailed(registration)) {
+        return registration.executed_at
+            ? t('registrations.desc_failed_at', { date: formatDate(registration.executed_at) })
+            : t('registrations.desc_failed');
+    }
+
+    return t('registrations.desc_pending');
+};
+
+const executeRegistration = async (registration) => {
+    if (!canExecute(registration)) {
+        return;
+    }
+
+    const ok = await confirm({
+        title: t('registrations.confirm_exec_title'),
+        message: isFailed(registration)
+            ? t('registrations.confirm_exec_msg_retry', { port: registration.pon_port })
+            : t('registrations.confirm_exec_msg_new', { port: registration.pon_port }),
+        confirmLabel: isFailed(registration) ? t('registrations.confirm_retry_label') : t('registrations.confirm_exec_label'),
+        variant: 'primary',
+    });
+
+    if (!ok) {
+        return;
+    }
+
+    router.post(route('smartolt.registrations.execute', {
+        olt: props.olt.id,
+        registration: registration.id,
+    }), {}, {
+        preserveScroll: true,
+    });
+};
+
+const deleteRegistration = async (registration) => {
+    if (!canDelete(registration)) {
+        return;
+    }
+
+    const ok = await confirm({
+        title: t('registrations.confirm_del_title'),
+        message: t('registrations.confirm_del_msg', { customer: registration.customer_name, port: registration.pon_port }),
+        confirmLabel: t('common.delete'),
+        variant: 'danger',
+    });
+
+    if (!ok) {
+        return;
+    }
+
+    router.delete(route('smartolt.registrations.destroy', {
+        olt: props.olt.id,
+        registration: registration.id,
+    }), {
+        preserveScroll: true,
+    });
+};
+
+</script>
+
+<template>
+    <Head title="Registration History" />
+
+    <AuthenticatedLayout>
+        <template #header>
+            <div class="flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
+                <div>
+                    <h2 class="text-lg font-semibold leading-tight sm:text-xl text-white">{{ $t('registrations.title') }}</h2>
+                    <p class="mt-1 text-sm text-slate-500">{{ olt.name }}</p>
+                </div>
+                <Link :href="route('smartolt.unconfigured-all', { olt_id: olt.id })">
+                    <SecondaryButton type="button">
+                        <ArrowLeft class="mr-2 h-4 w-4" />
+                        Unconfigured
+                    </SecondaryButton>
+                </Link>
+            </div>
+        </template>
+
+        <div class="min-h-[60vh] pt-5 pb-16 sm:pt-8">
+            <div class="w-full space-y-6 px-4 sm:px-6 lg:px-8">
+
+                <div v-if="registrations.length === 0" class="kv-surface overflow-hidden rounded-lg border border-white/10 bg-slate-900/40 shadow-lg shadow-black/30 backdrop-blur-xl">
+                    <div class="px-6 py-10 text-center text-sm text-slate-500">
+                        {{ $t('registrations.empty') }}
+                    </div>
+                </div>
+
+                <!-- Provisioning Scripts (script baru yang belum dieksekusi) -->
+                <div v-if="pendingRegistrations.length" class="kv-surface overflow-hidden rounded-lg border border-white/10 bg-slate-900/40 shadow-lg shadow-black/30 backdrop-blur-xl">
+                    <div class="flex items-center gap-3 border-b border-white/10 px-4 py-4 sm:px-6">
+                        <div class="flex h-9 w-9 flex-shrink-0 items-center justify-center rounded-lg bg-sky-500/15 ring-1 ring-cyan-500/30">
+                            <ClipboardList class="h-5 w-5 text-cyan-400" />
+                        </div>
+                        <h3 class="text-base font-semibold text-white">{{ $t('registrations.pending_title') }}</h3>
+                    </div>
+
+                    <div class="divide-y divide-white/5">
+                        <div v-for="registration in pendingRegistrations" :key="registration.id" class="p-6">
+                            <div class="flex flex-col gap-2 lg:flex-row lg:items-start lg:justify-between">
+                                <div>
+                                    <div class="font-medium text-white">
+                                        {{ registration.customer_name }} · {{ registration.pon_port }}
+                                    </div>
+                                    <div class="text-sm text-slate-500">
+                                        {{ registration.serial_number }} · VLAN {{ registration.vlan }} · {{ registration.wan_mode }} · {{ formatDate(registration.created_at) }}
+                                    </div>
+                                    <div class="mt-2 text-xs font-medium" :class="statusMeta(registration.status).textClass">
+                                        {{ statusDescription(registration) }}
+                                    </div>
+                                </div>
+                                <div class="flex flex-wrap items-center gap-2">
+                                    <span v-if="registration.preregistered" class="inline-flex w-fit items-center rounded-full bg-cyan-500/15 px-2.5 py-1 text-xs font-medium text-cyan-300 ring-1 ring-cyan-500/30">
+                                        Pre-register
+                                    </span>
+                                    <span
+                                        v-if="registration.prereg_status && preregStatuses[registration.prereg_status]"
+                                        class="inline-flex w-fit items-center rounded-full px-2.5 py-1 text-xs font-medium"
+                                        :class="preregStatuses[registration.prereg_status].pillClass"
+                                        :title="$t('registrations.prereg_status_hint')"
+                                    >
+                                        {{ preregStatuses[registration.prereg_status].label }}
+                                    </span>
+                                    <span class="inline-flex w-fit items-center gap-1.5 rounded-full px-2.5 py-1 text-xs font-medium" :class="statusMeta(registration.status).pillClass">
+                                        <component :is="statusMeta(registration.status).icon" class="h-3.5 w-3.5" />
+                                        {{ statusMeta(registration.status).label }}
+                                    </span>
+                                    <IconButton v-if="canExecute(registration)" variant="success" :title="isFailed(registration) ? $t('registrations.retry_title') : $t('registrations.execute_title')" @click="executeRegistration(registration)">
+                                        <Play class="h-4 w-4" />
+                                    </IconButton>
+                                    <IconButton v-if="canDelete(registration)" variant="danger" :title="$t('registrations.delete_script_title')" @click="deleteRegistration(registration)">
+                                        <Trash2 class="h-4 w-4" />
+                                    </IconButton>
+                                </div>
+                            </div>
+                            <pre class="mt-4 overflow-x-auto rounded-lg bg-slate-900 p-4 text-xs text-slate-300 border border-slate-700">{{ registration.cli_script }}</pre>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Logs (script yang sudah dikerjakan, status apa pun) -->
+                <div v-if="loggedRegistrations.length" class="kv-surface overflow-hidden rounded-lg border border-white/10 bg-slate-900/40 shadow-lg shadow-black/30 backdrop-blur-xl">
+                    <div class="flex items-center gap-3 border-b border-white/10 px-4 py-4 sm:px-6">
+                        <div class="flex h-9 w-9 flex-shrink-0 items-center justify-center rounded-lg bg-violet-500/15 ring-1 ring-violet-500/30">
+                            <History class="h-5 w-5 text-violet-300" />
+                        </div>
+                        <h3 class="text-base font-semibold text-white">{{ $t('registrations.logs') }}</h3>
+                    </div>
+
+                    <div class="divide-y divide-white/5">
+                        <div v-for="registration in loggedRegistrations" :key="registration.id" class="p-6">
+                            <div class="flex flex-col gap-2 lg:flex-row lg:items-start lg:justify-between">
+                                <div>
+                                    <div class="font-medium text-white">
+                                        {{ registration.customer_name }} · {{ registration.pon_port }}
+                                    </div>
+                                    <div class="text-sm text-slate-500">
+                                        {{ registration.serial_number }} · VLAN {{ registration.vlan }} · {{ registration.wan_mode }} · {{ formatDate(registration.created_at) }}
+                                    </div>
+                                    <div class="mt-2 text-xs font-medium" :class="statusMeta(registration.status).textClass">
+                                        {{ statusDescription(registration) }}
+                                    </div>
+                                </div>
+                                <div class="flex flex-wrap items-center gap-2">
+                                    <span v-if="registration.preregistered" class="inline-flex w-fit items-center rounded-full bg-cyan-500/15 px-2.5 py-1 text-xs font-medium text-cyan-300 ring-1 ring-cyan-500/30">
+                                        Pre-register
+                                    </span>
+                                    <span
+                                        v-if="registration.prereg_status && preregStatuses[registration.prereg_status]"
+                                        class="inline-flex w-fit items-center rounded-full px-2.5 py-1 text-xs font-medium"
+                                        :class="preregStatuses[registration.prereg_status].pillClass"
+                                        :title="$t('registrations.prereg_status_hint')"
+                                    >
+                                        {{ preregStatuses[registration.prereg_status].label }}
+                                    </span>
+                                    <span class="inline-flex w-fit items-center gap-1.5 rounded-full px-2.5 py-1 text-xs font-medium" :class="statusMeta(registration.status).pillClass">
+                                        <component :is="statusMeta(registration.status).icon" class="h-3.5 w-3.5" />
+                                        {{ statusMeta(registration.status).label }}
+                                    </span>
+                                    <IconButton v-if="canExecute(registration)" variant="success" :title="isFailed(registration) ? $t('registrations.retry_title') : $t('registrations.execute_title')" @click="executeRegistration(registration)">
+                                        <Play class="h-4 w-4" />
+                                    </IconButton>
+                                    <IconButton v-if="canDelete(registration)" variant="danger" :title="$t('registrations.delete_script_title')" @click="deleteRegistration(registration)">
+                                        <Trash2 class="h-4 w-4" />
+                                    </IconButton>
+                                    <button
+                                        type="button"
+                                        class="inline-flex items-center gap-1.5 rounded-lg border border-white/10 bg-slate-800/60 px-3 py-1.5 text-xs font-medium text-slate-300 transition-colors hover:border-cyan-500/40 hover:text-white"
+                                        @click="toggleLogScript(registration.id)"
+                                    >
+                                        <component :is="isLogExpanded(registration.id) ? EyeOff : Eye" class="h-3.5 w-3.5" />
+                                        {{ isLogExpanded(registration.id) ? $t('registrations.hide') : $t('registrations.show_script') }}
+                                    </button>
+                                </div>
+                            </div>
+                            <template v-if="isLogExpanded(registration.id)">
+                                <pre class="mt-4 overflow-x-auto rounded-lg bg-slate-900 p-4 text-xs text-slate-300 border border-slate-700">{{ registration.cli_script }}</pre>
+                                <div v-if="registration.executed_at || registration.execution_output || registration.execution_error" class="mt-4 space-y-2">
+                                    <div class="text-xs font-medium uppercase tracking-wide text-slate-500">
+                                        Execution · {{ formatDate(registration.executed_at) }}
+                                    </div>
+                                    <div v-if="registration.execution_error" class="flex items-center gap-3 rounded-lg border border-red-500/30 bg-red-500/15 px-4 py-3 text-sm text-red-300">
+                                        {{ registration.execution_error }}
+                                    </div>
+                                    <pre v-if="registration.execution_output" class="overflow-x-auto rounded-lg bg-slate-900 p-4 text-xs text-slate-300 border border-slate-700">{{ registration.execution_output }}</pre>
+                                </div>
+                            </template>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <ConfirmModal :state="confirmState" @confirm="handleConfirm" @cancel="handleCancel" />
+    </AuthenticatedLayout>
+</template>

@@ -1,0 +1,64 @@
+*.log
+.DS_Store
+.env
+.env.backup
+.env.production
+.env.bak.*
+.phpactor.json
+.phpunit.result.cache
+/.fleet
+/.idea
+/.nova
+/.phpunit.cache
+/.vscode
+/.zed
+/auth.json
+/bin/kv-snmp-poller
+/node_modules
+/public/build
+/public/hot
+/public/storage
+/storage/*.key
+/storage/pail
+/vendor
+Homestead.json
+Homestead.yaml
+Thumbs.db
+.agents
+.developer-assistant
+
+# kredensial sementara untuk scripts/snapshot.mjs (jangan commit)
+.snap.env
+
+# artefak distribusi Docker (di-generate ulang, jangan commit — bulky)
+/nostek-nmsolt-docker.zip
+/nostek-nmsolt-image.tar
+/nostek-nmsolt-image.tar.gz
+public/downloads/*.apk
+
+# Nostek-NMSOLT — local secrets, runtime data and build artifacts
+.env.*
+!.env.example
+!.env.docker.example
+*.pem
+*.p12
+*.pfx
+*.key
+*.sqlite
+*.sqlite3
+*.sql
+*.dump
+*.bak
+**/backups/
+**/build/
+mobile/android/key.properties
+mobile/android/app/google-services.json
+mobile/android/app/src/main/assets/*.json
+.gitleaks-report.*
+
+# Standalone pre-push artifacts
+.gitleaks
+*.gitleaks.json
+
+# Mobile app deferred until web release
+/mobile/

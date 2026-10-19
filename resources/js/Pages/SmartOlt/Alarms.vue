@@ -1,0 +1,462 @@
+<script setup>
+import Pagination from '@/Components/Pagination.vue';
+import FilterCard from '@/Components/Shell/FilterCard.vue';
+import { alarmStatusLabel, alarmTypeLabel } from '@/lib/alarm';
+import { formatDateTime } from '@/lib/datetime';
+import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
+import { Head, Link, router } from '@inertiajs/vue3';
+import { useI18n } from 'vue-i18n';
+import { AlertTriangle, BellRing, Filter, Loader2, RotateCcw, Search, ShieldCheck } from '@lucide/vue';
+import { computed, reactive, ref, watch } from 'vue';
+
+const { t } = useI18n({ useScope: 'global' });
+
+const props = defineProps({
+    alarms: {
+        type: Object,
+        required: true,
+    },
+    summary: {
+        type: Object,
+        required: true,
+    },
+    filter: {
+        type: Object,
+        required: true,
+    },
+    filterOptions: {
+        type: Object,
+        required: true,
+    },
+});
+
+const dismissedIds = ref(new Set());
+const rows = computed(() => (props.alarms.data ?? []).filter((alarm) => !dismissedIds.value.has(alarm.id)));
+const openingId = ref(null);
+const notice = ref(null);
+
+const cards = computed(() => [
+    { key: 'critical', label: 'Critical', value: props.summary.critical, class: 'text-red-400' },
+    { key: 'major', label: 'Major', value: props.summary.major, class: 'text-orange-400' },
+    { key: 'minor', label: 'Minor', value: props.summary.minor, class: 'text-amber-400' },
+    { key: 'warning', label: 'Warning', value: props.summary.warning, class: 'text-yellow-400' },
+]);
+
+const form = reactive({
+    status: props.filter.status ?? 'active',
+    severity: props.filter.severity ?? 'all',
+    olt_id: props.filter.olt_id ?? '',
+    scope: props.filter.scope ?? 'all',
+    type: props.filter.type ?? 'all',
+    q: props.filter.q ?? '',
+});
+
+watch(() => props.filter, (filter) => {
+    form.status = filter.status ?? 'active';
+    form.severity = filter.severity ?? 'all';
+    form.olt_id = filter.olt_id ?? '';
+    form.scope = filter.scope ?? 'all';
+    form.type = filter.type ?? 'all';
+    form.q = filter.q ?? '';
+}, { deep: true });
+
+const statusTitle = computed(() => ({
+    active: t('alarms.title_active'),
+    cleared: t('alarms.title_cleared'),
+    all: t('alarms.title_all'),
+}[props.filter.status] ?? t('alarms.title_active')));
+
+const hasFilters = computed(() => (
+    form.status !== 'active'
+    || form.severity !== 'all'
+    || form.olt_id !== ''
+    || form.scope !== 'all'
+    || form.type !== 'all'
+    || form.q !== ''
+));
+
+const cleanFilters = () => {
+    const filters = {};
+
+    if (form.status !== 'active') filters.status = form.status;
+    if (form.severity !== 'all') filters.severity = form.severity;
+    if (form.olt_id !== '') filters.olt_id = form.olt_id;
+    if (form.scope !== 'all') filters.scope = form.scope;
+    if (form.type !== 'all') filters.type = form.type;
+    if (form.q.trim() !== '') filters.q = form.q.trim();
+
+    return filters;
+};
+
+const applyFilters = () => {
+    router.get(route('alarms.index'), cleanFilters(), { preserveScroll: true, preserveState: true });
+};
+
+const resetFilters = () => {
+    form.status = 'active';
+    form.severity = 'all';
+    form.olt_id = '';
+    form.scope = 'all';
+    form.type = 'all';
+    form.q = '';
+
+    router.get(route('alarms.index'), {}, { preserveScroll: true, preserveState: true });
+};
+
+const setStatus = (status) => {
+    form.status = status;
+    applyFilters();
+};
+
+const setSeverity = (severity) => {
+    form.severity = form.severity === severity ? 'all' : severity;
+    applyFilters();
+};
+
+const severityClass = (severity) => ({
+    critical: 'bg-red-500/15 text-red-300 ring-1 ring-red-500/30',
+    major: 'bg-orange-500/15 text-orange-300 ring-1 ring-orange-500/30',
+    minor: 'bg-amber-500/15 text-amber-300 ring-1 ring-amber-500/30',
+    warning: 'bg-yellow-500/15 text-yellow-300 ring-1 ring-yellow-200',
+}[severity] ?? 'bg-slate-800/60 text-slate-300 ring-1 ring-slate-500/30');
+
+const statusClass = (status) => status === 'active'
+    ? 'bg-red-500/15 text-red-300 ring-1 ring-red-500/30'
+    : 'bg-emerald-500/15 text-emerald-300 ring-1 ring-emerald-500/30';
+
+const scopeLabel = (alarm) => {
+    if (alarm.scope === 'onu') {
+        return alarm.serial_number || `gpon-onu_1/${alarm.slot}/${alarm.port}:${alarm.onu_id}`;
+    }
+    if (alarm.scope === 'port') {
+        return `gpon-olt_1/${alarm.slot}/${alarm.port}`;
+    }
+    // Alarm ODP: nama ODP ada di pesan alarm; sub-label cukup posisi port PON-nya.
+    if (alarm.scope === 'odp') {
+        return alarm.slot != null && alarm.port != null ? `ODP · ${alarm.slot}/${alarm.port}` : 'ODP';
+    }
+    return 'OLT';
+};
+
+const scopeOptionLabel = (scope) => ({
+    olt: 'OLT',
+    port: 'Port',
+    odp: 'ODP',
+    onu: 'ONU',
+}[scope] ?? scope);
+
+const formatDate = (value) => {
+    if (!value) return '-';
+
+    return formatDateTime(value);
+};
+const openAlarm = async (alarm) => {
+    if (!alarm.contextual_navigation || openingId.value !== null) return;
+
+    openingId.value = alarm.id;
+    notice.value = null;
+
+    try {
+        const { data } = await window.axios.post(
+            route('notifications.alarms.open', alarm.id),
+        );
+        const target = data?.data?.target_url;
+
+        if (alarm.dismiss_on_read) {
+            dismissedIds.value = new Set([...dismissedIds.value, alarm.id]);
+        }
+
+        if (target) {
+            router.visit(target);
+            return;
+        }
+
+        notice.value = {
+            message: data?.data?.message ?? t('shell.notif_target_unavailable'),
+            fallback: data?.data?.fallback_url ?? route('alarms.index'),
+        };
+    } catch (error) {
+        notice.value = {
+            message: error?.response?.data?.message ?? t('shell.notif_target_unavailable'),
+            fallback: route('alarms.index'),
+        };
+    } finally {
+        openingId.value = null;
+    }
+};
+
+const openAlarmFromKeyboard = (event, alarm) => {
+    if (event.target !== event.currentTarget) return;
+
+    event.preventDefault();
+    openAlarm(alarm);
+};
+
+const goFallback = () => {
+    if (!notice.value?.fallback) return;
+
+    router.visit(notice.value.fallback);
+};
+</script>
+
+<template>
+    <Head title="Alarms" />
+
+    <AuthenticatedLayout>
+        <template #header>
+            <div class="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+                <h2 class="text-lg font-semibold leading-tight sm:text-xl text-white">Alarms</h2>
+                <div class="kv-surface grid grid-cols-3 overflow-hidden rounded-lg border border-white/10 bg-slate-900/40 shadow-lg shadow-black/30 backdrop-blur-xl sm:inline-flex sm:w-auto">
+                    <button
+                        type="button"
+                        class="min-h-11 px-4 py-2 text-sm font-medium"
+                        :class="form.status === 'active' ? 'bg-cyan-500 text-onaccent' : 'text-slate-500 hover:text-slate-200'"
+                        @click="setStatus('active')"
+                    >
+                        {{ $t('alarms.tab_active') }}
+                    </button>
+                    <button
+                        type="button"
+                        class="min-h-11 px-4 py-2 text-sm font-medium"
+                        :class="form.status === 'cleared' ? 'bg-cyan-500 text-onaccent' : 'text-slate-500 hover:text-slate-200'"
+                        @click="setStatus('cleared')"
+                    >
+                        {{ $t('alarms.tab_cleared') }}
+                    </button>
+                    <button
+                        type="button"
+                        class="min-h-11 px-4 py-2 text-sm font-medium"
+                        :class="form.status === 'all' ? 'bg-cyan-500 text-onaccent' : 'text-slate-500 hover:text-slate-200'"
+                        @click="setStatus('all')"
+                    >
+                        {{ $t('alarms.tab_all') }}
+                    </button>
+                </div>
+            </div>
+        </template>
+
+        <div class="min-h-[60vh] pt-5 pb-16 sm:pt-8">
+            <div class="w-full space-y-6 px-4 sm:px-6 lg:px-8">
+                <div class="grid grid-cols-2 gap-4 sm:grid-cols-4">
+                    <button
+                        v-for="card in cards"
+                        :key="card.key"
+                        type="button"
+                        class="rounded-lg border border-white/10 bg-slate-900/40 backdrop-blur-xl p-5 text-left shadow-sm shadow-black/30 transition hover:-translate-y-0.5"
+                        :class="form.severity === card.key ? 'ring-2 ring-cyan-500' : ''"
+                        @click="setSeverity(card.key)"
+                    >
+                        <div class="text-sm font-medium text-slate-500">{{ card.label }}</div>
+                        <div class="mt-2 text-3xl font-semibold" :class="card.class">{{ card.value }}</div>
+                    </button>
+                </div>
+
+                <FilterCard title="Filter" :icon="Filter">
+                    <form class="flex flex-wrap items-center gap-2" @submit.prevent="applyFilters">
+                        <div class="relative w-full lg:flex-1 lg:min-w-[16rem]">
+                            <Search class="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-slate-500" />
+                            <input
+                                v-model="form.q"
+                                type="search"
+                                :placeholder="$t('alarms.search_placeholder')"
+                                class="kv-filter-control !pl-9"
+                            >
+                        </div>
+                        <select v-model="form.severity" class="kv-filter-control w-full sm:w-auto">
+                            <option value="all">{{ $t('alarms.all_severity') }}</option>
+                            <option v-for="severity in filterOptions.severities" :key="severity" :value="severity">{{ severity }}</option>
+                        </select>
+                        <select v-model="form.olt_id" class="kv-filter-control w-full sm:w-auto">
+                            <option value="">{{ $t('alarms.all_olt') }}</option>
+                            <option v-for="olt in filterOptions.olts" :key="olt.id" :value="olt.id">{{ olt.name }}</option>
+                        </select>
+                        <select v-model="form.scope" class="kv-filter-control w-full sm:w-auto">
+                            <option value="all">{{ $t('alarms.all_scope') }}</option>
+                            <option v-for="scope in filterOptions.scopes" :key="scope" :value="scope">{{ scopeOptionLabel(scope) }}</option>
+                        </select>
+                        <select v-model="form.type" class="kv-filter-control w-full sm:w-auto">
+                            <option value="all">{{ $t('alarms.all_type') }}</option>
+                            <option v-for="type in filterOptions.types" :key="type" :value="type">{{ alarmTypeLabel(t, type) }}</option>
+                        </select>
+                        <button type="button" class="kv-filter-reset w-full sm:w-auto" :disabled="!hasFilters" @click="resetFilters">
+                            <RotateCcw class="h-4 w-4" />
+                            {{ $t('common.reset') }}
+                        </button>
+                        <button type="submit" class="kv-filter-apply w-full sm:w-auto">
+                            <Search class="h-4 w-4" />
+                            {{ $t('alarms.apply') }}
+                        </button>
+                    </form>
+                </FilterCard>
+
+                <div class="kv-surface overflow-hidden rounded-lg border border-white/10 bg-slate-900/40 shadow-lg shadow-black/30 backdrop-blur-xl">
+                    <div class="flex items-center gap-3 border-b border-white/10 px-4 py-4 sm:px-6">
+                        <div class="flex h-9 w-9 flex-shrink-0 items-center justify-center rounded-lg bg-red-500/20 ring-1 ring-red-500/30">
+                            <BellRing class="h-5 w-5 text-red-400" />
+                        </div>
+                        <div>
+                            <h3 class="text-base font-semibold text-white">
+                                {{ statusTitle }}
+                            </h3>
+                            <p class="mt-0.5 text-xs text-slate-500">{{ $t('alarms.subtitle') }}</p>
+                        </div>
+                    </div>
+
+                    <div v-if="notice" role="alert" class="flex items-start gap-2 border-b border-amber-500/20 bg-amber-500/10 px-4 py-3 text-sm text-amber-200 sm:px-6">
+                        <AlertTriangle class="mt-0.5 h-4 w-4 flex-shrink-0" />
+                        <div class="min-w-0 flex-1">
+                            <p>{{ notice.message }}</p>
+                            <button v-if="notice.fallback" type="button" class="mt-1.5 font-medium text-cyan-300 underline hover:text-cyan-200" @click="goFallback">
+                                {{ $t('shell.view_all_alarms') }} &rarr;
+                            </button>
+                        </div>
+                    </div>
+
+                    <div v-if="rows.length === 0" class="px-6 py-12 text-center">
+                        <div class="mx-auto mb-4 flex h-14 w-14 items-center justify-center rounded-full bg-slate-800/60 ring-1 ring-slate-500/30">
+                            <ShieldCheck class="h-7 w-7 text-slate-400" />
+                        </div>
+                        <h3 class="text-sm font-semibold text-white">{{ $t('alarms.empty_title') }}</h3>
+                        <p class="mt-1 text-sm text-slate-500">
+                            {{ hasFilters ? $t('alarms.empty_filtered') : $t('alarms.empty_normal') }}
+                        </p>
+                    </div>
+
+                    <template v-else>
+                        <div class="kv-mobile-list">
+                            <article
+                                v-for="alarm in rows"
+                                :key="alarm.id"
+                                class="kv-mobile-card relative"
+                                :class="alarm.contextual_navigation ? 'cursor-pointer transition hover:bg-white/[0.03] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-cyan-500' : ''"
+                                :role="alarm.contextual_navigation ? 'button' : undefined"
+                                :tabindex="alarm.contextual_navigation ? 0 : undefined"
+                                :aria-label="alarm.contextual_navigation ? $t('shell.open_notification') : undefined"
+                                :aria-busy="openingId === alarm.id"
+                                @click="openAlarm(alarm)"
+                                @keydown.enter="openAlarmFromKeyboard($event, alarm)"
+                                @keydown.space="openAlarmFromKeyboard($event, alarm)"
+                            >
+                                <Loader2 v-if="openingId === alarm.id" class="absolute right-4 top-4 h-5 w-5 animate-spin text-cyan-400" />
+                                <div class="kv-mobile-card-header">
+                                    <div class="min-w-0">
+                                        <div class="flex flex-wrap items-center gap-2">
+                                            <span class="inline-flex rounded-full px-2.5 py-1 text-xs font-medium uppercase" :class="severityClass(alarm.severity)">
+                                                {{ alarm.severity }}
+                                            </span>
+                                            <span class="inline-flex rounded-full px-2.5 py-1 text-xs font-medium" :class="statusClass(alarm.status)">
+                                                {{ alarmStatusLabel(t, alarm.status) }}
+                                            </span>
+                                        </div>
+                                        <h4 class="mt-3 kv-mobile-card-title">{{ alarmTypeLabel(t, alarm.type) }}</h4>
+                                        <p class="kv-mobile-card-subtitle">{{ alarm.message }}</p>
+                                    </div>
+                                </div>
+                                <div class="kv-mobile-fields">
+                                    <div class="kv-mobile-field">
+                                        <span class="kv-mobile-label">OLT</span>
+                                        <Link
+                                            :href="route('smartolt.detail', alarm.olt.id)"
+                                            class="kv-mobile-value font-medium text-cyan-400 hover:text-cyan-300"
+                                            @click.stop
+                                            @keydown.stop
+                                        >
+                                            {{ alarm.olt.name }}
+                                        </Link>
+                                    </div>
+                                    <div v-if="alarm.customer_name" class="kv-mobile-field">
+                                        <span class="kv-mobile-label">{{ $t('alarms.col_customer') }}</span>
+                                        <span class="kv-mobile-value">{{ alarm.customer_name }}</span>
+                                    </div>
+                                    <div class="kv-mobile-field">
+                                        <span class="kv-mobile-label">{{ $t('alarms.col_target') }}</span>
+                                        <span class="kv-mobile-value">{{ scopeLabel(alarm) }}</span>
+                                    </div>
+                                    <div class="kv-mobile-field">
+                                        <span class="kv-mobile-label">{{ $t('alarms.col_last') }}</span>
+                                        <span class="kv-mobile-value">{{ formatDate(alarm.last_seen_at) }}</span>
+                                    </div>
+                                    <div class="kv-mobile-field">
+                                        <span class="kv-mobile-label">{{ $t('alarms.col_since') }}</span>
+                                        <span class="kv-mobile-value">{{ formatDate(alarm.first_seen_at) }}</span>
+                                    </div>
+                                </div>
+                            </article>
+                        </div>
+
+                        <div class="kv-table-desktop">
+                        <table class="min-w-[720px] w-full text-xs">
+                            <thead>
+                                <tr class="border-b border-white/10 bg-canvas-3/40">
+                                    <th class="px-4 py-3 text-left text-xs font-semibold uppercase tracking-wider text-slate-500">{{ $t('alarms.col_severity') }}</th>
+                                    <th class="px-4 py-3 text-left text-xs font-semibold uppercase tracking-wider text-slate-500">{{ $t('alarms.col_type') }}</th>
+                                    <th class="px-4 py-3 text-left text-xs font-semibold uppercase tracking-wider text-slate-500">{{ $t('alarms.col_olt_target') }}</th>
+                                    <th class="px-4 py-3 text-left text-xs font-semibold uppercase tracking-wider text-slate-500">{{ $t('alarms.col_message') }}</th>
+                                    <th class="px-4 py-3 text-left text-xs font-semibold uppercase tracking-wider text-slate-500">{{ $t('common.status') }}</th>
+                                    <th class="px-4 py-3 text-left text-xs font-semibold uppercase tracking-wider text-slate-500">{{ $t('alarms.col_last') }}</th>
+                                </tr>
+                            </thead>
+                            <tbody class="divide-y divide-white/5">
+                                <tr
+                                    v-for="alarm in rows"
+                                    :key="alarm.id"
+                                    class="transition-colors duration-150 hover:bg-white/[0.03]"
+                                    :class="alarm.contextual_navigation ? 'cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-cyan-500' : ''"
+                                    :role="alarm.contextual_navigation ? 'button' : undefined"
+                                    :tabindex="alarm.contextual_navigation ? 0 : undefined"
+                                    :aria-label="alarm.contextual_navigation ? $t('shell.open_notification') : undefined"
+                                    :aria-busy="openingId === alarm.id"
+                                    @click="openAlarm(alarm)"
+                                    @keydown.enter="openAlarmFromKeyboard($event, alarm)"
+                                    @keydown.space="openAlarmFromKeyboard($event, alarm)"
+                                >
+                                    <td class="px-4 py-3">
+                                        <span class="inline-flex rounded-full px-2.5 py-1 text-xs font-medium uppercase" :class="severityClass(alarm.severity)">
+                                            {{ alarm.severity }}
+                                        </span>
+                                    </td>
+                                    <td class="px-4 py-3 text-xs font-medium text-white">{{ alarmTypeLabel(t, alarm.type) }}</td>
+                                    <td class="px-4 py-3 text-xs text-slate-200">
+                                        <Link
+                                            :href="route('smartolt.detail', alarm.olt.id)"
+                                            class="font-medium text-cyan-400 hover:text-cyan-400"
+                                            @click.stop
+                                            @keydown.stop
+                                        >
+                                            {{ alarm.olt.name }}
+                                        </Link>
+                                        <div v-if="alarm.customer_name" class="mt-1 text-xs font-medium text-white">
+                                            {{ alarm.customer_name }}
+                                        </div>
+                                        <div class="text-xs text-slate-500">{{ scopeLabel(alarm) }}</div>
+                                    </td>
+                                    <td class="px-4 py-3 text-xs text-slate-200">{{ alarm.message }}</td>
+                                    <td class="px-4 py-3">
+                                        <span class="inline-flex rounded-full px-2.5 py-1 text-xs font-medium" :class="statusClass(alarm.status)">
+                                            {{ alarmStatusLabel(t, alarm.status) }}
+                                        </span>
+                                    </td>
+                                    <td class="px-4 py-3 text-xs text-slate-200">
+                                        <div class="flex items-center gap-2">
+                                            <span>{{ formatDate(alarm.last_seen_at) }}</span>
+                                            <Loader2 v-if="openingId === alarm.id" class="h-4 w-4 animate-spin text-cyan-400" />
+                                        </div>
+                                        <div class="text-xs text-slate-500">{{ $t('alarms.since_prefix', { date: formatDate(alarm.first_seen_at) }) }}</div>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                        </div>
+                    </template>
+
+                    <div v-if="rows.length > 0" class="flex flex-col items-center justify-between gap-3 border-t border-white/10 px-6 py-4 sm:flex-row">
+                        <p class="text-sm text-slate-500">
+                            {{ $t('alarms.showing', { from: alarms.from, to: alarms.to, total: alarms.total }) }}
+                        </p>
+                        <Pagination :links="alarms.links" />
+                    </div>
+                </div>
+            </div>
+        </div>
+    </AuthenticatedLayout>
+</template>

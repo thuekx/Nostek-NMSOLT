@@ -1,0 +1,6 @@
+# Nostek-NMSOLT — kebijakan pelaporan celah keamanan (RFC 9116)
+# thuekx
+Contact: mailto:misbakhulmunir@nostek-nmsolt.net
+Expires: 2027-07-13T00:00:00.000Z
+Preferred-Languages: id, en
+Canonical: https://nms.nostek-nmsolt.net/.well-known/security.txt

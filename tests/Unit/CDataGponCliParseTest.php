@@ -1,0 +1,79 @@
+<?php
+
+namespace Tests\Unit;
+
+use App\Services\CData\CDataGponCliService;
+use PHPUnit\Framework\TestCase;
+
+class CDataGponCliParseTest extends TestCase
+{
+    /** Sampel nyata `show ont info all` dari FD1608S V3.3.86 (#277). */
+    private const SAMPLE = <<<'TXT'
+----------------------------------------------------------------------------------------
+  F/S P  ONT    SN               Control  Run     Config    Match     Last       Desc
+         ID                      flag     state   state     state     down-cause
+----------------------------------------------------------------------------------------
+  0/0 1  1      CDTC0A1B2C3D     Active   Online  success   match     --         PELANGGAN-UJI-01
+  0/0 1  2      ZTEG00000002     Active   Online  success   match     reboot     Pak Budi Sukamaju
+  0/0 1  4      ZTEG00000004     Active   Online  success   match     dying-gasp Andi Wijaya Sukamaju/ Vlan 100
+  0/0 1  32     ZTEG00000032     Deactive Offline success   match     dying-gasp Mbah Siti Kulon Sukamaju
+----------------------------------------------------------------------------------------
+  Total: 31,  online: 31,  deactive: 0,  success: 31 , failed: 0
+TXT;
+
+    public function test_parses_only_ont_rows_with_fields(): void
+    {
+        $onus = (new CDataGponCliService)->parseOntInfo(self::SAMPLE);
+
+        // 4 baris ONU; header/separator/Total diabaikan.
+        $this->assertCount(4, $onus);
+
+        $first = $onus[0];
+        $this->assertSame([0, 1, 1], [$first['slot'], $first['port'], $first['onu_id']]);
+        $this->assertSame('gpon 0/0/1:1', $first['interface']);
+        $this->assertSame('CDTC0A1B2C3D', $first['serial_number']);
+        $this->assertSame('CDTC', $first['vendor_id']);
+        $this->assertSame('enable', $first['admin_state']);
+        $this->assertTrue($first['online']);
+        $this->assertNull($first['last_down_cause']); // "--"
+        $this->assertSame('PELANGGAN-UJI-01', $first['name']);
+        $this->assertSame('cli', $first['source']);
+    }
+
+    public function test_keeps_description_with_spaces_and_slashes(): void
+    {
+        $onus = (new CDataGponCliService)->parseOntInfo(self::SAMPLE);
+
+        $this->assertSame('Andi Wijaya Sukamaju/ Vlan 100', $onus[2]['name']);
+        $this->assertSame('dying-gasp', $onus[2]['last_down_cause']);
+    }
+
+    public function test_offline_and_deactive_states(): void
+    {
+        $onus = (new CDataGponCliService)->parseOntInfo(self::SAMPLE);
+
+        $last = $onus[3]; // ONT 32, Deactive/Offline
+        $this->assertSame(32, $last['onu_id']);
+        $this->assertFalse($last['online']);
+        $this->assertSame('disable', $last['admin_state']);
+    }
+
+    public function test_parses_optical_rx_per_ont(): void
+    {
+        $sample = <<<'TXT'
+-------------------------------------------------------------------------------------
+ONT    Rx power     Tx power     OLT Rx ONT    Temperature    Voltage     Current
+ID     (dBm)        (dBm)         power(dBm)   (C)            (V)         (mA)
+-------------------------------------------------------------------------------------
+1      -18.83       1.56         -26.02        41.55          3.26        11.55
+2      -23.09       2.72         -25.09        55.66          3.26        21.45
+8      --           --           --            --             --          --
+TXT;
+
+        $rx = (new CDataGponCliService)->parseOpticalInfo($sample);
+
+        $this->assertSame(-18.83, $rx[1]);
+        $this->assertSame(-23.09, $rx[2]);
+        $this->assertArrayNotHasKey(8, $rx); // "--" = N/A
+    }
+}

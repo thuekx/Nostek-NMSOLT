@@ -1,0 +1,273 @@
+<script setup>
+import ConfirmModal from '@/Components/ConfirmModal.vue';
+import InputLabel from '@/Components/InputLabel.vue';
+import Modal from '@/Components/Modal.vue';
+import PrimaryButton from '@/Components/PrimaryButton.vue';
+import SecondaryButton from '@/Components/SecondaryButton.vue';
+import TextInput from '@/Components/TextInput.vue';
+import { useConfirm } from '@/Composables/useConfirm';
+import { rxBadgeClass } from '@/Composables/useRxLevel';
+import { Link, router, useForm } from '@inertiajs/vue3';
+import { ExternalLink, Info, Lock, LockOpen, MapPin, Pencil, Power, Trash2, Wifi, WifiOff, X } from '@lucide/vue';
+import { computed, ref } from 'vue';
+import { useI18n } from 'vue-i18n';
+
+const { t } = useI18n({ useScope: 'global' });
+
+const props = defineProps({
+    pin: { type: Object, required: true },
+});
+
+const emit = defineEmits(['close']);
+
+const { confirmState, confirm, handleConfirm, handleCancel } = useConfirm();
+const caps = computed(() => props.pin.capabilities ?? {});
+const busy = ref(false);
+
+const portOnuHref = computed(() => {
+    // port_route sudah menentukan family (smartolt / cdata-olt / hioso-olt) dari server.
+    const name = props.pin.port_route ?? 'smartolt.port-onus';
+    return `${route(name, [props.pin.snmp_olt_id, props.pin.slot, props.pin.port])}?focus=${props.pin.onu_id}`;
+});
+
+const googleHref = computed(() => `https://www.google.com/maps?q=${props.pin.latitude},${props.pin.longitude}`);
+
+// --- ganti nama ---
+const renameOpen = ref(false);
+const renameForm = useForm({ name: '' });
+
+const openRename = () => {
+    renameForm.name = props.pin.onu_name ?? '';
+    renameForm.clearErrors();
+    renameOpen.value = true;
+};
+
+const submitRename = () => {
+    renameForm.post(route('map.pins.rename', props.pin.id), {
+        preserveScroll: true,
+        onSuccess: () => {
+            renameOpen.value = false;
+        },
+    });
+};
+
+// --- kunci / buka posisi pin ---
+// Unlock membuat marker bisa digeser di peta; koordinat baru tersimpan otomatis tiap kali
+// marker dilepas (lihat onPinMoved di Pages/Map/Index.vue), Lock mengunci kembali.
+const toggleLock = () => {
+    busy.value = true;
+    router.put(
+        route('map.pins.update', props.pin.id),
+        { locked: props.pin.locked === false },
+        {
+            preserveScroll: true,
+            preserveState: true,
+            // Hanya prop pin (+ flash toast) yang perlu dihitung ulang server — tanpa ini
+            // seluruh payload peta (ODP + ONU semua OLT) dibangun ulang tiap klik kunci.
+            only: ['pins', 'flash'],
+            onFinish: () => (busy.value = false),
+        },
+    );
+};
+
+// --- reboot ---
+const rebootOnu = async () => {
+    const ok = await confirm({
+        title: t('portonus.act_reboot'),
+        message: t('portonus.reboot_msg', { interface: props.pin.interface }),
+        confirmLabel: 'Reboot',
+        variant: 'danger',
+    });
+    if (!ok) return;
+    busy.value = true;
+    router.post(
+        route('map.pins.reboot', props.pin.id),
+        {},
+        { preserveScroll: true, onFinish: () => (busy.value = false) },
+    );
+};
+
+// --- hapus pin ---
+const deletePin = async () => {
+    const ok = await confirm({
+        title: t('map.delete_title'),
+        message: t('map.delete_msg'),
+        confirmLabel: t('common.delete'),
+        variant: 'danger',
+    });
+    if (!ok) return;
+    busy.value = true;
+    router.delete(route('map.pins.destroy', props.pin.id), {
+        preserveScroll: true,
+        onFinish: () => (busy.value = false),
+        onSuccess: () => emit('close'),
+    });
+};
+</script>
+
+<template>
+    <div class="flex flex-col gap-2.5 rounded-2xl border border-white/10 bg-canvas-3/95 p-3.5 shadow-xl shadow-black/50 backdrop-blur-xl">
+        <!-- Header -->
+        <div class="flex items-start justify-between gap-2">
+            <div class="min-w-0">
+                <h3 class="truncate text-sm font-semibold text-white">{{ pin.customer_name || $t('map.onu_unnamed') }}</h3>
+                <p class="mt-0.5 truncate text-[11px] text-slate-400">{{ pin.interface }} · {{ pin.olt_name }}</p>
+            </div>
+            <button type="button" class="-mr-1 -mt-1 rounded-lg p-1 text-slate-400 transition hover:bg-white/10 hover:text-white" :title="$t('common.close')" @click="emit('close')">
+                <X class="h-4 w-4" />
+            </button>
+        </div>
+
+        <!-- Status & RX -->
+        <div class="flex flex-wrap items-center gap-1.5">
+            <span class="inline-flex items-center gap-1 rounded-full px-2 py-0.5 text-[11px] font-semibold" :class="pin.online ? 'bg-emerald-500/15 text-emerald-300 ring-1 ring-emerald-500/30' : 'bg-slate-800/60 text-slate-400 ring-1 ring-slate-500/30'">
+                <component :is="pin.online ? Wifi : WifiOff" class="h-3 w-3" />
+                {{ pin.online ? $t('common.online') : $t('common.offline') }}
+            </span>
+            <span class="inline-flex rounded-full px-2 py-0.5 text-[11px] font-semibold" :class="rxBadgeClass(pin.rx_power_dbm)">
+                RX {{ pin.rx_power_label || '—' }}
+            </span>
+            <span v-if="!pin.has_live" class="text-[11px] text-amber-400">{{ $t('map.not_in_cache') }}</span>
+        </div>
+
+        <!-- Detail -->
+        <dl class="grid grid-cols-3 gap-x-3 gap-y-1 text-xs">
+            <dt class="text-slate-500">{{ $t('common.serial') }}</dt>
+            <dd class="col-span-2 truncate text-slate-200">{{ pin.serial_number || '—' }}</dd>
+            <dt class="text-slate-500">{{ $t('map.slot_port_onu') }}</dt>
+            <dd class="col-span-2 text-slate-200">{{ pin.slot }}/{{ pin.port }}/{{ pin.onu_id }}</dd>
+            <template v-if="pin.address">
+                <dt class="text-slate-500">{{ $t('map.address') }}</dt>
+                <dd class="col-span-2 text-slate-200">{{ pin.address }}</dd>
+            </template>
+            <template v-if="pin.phone">
+                <dt class="text-slate-500">{{ $t('map.phone') }}</dt>
+                <dd class="col-span-2 text-slate-200">{{ pin.phone }}</dd>
+            </template>
+            <template v-if="pin.notes">
+                <dt class="text-slate-500">{{ $t('map.notes') }}</dt>
+                <dd class="col-span-2 text-slate-200">{{ pin.notes }}</dd>
+            </template>
+            <dt class="text-slate-500">{{ $t('map.coords') }}</dt>
+            <dd class="col-span-2 text-slate-400">{{ Number(pin.latitude).toFixed(6) }}, {{ Number(pin.longitude).toFixed(6) }}</dd>
+        </dl>
+
+        <!-- Aksi -->
+        <div class="mt-1 space-y-2 border-t border-white/10 pt-3">
+            <p v-if="pin.locked === false" class="rounded-lg bg-cyan-500/10 px-2.5 py-1.5 text-[11px] text-cyan-200">
+                {{ $t('map.unlocked_hint') }}
+            </p>
+            <div class="grid grid-cols-2 gap-2">
+                <button
+                    type="button"
+                    class="kv-action-btn"
+                    :class="pin.locked === false ? 'kv-action-btn--active' : ''"
+                    :disabled="busy"
+                    @click="toggleLock"
+                >
+                    <component :is="pin.locked === false ? LockOpen : Lock" class="h-4 w-4" />
+                    {{ pin.locked === false ? $t('map.lock') : $t('map.unlock') }}
+                </button>
+                <button
+                    v-if="caps.supports_onu_info_write"
+                    type="button"
+                    class="kv-action-btn"
+                    :disabled="busy"
+                    @click="openRename"
+                >
+                    <Pencil class="h-4 w-4" /> {{ $t('map.edit_name') }}
+                </button>
+                <button
+                    v-if="caps.supports_reboot"
+                    type="button"
+                    class="kv-action-btn"
+                    :disabled="busy"
+                    @click="rebootOnu"
+                >
+                    <Power class="h-4 w-4" /> Reboot
+                </button>
+                <Link
+                    v-if="!pin.olt_cdata && caps.supports_cli_onu_detail"
+                    :href="route('smartolt.onu.detail', [pin.snmp_olt_id, pin.slot, pin.port, pin.onu_id])"
+                    class="kv-action-btn"
+                >
+                    <Info class="h-4 w-4" /> {{ $t('map.onu_detail') }}
+                </Link>
+                <Link :href="portOnuHref" class="kv-action-btn">
+                    <ExternalLink class="h-4 w-4" /> {{ $t('common.port') }}
+                </Link>
+                <a :href="googleHref" target="_blank" rel="noopener" class="kv-action-btn">
+                    <MapPin class="h-4 w-4" /> Maps
+                </a>
+            </div>
+            <button type="button" class="kv-action-btn kv-action-btn--danger w-full" :disabled="busy" @click="deletePin">
+                <Trash2 class="h-4 w-4" /> {{ $t('map.delete_pin') }}
+            </button>
+        </div>
+
+        <!-- Modal ganti nama -->
+        <Modal :show="renameOpen" max-width="md" @close="renameOpen = false">
+            <div class="p-6">
+                <h3 class="mb-4 text-lg font-semibold text-white">{{ $t('map.rename_title') }}</h3>
+                <InputLabel :value="$t('map.rename_label')" />
+                <TextInput v-model="renameForm.name" type="text" class="mt-1 w-full" :placeholder="$t('map.rename_placeholder')" @keyup.enter="submitRename" />
+                <p class="mt-1 text-xs text-slate-500">{{ $t('map.rename_hint', { target: pin.olt_cdata ? 'C-Data CLI' : 'ZTE SNMP' }) }}</p>
+                <div class="mt-6 flex justify-end gap-3">
+                    <SecondaryButton @click="renameOpen = false">{{ $t('common.cancel') }}</SecondaryButton>
+                    <PrimaryButton :disabled="renameForm.processing" @click="submitRename">{{ $t('common.save') }}</PrimaryButton>
+                </div>
+            </div>
+        </Modal>
+
+        <ConfirmModal :state="confirmState" @confirm="handleConfirm" @cancel="handleCancel" />
+    </div>
+</template>
+
+<style scoped>
+.kv-action-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.35rem;
+    border-radius: 0.5rem;
+    border: 1px solid rgb(var(--kv-white) / 0.1);
+    background: rgb(var(--kv-white) / 0.04);
+    padding: 0.4rem 0.6rem;
+    font-size: 0.75rem;
+    font-weight: 500;
+    color: rgb(var(--kv-slate-300));
+    transition: background-color 0.15s, color 0.15s;
+}
+
+.kv-action-btn svg {
+    width: 0.875rem;
+    height: 0.875rem;
+}
+
+.kv-action-btn:hover {
+    background: rgb(var(--kv-white) / 0.08);
+    color: rgb(var(--kv-white));
+}
+
+/* Tombol Lock saat pin sedang terbuka — senada cincin cyan pin di peta. */
+.kv-action-btn--active {
+    border-color: rgb(var(--kv-cyan-400) / 0.4);
+    background: rgb(var(--kv-cyan-400) / 0.12);
+    color: rgb(var(--kv-cyan-300));
+}
+
+.kv-action-btn:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+.kv-action-btn--danger {
+    color: rgb(var(--kv-red-300));
+    border-color: rgb(var(--kv-red-400) / 0.25);
+}
+
+.kv-action-btn--danger:hover {
+    background: rgb(var(--kv-red-400) / 0.12);
+    color: rgb(var(--kv-red-200));
+}
+</style>

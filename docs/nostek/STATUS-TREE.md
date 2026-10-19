@@ -59,7 +59,8 @@ Nostek-NMSOLT — ONE SOURCE / TWO INDEPENDENT DOCKER DEPLOYMENTS
   [#4](https://github.com/thuekx/Nostek-NMSOLT/pull/4),
   [#5](https://github.com/thuekx/Nostek-NMSOLT/pull/5),
   [#6](https://github.com/thuekx/Nostek-NMSOLT/pull/6),
-  [#7](https://github.com/thuekx/Nostek-NMSOLT/pull/7)
+  [#7](https://github.com/thuekx/Nostek-NMSOLT/pull/7),
+  [#8](https://github.com/thuekx/Nostek-NMSOLT/pull/8)
 - Readiness details: [NMS-04](NMS-04-STAGING-READINESS.md),
   [NMS-05](NMS-05-GENIEACS-LAB-MATRIX.md),
   [NMS-06](NMS-06-FTTH-CAPABILITY-MATRIX.md),

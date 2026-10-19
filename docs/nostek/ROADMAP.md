@@ -6,7 +6,7 @@
 **Status:** consult [PROJECT-STATUS.yaml](PROJECT-STATUS.yaml) before each action.  
 **Handoff:** [HANDOFF.md](HANDOFF.md).  
 **Human-readable tree:** [STATUS-TREE.md](STATUS-TREE.md).  
-**Current checkpoint (2026-10-20):** NMS-01 and NMS-02 are VERIFIED. NMS-03 remains BLOCKED on authorized Maung host evidence. Source-readiness PRs #5 (NMS-04), #6 (NMS-05) and #7 (NMS-06) passed exact-head CI and merged as `f382366`, `f5917c0` and `9c6722c`; these do not satisfy their runtime gates. NMS-07 through NMS-12 have gated preparation only.
+**Current checkpoint (2026-10-20):** NMS-01 and NMS-02 are VERIFIED. NMS-03 remains BLOCKED on authorized Maung host evidence. Source-readiness PRs #5 (NMS-04), #6 (NMS-05) and #7 (NMS-06) passed exact-head CI and merged as `f382366`, `f5917c0` and `9c6722c`; these do not satisfy their runtime gates. NMS-07 through NMS-12 have gated preparation in PR #8 / run `39296021006`, merged as `22d609a`; all remain BLOCKED on their runtime, contract and approval gates.
 
 ## Product contract
 

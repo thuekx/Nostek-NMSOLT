@@ -1,6 +1,6 @@
 # Nostek-NMSOLT — project status tree
 
-Updated **2026-10-19 WIB**. State reflects GitHub evidence, not merely intended plans. Open [PROJECT-STATUS.yaml](PROJECT-STATUS.yaml) for machine-readable checkpoint.
+Updated **2026-10-20 WIB**. State reflects GitHub evidence, not merely intended plans. Open [PROJECT-STATUS.yaml](PROJECT-STATUS.yaml) for machine-readable checkpoint.
 
 ```text
 Nostek-NMSOLT — ONE SOURCE / TWO INDEPENDENT DOCKER DEPLOYMENTS
@@ -19,12 +19,15 @@ Nostek-NMSOLT — ONE SOURCE / TWO INDEPENDENT DOCKER DEPLOYMENTS
 |   +-- [NOTE] 660 non-fatal warnings remain visible as backlog
 |   +-- [MERGED] main 63f4b77
 |
-+-- NMS-02 [IN_PROGRESS] Source security, read-only access and write isolation
-|   +-- [OPEN] Draft PR #2, head ac425b7
-|   +-- [PENDING] five-job CI and final review
++-- NMS-02 [VERIFIED] Source security, read-only access and write isolation
+|   +-- [PASS] PR #2 run 39284353892 on 0fcb962
+|   +-- [PASS] fail-closed writes, request audit, queue and Telegram rechecks
+|   +-- [PASS] Compose/images, Go, Vue 57, Laravel 122 / 4,603 assertions
+|   +-- [MERGED] main 732debb
 |
 +-- NMS-03 [BLOCKED] VM maung-apps resource/port/network audit (R0)
-|   +-- [OPEN] Draft PR #3 with read-only collector
+|   +-- [PASS] PR #3 readiness run 39290385687 on 61e6ca4
+|   +-- [PASS] collector bash syntax; preparation merged as f925529
 |   +-- [BLOCKER] authorized host execution and sanitized evidence
 +-- NMS-04 [PENDING] Independent NMSOLT staging on maung-apps
 +-- NMS-05 [PENDING] GenieACS + MongoDB optional lab and approved ONT
@@ -51,4 +54,4 @@ Nostek-NMSOLT — ONE SOURCE / TWO INDEPENDENT DOCKER DEPLOYMENTS
 - Definition of each gate: [ROADMAP.md](ROADMAP.md)
 - Resume instructions: [HANDOFF.md](HANDOFF.md)
 
-A partial PASS within a phase does **not** mean the whole phase is VERIFIED. NMS-02 remains unverified until its own CI and review complete; NMS-03 remains blocked until host evidence exists.
+A partial PASS within a phase does **not** mean the whole phase is VERIFIED. NMS-02 is VERIFIED by its cited exact-head CI and merge. NMS-03 readiness is merged, but the phase remains blocked until current authorized host evidence exists.

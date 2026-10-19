@@ -23,7 +23,7 @@ log() { printf '\033[1;34m[entrypoint]\033[0m %s\n' "$*"; }
 #    tanpa pesan jelas. HANYA var yang dikonsumsi app — DB_* sengaja dilewati
 #    karena harus identik dengan yang dipakai container "db" (postgres).
 # ---------------------------------------------------------------------------
-for _v in APP_KEY APP_NAME APP_URL APP_LOCALE \
+for _v in APP_KEY APP_NAME APP_URL APP_LOCALE NMSOLT_DEVICE_WRITES_ENABLED \
           ACS_URL ACS_USERNAME ACS_PASSWORD \
           ADMIN_NAME ADMIN_EMAIL ADMIN_PASSWORD; do
   eval "_cur=\${$_v-}"

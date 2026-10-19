@@ -17,17 +17,18 @@ Finish an independently Dockerized Nostek-NMSOLT web application, GenieACS lab, 
 - Target second site: existing Nostek AI VM (choose after resource study, likely nostek-platform vs nostek-ops); no new VM presumed.
 - User requested Flutter/mobile deferred because inherited logo resembled 'K'; the mobile files remain physically in Windows checkout but `/mobile/` is Git-ignored and absent in initial commit.
 - Gitleaks 8.30.1 and PowerShell prepush static scan passed on Windows at initial commit. This does not equal a full third-party security audit.
-- NMS-01 draft CI PR #1: https://github.com/thuekx/Nostek-NMSOLT/pull/1, branch `ci/nms-01-docker-gates`, last known head `1897c7facd45c431310eb60c11594c3d3c683f05`.
-- Latest checked PR run: https://github.com/thuekx/Nostek-NMSOLT/actions/runs/39275735589 — four jobs pass: Compose base/ACS, Go poller, JS/Vue, both Docker builds. **Laravel job fails**, 98 failed/562 warnings/122 passed, 3524 assertions. Previous issue missing APP_KEY was addressed by ephemeral secret in workflow; remaining examples include `ViteManifestNotFoundException` and locale-based string mismatch in `tests/Unit/CDataGponPortWriteTest.php`, plus fixture/path warnings. Do not merge until all tests green.
+- NMS-01 PR #1 https://github.com/thuekx/Nostek-NMSOLT/pull/1 is merged. Verified head `b20149cad1aff4087108f7dc4cd1433da307495b`; successful integration run https://github.com/thuekx/Nostek-NMSOLT/actions/runs/39278668150; squash merge `63f4b77b002fa5ef9b1189d4a4c982c0246a1354`.
+- NMS-01 evidence: Compose base/ACS PASS, loopback publishing PASS, both images build without push, Go test/vet PASS, Vue 12 files/57 tests PASS, Laravel 122 tests/4,505 assertions/0 failures. The 660 non-fatal PHPUnit warnings and runner action deprecations remain visible backlog; they were not reported as clean output.
+- NMS-02 draft PR #2 https://github.com/thuekx/Nostek-NMSOLT/pull/2 adds a default-off device-write boundary, audit decisions, queued-job rechecks and negative/inventory tests. Current head `ac425b7d827ae83ca96daa7a4a67289bf0da1b5a`; full CI is pending, so NMS-02 is IN_PROGRESS.
+- NMS-03 draft PR #3 https://github.com/thuekx/Nostek-NMSOLT/pull/3 contains only a read-only Maung collector and evidence checklist. No host connection occurred. NMS-03 is BLOCKED on authorized execution and sanitized host evidence.
 
 ## Next concrete actions without owner input
 
-1. Fetch current open PR, CI runs and failing Laravel logs. Confirm SHA, don't assume checkpoint is fresh.
-2. Amend **CI branch only** to install Node and build frontend for Laravel view tests or otherwise use properly isolated Vite testing. Avoid weakening tests or hiding errors. Diagnose failures after build assets exist, fix application bugs/fixture paths if needed. An initial `npm ci && npm run build` in PHP job is a credible next trial; repository lockfile exists and separate frontend job passes.
-3. If needed open a **separate security PR** for production write-operation isolation/R0 restrictions; do not change OLT semantics without tests.
-4. Re-run CI. Only after full VERIFIED mark NMS-01 and proceed NMS-02/NMS-03. Avoid merging draft PR without review and complete evidence.
-5. Do Maung host inspection read-only, then produce resource/deployment plan. If connection unavailable request a single consolidated read-only collection command rather than many rounds. Never execute `docker compose down -v` against live data.
-6. Later: optional isolated GenieACS lab, Maung SSO and /nmsolt, inventory/CRM/WO contracts, approved production, second Nostek Docker, broker approvals, commercial readiness per ROADMAP.
+1. Inspect all five jobs in PR #2 at its current head. Fix failures without weakening assertions; merge only with a green run and reviewed security evidence.
+2. After PR #2 is merged, rebase/retarget PR #3 onto main and run CI/shell syntax validation. Keep the collector read-only.
+3. To complete NMS-03, obtain authorized execution of the collector on the intended Maung host, review/sanitize the output, and record CPU/RAM/disk, port/network/Compose collisions, reverse-proxy ownership, backups and a bounded staging budget.
+4. NMS-04 and later infrastructure stages remain blocked until NMS-03 evidence and any required human approval exist. Continue only source-level documentation, design, fixtures and tests that cannot affect production.
+5. Never infer OLT/ONT or host state from historical details, and never mark a phase VERIFIED without the cited run/log/artifact.
 
 ## Safety
 
@@ -39,4 +40,4 @@ Owner communicates Indonesian, prefers complete executable one-block scripts if 
 
 ## New-session prompt to paste
 
-> Lanjutkan proyek Nostek-NMSOLT dari checkpoint GitHub. Baca terlebih dahulu `https://github.com/thuekx/Nostek-NMSOLT/blob/main/docs/nostek/HANDOFF.md`, `ROADMAP.md`, `PROJECT-STATUS.yaml` dan `STATUS-TREE.md` dalam folder sama; cek langsung status PR #1 dan GitHub Actions terbaru sebelum mengubah apa pun. Ikuti tahapan NMS-00 sampai NMS-12; kerjakan otomatis task berikutnya ketika gate VERIFIED tanpa berhenti bertanya, selama tidak memerlukan akses/approval saya. Jangan sentuh Docker Maung produksi atau OLT/ONT live tanpa persetujuan. Seluruh perubahan source lewat branch dan PR, catat evidence dan update status/handoff. Mulai dari Laravel CI yang masih gagal. Bahasa Indonesia.
+> Lanjutkan proyek Nostek-NMSOLT dari checkpoint GitHub. Baca `docs/nostek/HANDOFF.md`, `ROADMAP.md`, `PROJECT-STATUS.yaml`, dan `STATUS-TREE.md`; verifikasi `main`, PR #2, PR #3, serta CI terbaru. NMS-01 sudah VERIFIED dan merged sebagai `63f4b77`. Selesaikan review/CI NMS-02 tanpa melemahkan gate. Setelah NMS-02 VERIFIED, rebase PR #3 dan lanjutkan NMS-03 hanya dengan inventaris Maung read-only yang diotorisasi; jangan menyentuh produksi atau OLT/ONT live dan jangan melewati approval. Catat seluruh bukti dan blocker di GitHub. Bahasa Indonesia.

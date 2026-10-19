@@ -7,7 +7,12 @@ source_of_truth:
   baseline_sha: 24332a2b4144cff03f04f64e4711ce7938d992ae
   ci_pr: https://github.com/thuekx/Nostek-NMSOLT/pull/1
   ci_branch: ci/nms-01-docker-gates
-  ci_current_sha: 17cf45145d38781fd00638608ccd2a27720d113a
+  ci_verified_sha: b20149cad1aff4087108f7dc4cd1433da307495b
+  ci_run: https://github.com/thuekx/Nostek-NMSOLT/actions/runs/39278668150
+  ci_merged_sha: 63f4b77b002fa5ef9b1189d4a4c982c0246a1354
+  security_pr: https://github.com/thuekx/Nostek-NMSOLT/pull/2
+  security_head: ac425b7d827ae83ca96daa7a4a67289bf0da1b5a
+  discovery_pr: https://github.com/thuekx/Nostek-NMSOLT/pull/3
 policy:
   automatic_next_task_within_session: true
   production_write_requires_approval: true
@@ -15,9 +20,9 @@ policy:
   preserve_mit_upstream_notice: true
 status:
   NMS-00: VERIFIED
-  NMS-01: BLOCKED
-  NMS-02: PENDING
-  NMS-03: PENDING
+  NMS-01: VERIFIED
+  NMS-02: IN_PROGRESS
+  NMS-03: BLOCKED
   NMS-04: PENDING
   NMS-05: PENDING
   NMS-06: PENDING
@@ -37,15 +42,26 @@ latest_evidence:
     mobile_files_in_commit: 0
     gitleaks_windows_result: "0 findings, October 19 2026"
   NMS-01:
-    last_reviewed_run: https://github.com/thuekx/Nostek-NMSOLT/actions/runs/39275735589
-    result: failure
-    pass_jobs: ["Docker Compose including ACS overlay", "NMSOLT and GenieACS Docker image builds", "Go tests and vet", "Vue and JS tests"]
-    failed_jobs: ["Laravel tests (isolated SQLite)"]
-    laravel_result: "98 failed, 562 warnings, 122 passed (3524 assertions)"
-    known_causes: ["Vite manifest missing during Inertia/Blade feature tests", "locale-sensitive assertion mismatch in CDataGponPortWriteTest", "test fixtures/path warnings needing triage"]
-    earlier_fixed_cause: "Missing APP_KEY on CI runner; fixed via ephemeral GitHub Actions key in 1897c7f"
-    latest_change: "17cf451 adds npm ci and npm run build to PHP job; new full CI result not yet verified."
-    merge_gate: "All 5 CI jobs green on same commit and test failures classified honestly."
+    verified_head: b20149cad1aff4087108f7dc4cd1433da307495b
+    verified_run: https://github.com/thuekx/Nostek-NMSOLT/actions/runs/39278668150
+    result: success
+    merged_pr: https://github.com/thuekx/Nostek-NMSOLT/pull/1
+    merged_main_sha: 63f4b77b002fa5ef9b1189d4a4c982c0246a1354
+    pass_jobs: ["Docker Compose base and ACS overlay", "NMSOLT and GenieACS Docker image builds", "Go tests and vet", "Vue and JS tests", "Laravel tests on SQLite"]
+    vue_result: "12 files, 57 tests passed"
+    laravel_result: "122 tests passed, 4505 assertions, 660 non-fatal warnings"
+    warning_backlog: "PHPUnit fixture/path warnings and runner action deprecation warnings remain visible; no failure was masked."
+  NMS-02:
+    status: IN_PROGRESS
+    pr: https://github.com/thuekx/Nostek-NMSOLT/pull/2
+    head: ac425b7d827ae83ca96daa7a4a67289bf0da1b5a
+    controls: ["fail-closed device-write gate", "conditional dry-run/cache-only paths", "queued write recheck", "decision audit without request payloads", "mutation-route inventory tests"]
+    verification: "Full CI pending; do not merge or mark VERIFIED until green."
+  NMS-03:
+    status: BLOCKED
+    pr: https://github.com/thuekx/Nostek-NMSOLT/pull/3
+    preparation: "Read-only collector and sanitized evidence checklist prepared."
+    blocker: "Authorized execution on the intended Maung host and sanitized capacity/network/backup evidence are required."
 environment:
   maung_host: "maung-apps, 192.168.48.99 (unverified current state)"
   maung_deployment: NOT_STARTED
@@ -53,8 +69,8 @@ environment:
   genieacs_lab: NOT_STARTED
   live_olt_write: PROHIBITED_WITHOUT_APPROVAL
 next_action:
-  id: NMS-01-CI-FIX
-  instruction: "Investigate failing CI Laravel tests; add ephemeral frontend build/assets and fix locale/fixture test issues without weakening assertions. Re-run all five CI jobs; do not merge while red."
-  owner: "executor in next active session"
+  id: NMS-02-CI-REVIEW
+  instruction: "Wait for and inspect all five jobs in PR #2 at ac425b7; fix failures without weakening tests. Merge only when the NMS-02 acceptance evidence is complete. Keep PR #3 draft and request authorized sanitized Maung collector output when host facts become necessary."
+  owner: "executor in current or next active session"
   approval_required: false
 references: ["docs/nostek/ROADMAP.md", "docs/nostek/STATUS-TREE.md", "docs/nostek/HANDOFF.md"]

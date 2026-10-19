@@ -10,17 +10,22 @@ Nostek-NMSOLT — ONE SOURCE / TWO INDEPENDENT DOCKER DEPLOYMENTS
 |   +-- public repository, 678 files; mobile excluded
 |   +-- MIT attribution retained, Gitleaks/whitespace/prepush checks PASS
 |
-+-- NMS-01 [BLOCKED] Repeatable CI and Docker build
-|   +-- [PASS] base and ACS Docker Compose config
-|   +-- [PASS] NMSOLT and GenieACS image builds
-|   +-- [PASS] Go SNMP poller tests/vet
-|   +-- [PASS] Vue / JS tests
-|   +-- [FAIL] Laravel tests: 98 fail / 562 warnings / 122 pass
-|   +-- [OPEN] Draft PR #1 (not merged)
-|   +-- [NEXT] Vite assets in CI, locale assertions, fixture warnings
++-- NMS-01 [VERIFIED] Repeatable CI and Docker build
+|   +-- [PASS] PR #1 run 39278668150 on b20149c
+|   +-- [PASS] Compose base/ACS and loopback publishing
+|   +-- [PASS] NMSOLT + GenieACS image builds (no push)
+|   +-- [PASS] Go test/vet; Vue 57 tests
+|   +-- [PASS] Laravel 122 tests / 4,505 assertions / 0 failures
+|   +-- [NOTE] 660 non-fatal warnings remain visible as backlog
+|   +-- [MERGED] main 63f4b77
 |
-+-- NMS-02 [PENDING] Source security, read-only access and write isolation
-+-- NMS-03 [PENDING] VM maung-apps resource/port/network audit (R0)
++-- NMS-02 [IN_PROGRESS] Source security, read-only access and write isolation
+|   +-- [OPEN] Draft PR #2, head ac425b7
+|   +-- [PENDING] five-job CI and final review
+|
++-- NMS-03 [BLOCKED] VM maung-apps resource/port/network audit (R0)
+|   +-- [OPEN] Draft PR #3 with read-only collector
+|   +-- [BLOCKER] authorized host execution and sanitized evidence
 +-- NMS-04 [PENDING] Independent NMSOLT staging on maung-apps
 +-- NMS-05 [PENDING] GenieACS + MongoDB optional lab and approved ONT
 +-- NMS-06 [PENDING] FTTH polling, optical RX, alarms, ODP validation
@@ -38,9 +43,12 @@ Nostek-NMSOLT — ONE SOURCE / TWO INDEPENDENT DOCKER DEPLOYMENTS
 ## Evidence and definition of done
 
 - CI PR: https://github.com/thuekx/Nostek-NMSOLT/pull/1
-- Failed CI run: https://github.com/thuekx/Nostek-NMSOLT/actions/runs/39275735589
+- Verified CI run: https://github.com/thuekx/Nostek-NMSOLT/actions/runs/39278668150
+- NMS-01 merge: https://github.com/thuekx/Nostek-NMSOLT/commit/63f4b77b002fa5ef9b1189d4a4c982c0246a1354
+- NMS-02 draft: https://github.com/thuekx/Nostek-NMSOLT/pull/2
+- NMS-03 draft: https://github.com/thuekx/Nostek-NMSOLT/pull/3
 - Baseline: https://github.com/thuekx/Nostek-NMSOLT/commit/24332a2b4144cff03f04f64e4711ce7938d992ae
 - Definition of each gate: [ROADMAP.md](ROADMAP.md)
 - Resume instructions: [HANDOFF.md](HANDOFF.md)
 
-A partial PASS within a phase does **not** mean the whole phase is VERIFIED. Never merge a failing CI PR for convenience.
+A partial PASS within a phase does **not** mean the whole phase is VERIFIED. NMS-02 remains unverified until its own CI and review complete; NMS-03 remains blocked until host evidence exists.

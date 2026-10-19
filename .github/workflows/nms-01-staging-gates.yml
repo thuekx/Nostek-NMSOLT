@@ -76,6 +76,10 @@ jobs:
           tools: composer:v2
           coverage: none
       - run: composer install --prefer-dist --no-interaction --no-progress
+      - name: Generate ephemeral Laravel test encryption key
+        shell: bash
+        run: |
+          php -r 'file_put_contents(getenv("GITHUB_ENV"), "APP_KEY=base64:".base64_encode(random_bytes(32)).PHP_EOL, FILE_APPEND);'
       - name: Run repository test wrapper with SQLite gate
         run: bash scripts/test.sh
 

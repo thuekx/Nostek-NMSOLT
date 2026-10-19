@@ -37,7 +37,7 @@ class UserListPageTest extends TestCase
 
                 // Di dalam satu role, nama tetap menaik (mengandalkan sort stabil PHP 8).
                 $this->assertSame(
-                    ['thuekx', 'Masamune', 'Kiky', 'NOC', 'Alaik', 'Andian', 'demo'],
+                    ['Masamune', 'thuekx', 'Kiky', 'NOC', 'Alaik', 'Andian', 'demo'],
                     $rows->pluck('name')->all(),
                 );
             });
@@ -88,3 +88,4 @@ class UserListPageTest extends TestCase
         ]);
     }
 }
+

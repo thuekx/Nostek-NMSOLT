@@ -111,7 +111,7 @@ class ThemePreferenceTest extends TestCase
     {
         // CSP app ini melarang skrip inline tanpa nonce; skrip yang diblokir
         // tidak memberi pesan apa pun dan pilihan 'system' diam-diam tak berlaku.
-        $html = $this->get('/')->assertOk()->getContent();
+        $html = $this->get(route('login'))->assertOk()->getContent();
 
         $this->assertMatchesRegularExpression(
             '/<script nonce="[^"]+">\s*\(function \(\) \{\s*try \{\s*if \(/',
@@ -196,7 +196,7 @@ class ThemePreferenceTest extends TestCase
     public function halaman_publik_memakai_pilihan_dari_cookie(): void
     {
         $this->withUnencryptedCookie(Theme::COOKIE, Theme::LIGHT)
-            ->get('/')
+            ->get(route('login'))
             ->assertOk()
             ->assertSee('data-theme="light"', false)
             ->assertInertia(fn (Assert $page) => $page->where('theme', Theme::LIGHT));
@@ -224,3 +224,4 @@ class ThemePreferenceTest extends TestCase
         $this->assertStringContainsString('<ThemeSegmented', $layout, 'Drawer HP kehilangan pemilih tema.');
     }
 }
+

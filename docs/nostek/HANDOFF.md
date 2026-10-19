@@ -58,11 +58,14 @@ verification.
   routing and unsupported-vendor fail-closed tests executed; Laravel 122 /
   4,620 assertions / 667 non-fatal warnings / 0 failures. Per-model lab
   polling/RX/stale/alarm/ODP/UI evidence is still required.
-- **NMS-07 through NMS-12 BLOCKED:** contracts, approvals, negative evidence and
-  stop rules are in [NMS-07-12-GATED-READINESS.md](NMS-07-12-GATED-READINESS.md).
-  They remain blocked on upstream gates, external contracts, runtime evidence
-  and explicit approvals. No Maung, CRM/WO, production or device mutation was
-  performed.
+- **NMS-07 through NMS-12 BLOCKED:** [PR #8](https://github.com/thuekx/Nostek-NMSOLT/pull/8),
+  head e31300ab9e2a6030be6541d5a23435e12ff6fb6b, successful
+  [run 39296021006](https://github.com/thuekx/Nostek-NMSOLT/actions/runs/39296021006),
+  merge 22d609a49cab92d5eb4a2e7303303d6bbc98f3a9. Contracts, approvals,
+  negative evidence and stop rules are in
+  [NMS-07-12-GATED-READINESS.md](NMS-07-12-GATED-READINESS.md). All remain
+  blocked on upstream gates, external contracts, runtime evidence and explicit
+  approvals. No Maung, CRM/WO, production or device mutation was performed.
 
 ## Exact next action requiring owner authority
 

@@ -4,20 +4,43 @@ updated_at: "2026-10-20"
 source_of_truth:
   repo: https://github.com/thuekx/Nostek-NMSOLT
   default_branch: main
+  checkpoint_main_sha: 9c6722c218e1e7d6cd0d581b3f8f29ad0fbffdfe
   baseline_sha: 24332a2b4144cff03f04f64e4711ce7938d992ae
-  ci_pr: https://github.com/thuekx/Nostek-NMSOLT/pull/1
-  ci_branch: ci/nms-01-docker-gates
-  ci_verified_sha: b20149cad1aff4087108f7dc4cd1433da307495b
-  ci_run: https://github.com/thuekx/Nostek-NMSOLT/actions/runs/39278668150
-  ci_merged_sha: 63f4b77b002fa5ef9b1189d4a4c982c0246a1354
-  security_pr: https://github.com/thuekx/Nostek-NMSOLT/pull/2
-  security_verified_sha: 0fcb962347c20873f75ba54273e346247db5c613
-  security_run: https://github.com/thuekx/Nostek-NMSOLT/actions/runs/39284353892
-  security_merged_sha: 732debb348ca62d74df256a7f233c3601d48710a
-  discovery_pr: https://github.com/thuekx/Nostek-NMSOLT/pull/3
-  discovery_readiness_sha: 61e6ca45c20504e12f3ada619e52e4638eaa9534
-  discovery_run: https://github.com/thuekx/Nostek-NMSOLT/actions/runs/39290385687
-  discovery_merged_sha: f925529ef0b41026a08e8bd9639cedbe3ff6e22b
+  ci:
+    pr: https://github.com/thuekx/Nostek-NMSOLT/pull/1
+    verified_sha: b20149cad1aff4087108f7dc4cd1433da307495b
+    run: https://github.com/thuekx/Nostek-NMSOLT/actions/runs/39278668150
+    merged_sha: 63f4b77b002fa5ef9b1189d4a4c982c0246a1354
+  security:
+    pr: https://github.com/thuekx/Nostek-NMSOLT/pull/2
+    verified_sha: 0fcb962347c20873f75ba54273e346247db5c613
+    run: https://github.com/thuekx/Nostek-NMSOLT/actions/runs/39284353892
+    merged_sha: 732debb348ca62d74df256a7f233c3601d48710a
+  discovery_readiness:
+    pr: https://github.com/thuekx/Nostek-NMSOLT/pull/3
+    verified_sha: 61e6ca45c20504e12f3ada619e52e4638eaa9534
+    run: https://github.com/thuekx/Nostek-NMSOLT/actions/runs/39290385687
+    merged_sha: f925529ef0b41026a08e8bd9639cedbe3ff6e22b
+  canonical_checkpoint:
+    pr: https://github.com/thuekx/Nostek-NMSOLT/pull/4
+    verified_sha: 4c56601c3aa8197efdde677361896691ea473b8c
+    run: https://github.com/thuekx/Nostek-NMSOLT/actions/runs/39291117764
+    merged_sha: 3bf0d314f8071070cfa5893ca8a1ef421056bd6c
+  staging_readiness:
+    pr: https://github.com/thuekx/Nostek-NMSOLT/pull/5
+    verified_sha: a548131e3aa51901727a5105865e91363f695793
+    run: https://github.com/thuekx/Nostek-NMSOLT/actions/runs/39291789107
+    merged_sha: f3823666b78f6eb5bc840ff3f4217858b0c691d3
+  genieacs_readiness:
+    pr: https://github.com/thuekx/Nostek-NMSOLT/pull/6
+    verified_sha: 97377e53d7532e6d02e257e315b302b6d47215b7
+    run: https://github.com/thuekx/Nostek-NMSOLT/actions/runs/39294335613
+    merged_sha: f5917c06b05b10a1f727a79dd2b5ce0a4b120008
+  ftth_readiness:
+    pr: https://github.com/thuekx/Nostek-NMSOLT/pull/7
+    verified_sha: 2a565b0e5647cf65d1ca0a98f387149c886ec24f
+    run: https://github.com/thuekx/Nostek-NMSOLT/actions/runs/39295106373
+    merged_sha: 9c6722c218e1e7d6cd0d581b3f8f29ad0fbffdfe
 policy:
   automatic_next_task_within_session: true
   production_write_requires_approval: true
@@ -28,59 +51,82 @@ status:
   NMS-01: VERIFIED
   NMS-02: VERIFIED
   NMS-03: BLOCKED
-  NMS-04: PENDING
-  NMS-05: PENDING
-  NMS-06: PENDING
-  NMS-07: PENDING
-  NMS-08: PENDING
-  NMS-09: PENDING
-  NMS-10: PENDING
-  NMS-11: PENDING
-  NMS-12: PENDING
+  NMS-04: BLOCKED
+  NMS-05: BLOCKED
+  NMS-06: BLOCKED
+  NMS-07: BLOCKED
+  NMS-08: BLOCKED
+  NMS-09: BLOCKED
+  NMS-10: BLOCKED
+  NMS-11: BLOCKED
+  NMS-12: BLOCKED
 deferred:
-  mobile_flutter: "Excluded from initial commit, 132 files remain on Windows only; original launcher identity unsuitable."
+  mobile_flutter: "Excluded from initial commit; inherited mobile identity is not approved for distribution."
 latest_evidence:
   NMS-00:
     initial_commit: https://github.com/thuekx/Nostek-NMSOLT/commit/24332a2b4144cff03f04f64e4711ce7938d992ae
-    author: "thuekx <thuekx@kolu.web.id>"
-    baseline_files: 678
-    mobile_files_in_commit: 0
-    gitleaks_windows_result: "0 findings, October 19 2026"
+    result: "678 source files; mobile excluded; MIT attribution retained; initial Windows Gitleaks check reported 0 findings."
   NMS-01:
-    verified_head: b20149cad1aff4087108f7dc4cd1433da307495b
-    verified_run: https://github.com/thuekx/Nostek-NMSOLT/actions/runs/39278668150
-    result: success
-    merged_pr: https://github.com/thuekx/Nostek-NMSOLT/pull/1
-    merged_main_sha: 63f4b77b002fa5ef9b1189d4a4c982c0246a1354
-    pass_jobs: ["Docker Compose base and ACS overlay", "NMSOLT and GenieACS Docker image builds", "Go tests and vet", "Vue and JS tests", "Laravel tests on SQLite"]
-    vue_result: "12 files, 57 tests passed"
-    laravel_result: "122 tests passed, 4505 assertions, 660 non-fatal warnings"
-    warning_backlog: "PHPUnit fixture/path warnings and runner action deprecation warnings remain visible; no failure was masked."
+    status: VERIFIED
+    result: "PR #1 exact-head CI passed all five jobs and merged as 63f4b77."
+    vue: "12 files, 57 tests passed"
+    laravel: "122 passed, 4505 assertions, 660 non-fatal warnings, 0 failures"
   NMS-02:
     status: VERIFIED
-    pr: https://github.com/thuekx/Nostek-NMSOLT/pull/2
-    verified_head: 0fcb962347c20873f75ba54273e346247db5c613
-    verified_run: https://github.com/thuekx/Nostek-NMSOLT/actions/runs/39284353892
-    merged_main_sha: 732debb348ca62d74df256a7f233c3601d48710a
-    controls: ["fail-closed device-write gate", "conditional dry-run/cache-only paths", "queued write recheck", "decision audit without request payloads", "mutation-route inventory tests", "Telegram reboot boundary"]
-    verification: "Five CI jobs passed; Laravel 122 passed / 4603 assertions / 665 non-fatal warnings; Vue 57 passed; Compose, images, Go test/vet passed."
+    result: "PR #2 exact-head CI passed; default-off route, queue and Telegram device-write boundary merged as 732debb."
+    laravel: "122 passed, 4603 assertions, 665 non-fatal warnings, 0 failures"
   NMS-03:
     status: BLOCKED
-    pr: https://github.com/thuekx/Nostek-NMSOLT/pull/3
-    readiness_head: 61e6ca45c20504e12f3ada619e52e4638eaa9534
-    readiness_run: https://github.com/thuekx/Nostek-NMSOLT/actions/runs/39290385687
-    readiness_merged_sha: f925529ef0b41026a08e8bd9639cedbe3ff6e22b
-    preparation: "Read-only collector, sanitized evidence checklist, and bash syntax gate merged."
-    blocker: "Authorized execution on the intended Maung host and sanitized capacity/network/backup evidence are required."
+    source_readiness: "PR #3 passed run 39290385687 and merged as f925529; read-only collector and sanitization checklist exist."
+    blocker: "Owner-authorized execution on the intended Maung host and sanitized CPU/RAM/disk/ports/Docker/proxy/backup evidence."
+  NMS-04:
+    status: BLOCKED
+    source_readiness: "PR #5 passed run 39291789107 and merged as f382366; rendered base/ACS topology validators passed."
+    blocker: "NMS-03 evidence, staging deployment approval, and deploy/health/migration/backup/restore/rollback logs."
+  NMS-05:
+    status: BLOCKED
+    source_readiness: "PR #6 head 97377e5 passed all five jobs in run 39294335613 and merged as f5917c0; GenieACS isolated lab policy PASS."
+    blocker: "NMS-03/NMS-04 plus approval for one exact lab ONT and sanitized inform/NBI/read-parameter/rollback evidence."
+  NMS-06:
+    status: BLOCKED
+    source_readiness: "PR #7 head 2a565b0 passed all five jobs in run 39295106373 and merged as 9c6722c; reviewed family routing and unknown fail-closed tests executed."
+    verification: "Laravel 122 passed / 4620 assertions / 667 non-fatal warnings / 0 failures; Vue 57; Compose, Go and image builds passed."
+    blocker: "Prerequisite runtime gates and owner-approved sanitized per-model polling/RX/stale/alarm/ODP/UI evidence."
+  NMS-07:
+    status: BLOCKED
+    preparation: "SSO, app.nmsolt, /nmsolt routing and reversible proxy evidence contract documented."
+    blocker: "Maung identity contract/schema, prerequisite staging, and approved Caddy/SSO test window."
+  NMS-08:
+    status: BLOCKED
+    preparation: "System ownership, canonical IDs, provenance, freshness and idempotency contract documented."
+    blocker: "Approved Maung WO/CRM contracts and synthetic integration environment."
+  NMS-09:
+    status: BLOCKED
+    blocker: "NMS-03 through NMS-08 VERIFIED plus explicit production change approval and rollback proof."
+  NMS-10:
+    status: BLOCKED
+    blocker: "Current capacity/security evidence and owner host decision; distinct deployment credentials/data required."
+  NMS-11:
+    status: BLOCKED
+    preparation: "High-risk action lifecycle and deny conditions documented; global writes remain disabled."
+    blocker: "Approved broker design, one-time authorization, lab evidence and explicit per-action approval."
+  NMS-12:
+    status: BLOCKED
+    preparation: "Release, DR, observability, isolation, SBOM/license and commercial decision checklist documented."
+    blocker: "Upstream gates and explicit release/product decisions."
 environment:
-  maung_host: "maung-apps, 192.168.48.99 (unverified current state)"
+  maung_host: "maung-apps, 192.168.48.99 (historical; current state unverified)"
   maung_deployment: NOT_STARTED
   nostek_deployment: NOT_STARTED
   genieacs_lab: NOT_STARTED
   live_olt_write: PROHIBITED_WITHOUT_APPROVAL
 next_action:
   id: NMS-03-HOST-DISCOVERY
-  instruction: "Obtain owner authorization to run scripts/nostek/collect-maung-r0.sh on the intended Maung host, review and sanitize the output, then record CPU/RAM/disk, ports, Docker projects/networks/volumes, reverse-proxy ownership, backups, collisions and a bounded NMSOLT staging budget. Do not deploy or access secrets."
-  owner: "owner for host authorization; executor for evidence review"
+  instruction: "With owner authorization, run scripts/nostek/collect-maung-r0.sh on the intended Maung host as an ordinary account; sanitize before sharing; record capacity, ports, Docker resources, reverse proxy and backup posture. Do not deploy or access secrets."
+  owner: "owner for host authorization; executor for sanitized evidence review"
   approval_required: true
-references: ["docs/nostek/ROADMAP.md", "docs/nostek/STATUS-TREE.md", "docs/nostek/HANDOFF.md"]
+references:
+  - docs/nostek/ROADMAP.md
+  - docs/nostek/STATUS-TREE.md
+  - docs/nostek/HANDOFF.md
+  - docs/nostek/NMS-07-12-GATED-READINESS.md

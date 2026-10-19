@@ -30,6 +30,10 @@ jobs:
         run: docker compose -f docker-compose.yml config --quiet
       - name: Validate optional GenieACS overlay
         run: docker compose -f docker-compose.yml -f compose.acs.yaml config --quiet
+      - name: Enforce isolated base staging topology
+        run: docker compose -f docker-compose.yml config --format json | python3 scripts/nostek/validate-staging-compose.py --profile base
+      - name: Enforce isolated ACS lab topology
+        run: docker compose -f docker-compose.yml -f compose.acs.yaml config --format json | python3 scripts/nostek/validate-staging-compose.py --profile acs
       - name: Ensure loopback-only publishing in base stack
         shell: bash
         run: |

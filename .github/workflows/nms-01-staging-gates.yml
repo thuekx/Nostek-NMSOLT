@@ -76,6 +76,14 @@ jobs:
           tools: composer:v2
           coverage: none
       - run: composer install --prefer-dist --no-interaction --no-progress
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: npm
+      - name: Compile Vite assets for Laravel Inertia feature tests
+        run: |
+          npm ci --no-audit --no-fund
+          npm run build
       - name: Generate ephemeral Laravel test encryption key
         shell: bash
         run: |

@@ -1,0 +1,59 @@
+schema: nostek-nmsolt-status/v1
+project: Nostek-NMSOLT
+updated_at: "2026-10-19"
+source_of_truth:
+  repo: https://github.com/thuekx/Nostek-NMSOLT
+  default_branch: main
+  baseline_sha: 24332a2b4144cff03f04f64e4711ce7938d992ae
+  ci_pr: https://github.com/thuekx/Nostek-NMSOLT/pull/1
+  ci_branch: ci/nms-01-docker-gates
+  ci_current_sha: 1897c7facd45c431310eb60c11594c3d3c683f05
+policy:
+  automatic_next_task_within_session: true
+  production_write_requires_approval: true
+  never_claim_unexecuted_verification: true
+  preserve_mit_upstream_notice: true
+status:
+  NMS-00: VERIFIED
+  NMS-01: BLOCKED
+  NMS-02: PENDING
+  NMS-03: PENDING
+  NMS-04: PENDING
+  NMS-05: PENDING
+  NMS-06: PENDING
+  NMS-07: PENDING
+  NMS-08: PENDING
+  NMS-09: PENDING
+  NMS-10: PENDING
+  NMS-11: PENDING
+  NMS-12: PENDING
+deferred:
+  mobile_flutter: "Excluded from initial commit, 132 files remain on Windows only; original launcher identity unsuitable."
+latest_evidence:
+  NMS-00:
+    initial_commit: https://github.com/thuekx/Nostek-NMSOLT/commit/24332a2b4144cff03f04f64e4711ce7938d992ae
+    author: "thuekx <thuekx@kolu.web.id>"
+    baseline_files: 678
+    mobile_files_in_commit: 0
+    gitleaks_windows_result: "0 findings, October 19 2026"
+  NMS-01:
+    last_reviewed_run: https://github.com/thuekx/Nostek-NMSOLT/actions/runs/39275735589
+    result: failure
+    pass_jobs: ["Docker Compose including ACS overlay", "NMSOLT and GenieACS Docker image builds", "Go tests and vet", "Vue and JS tests"]
+    failed_jobs: ["Laravel tests (isolated SQLite)"]
+    laravel_result: "98 failed, 562 warnings, 122 passed (3524 assertions)"
+    known_causes: ["Vite manifest missing during Inertia/Blade feature tests", "locale-sensitive assertion mismatch in CDataGponPortWriteTest", "test fixtures/path warnings needing triage"]
+    earlier_fixed_cause: "Missing APP_KEY on CI runner; fixed via ephemeral GitHub Actions key in 1897c7f"
+    merge_gate: "All 5 CI jobs green on same commit and test failures classified honestly."
+environment:
+  maung_host: "maung-apps, 192.168.48.99 (unverified current state)"
+  maung_deployment: NOT_STARTED
+  nostek_deployment: NOT_STARTED
+  genieacs_lab: NOT_STARTED
+  live_olt_write: PROHIBITED_WITHOUT_APPROVAL
+next_action:
+  id: NMS-01-CI-FIX
+  instruction: "Investigate failing CI Laravel tests; add ephemeral frontend build/assets and fix locale/fixture test issues without weakening assertions. Re-run all five CI jobs; do not merge while red."
+  owner: "executor in next active session"
+  approval_required: false
+references: ["docs/nostek/ROADMAP.md", "docs/nostek/STATUS-TREE.md", "docs/nostek/HANDOFF.md"]

@@ -28,6 +28,10 @@ class AuditLog extends Model
 
     public const EVENT_TELNET_OPENED = 'telnet_opened';
 
+    public const EVENT_DEVICE_WRITE_ALLOWED = 'device_write_allowed';
+
+    public const EVENT_DEVICE_WRITE_BLOCKED = 'device_write_blocked';
+
     protected $fillable = [
         'user_id',
         'user_name',

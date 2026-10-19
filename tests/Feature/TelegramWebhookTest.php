@@ -2,6 +2,7 @@
 
 namespace Tests\Feature;
 
+use App\Models\AuditLog;
 use App\Models\SnmpOlt;
 use App\Models\TelegramSetting;
 use App\Models\User;
@@ -482,6 +483,26 @@ class TelegramWebhookTest extends TestCase
 
         Http::assertSent(fn ($request) => str_contains($request->url(), 'editMessageText')
             && str_contains($request['text'], 'Perintah reboot terkirim'));
+    }
+
+    public function test_reboot_execute_callback_respects_the_installation_write_boundary(): void
+    {
+        config()->set('nostek.device_writes_enabled', false);
+        Http::fake(['api.telegram.org/*' => Http::response(['ok' => true], 200)]);
+        $this->configureBot(['chat_id' => '111']);
+        $olt = $this->seedOltWithOnus();
+
+        $this->mock(ZteRemoteOnuService::class)->shouldNotReceive('reboot');
+
+        $this->postWebhook($this->callbackUpdate('111', "rbx:{$olt->id}:1:1:1:0:0:0"))->assertOk();
+
+        Http::assertSent(fn ($request) => str_contains($request->url(), 'editMessageText')
+            && str_contains($request['text'], 'dinonaktifkan'));
+        $this->assertDatabaseHas('audit_logs', [
+            'event' => AuditLog::EVENT_DEVICE_WRITE_BLOCKED,
+            'auditable_type' => $olt->getMorphClass(),
+            'auditable_id' => $olt->id,
+        ]);
     }
 
     public function test_reboot_is_blocked_for_unsupported_olt(): void

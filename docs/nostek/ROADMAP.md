@@ -5,7 +5,8 @@
 **Execution policy:** Continue automatically from a VERIFIED gate to the next non-destructive task **within an active session**. Never claim asynchronous work will continue after the session ends. Never mark a test PASS unless backed by actual execution/evidence.  
 **Status:** consult [PROJECT-STATUS.yaml](PROJECT-STATUS.yaml) before each action.  
 **Handoff:** [HANDOFF.md](HANDOFF.md).  
-**Human-readable tree:** [STATUS-TREE.md](STATUS-TREE.md).
+**Human-readable tree:** [STATUS-TREE.md](STATUS-TREE.md).  
+**Current checkpoint (2026-10-19):** NMS-01 VERIFIED by PR #1 / Actions run `39278668150` and merged as `63f4b77`; NMS-02 is IN_PROGRESS in draft PR #2; NMS-03 read-only preparation is in draft PR #3 and remains BLOCKED until authorized Maung host evidence is collected.
 
 ## Product contract
 

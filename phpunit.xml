@@ -22,6 +22,8 @@
         <!-- Tests that assert Indonesian copy must not inherit the runner locale. -->
         <env name="APP_LOCALE" value="id"/>
         <env name="APP_FALLBACK_LOCALE" value="en"/>
+        <!-- Functional write tests use fakes only; boundary tests override config to false. -->
+        <env name="NMSOLT_DEVICE_WRITES_ENABLED" value="true"/>
         <!-- Abaikan config cache produksi supaya <env> di bawah ini benar-benar dipakai. -->
         <env name="APP_CONFIG_CACHE" value="bootstrap/cache/config.testing-tidak-ada.php"/>
         <env name="APP_ROUTES_CACHE" value="bootstrap/cache/routes.testing-tidak-ada.php"/>
@@ -42,4 +44,3 @@
         <env name="NIGHTWATCH_ENABLED" value="false"/>
     </php>
 </phpunit>
-

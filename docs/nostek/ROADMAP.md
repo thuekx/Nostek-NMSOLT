@@ -6,7 +6,7 @@
 **Status:** consult [PROJECT-STATUS.yaml](PROJECT-STATUS.yaml) before each action.  
 **Handoff:** [HANDOFF.md](HANDOFF.md).  
 **Human-readable tree:** [STATUS-TREE.md](STATUS-TREE.md).  
-**Current checkpoint (2026-10-20):** NMS-01 and NMS-02 are VERIFIED. NMS-03 remains BLOCKED on authorized Maung host evidence. Source-readiness PRs #5 (NMS-04), #6 (NMS-05) and #7 (NMS-06) passed exact-head CI and merged as `f382366`, `f5917c0` and `9c6722c`; these do not satisfy their runtime gates. NMS-07 through NMS-12 have gated preparation in PR #8 / run `39296021006`, merged as `22d609a`; all remain BLOCKED on their runtime, contract and approval gates.
+**Current checkpoint (2026-10-20):** NMS-01 and NMS-02 are VERIFIED. NMS-03 is VERIFIED from the owner-run read-only collector at `2026-10-20T00:52:49+07:00`; sanitized evidence records 8 vCPU, about 13 GiB available memory, 43 GiB root free, current Docker/port/network/proxy/backup inventory and a bounded staging budget. Source-readiness PRs #5–#8 are merged, but NMS-04 through NMS-12 remain BLOCKED on deployment, runtime, contract and approval gates.
 
 ## Product contract
 
@@ -55,6 +55,7 @@ Non-destructive parallel work is allowed (documentation, API design, unit tests,
 ## Readiness artifacts
 
 - [NMS-03-MAUNG-DISCOVERY.md](NMS-03-MAUNG-DISCOVERY.md): read-only host collector and evidence checklist.
+- [NMS-03-MAUNG-EVIDENCE-2026-10-20.md](NMS-03-MAUNG-EVIDENCE-2026-10-20.md): sanitized capacity, collision and bounded-budget decision.
 - [NMS-04-STAGING-READINESS.md](NMS-04-STAGING-READINESS.md): isolated Compose deployment/rollback plan.
 - [NMS-05-GENIEACS-LAB-MATRIX.md](NMS-05-GENIEACS-LAB-MATRIX.md): approved lab-ONT matrix and stop rules.
 - [NMS-06-FTTH-CAPABILITY-MATRIX.md](NMS-06-FTTH-CAPABILITY-MATRIX.md): reviewed vendor fixture coverage and lab gaps.

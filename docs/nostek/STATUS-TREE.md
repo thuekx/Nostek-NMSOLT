@@ -15,9 +15,11 @@ Nostek-NMSOLT — ONE SOURCE / TWO INDEPENDENT DOCKER DEPLOYMENTS
 |   +-- PR #2 / run 39284353892 / head 0fcb962 / merge 732debb
 |   +-- route, queued job and Telegram boundaries covered
 |
-+-- NMS-03 [BLOCKED] Maung read-only discovery
-|   +-- readiness PR #3 / run 39290385687 / merge f925529
-|   +-- BLOCKER: authorized host run + sanitized resource/network/backup evidence
++-- NMS-03 [VERIFIED] Maung read-only discovery
+|   +-- collector executed 2026-10-20T00:52:49+07:00; raw SHA-256 0187497B...1844ECB
+|   +-- 8 vCPU; ~13 GiB available RAM; 43 GiB root free
+|   +-- current Docker/ports/networks/proxy/backup inventory sanitized
+|   +-- bounded NMS-04 base budget: 2 vCPU / 3 GiB / 12 GiB
 +-- NMS-04 [BLOCKED] Isolated Maung staging
 |   +-- source readiness PR #5 / run 39291789107 / merge f382366
 |   +-- PASS: base/ACS rendered topology policy
@@ -67,5 +69,5 @@ Nostek-NMSOLT — ONE SOURCE / TWO INDEPENDENT DOCKER DEPLOYMENTS
   [NMS-07–12](NMS-07-12-GATED-READINESS.md).
 - Definitions: [ROADMAP.md](ROADMAP.md); resume: [HANDOFF.md](HANDOFF.md).
 
-A readiness PASS does not make the phase VERIFIED. Only NMS-00 through NMS-02
-currently satisfy their full definitions of done.
+A readiness PASS does not make the phase VERIFIED. NMS-00 through NMS-03
+currently satisfy their full definitions of done; NMS-04 and later remain blocked.

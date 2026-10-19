@@ -6,7 +6,7 @@
 **Status:** consult [PROJECT-STATUS.yaml](PROJECT-STATUS.yaml) before each action.  
 **Handoff:** [HANDOFF.md](HANDOFF.md).  
 **Human-readable tree:** [STATUS-TREE.md](STATUS-TREE.md).  
-**Current checkpoint (2026-10-20):** NMS-01 VERIFIED by PR #1 / Actions run `39278668150` and merged as `63f4b77`; NMS-02 VERIFIED by PR #2 / Actions run `39284353892` and merged as `732debb`; NMS-03 readiness PR #3 passed run `39290385687` and merged as `f925529`, but NMS-03 remains BLOCKED until authorized, sanitized Maung host evidence is collected.
+**Current checkpoint (2026-10-20):** NMS-01 and NMS-02 are VERIFIED. NMS-03 remains BLOCKED on authorized Maung host evidence. Source-readiness PRs #5 (NMS-04), #6 (NMS-05) and #7 (NMS-06) passed exact-head CI and merged as `f382366`, `f5917c0` and `9c6722c`; these do not satisfy their runtime gates. NMS-07 through NMS-12 have gated preparation only.
 
 ## Product contract
 
@@ -51,6 +51,14 @@
 NMS-00 → NMS-01 → NMS-02 → NMS-03 → NMS-04 → NMS-05 → NMS-06 → NMS-07 → NMS-08 → NMS-09 → NMS-10 → NMS-11 → NMS-12.
 
 Non-destructive parallel work is allowed (documentation, API design, unit tests, capacity-readiness scripts). Stages are not permission to bypass the earlier safety gates or deploy to production. For resource/capacity checks, obtain environment access or have the owner run a read-only collector only when necessary.
+
+## Readiness artifacts
+
+- [NMS-03-MAUNG-DISCOVERY.md](NMS-03-MAUNG-DISCOVERY.md): read-only host collector and evidence checklist.
+- [NMS-04-STAGING-READINESS.md](NMS-04-STAGING-READINESS.md): isolated Compose deployment/rollback plan.
+- [NMS-05-GENIEACS-LAB-MATRIX.md](NMS-05-GENIEACS-LAB-MATRIX.md): approved lab-ONT matrix and stop rules.
+- [NMS-06-FTTH-CAPABILITY-MATRIX.md](NMS-06-FTTH-CAPABILITY-MATRIX.md): reviewed vendor fixture coverage and lab gaps.
+- [NMS-07-12-GATED-READINESS.md](NMS-07-12-GATED-READINESS.md): SSO, WO/CRM, go-live, second deployment, action governance and release gates.
 
 ## Stop/continue rule
 

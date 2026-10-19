@@ -34,6 +34,8 @@ jobs:
         run: docker compose -f docker-compose.yml config --format json | python3 scripts/nostek/validate-staging-compose.py --profile base
       - name: Enforce isolated ACS lab topology
         run: docker compose -f docker-compose.yml -f compose.acs.yaml config --format json | python3 scripts/nostek/validate-staging-compose.py --profile acs
+      - name: Enforce GenieACS lab source policy
+        run: docker compose -f docker-compose.yml -f compose.acs.yaml config --format json | python3 scripts/nostek/validate-genieacs-lab.py --dockerfile docker/genieacs/Dockerfile --compose-source compose.acs.yaml
       - name: Ensure loopback-only publishing in base stack
         shell: bash
         run: |

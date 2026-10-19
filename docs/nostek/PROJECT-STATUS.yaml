@@ -4,7 +4,7 @@ updated_at: "2026-10-20"
 source_of_truth:
   repo: https://github.com/thuekx/Nostek-NMSOLT
   default_branch: main
-  checkpoint_main_sha: 9c6722c218e1e7d6cd0d581b3f8f29ad0fbffdfe
+  checkpoint_main_sha: 22d609a49cab92d5eb4a2e7303303d6bbc98f3a9
   baseline_sha: 24332a2b4144cff03f04f64e4711ce7938d992ae
   ci:
     pr: https://github.com/thuekx/Nostek-NMSOLT/pull/1
@@ -41,6 +41,11 @@ source_of_truth:
     verified_sha: 2a565b0e5647cf65d1ca0a98f387149c886ec24f
     run: https://github.com/thuekx/Nostek-NMSOLT/actions/runs/39295106373
     merged_sha: 9c6722c218e1e7d6cd0d581b3f8f29ad0fbffdfe
+  gated_readiness_pack:
+    pr: https://github.com/thuekx/Nostek-NMSOLT/pull/8
+    verified_sha: e31300ab9e2a6030be6541d5a23435e12ff6fb6b
+    run: https://github.com/thuekx/Nostek-NMSOLT/actions/runs/39296021006
+    merged_sha: 22d609a49cab92d5eb4a2e7303303d6bbc98f3a9
 policy:
   automatic_next_task_within_session: true
   production_write_requires_approval: true

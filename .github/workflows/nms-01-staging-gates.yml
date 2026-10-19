@@ -22,6 +22,8 @@ jobs:
       GENIEACS_UI_JWT_SECRET: ci-placeholder-not-real-credentials
     steps:
       - uses: actions/checkout@v4
+      - name: Validate NMS-03 read-only collector syntax
+        run: bash -n scripts/nostek/collect-maung-r0.sh
       - name: Create local-only environment template
         run: cp .env.docker.example .env
       - name: Validate base NMSOLT stack

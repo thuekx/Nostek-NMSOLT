@@ -1,0 +1,93 @@
+name: NMS-01 Staging Gates
+
+on:
+  push:
+    branches:
+      - ci/nms-01-docker-gates
+  pull_request:
+    branches:
+      - main
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  compose:
+    name: Validate Docker Compose (base + ACS)
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    env:
+      DB_PASSWORD: ci-placeholder-not-real-credentials
+      GENIEACS_UI_JWT_SECRET: ci-placeholder-not-real-credentials
+    steps:
+      - uses: actions/checkout@v4
+      - name: Create local-only environment template
+        run: cp .env.docker.example .env
+      - name: Validate base NMSOLT stack
+        run: docker compose -f docker-compose.yml config --quiet
+      - name: Validate optional GenieACS overlay
+        run: docker compose -f docker-compose.yml -f compose.acs.yaml config --quiet
+      - name: Ensure loopback-only publishing in base stack
+        shell: bash
+        run: |
+          set -euo pipefail
+          docker compose -f docker-compose.yml config --format json |
+            python3 -c 'import json,sys; d=json.load(sys.stdin); p=d["services"]["app"].get("ports", []); assert p and all(x.get("host_ip") in ("127.0.0.1","::1") for x in p), "app has unexpected host binding"; print("Loopback-only app publishing: PASS")'
+
+  go-poller:
+    name: Go SNMP poller tests
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-go@v5
+        with:
+          go-version: '1.22'
+          cache: true
+      - name: Go tests
+        run: go test ./...
+      - name: Go vet
+        run: go vet ./...
+
+  frontend:
+    name: Vue / JS tests
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: npm
+      - run: npm ci --no-audit --no-fund
+      - run: npm test
+
+  php-tests:
+    name: Laravel tests (isolated SQLite)
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v4
+      - uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.3'
+          extensions: mbstring, dom, pdo_pgsql, pdo_sqlite, sqlite3, snmp, pcntl, redis, gd, zip, sockets, bcmath, intl
+          tools: composer:v2
+          coverage: none
+      - run: composer install --prefer-dist --no-interaction --no-progress
+      - name: Run repository test wrapper with SQLite gate
+        run: bash scripts/test.sh
+
+  docker-build:
+    name: Build NMSOLT and GenieACS images (no run, no push)
+    runs-on: ubuntu-latest
+    timeout-minutes: 40
+    steps:
+      - uses: actions/checkout@v4
+      - name: Build NMSOLT application image
+        run: docker build --tag nostek-nmsolt:ci --file Dockerfile .
+      - name: Build GenieACS lab image
+        run: docker build --tag nostek-genieacs:ci --file docker/genieacs/Dockerfile .
+
+# GitHub-hosted ephemeral runners only; no registry push or production access.

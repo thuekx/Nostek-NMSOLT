@@ -7,7 +7,7 @@ source_of_truth:
   baseline_sha: 24332a2b4144cff03f04f64e4711ce7938d992ae
   ci_pr: https://github.com/thuekx/Nostek-NMSOLT/pull/1
   ci_branch: ci/nms-01-docker-gates
-  ci_current_sha: 1897c7facd45c431310eb60c11594c3d3c683f05
+  ci_current_sha: 17cf45145d38781fd00638608ccd2a27720d113a
 policy:
   automatic_next_task_within_session: true
   production_write_requires_approval: true
@@ -44,6 +44,7 @@ latest_evidence:
     laravel_result: "98 failed, 562 warnings, 122 passed (3524 assertions)"
     known_causes: ["Vite manifest missing during Inertia/Blade feature tests", "locale-sensitive assertion mismatch in CDataGponPortWriteTest", "test fixtures/path warnings needing triage"]
     earlier_fixed_cause: "Missing APP_KEY on CI runner; fixed via ephemeral GitHub Actions key in 1897c7f"
+    latest_change: "17cf451 adds npm ci and npm run build to PHP job; new full CI result not yet verified."
     merge_gate: "All 5 CI jobs green on same commit and test failures classified honestly."
 environment:
   maung_host: "maung-apps, 192.168.48.99 (unverified current state)"

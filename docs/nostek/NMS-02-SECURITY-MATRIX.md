@@ -45,6 +45,39 @@ recording the bot token or chat ID. Queue workers recheck the installation gate 
 configuration (for example, after the deployment's normal config-cache and
 worker reload), queued executions that have not begun are stopped.
 
+## Existing control inventory
+
+- `PartnerOltScope` and `DemoScope` constrain OLT, alarm, ODP, map and related
+  model queries. Route-model binding therefore returns 404 for an OLT outside
+  the authenticated user's assignment instead of exposing its inventory.
+- OLT SNMP communities and CLI passwords, ACS passwords, and global/partner
+  Telegram tokens and webhook secrets use encrypted model casts and hidden
+  serialization fields.
+- Existing role/capability checks restrict secret access, connection edits,
+  uplink writes and backup content. Demo accounts remain read-only for both
+  session and token API requests.
+- Existing audit serialization excludes OLT credentials, while ACS passwords
+  are filled server-side and Telegram error redaction removes bot tokens.
+
+The repository suite contains regression coverage in `PartnerRoleTest`,
+`OperatorOltScopeTest`, `SecurityHardeningTest`, `OltAccessGateTest`,
+`AuditLogTest`, and the device-write boundary tests below. Their presence is
+not a PASS by itself; the branch's full CI run remains the verification gate.
+
+## Threat boundary and residual risks
+
+This control is an application kill switch, not a network firewall or a broker
+approval system. Read-only polling and explicit refresh actions can still open
+SNMP/CLI sessions to approved inventory targets. A changed environment value
+only takes effect after the deployment's normal config-cache and long-running
+worker reload. Direct database access, compromised application code, or a
+separately privileged host process is outside this gate.
+
+Per-operation impact previews, one-time authorization and external broker
+approval remain NMS-11 work. Until those controls and lab evidence exist, an
+enabled installation variable is necessary but not sufficient authorization
+for a live OLT/ONT change.
+
 ## Verification
 
 `tests/Feature/DeviceWriteBoundaryTest.php` verifies:

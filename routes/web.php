@@ -143,22 +143,22 @@ Route::middleware('auth')->group(function () {
     Route::post('/cdata-olt/{olt}/test', [CDataOltController::class, 'test'])->middleware('throttle:olt-refresh')->name('cdata-olt.test');
     Route::get('/cdata-olt/{olt}/detail', [CDataOltController::class, 'detail'])->name('cdata-olt.detail');
     Route::post('/cdata-olt/{olt}/refresh', [CDataOltController::class, 'refresh'])->middleware('throttle:olt-refresh')->name('cdata-olt.refresh');
-    Route::post('/cdata-olt/{olt}/config/save', [CDataOltController::class, 'saveConfig'])->middleware('throttle:olt-refresh')->name('cdata-olt.config.save');
+    Route::post('/cdata-olt/{olt}/config/save', [CDataOltController::class, 'saveConfig'])->middleware(['throttle:olt-refresh', 'device.write'])->name('cdata-olt.config.save');
     Route::get('/cdata-olt/{olt}/pon-ports', [CDataOltController::class, 'ponPorts'])->name('cdata-olt.pon-ports');
     Route::get('/cdata-olt/{olt}/ports/{slot}/{port}/onus', [CDataOltController::class, 'portOnus'])->name('cdata-olt.port-onus');
     Route::post('/cdata-olt/{olt}/ports/{slot}/{port}/onus/refresh', [CDataOltController::class, 'refreshPortOnus'])->name('cdata-olt.port-onus.refresh');
-    Route::post('/cdata-olt/{olt}/ports/{slot}/{port}/onus/{onuId}/reboot', [CDataOltController::class, 'rebootOnu'])->name('cdata-olt.onu.reboot');
-    Route::post('/cdata-olt/{olt}/ports/{slot}/{port}/onus/{onuId}/state', [CDataOltController::class, 'setOnuState'])->name('cdata-olt.onu.state');
-    Route::post('/cdata-olt/{olt}/ports/{slot}/{port}/onus/{onuId}/info', [CDataOltController::class, 'updateOnuInfo'])->name('cdata-olt.onu.info');
-    Route::post('/cdata-olt/{olt}/ports/{slot}/{port}/onus/{onuId}/remote-access', [CDataOltController::class, 'setOnuRemoteAccess'])->name('cdata-olt.onu.remote-access');
-    Route::delete('/cdata-olt/{olt}/ports/{slot}/{port}/onus/{onuId}', [CDataOltController::class, 'deleteOnu'])->name('cdata-olt.onu.delete');
+    Route::post('/cdata-olt/{olt}/ports/{slot}/{port}/onus/{onuId}/reboot', [CDataOltController::class, 'rebootOnu'])->middleware('device.write')->name('cdata-olt.onu.reboot');
+    Route::post('/cdata-olt/{olt}/ports/{slot}/{port}/onus/{onuId}/state', [CDataOltController::class, 'setOnuState'])->middleware('device.write')->name('cdata-olt.onu.state');
+    Route::post('/cdata-olt/{olt}/ports/{slot}/{port}/onus/{onuId}/info', [CDataOltController::class, 'updateOnuInfo'])->middleware('device.write')->name('cdata-olt.onu.info');
+    Route::post('/cdata-olt/{olt}/ports/{slot}/{port}/onus/{onuId}/remote-access', [CDataOltController::class, 'setOnuRemoteAccess'])->middleware('device.write')->name('cdata-olt.onu.remote-access');
+    Route::delete('/cdata-olt/{olt}/ports/{slot}/{port}/onus/{onuId}', [CDataOltController::class, 'deleteOnu'])->middleware('device.write')->name('cdata-olt.onu.delete');
     // VLAN & detail port GPON/EPON/GE/XGE C-Data firmware V3 (CLI). Tulis = staf Pusat / pemilik OLT (dicek controller).
     Route::get('/cdata-olt/{olt}/vlans', [CDataGponPortController::class, 'vlans'])->name('cdata-olt.vlans');
-    Route::post('/cdata-olt/{olt}/vlans', [CDataGponPortController::class, 'storeVlan'])->middleware('throttle:olt-refresh')->name('cdata-olt.vlans.store');
+    Route::post('/cdata-olt/{olt}/vlans', [CDataGponPortController::class, 'storeVlan'])->middleware(['throttle:olt-refresh', 'device.write'])->name('cdata-olt.vlans.store');
     Route::get('/cdata-olt/{olt}/port/{kind}/{slot}/{port}', [CDataGponPortController::class, 'portDetail'])
         ->whereIn('kind', ['gpon', 'epon', 'ge', 'xge'])->whereNumber(['slot', 'port'])->name('cdata-olt.port.detail');
     Route::post('/cdata-olt/{olt}/port/{kind}/{slot}/{port}/vlan', [CDataGponPortController::class, 'tagPortVlan'])
-        ->whereIn('kind', ['ge', 'xge', 'epon'])->whereNumber(['slot', 'port'])->middleware('throttle:olt-refresh')->name('cdata-olt.port.vlan');
+        ->whereIn('kind', ['ge', 'xge', 'epon'])->whereNumber(['slot', 'port'])->middleware(['throttle:olt-refresh', 'device.write'])->name('cdata-olt.port.vlan');
 
     // OLT HiOSO EPON (enterprise 25355, mis. HA7304) — inventori + rename/reboot ONU (CLI).
     Route::get('/hioso-olt', [HiosoOltController::class, 'index'])->name('hioso-olt.index');
@@ -170,14 +170,14 @@ Route::middleware('auth')->group(function () {
     Route::post('/hioso-olt/{olt}/test', [HiosoOltController::class, 'test'])->middleware('throttle:olt-refresh')->name('hioso-olt.test');
     Route::get('/hioso-olt/{olt}/detail', [HiosoOltController::class, 'detail'])->name('hioso-olt.detail');
     Route::post('/hioso-olt/{olt}/refresh', [HiosoOltController::class, 'refresh'])->middleware('throttle:olt-refresh')->name('hioso-olt.refresh');
-    Route::post('/hioso-olt/{olt}/config/save', [HiosoOltController::class, 'saveConfig'])->middleware('throttle:olt-refresh')->name('hioso-olt.config.save');
+    Route::post('/hioso-olt/{olt}/config/save', [HiosoOltController::class, 'saveConfig'])->middleware(['throttle:olt-refresh', 'device.write'])->name('hioso-olt.config.save');
     Route::get('/hioso-olt/{olt}/pon-ports', [HiosoOltController::class, 'ponPorts'])->name('hioso-olt.pon-ports');
     Route::get('/hioso-olt/{olt}/ports/{slot}/{port}/onus', [HiosoOltController::class, 'portOnus'])->name('hioso-olt.port-onus');
     Route::post('/hioso-olt/{olt}/ports/{slot}/{port}/onus/refresh', [HiosoOltController::class, 'refreshPortOnus'])->name('hioso-olt.port-onus.refresh');
-    Route::post('/hioso-olt/{olt}/ports/{slot}/{port}/onus/{onuId}/reboot', [HiosoOltController::class, 'rebootOnu'])->name('hioso-olt.onu.reboot');
-    Route::post('/hioso-olt/{olt}/ports/{slot}/{port}/onus/{onuId}/state', [HiosoOltController::class, 'setOnuState'])->name('hioso-olt.onu.state');
-    Route::post('/hioso-olt/{olt}/ports/{slot}/{port}/onus/{onuId}/info', [HiosoOltController::class, 'updateOnuInfo'])->name('hioso-olt.onu.info');
-    Route::delete('/hioso-olt/{olt}/ports/{slot}/{port}/onus/{onuId}', [HiosoOltController::class, 'deleteOnu'])->name('hioso-olt.onu.delete');
+    Route::post('/hioso-olt/{olt}/ports/{slot}/{port}/onus/{onuId}/reboot', [HiosoOltController::class, 'rebootOnu'])->middleware('device.write')->name('hioso-olt.onu.reboot');
+    Route::post('/hioso-olt/{olt}/ports/{slot}/{port}/onus/{onuId}/state', [HiosoOltController::class, 'setOnuState'])->middleware('device.write')->name('hioso-olt.onu.state');
+    Route::post('/hioso-olt/{olt}/ports/{slot}/{port}/onus/{onuId}/info', [HiosoOltController::class, 'updateOnuInfo'])->middleware('device.write')->name('hioso-olt.onu.info');
+    Route::delete('/hioso-olt/{olt}/ports/{slot}/{port}/onus/{onuId}', [HiosoOltController::class, 'deleteOnu'])->middleware('device.write')->name('hioso-olt.onu.delete');
 
     Route::get('/smartolt', [SmartOltController::class, 'index'])->name('smartolt.index');
     Route::get('/smartolt/create', [SmartOltController::class, 'create'])->middleware('role:admin,operator,partner')->name('smartolt.create');
@@ -192,8 +192,8 @@ Route::middleware('auth')->group(function () {
     Route::post('/map/pins', [OnuMapController::class, 'store'])->name('map.pins.store');
     Route::put('/map/pins/{pin}', [OnuMapController::class, 'update'])->name('map.pins.update');
     Route::delete('/map/pins/{pin}', [OnuMapController::class, 'destroy'])->name('map.pins.destroy');
-    Route::post('/map/pins/{pin}/reboot', [OnuMapController::class, 'rebootPin'])->name('map.pins.reboot');
-    Route::post('/map/pins/{pin}/rename', [OnuMapController::class, 'renamePin'])->name('map.pins.rename');
+    Route::post('/map/pins/{pin}/reboot', [OnuMapController::class, 'rebootPin'])->middleware('device.write')->name('map.pins.reboot');
+    Route::post('/map/pins/{pin}/rename', [OnuMapController::class, 'renamePin'])->middleware('device.write')->name('map.pins.rename');
     // ODP (Optical Distribution Point) — pin ODP di peta + relasi ONU↔ODP.
     Route::post('/map/odps', [OdpController::class, 'store'])->name('map.odps.store');
     Route::put('/map/odps/{odp}', [OdpController::class, 'update'])->name('map.odps.update');
@@ -218,7 +218,7 @@ Route::middleware('auth')->group(function () {
     // perangkat pelanggan, jadi dibatasi peran tulis (lebih ketat dari aksi ONU
     // lain yang hanya ber-`auth`) dan dicatat ke audit di controller.
     Route::post('/olts/{olt}/onus/{slot}/{port}/{onuId}/acs-wifi', [GenieacsController::class, 'updateWifi'])
-        ->middleware('role:admin,operator,partner')
+        ->middleware(['role:admin,operator,partner', 'device.write'])
         ->whereNumber(['slot', 'port', 'onuId'])
         ->name('genieacs.onu.wifi');
     // Penyematan manual pasangan ONU↔device ACS. Pencariannya hanya membaca
@@ -253,9 +253,9 @@ Route::middleware('auth')->group(function () {
     Route::get('/smartolt/{olt}/port-detail', [SmartOltController::class, 'portDetail'])->name('smartolt.port.detail');
     Route::post('/smartolt/{olt}/port-detail/refresh', [SmartOltController::class, 'refreshPortDetail'])->name('smartolt.port.refresh');
     Route::get('/smartolt/{olt}/port-detail/traffic', [SmartOltController::class, 'portTraffic'])->name('smartolt.port.traffic');
-    Route::post('/smartolt/{olt}/port-detail/vlan', [SmartOltController::class, 'storePortVlan'])->name('smartolt.port.vlan');
-    Route::post('/smartolt/{olt}/port-detail/description', [SmartOltController::class, 'storePortDescription'])->middleware('throttle:olt-refresh')->name('smartolt.port.description');
-    Route::post('/smartolt/{olt}/port-detail/admin-state', [SmartOltController::class, 'storePortAdminState'])->middleware('throttle:olt-refresh')->name('smartolt.port.admin-state');
+    Route::post('/smartolt/{olt}/port-detail/vlan', [SmartOltController::class, 'storePortVlan'])->middleware('device.write')->name('smartolt.port.vlan');
+    Route::post('/smartolt/{olt}/port-detail/description', [SmartOltController::class, 'storePortDescription'])->middleware(['throttle:olt-refresh', 'device.write'])->name('smartolt.port.description');
+    Route::post('/smartolt/{olt}/port-detail/admin-state', [SmartOltController::class, 'storePortAdminState'])->middleware(['throttle:olt-refresh', 'device.write'])->name('smartolt.port.admin-state');
     Route::get('/smartolt/{olt}/ports/{slot}/{port}/onus', [SmartOltController::class, 'portOnus'])->name('smartolt.port-onus');
     Route::get('/smartolt/{olt}/unconfigured', [SmartOltController::class, 'unconfigured'])->name('smartolt.unconfigured');
     Route::post('/smartolt/{olt}/unconfigured/refresh', [SmartOltController::class, 'refreshUnconfigured'])->name('smartolt.unconfigured.refresh');
@@ -263,25 +263,25 @@ Route::middleware('auth')->group(function () {
     Route::get('/smartolt/{olt}/register/mgmt-pool', [SmartOltController::class, 'registerMgmtPool'])->middleware('throttle:olt-refresh')->name('smartolt.register.mgmt-pool');
     Route::post('/smartolt/{olt}/register/preview', [SmartOltController::class, 'registerOnuPreview'])->name('smartolt.register.preview');
     Route::post('/smartolt/{olt}/register/advanced/preview', [SmartOltController::class, 'registerOnuAdvancedPreview'])->name('smartolt.register.advanced.preview');
-    Route::post('/smartolt/{olt}/register/advanced', [SmartOltController::class, 'storeOnuAdvanced'])->name('smartolt.register.advanced.store');
-    Route::post('/smartolt/{olt}/register', [SmartOltController::class, 'storeOnu'])->name('smartolt.register.store');
+    Route::post('/smartolt/{olt}/register/advanced', [SmartOltController::class, 'storeOnuAdvanced'])->middleware('device.write:execute')->name('smartolt.register.advanced.store');
+    Route::post('/smartolt/{olt}/register', [SmartOltController::class, 'storeOnu'])->middleware('device.write:execute')->name('smartolt.register.store');
     Route::get('/smartolt/{olt}/registrations', [SmartOltController::class, 'registrations'])->name('smartolt.registrations');
-    Route::post('/smartolt/{olt}/registrations/{registration}/execute', [SmartOltController::class, 'executeRegistration'])->name('smartolt.registrations.execute');
+    Route::post('/smartolt/{olt}/registrations/{registration}/execute', [SmartOltController::class, 'executeRegistration'])->middleware('device.write')->name('smartolt.registrations.execute');
     Route::delete('/smartolt/{olt}/registrations/{registration}', [SmartOltController::class, 'destroyRegistration'])->name('smartolt.registrations.destroy');
     Route::get('/smartolt/{olt}/profiles', [SmartOltProfileController::class, 'index'])->name('smartolt.profiles.index');
-    Route::post('/smartolt/{olt}/profiles', [SmartOltProfileController::class, 'store'])->name('smartolt.profiles.store');
+    Route::post('/smartolt/{olt}/profiles', [SmartOltProfileController::class, 'store'])->middleware('device.write:execute_cli')->name('smartolt.profiles.store');
     Route::post('/smartolt/{olt}/profiles/sync', [SmartOltProfileController::class, 'syncFromOlt'])->name('smartolt.profiles.sync');
-    Route::put('/smartolt/{olt}/profiles/{profile}', [SmartOltProfileController::class, 'update'])->name('smartolt.profiles.update');
-    Route::delete('/smartolt/{olt}/profiles/{profile}', [SmartOltProfileController::class, 'destroy'])->name('smartolt.profiles.destroy');
+    Route::put('/smartolt/{olt}/profiles/{profile}', [SmartOltProfileController::class, 'update'])->middleware('device.write:execute_cli')->name('smartolt.profiles.update');
+    Route::delete('/smartolt/{olt}/profiles/{profile}', [SmartOltProfileController::class, 'destroy'])->middleware('device.write:execute_cli')->name('smartolt.profiles.destroy');
     Route::get('/smartolt/{olt}/edit', [SmartOltController::class, 'edit'])->name('smartolt.edit');
     Route::put('/smartolt/{olt}', [SmartOltController::class, 'update'])->name('smartolt.update');
     Route::delete('/smartolt/{olt}', [SmartOltController::class, 'destroy'])->middleware('role:admin,operator,partner')->name('smartolt.destroy');
-    Route::post('/smartolt/{olt}/telnet/token', [TelnetSessionController::class, 'token'])->name('smartolt.telnet.token');
+    Route::post('/smartolt/{olt}/telnet/token', [TelnetSessionController::class, 'token'])->middleware('device.write')->name('smartolt.telnet.token');
     Route::post('/smartolt/{olt}/test', [SmartOltController::class, 'test'])->middleware('throttle:olt-refresh')->name('smartolt.test');
     // Toggle alarm per-OLT (mute) — dipakai semua family (ZTE/C-Data/HiOSO), hanya membalik flag SnmpOlt.
     Route::post('/smartolt/{olt}/alarms/toggle', [SmartOltController::class, 'toggleAlarms'])->name('smartolt.alarms.toggle');
     // Simpan running-config OLT ZTE ke memori (CLI `write`) — sinkron, bisa ~30 detik di C300.
-    Route::post('/smartolt/{olt}/config/save', [SmartOltController::class, 'saveConfig'])->middleware('throttle:olt-refresh')->name('smartolt.config.save');
+    Route::post('/smartolt/{olt}/config/save', [SmartOltController::class, 'saveConfig'])->middleware(['throttle:olt-refresh', 'device.write'])->name('smartolt.config.save');
     // Backup running-config OLT (ZTE): riwayat, backup manual, toggle backup harian, view/download versi.
     Route::get('/smartolt/{olt}/config-backups', [OltConfigBackupController::class, 'index'])->name('smartolt.config-backups.index');
     Route::post('/smartolt/{olt}/config-backups', [OltConfigBackupController::class, 'store'])->middleware('throttle:olt-refresh')->name('smartolt.config-backups.store');
@@ -290,13 +290,13 @@ Route::middleware('auth')->group(function () {
     Route::get('/smartolt/{olt}/config-backups/{backup}/download', [OltConfigBackupController::class, 'download'])->name('smartolt.config-backups.download');
     Route::post('/smartolt/{olt}/refresh', [SmartOltController::class, 'refresh'])->middleware('throttle:olt-refresh')->name('smartolt.refresh');
     Route::post('/smartolt/{olt}/ports/{slot}/{port}/onus/refresh', [SmartOltController::class, 'refreshPortOnus'])->name('smartolt.port-onus.refresh');
-    Route::post('/smartolt/{olt}/ports/{slot}/{port}/onus/delete', [SmartOltController::class, 'deleteOnus'])->name('smartolt.port-onus.delete');
-    Route::post('/smartolt/{olt}/ports/{slot}/{port}/onus/copy', [SmartOltController::class, 'copyOnusToPort'])->name('smartolt.port-onus.copy');
+    Route::post('/smartolt/{olt}/ports/{slot}/{port}/onus/delete', [SmartOltController::class, 'deleteOnus'])->middleware('device.write')->name('smartolt.port-onus.delete');
+    Route::post('/smartolt/{olt}/ports/{slot}/{port}/onus/copy', [SmartOltController::class, 'copyOnusToPort'])->middleware('device.write:execute')->name('smartolt.port-onus.copy');
     Route::get('/smartolt/{olt}/copy-tasks/{task}', [SmartOltController::class, 'copyTaskStatus'])->name('smartolt.copy-task.status');
-    Route::post('/smartolt/{olt}/ports/{slot}/{port}/tr069-bulk', [SmartOltController::class, 'tr069Bulk'])->name('smartolt.tr069-bulk');
+    Route::post('/smartolt/{olt}/ports/{slot}/{port}/tr069-bulk', [SmartOltController::class, 'tr069Bulk'])->middleware('device.write:execute')->name('smartolt.tr069-bulk');
     Route::get('/smartolt/{olt}/tr069-bulk/{task}', [SmartOltController::class, 'tr069BulkStatus'])->name('smartolt.tr069-bulk.status');
-    Route::post('/smartolt/{olt}/ports/{slot}/{port}/onus/{onuId}/reboot', [SmartOltController::class, 'rebootOnu'])->name('smartolt.onu.reboot');
-    Route::post('/smartolt/{olt}/ports/{slot}/{port}/onus/{onuId}/delete', [SmartOltController::class, 'deleteOnu'])->name('smartolt.onu.delete');
+    Route::post('/smartolt/{olt}/ports/{slot}/{port}/onus/{onuId}/reboot', [SmartOltController::class, 'rebootOnu'])->middleware('device.write')->name('smartolt.onu.reboot');
+    Route::post('/smartolt/{olt}/ports/{slot}/{port}/onus/{onuId}/delete', [SmartOltController::class, 'deleteOnu'])->middleware('device.write')->name('smartolt.onu.delete');
     // "Bind ONU" dari halaman unconfigured: kandidat = ONU di port yang sama (SNMP live), lalu
     // `registration-method sn` memasang SN ONU pengganti ke slot ONU lama (C300/C320).
     Route::get('/smartolt/{olt}/ports/{slot}/{port}/replace-candidates', [SmartOltController::class, 'replaceCandidates'])
@@ -304,18 +304,19 @@ Route::middleware('auth')->group(function () {
         ->whereNumber(['slot', 'port'])
         ->name('smartolt.onu.replace-candidates');
     Route::post('/smartolt/{olt}/ports/{slot}/{port}/onus/{onuId}/replace', [SmartOltController::class, 'replaceOnu'])
+        ->middleware('device.write')
         ->whereNumber(['slot', 'port', 'onuId'])
         ->name('smartolt.onu.replace');
-    Route::post('/smartolt/{olt}/ports/{slot}/{port}/onus/{onuId}/state', [SmartOltController::class, 'setOnuState'])->name('smartolt.onu.state');
-    Route::post('/smartolt/{olt}/ports/{slot}/{port}/onus/{onuId}/info', [SmartOltController::class, 'updateOnuInfo'])->name('smartolt.onu.info');
+    Route::post('/smartolt/{olt}/ports/{slot}/{port}/onus/{onuId}/state', [SmartOltController::class, 'setOnuState'])->middleware('device.write')->name('smartolt.onu.state');
+    Route::post('/smartolt/{olt}/ports/{slot}/{port}/onus/{onuId}/info', [SmartOltController::class, 'updateOnuInfo'])->middleware('device.write')->name('smartolt.onu.info');
     Route::get('/smartolt/{olt}/ports/{slot}/{port}/onus/{onuId}/detail', [SmartOltController::class, 'onuDetail'])->name('smartolt.onu.detail');
     Route::get('/smartolt/{olt}/ports/{slot}/{port}/onus/{onuId}/configure', [SmartOltController::class, 'configureOnuForm'])->name('smartolt.onu.configure');
     Route::post('/smartolt/{olt}/ports/{slot}/{port}/onus/{onuId}/configure/preview', [SmartOltController::class, 'configureOnuPreview'])->name('smartolt.onu.configure.preview');
-    Route::post('/smartolt/{olt}/ports/{slot}/{port}/onus/{onuId}/configure', [SmartOltController::class, 'configureOnuApply'])->name('smartolt.onu.configure.apply');
+    Route::post('/smartolt/{olt}/ports/{slot}/{port}/onus/{onuId}/configure', [SmartOltController::class, 'configureOnuApply'])->middleware('device.write')->name('smartolt.onu.configure.apply');
     // Editor per-bagian gaya NetNumen: satu perubahan → langsung ke OLT → config dibaca ulang (JSON).
-    Route::post('/smartolt/{olt}/ports/{slot}/{port}/onus/{onuId}/configure/item', [SmartOltController::class, 'configureOnuItem'])->name('smartolt.onu.configure.item');
+    Route::post('/smartolt/{olt}/ports/{slot}/{port}/onus/{onuId}/configure/item', [SmartOltController::class, 'configureOnuItem'])->middleware('device.write')->name('smartolt.onu.configure.item');
     // Lepas onu-profile C300 (`no onu N profile`) + tulis ulang baris profile agar layanan tetap jalan.
-    Route::post('/smartolt/{olt}/ports/{slot}/{port}/onus/{onuId}/configure/unbind-profile', [SmartOltController::class, 'configureOnuUnbindProfile'])->name('smartolt.onu.configure.unbind-profile');
+    Route::post('/smartolt/{olt}/ports/{slot}/{port}/onus/{onuId}/configure/unbind-profile', [SmartOltController::class, 'configureOnuUnbindProfile'])->middleware('device.write')->name('smartolt.onu.configure.unbind-profile');
 });
 
 require __DIR__.'/auth.php';

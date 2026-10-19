@@ -41,6 +41,16 @@ class CopyOnusToPortJob implements ShouldQueue
             return;
         }
 
+        if ($task->execute && ! config('nostek.device_writes_enabled', false)) {
+            $task->update([
+                'status' => 'failed',
+                'error' => 'Aksi tulis OLT/ONT dinonaktifkan untuk instalasi ini.',
+                'finished_at' => now(),
+            ]);
+
+            return;
+        }
+
         $task->update(['status' => 'running', 'started_at' => now()]);
 
         try {

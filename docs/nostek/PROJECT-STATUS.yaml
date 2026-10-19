@@ -4,7 +4,7 @@ updated_at: "2026-10-20"
 source_of_truth:
   repo: https://github.com/thuekx/Nostek-NMSOLT
   default_branch: main
-  checkpoint_main_sha: 22d609a49cab92d5eb4a2e7303303d6bbc98f3a9
+  checkpoint_main_sha: 6981999a8c8f55cfb1dc345fd17cb52ebe6c37f2
   baseline_sha: 24332a2b4144cff03f04f64e4711ce7938d992ae
   ci:
     pr: https://github.com/thuekx/Nostek-NMSOLT/pull/1
@@ -55,7 +55,7 @@ status:
   NMS-00: VERIFIED
   NMS-01: VERIFIED
   NMS-02: VERIFIED
-  NMS-03: BLOCKED
+  NMS-03: VERIFIED
   NMS-04: BLOCKED
   NMS-05: BLOCKED
   NMS-06: BLOCKED
@@ -81,9 +81,12 @@ latest_evidence:
     result: "PR #2 exact-head CI passed; default-off route, queue and Telegram device-write boundary merged as 732debb."
     laravel: "122 passed, 4603 assertions, 665 non-fatal warnings, 0 failures"
   NMS-03:
-    status: BLOCKED
+    status: VERIFIED
     source_readiness: "PR #3 passed run 39290385687 and merged as f925529; read-only collector and sanitization checklist exist."
-    blocker: "Owner-authorized execution on the intended Maung host and sanitized CPU/RAM/disk/ports/Docker/proxy/backup evidence."
+    collected_at: "2026-10-20T00:52:49+07:00"
+    raw_artifact_sha256: 0187497B9551BE5AB3E0C8598E8F12DE109D8700273EFA1C3C877C5661844ECB
+    sanitized_evidence: docs/nostek/NMS-03-MAUNG-EVIDENCE-2026-10-20.md
+    result: "8 vCPU; 15 GiB RAM / about 13 GiB available; 43 GiB root free; existing Docker/proxy/ports/networks/backups inventoried; bounded base staging budget 2 vCPU / 3 GiB / 12 GiB."
   NMS-04:
     status: BLOCKED
     source_readiness: "PR #5 passed run 39291789107 and merged as f382366; rendered base/ACS topology validators passed."
@@ -126,9 +129,9 @@ environment:
   genieacs_lab: NOT_STARTED
   live_olt_write: PROHIBITED_WITHOUT_APPROVAL
 next_action:
-  id: NMS-03-HOST-DISCOVERY
-  instruction: "With owner authorization, run scripts/nostek/collect-maung-r0.sh on the intended Maung host as an ordinary account; sanitize before sharing; record capacity, ports, Docker resources, reverse proxy and backup posture. Do not deploy or access secrets."
-  owner: "owner for host authorization; executor for sanitized evidence review"
+  id: NMS-04-STAGING-APPROVAL
+  instruction: "Review the sanitized NMS-03 budget and approve a bounded NMS-04 staging window. Recheck point-in-time capacity/ports/networks, then deploy only the isolated base stack with writes disabled; collect health, migration, backup/restore and rollback evidence. Do not change Caddy or join maung_edge."
+  owner: "owner for staging change approval; executor for bounded deployment and evidence"
   approval_required: true
 references:
   - docs/nostek/ROADMAP.md

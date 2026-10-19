@@ -34,12 +34,15 @@ verification.
 
 ## Blocked phases and completed safe preparation
 
-- **NMS-03 BLOCKED:** [PR #3](https://github.com/thuekx/Nostek-NMSOLT/pull/3)
+- **NMS-03 VERIFIED:** preparation [PR #3](https://github.com/thuekx/Nostek-NMSOLT/pull/3)
   passed [run 39290385687](https://github.com/thuekx/Nostek-NMSOLT/actions/runs/39290385687)
-  and merged f925529ef0b41026a08e8bd9639cedbe3ff6e22b. The read-only
-  collector and sanitization checklist exist. No host connection occurred.
-  Blocker: owner-authorized execution on the intended Maung host and sanitized
-  CPU/RAM/disk/ports/Docker/proxy/backup evidence.
+  and merged f925529ef0b41026a08e8bd9639cedbe3ff6e22b. The owner ran the
+  read-only collector at 2026-10-20T00:52:49+07:00. Raw artifact SHA-256 is
+  0187497B9551BE5AB3E0C8598E8F12DE109D8700273EFA1C3C877C5661844ECB;
+  raw output remains outside the public repo. Sanitized evidence records 8 vCPU,
+  about 13 GiB available RAM, 43 GiB root free, existing Docker/port/network/
+  proxy/backup inventory and a bounded base staging budget of 2 vCPU / 3 GiB /
+  12 GiB.
 - **NMS-04 BLOCKED:** [PR #5](https://github.com/thuekx/Nostek-NMSOLT/pull/5),
   head a548131e3aa51901727a5105865e91363f695793, successful
   [run 39291789107](https://github.com/thuekx/Nostek-NMSOLT/actions/runs/39291789107),
@@ -69,14 +72,14 @@ verification.
 
 ## Exact next action requiring owner authority
 
-Authorize execution of scripts/nostek/collect-maung-r0.sh on the intended Maung
-host as an ordinary account. The executor must not use sudo, read environment
-secrets, deploy, restart services, change firewall/proxy configuration, or
-contact devices. Sanitize the output before it enters GitHub, then record the
-bounded staging resource budget and collisions.
-
-Historical target information is maung-apps / 192.168.48.99, but current state
-is unverified and must not be inferred from history.
+Approve a bounded NMS-04 staging window using the sanitized NMS-03 budget. The
+executor must recheck memory, disk, ports and Docker subnets immediately before
+starting; deploy only the isolated base stack on loopback 18080 with device
+writes disabled; use separate project/network/volumes; do not edit Caddy or join
+maung_edge. Collect migration, application/worker/scheduler health, backup,
+restore and rollback evidence. Stop if available memory is below 8 GiB, root free
+space below 30 GiB before deploy, port 18080 is occupied, or a network collision
+exists.
 
 ## After NMS-03 evidence
 
@@ -93,10 +96,10 @@ is unverified and must not be inferred from history.
 
 > Lanjutkan thuekx/Nostek-NMSOLT dari GitHub. Baca HANDOFF.md, ROADMAP.md,
 > PROJECT-STATUS.yaml dan STATUS-TREE.md; verifikasi main, PR dan CI terbaru.
-> NMS-00..02 VERIFIED. NMS-03..12 BLOCKED dengan source-readiness sampai NMS-06
+> NMS-00..03 VERIFIED. NMS-04..12 BLOCKED dengan source-readiness sampai NMS-06
 > dan kontrak gate NMS-07..12 sudah terdokumentasi. Kerjakan semua langkah aman
 > secara berurutan, tetapi jangan menyentuh produksi/live OLT/ONT, Maung WO/CRM,
 > Caddy atau rahasia, dan jangan melewati approval. Tahap berikut yang membutuhkan
-> otorisasi adalah collector read-only NMS-03 pada host Maung yang dimaksud;
-> sanitasi hasil sebelum GitHub. Jangan klaim VERIFIED tanpa bukti exact-head CI
+> otorisasi adalah deployment staging NMS-04 yang dibatasi 2 vCPU / 3 GiB /
+> 12 GiB, loopback-only, writes disabled, tanpa perubahan Caddy atau maung_edge. Jangan klaim VERIFIED tanpa bukti exact-head CI
 > dan artifact runtime yang diwajibkan.

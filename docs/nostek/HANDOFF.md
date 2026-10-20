@@ -99,23 +99,15 @@ NMS-05 remains BLOCKED; source-readiness work is already complete.
 
 
 
-1. Review the sanitized inventory and set a bounded NMSOLT staging budget.
-2. Obtain an explicit staging deployment window; execute NMS-04 deploy,
-   migration, health, backup/restore and rollback rehearsal.
-3. Obtain separate approval for one exact lab ONT; execute only the NMS-05
-   inform/read matrix.
-4. Continue NMS-06 read-only lab validation, then negotiate the Maung SSO and
-   WO/CRM contracts before NMS-07/NMS-08.
-5. Production and every device write remain independently approval-gated.
-
 ## New-session prompt
 
 > Lanjutkan thuekx/Nostek-NMSOLT dari GitHub. Baca HANDOFF.md, ROADMAP.md,
 > PROJECT-STATUS.yaml dan STATUS-TREE.md; verifikasi main, PR dan CI terbaru.
-> NMS-00..03 VERIFIED. NMS-04..12 BLOCKED dengan source-readiness sampai NMS-06
-> dan kontrak gate NMS-07..12 sudah terdokumentasi. Kerjakan semua langkah aman
-> secara berurutan, tetapi jangan menyentuh produksi/live OLT/ONT, Maung WO/CRM,
-> Caddy atau rahasia, dan jangan melewati approval. Tahap berikut yang membutuhkan
-> otorisasi adalah deployment staging NMS-04 yang dibatasi 2 vCPU / 3 GiB /
-> 12 GiB, loopback-only, writes disabled, tanpa perubahan Caddy atau maung_edge. Jangan klaim VERIFIED tanpa bukti exact-head CI
-> dan artifact runtime yang diwajibkan.
+> NMS-00..04 VERIFIED. Base staging NMS-04 aktif secara terisolasi pada image
+> 4b7437c, loopback-only, writes disabled; bukti migrasi, proses, backup/restore,
+> resource dan rollback tersimpan secara tersanitasi. NMS-05..12 BLOCKED.
+> Lanjutkan pekerjaan aman secara berurutan, tetapi jangan menyentuh produksi,
+> live OLT/ONT, Maung WO/CRM, Caddy atau rahasia, dan jangan melewati approval.
+> Gate berikutnya adalah persetujuan satu ONT lab non-produksi yang spesifik
+> untuk matriks inform/read NMS-05. Jangan mengaktifkan device writes atau
+> mengekspos CWMP, dan jangan klaim VERIFIED tanpa bukti runtime yang diwajibkan.

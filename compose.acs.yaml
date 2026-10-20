@@ -1,7 +1,7 @@
 # OPTIONAL lab-only ACS overlay, NOT included in default docker compose.
 # Run only after reading docs/nostek/GENIEACS-STAGING.md and setting secrets.
-# CWMP/GUI bind to loopback for SSH tunnel access; ONTs cannot reach them until
-# a separately approved secured connection path is configured.
+# UI binds to loopback for SSH-tunnel access. CWMP defaults to loopback and may
+# bind one explicitly approved private host address for a bounded lab path.
 services:
   app:
     networks:
@@ -35,7 +35,7 @@ services:
     networks:
       - acs_private
     ports:
-      - "127.0.0.1:${ACS_CWMP_PORT:-17547}:7547"
+      - "${ACS_CWMP_BIND_IP:-127.0.0.1}:${ACS_CWMP_PORT:-17547}:7547"
 
   genieacs-nbi:
     image: nmsolt-genieacs:1.2.16-local

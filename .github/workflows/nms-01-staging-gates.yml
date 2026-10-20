@@ -26,6 +26,8 @@ jobs:
         run: bash -n scripts/nostek/collect-maung-r0.sh
       - name: Validate authorized NMS-04 staging runner syntax
         run: bash -n scripts/nostek/deploy-maung-staging.sh
+      - name: Validate authorized NMS-05 GenieACS runner syntax
+        run: bash -n scripts/nostek/deploy-maung-genieacs-lab.sh
       - name: Create local-only environment template
         run: cp .env.docker.example .env
       - name: Validate base NMSOLT stack
@@ -38,6 +40,14 @@ jobs:
         run: docker compose -f docker-compose.yml -f compose.acs.yaml config --format json | python3 scripts/nostek/validate-staging-compose.py --profile acs
       - name: Enforce GenieACS lab source policy
         run: docker compose -f docker-compose.yml -f compose.acs.yaml config --format json | python3 scripts/nostek/validate-genieacs-lab.py --dockerfile docker/genieacs/Dockerfile --compose-source compose.acs.yaml
+      - name: Validate one explicitly approved private CWMP binding
+        shell: bash
+        run: |
+          set -euo pipefail
+          ACS_CWMP_BIND_IP=192.168.48.99 docker compose -f docker-compose.yml -f compose.acs.yaml config --format json |
+            python3 scripts/nostek/validate-staging-compose.py --profile acs --approved-cwmp-host-ip 192.168.48.99
+          ACS_CWMP_BIND_IP=192.168.48.99 docker compose -f docker-compose.yml -f compose.acs.yaml config --format json |
+            python3 scripts/nostek/validate-genieacs-lab.py --dockerfile docker/genieacs/Dockerfile --compose-source compose.acs.yaml --approved-cwmp-host-ip 192.168.48.99
       - name: Ensure loopback-only publishing in base stack
         shell: bash
         run: |

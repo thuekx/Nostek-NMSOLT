@@ -99,6 +99,9 @@ COPY --from=gobuild  /out/kv-snmp-poller /var/www/html/bin/kv-snmp-poller
 RUN cp .env.example .env \
  && composer dump-autoload --optimize --no-dev --no-interaction \
  && rm -f .env \
+ # Build contexts prepared under a restrictive host umask can otherwise leave\
+ # application files unreadable by php-fpm/worker processes running as www-data.\
+ && chmod -R a+rX /var/www/html \
  && chmod +x bin/kv-snmp-poller \
  && chown -R www-data:www-data storage bootstrap/cache
 

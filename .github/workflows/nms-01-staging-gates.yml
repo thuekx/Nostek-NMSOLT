@@ -24,6 +24,8 @@ jobs:
       - uses: actions/checkout@v4
       - name: Validate NMS-03 read-only collector syntax
         run: bash -n scripts/nostek/collect-maung-r0.sh
+      - name: Validate authorized NMS-04 staging runner syntax
+        run: bash -n scripts/nostek/deploy-maung-staging.sh
       - name: Create local-only environment template
         run: cp .env.docker.example .env
       - name: Validate base NMSOLT stack

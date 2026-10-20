@@ -85,7 +85,6 @@ fi
 say "Preflight: subnet collision"
 network_json="$(mktemp)"
 route_json="$(mktemp)"
-trap 'rm -f -- "${network_json}" "${route_json}"' RETURN
 docker network inspect $(docker network ls -q) > "${network_json}"
 ip -j route show > "${route_json}"
 python3 - "${STAGING_SUBNET}" "${network_json}" "${route_json}" <<'PY'
@@ -117,7 +116,6 @@ for route in routes:
 print(f"Subnet {candidate} has no observed collision: PASS")
 PY
 rm -f -- "${network_json}" "${route_json}"
-trap - RETURN
 
 say "Create isolated staging workspace"
 mkdir -p "${SOURCE_DIR}" "${EVIDENCE_DIR}" "${BACKUP_DIR}"

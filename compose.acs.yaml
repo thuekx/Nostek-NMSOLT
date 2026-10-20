@@ -34,6 +34,7 @@ services:
       mongo_acs: {condition: service_healthy}
     networks:
       - acs_private
+      - default
     ports:
       - "${ACS_CWMP_BIND_IP:-127.0.0.1}:${ACS_CWMP_PORT:-17547}:7547"
 
@@ -74,6 +75,7 @@ services:
       genieacs-nbi: {condition: service_started}
     networks:
       - acs_private
+      - default
     ports:
       - "127.0.0.1:${ACS_UI_PORT:-13000}:3000"
 

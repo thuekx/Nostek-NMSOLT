@@ -34,6 +34,7 @@ def main() -> int:
     parser = argparse.ArgumentParser()
     parser.add_argument("--dockerfile", type=Path, required=True)
     parser.add_argument("--compose-source", type=Path, required=True)
+    parser.add_argument("--approved-cwmp-host-ip")
     args = parser.parse_args()
 
     try:
@@ -96,8 +97,12 @@ def main() -> int:
             fail(errors, f"{name} must publish exactly one loopback-only lab port")
             continue
         port = ports[0]
-        if port.get("host_ip") not in {"127.0.0.1", "::1"} or int(port.get("target", -1)) != target:
-            fail(errors, f"{name} must publish container port {target} on loopback only")
+        allowed_host_ips = {"127.0.0.1", "::1"}
+        if name == "genieacs-cwmp" and args.approved_cwmp_host_ip:
+            allowed_host_ips = {args.approved_cwmp_host_ip}
+        if port.get("host_ip") not in allowed_host_ips or int(port.get("target", -1)) != target:
+            expected = ", ".join(sorted(allowed_host_ips))
+            fail(errors, f"{name} must publish container port {target} on {expected}")
 
     if errors:
         for error in errors:

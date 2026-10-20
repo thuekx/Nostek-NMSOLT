@@ -3,7 +3,7 @@
 **Canonical restart page:** https://github.com/thuekx/Nostek-NMSOLT/blob/main/docs/nostek/HANDOFF.md  
 **Companion files:** [ROADMAP.md](ROADMAP.md), [STATUS-TREE.md](STATUS-TREE.md),
 [PROJECT-STATUS.yaml](PROJECT-STATUS.yaml).  
-**Snapshot date:** 20 October 2026 (Asia/Jakarta). Always refresh main, open
+**Snapshot date:** 21 October 2026 (Asia/Jakarta). Always refresh main, open
 PRs and CI before resuming.
 
 ## Mission and safety boundary
@@ -43,11 +43,19 @@ verification.
   about 13 GiB available RAM, 43 GiB root free, existing Docker/port/network/
   proxy/backup inventory and a bounded base staging budget of 2 vCPU / 3 GiB /
   12 GiB.
-- **NMS-04 BLOCKED:** [PR #5](https://github.com/thuekx/Nostek-NMSOLT/pull/5),
-  head a548131e3aa51901727a5105865e91363f695793, successful
-  [run 39291789107](https://github.com/thuekx/Nostek-NMSOLT/actions/runs/39291789107),
-  merge f3823666b78f6eb5bc840ff3f4217858b0c691d3. Rendered base and
-  ACS topology policies passed. No staging deployment occurred.
+- **NMS-04 VERIFIED:** source topology [PR #5](https://github.com/thuekx/Nostek-NMSOLT/pull/5)
+  passed run 39291789107 and merged f3823666b78f6eb5bc840ff3f4217858b0c691d3.
+  The authorized runner [PR #11](https://github.com/thuekx/Nostek-NMSOLT/pull/11)
+  passed [run 39449952838](https://github.com/thuekx/Nostek-NMSOLT/actions/runs/39449952838)
+  and merged 3ad09b818b80a73a913acb03a8c8bba7d54efcf2. A restrictive
+  build-context permission incident was corrected by
+  [PR #12](https://github.com/thuekx/Nostek-NMSOLT/pull/12), successful
+  [run 39470245938](https://github.com/thuekx/Nostek-NMSOLT/actions/runs/39470245938),
+  merge 4b7437c7169e98a2b42be599bc241ece0a7299e7. That exact permanent
+  image is active. Loopback-only isolation, writes-disabled policy, migrations,
+  five supervised processes, backup/restore with 38/38 public tables, bounded
+  resources, rollback/restart and unchanged pre-existing containers all passed.
+  See [sanitized runtime evidence](NMS-04-MAUNG-STAGING-EVIDENCE-2026-10-21.md).
 - **NMS-05 BLOCKED:** [PR #6](https://github.com/thuekx/Nostek-NMSOLT/pull/6),
   head 97377e53d7532e6d02e257e315b302b6d47215b7, successful
   [run 39294335613](https://github.com/thuekx/Nostek-NMSOLT/actions/runs/39294335613),
@@ -72,16 +80,24 @@ verification.
 
 ## Exact next action requiring owner authority
 
-Approve a bounded NMS-04 staging window using the sanitized NMS-03 budget. The
-executor must recheck memory, disk, ports and Docker subnets immediately before
-starting; deploy only the isolated base stack on loopback 18080 with device
-writes disabled; use separate project/network/volumes; do not edit Caddy or join
-maung_edge. Collect migration, application/worker/scheduler health, backup,
-restore and rollback evidence. Stop if available memory is below 8 GiB, root free
-space below 30 GiB before deploy, port 18080 is occupied, or a network collision
-exists.
+NMS-05 requires a separate owner decision identifying one exact non-production
+lab ONT and approving its network path to the isolated GenieACS lab. Do not use
+a production ONT, expose CWMP publicly, change Caddy, enable device writes, or
+perform write-parameter tests. Until that identity and boundary are supplied,
+NMS-05 remains BLOCKED; source-readiness work is already complete.
 
-## After NMS-03 evidence
+## Continuation after NMS-04
+
+1. Record the exact lab ONT identity/model and confirm it is non-production.
+2. Approve only the isolated NMS-05 inform/read matrix and rollback boundary.
+3. Deploy the private GenieACS/MongoDB overlay within the remaining approved
+   incremental budget; expose only approved loopback/test-network endpoints.
+4. Collect sanitized CWMP health, inform identity match, NBI/read-parameter and
+   rollback evidence without publishing serials, MACs or credentials.
+5. Continue NMS-06 read-only vendor validation. NMS-07 Caddy/SSO, NMS-08
+   WO/CRM, production and every device write remain separately approval-gated.
+
+
 
 1. Review the sanitized inventory and set a bounded NMSOLT staging budget.
 2. Obtain an explicit staging deployment window; execute NMS-04 deploy,

@@ -10,8 +10,9 @@ exists.
   production/customer ONT.
 - Keep device writes disabled. Inform, identity matching and compatible read
   parameters are the only allowed device interactions in this gate.
-- CWMP ingress remains loopback-only until a separate network/TLS/authentication
-  plan is reviewed and explicitly approved.
+- CWMP defaults to loopback. For this approved lab only, it may bind the exact
+  private Maung host address and port 17547; routing is private and the endpoint
+  must not bind a wildcard/public address.
 - GenieACS NBI, file service and MongoDB must remain private. UI access is through
   a loopback tunnel only.
 - Never record CWMP credentials, UI JWT secrets, customer PII, full serials or
@@ -25,12 +26,12 @@ Fill this section only after approval is issued. Redact sensitive identifiers.
 
 | Field | Required evidence |
 | --- | --- |
-| Approval/change ID | Owner-issued identifier and approver |
-| Time window | Start/end with timezone |
-| Lab device | Vendor/model/firmware; masked serial and MAC |
-| Network path | Approved source/destination, TLS/auth mode, rollback owner |
-| Scope | Inform plus read-only parameter retrieval |
-| Prohibited actions acknowledged | Explicit confirmation that no write/repoint/reset is allowed |
+| Approval/change ID | Owner authorization recorded in the 2026-10-21 project session |
+| Time window | Bounded commissioning session; recheck point-in-time resources and ports |
+| Lab device | ZTE F660, owner-designated non-production lab unit; full identifiers retained off-repository |
+| Network path | Private routed management path to the Maung staging host; exact ONU address/CVLAN retained off-repository |
+| Scope | Deploy isolated ACS overlay; one Inform plus read-only parameter retrieval |
+| Prohibited actions acknowledged | No production device, reboot, provisioning, reset, firmware, parameter write, Caddy or maung_edge change |
 
 ## Runtime evidence matrix
 

@@ -35,6 +35,7 @@ def is_false(value: Any) -> bool:
 def main() -> int:
     parser = argparse.ArgumentParser()
     parser.add_argument("--profile", choices=("base", "acs"), required=True)
+    parser.add_argument("--approved-cwmp-host-ip")
     args = parser.parse_args()
 
     try:
@@ -73,8 +74,15 @@ def main() -> int:
             fail(errors, f"service {name} unexpectedly publishes host ports")
         for port in published:
             host_ip = str(port.get("host_ip", ""))
-            if host_ip not in {"127.0.0.1", "::1"}:
-                fail(errors, f"service {name} publishes a non-loopback port: {host_ip or '<wildcard>'}")
+            approved_host_ips = {"127.0.0.1", "::1"}
+            if name == "genieacs-cwmp" and args.approved_cwmp_host_ip:
+                approved_host_ips = {args.approved_cwmp_host_ip}
+            if host_ip not in approved_host_ips:
+                expected = ", ".join(sorted(approved_host_ips))
+                fail(
+                    errors,
+                    f"service {name} publishes host IP {host_ip or '<wildcard>'}; expected {expected}",
+                )
 
     for name in ("db", "redis"):
         if name in services and ports(services[name]):

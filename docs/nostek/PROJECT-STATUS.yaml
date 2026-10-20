@@ -1,10 +1,10 @@
 schema: nostek-nmsolt-status/v1
 project: Nostek-NMSOLT
-updated_at: "2026-10-20"
+updated_at: "2026-10-21"
 source_of_truth:
   repo: https://github.com/thuekx/Nostek-NMSOLT
   default_branch: main
-  checkpoint_main_sha: 6981999a8c8f55cfb1dc345fd17cb52ebe6c37f2
+  checkpoint_main_sha: 4b7437c7169e98a2b42be599bc241ece0a7299e7
   baseline_sha: 24332a2b4144cff03f04f64e4711ce7938d992ae
   ci:
     pr: https://github.com/thuekx/Nostek-NMSOLT/pull/1
@@ -56,7 +56,7 @@ status:
   NMS-01: VERIFIED
   NMS-02: VERIFIED
   NMS-03: VERIFIED
-  NMS-04: BLOCKED
+  NMS-04: VERIFIED
   NMS-05: BLOCKED
   NMS-06: BLOCKED
   NMS-07: BLOCKED
@@ -88,13 +88,17 @@ latest_evidence:
     sanitized_evidence: docs/nostek/NMS-03-MAUNG-EVIDENCE-2026-10-20.md
     result: "8 vCPU; 15 GiB RAM / about 13 GiB available; 43 GiB root free; existing Docker/proxy/ports/networks/backups inventoried; bounded base staging budget 2 vCPU / 3 GiB / 12 GiB."
   NMS-04:
-    status: BLOCKED
+    status: VERIFIED
     source_readiness: "PR #5 passed run 39291789107 and merged as f382366; rendered base/ACS topology validators passed."
-    blocker: "NMS-03 evidence, staging deployment approval, and deploy/health/migration/backup/restore/rollback logs."
+    runner: "PR #11 head 983ef45 passed run 39449952838 and merged as 3ad09b8."
+    runtime_fix: "PR #12 head 27ec84e passed run 39470245938 and merged as 4b7437c."
+    deployed_image: "ghcr.io/thuekx/nostek-nmsolt:4b7437c7169e98a2b42be599bc241ece0a7299e7"
+    sanitized_evidence: docs/nostek/NMS-04-MAUNG-STAGING-EVIDENCE-2026-10-21.md
+    result: "Isolated project/network/volumes; loopback 18080; writes disabled; migrations and five supervised processes healthy; backup restored with 38/38 public tables; resource snapshot within 2 CPU/3 GiB limits; stop/restart rollback passed; pre-existing containers unchanged."
   NMS-05:
     status: BLOCKED
     source_readiness: "PR #6 head 97377e5 passed all five jobs in run 39294335613 and merged as f5917c0; GenieACS isolated lab policy PASS."
-    blocker: "NMS-03/NMS-04 plus approval for one exact lab ONT and sanitized inform/NBI/read-parameter/rollback evidence."
+    blocker: "Separate owner approval for one exact lab ONT plus sanitized inform/NBI/read-parameter/rollback evidence; no production ONT repointing."
   NMS-06:
     status: BLOCKED
     source_readiness: "PR #7 head 2a565b0 passed all five jobs in run 39295106373 and merged as 9c6722c; reviewed family routing and unknown fail-closed tests executed."
@@ -124,14 +128,14 @@ latest_evidence:
     blocker: "Upstream gates and explicit release/product decisions."
 environment:
   maung_host: "maung-apps, 192.168.48.99 (historical; current state unverified)"
-  maung_deployment: NOT_STARTED
+  maung_deployment: STAGING_BASE_ACTIVE
   nostek_deployment: NOT_STARTED
   genieacs_lab: NOT_STARTED
   live_olt_write: PROHIBITED_WITHOUT_APPROVAL
 next_action:
-  id: NMS-04-STAGING-APPROVAL
-  instruction: "Review the sanitized NMS-03 budget and approve a bounded NMS-04 staging window. Recheck point-in-time capacity/ports/networks, then deploy only the isolated base stack with writes disabled; collect health, migration, backup/restore and rollback evidence. Do not change Caddy or join maung_edge."
-  owner: "owner for staging change approval; executor for bounded deployment and evidence"
+  id: NMS-05-LAB-ONT-APPROVAL
+  instruction: "Select and explicitly approve one exact non-production lab ONT for the isolated GenieACS inform/read matrix. Keep device writes disabled; do not repoint a production ONT, expose CWMP, change Caddy, or proceed without the device/network boundary."
+  owner: "owner for exact lab ONT and network approval; executor for bounded lab evidence"
   approval_required: true
 references:
   - docs/nostek/ROADMAP.md

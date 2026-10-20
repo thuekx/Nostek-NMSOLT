@@ -155,7 +155,8 @@ compose config --format json |
 compose config --format json |
     python3 "${SOURCE_DIR}/scripts/nostek/validate-genieacs-lab.py" \
         --dockerfile "${SOURCE_DIR}/docker/genieacs/Dockerfile" \
-        --compose-source "${SOURCE_DIR}/compose.acs.yaml" >/dev/null
+        --compose-source "${SOURCE_DIR}/compose.acs.yaml" \
+        --approved-cwmp-host-ip "${CWMP_BIND_IP}" >/dev/null
 
 say "Build reviewed GenieACS image"
 COMPOSE_PARALLEL_LIMIT=1 compose build genieacs-cwmp

@@ -6,7 +6,7 @@
 **Status:** consult [PROJECT-STATUS.yaml](PROJECT-STATUS.yaml) before each action.  
 **Handoff:** [HANDOFF.md](HANDOFF.md).  
 **Human-readable tree:** [STATUS-TREE.md](STATUS-TREE.md).  
-**Current checkpoint (2026-10-20):** NMS-01 and NMS-02 are VERIFIED. NMS-03 is VERIFIED from the owner-run read-only collector at `2026-10-20T00:52:49+07:00`; sanitized evidence records 8 vCPU, about 13 GiB available memory, 43 GiB root free, current Docker/port/network/proxy/backup inventory and a bounded staging budget. Source-readiness PRs #5–#8 are merged, but NMS-04 through NMS-12 remain BLOCKED on deployment, runtime, contract and approval gates.
+**Current checkpoint (2026-10-21):** NMS-00 through NMS-04 are VERIFIED. The owner-authorized NMS-04 base staging stack is isolated on loopback port 18080 with device writes disabled; migrations, application processes, backup/restore, resource limits and rollback passed on permanent image commit `4b7437c7169e98a2b42be599bc241ece0a7299e7`. NMS-05 through NMS-12 remain BLOCKED on lab-device, contract, production and approval gates.
 
 ## Product contract
 
@@ -57,6 +57,7 @@ Non-destructive parallel work is allowed (documentation, API design, unit tests,
 - [NMS-03-MAUNG-DISCOVERY.md](NMS-03-MAUNG-DISCOVERY.md): read-only host collector and evidence checklist.
 - [NMS-03-MAUNG-EVIDENCE-2026-10-20.md](NMS-03-MAUNG-EVIDENCE-2026-10-20.md): sanitized capacity, collision and bounded-budget decision.
 - [NMS-04-STAGING-READINESS.md](NMS-04-STAGING-READINESS.md): isolated Compose deployment/rollback plan.
+- [NMS-04-MAUNG-STAGING-EVIDENCE-2026-10-21.md](NMS-04-MAUNG-STAGING-EVIDENCE-2026-10-21.md): sanitized deploy, health, backup/restore, resource and rollback evidence.
 - [NMS-05-GENIEACS-LAB-MATRIX.md](NMS-05-GENIEACS-LAB-MATRIX.md): approved lab-ONT matrix and stop rules.
 - [NMS-06-FTTH-CAPABILITY-MATRIX.md](NMS-06-FTTH-CAPABILITY-MATRIX.md): reviewed vendor fixture coverage and lab gaps.
 - [NMS-07-12-GATED-READINESS.md](NMS-07-12-GATED-READINESS.md): SSO, WO/CRM, go-live, second deployment, action governance and release gates.

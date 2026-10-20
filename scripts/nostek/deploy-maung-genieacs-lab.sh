@@ -201,9 +201,9 @@ record "cwmp_listener=PASS(http_${cwmp_code})"
 record "ui_loopback=PASS(http_${ui_code})"
 record "acs_overlay_deployment=PASS"
 compose ps >> "${EVIDENCE_FILE}"
+acs_container_ids="$(compose ps -q mongo_acs genieacs-cwmp genieacs-nbi genieacs-fs genieacs-ui)"
 docker stats --no-stream --format '{{.Name}} cpu={{.CPUPerc}} memory={{.MemUsage}}' \
-    $(compose ps -q mongo_acs genieacs-cwmp genieacs-nbi genieacs-fs genieacs-ui) >>
-    "${EVIDENCE_FILE}"
+    ${acs_container_ids} >> "${EVIDENCE_FILE}"
 record "completed_at=$(date --iso-8601=seconds)"
 
 trap - ERR

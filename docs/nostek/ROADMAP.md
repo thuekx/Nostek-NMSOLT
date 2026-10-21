@@ -6,7 +6,7 @@
 **Status:** consult [PROJECT-STATUS.yaml](PROJECT-STATUS.yaml) before each action.  
 **Handoff:** [HANDOFF.md](HANDOFF.md).  
 **Human-readable tree:** [STATUS-TREE.md](STATUS-TREE.md).  
-**Current checkpoint (2026-10-21):** NMS-00 through NMS-05 are VERIFIED. The isolated Maung staging base remains healthy with device writes disabled. One approved lab ZTE F660 completed Bootstrap, periodic Inform, local serial match, compatible read-only parameters and ACS stop/start persistence without faults or device mutation. NMS-06 is the active read-only gate; NMS-07 through NMS-12 remain BLOCKED on integration, production and approval gates.
+**Current checkpoint (2026-10-22):** NMS-00 through NMS-06 are VERIFIED. The isolated Maung staging base remains healthy with device writes disabled. ZTE F660 TR-069 and ZTE C320 read-only FTTH inventory/optical validation passed with sanitized evidence and exact-head CI. NMS-07 is the active identity-contract gate; Caddy/routing changes and NMS-08 through NMS-12 remain approval-gated or blocked.
 
 ## Product contract
 
@@ -60,7 +60,8 @@ Non-destructive parallel work is allowed (documentation, API design, unit tests,
 - [NMS-04-MAUNG-STAGING-EVIDENCE-2026-10-21.md](NMS-04-MAUNG-STAGING-EVIDENCE-2026-10-21.md): sanitized deploy, health, backup/restore, resource and rollback evidence.
 - [NMS-05-GENIEACS-LAB-MATRIX.md](NMS-05-GENIEACS-LAB-MATRIX.md): approved lab-ONT matrix and stop rules.
 - [NMS-05-GENIEACS-RUNTIME-EVIDENCE-2026-10-21.md](NMS-05-GENIEACS-RUNTIME-EVIDENCE-2026-10-21.md): sanitized Inform/read/rollback evidence.
-- [NMS-06-FTTH-CAPABILITY-MATRIX.md](NMS-06-FTTH-CAPABILITY-MATRIX.md): reviewed vendor fixture coverage and lab gaps.
+- [NMS-06-FTTH-CAPABILITY-MATRIX.md](NMS-06-FTTH-CAPABILITY-MATRIX.md): verified vendor fixture/runtime coverage.
+- [NMS-06-ZTE-C320-RUNTIME-EVIDENCE-2026-10-22.md](NMS-06-ZTE-C320-RUNTIME-EVIDENCE-2026-10-22.md): sanitized C320 inventory, optical and UI evidence.
 - [NMS-07-12-GATED-READINESS.md](NMS-07-12-GATED-READINESS.md): SSO, WO/CRM, go-live, second deployment, action governance and release gates.
 
 ## Stop/continue rule

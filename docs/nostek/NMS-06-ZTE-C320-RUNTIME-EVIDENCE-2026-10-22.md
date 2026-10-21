@@ -47,6 +47,6 @@ the read-only CLI detail path but is not evidence for any write capability.
 
 ## Decision
 
-NMS-06 remains IN_PROGRESS until this change passes the complete CI suite and
-the reviewed fixture evidence is explicitly reconciled with the runtime matrix.
-No additional live-device action is required for that review.
+NMS-06 is VERIFIED by the sanitized C320 runtime evidence plus exact-head CI
+covering stale/partial data, debounce, ODP correlation, role restrictions and
+unknown-vendor fail-closed behavior. No additional live-device action is required.

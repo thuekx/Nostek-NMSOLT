@@ -4,7 +4,7 @@ updated_at: "2026-10-21"
 source_of_truth:
   repo: https://github.com/thuekx/Nostek-NMSOLT
   default_branch: main
-  checkpoint_main_sha: 4b7437c7169e98a2b42be599bc241ece0a7299e7
+  checkpoint_main_sha: 2a1547cd7d06e4d07d6526862ea615a105366cd5
   baseline_sha: 24332a2b4144cff03f04f64e4711ce7938d992ae
   ci:
     pr: https://github.com/thuekx/Nostek-NMSOLT/pull/1
@@ -57,7 +57,7 @@ status:
   NMS-02: VERIFIED
   NMS-03: VERIFIED
   NMS-04: VERIFIED
-  NMS-05: BLOCKED
+  NMS-05: VERIFIED
   NMS-06: BLOCKED
   NMS-07: BLOCKED
   NMS-08: BLOCKED
@@ -96,9 +96,11 @@ latest_evidence:
     sanitized_evidence: docs/nostek/NMS-04-MAUNG-STAGING-EVIDENCE-2026-10-21.md
     result: "Isolated project/network/volumes; loopback 18080; writes disabled; migrations and five supervised processes healthy; backup restored with 38/38 public tables; resource snapshot within 2 CPU/3 GiB limits; stop/restart rollback passed; pre-existing containers unchanged."
   NMS-05:
-    status: BLOCKED
-    source_readiness: "PR #6 head 97377e5 passed all five jobs in run 39294335613 and merged as f5917c0; GenieACS isolated lab policy PASS."
-    blocker: "Separate owner approval for one exact lab ONT plus sanitized inform/NBI/read-parameter/rollback evidence; no production ONT repointing."
+    status: VERIFIED
+    source_readiness: "PR #6 passed source policy; PR #14 added the approved lab runner; PR #15 repaired published-service networking; PR #16 pinned execution to the verified Maung host."
+    runtime_source: "PR #15 merged as 08a57e6be31fbf00bcc9fe4cd5cb8f87bfa6a61f; host guard merged as 2a1547cd7d06e4d07d6526862ea615a105366cd5."
+    sanitized_evidence: docs/nostek/NMS-05-GENIEACS-RUNTIME-EVIDENCE-2026-10-21.md
+    result: "One approved ZTE F660: Bootstrap and Periodic Inform PASS; local serial match PASS; read-only getParameterValues consumed; 0 faults, 0 pending tasks, 0 presets; Mongo persistence and ACS stop/start PASS; base NMS-04 stayed healthy; no device write."
   NMS-06:
     status: BLOCKED
     source_readiness: "PR #7 head 2a565b0 passed all five jobs in run 39295106373 and merged as 9c6722c; reviewed family routing and unknown fail-closed tests executed."
@@ -130,13 +132,13 @@ environment:
   maung_host: "maung-apps, 192.168.48.99 (historical; current state unverified)"
   maung_deployment: STAGING_BASE_ACTIVE
   nostek_deployment: NOT_STARTED
-  genieacs_lab: NOT_STARTED
+  genieacs_lab: ACTIVE_VERIFIED
   live_olt_write: PROHIBITED_WITHOUT_APPROVAL
 next_action:
-  id: NMS-05-LAB-ONT-APPROVAL
-  instruction: "Select and explicitly approve one exact non-production lab ONT for the isolated GenieACS inform/read matrix. Keep device writes disabled; do not repoint a production ONT, expose CWMP, change Caddy, or proceed without the device/network boundary."
-  owner: "owner for exact lab ONT and network approval; executor for bounded lab evidence"
-  approval_required: true
+  id: NMS-06-ZTE-C320-READ-ONLY
+  instruction: "Register the approved ZTE C320 with an RO-only SNMP community, run bounded manual Test/Refresh, and collect sanitized system/PON/ONU/RX/stale/alarm/ODP/UI evidence. Keep automated polling, Telnet and all device writes disabled."
+  owner: "owner supplies the C320 management address and locally retained RO community; executor reviews bounded evidence"
+  approval_required: false
 references:
   - docs/nostek/ROADMAP.md
   - docs/nostek/STATUS-TREE.md

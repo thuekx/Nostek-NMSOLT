@@ -6,6 +6,8 @@ set -Eeuo pipefail
 umask 077
 
 PROJECT="nmsolt-maung-staging"
+EXPECTED_HOSTNAME="maung-apps"
+EXPECTED_HOST_IPV4="192.168.48.99"
 STAGING_ROOT="${NMSOLT_STAGING_ROOT:-${HOME}/nostek-nmsolt-staging}"
 SOURCE_DIR="${STAGING_ROOT}/source"
 ENV_FILE="${SOURCE_DIR}/.env"
@@ -54,11 +56,16 @@ on_error() {
 }
 trap on_error ERR
 
-for command_name in docker curl openssl python3 ss ip awk df grep; do
+for command_name in docker curl openssl python3 ss ip awk df grep hostname; do
     command -v "${command_name}" >/dev/null 2>&1 ||
         die "required command is unavailable: ${command_name}"
 done
 [ "$(id -u)" -ne 0 ] || die "run as the ordinary Docker-enabled account, not root"
+actual_hostname="$(hostname -s 2>/dev/null || hostname)"
+[ "${actual_hostname}" = "${EXPECTED_HOSTNAME}" ] ||
+    die "wrong host: expected hostname ${EXPECTED_HOSTNAME}, detected ${actual_hostname}"
+[ "${CWMP_BIND_IP}" = "${EXPECTED_HOST_IPV4}" ] ||
+    die "wrong host address: this runner is pinned to ${EXPECTED_HOST_IPV4}, received ${CWMP_BIND_IP}"
 [ -f "${ENV_FILE}" ] || die "NMS-04 environment is missing"
 [ -f "${BASE_OVERRIDE}" ] || die "NMS-04 override is missing"
 [ -f "${SOURCE_DIR}/compose.acs.yaml" ] || die "ACS overlay source is missing"
@@ -76,7 +83,12 @@ ip -4 -o address show | awk '{print $4}' | cut -d/ -f1 |
     grep -Fxq "${CWMP_BIND_IP}" ||
     die "approved CWMP bind address is not assigned to this host"
 
-ip route get "${LAB_ONT_IP}" >/dev/null
+route_source="$(ip -4 route get "${LAB_ONT_IP}" | awk '{for (i=1;i<=NF;i++) if ($i=="src") {print $(i+1); exit}}')"
+[ "${route_source}" = "${EXPECTED_HOST_IPV4}" ] ||
+    die "wrong routed source: expected ${EXPECTED_HOST_IPV4}, detected ${route_source:-none}"
+printf 'HOST_IDENTITY=PASS hostname=%s ipv4=%s route_source=%s\n' \
+    "${actual_hostname}" "${EXPECTED_HOST_IPV4}" "${route_source}"
+
 ping -c 2 -W 2 "${LAB_ONT_IP}" >/dev/null ||
     die "approved lab ONT did not answer the bounded reachability preflight"
 
@@ -146,6 +158,7 @@ mkdir -p "${EVIDENCE_DIR}"
     printf 'project=%s\n' "${PROJECT}"
     printf 'approved_device=ZTE-F660\n'
     printf 'approved_olt=ZTE-C320\n'
+    printf 'host_identity=PASS\n'
     printf 'network_route=PASS\n'
     printf 'cwmp_port=17547\n'
     printf 'ui_endpoint=127.0.0.1:13000\n'

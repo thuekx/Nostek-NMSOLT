@@ -17,8 +17,9 @@ EVIDENCE_FILE="${EVIDENCE_DIR}/nms05-runtime-${RUN_ID}.txt"
 CWMP_BIND_IP="${NMSOLT_CWMP_BIND_IP:?set NMSOLT_CWMP_BIND_IP to the approved private Maung address}"
 LAB_ONT_IP="${NMSOLT_LAB_ONT_IP:?set NMSOLT_LAB_ONT_IP to the approved lab ONT management address}"
 DEPLOYMENT_STARTED=0
+CURRENT_PHASE="initialization"
 
-say() { printf '\n==> %s\n' "$*"; }
+say() { CURRENT_PHASE="$*"; printf '\n==> %s\n' "$*"; }
 die() { printf 'ERROR: %s\n' "$*" >&2; exit 1; }
 record() { printf '%s\n' "$*" >> "${EVIDENCE_FILE}"; }
 
@@ -33,8 +34,19 @@ compose() {
 
 on_error() {
     code=$?
+    diagnostic_file="${EVIDENCE_DIR}/nms05-failure-${RUN_ID}.log"
+    mkdir -p "${EVIDENCE_DIR}"
+    {
+        printf 'failed_phase=%s\n' "${CURRENT_PHASE}"
+        printf 'exit_code=%s\n' "${code}"
+        compose ps || true
+        compose logs --tail=80 mongo_acs genieacs-cwmp genieacs-nbi genieacs-fs genieacs-ui || true
+    } > "${diagnostic_file}" 2>&1
+    chmod 600 "${diagnostic_file}"
+    printf 'NMS-05 overlay failed during: %s (exit %s).\n' "${CURRENT_PHASE}" "${code}" >&2
+    printf 'Local diagnostic: %s\n' "${diagnostic_file}" >&2
     if [ "${DEPLOYMENT_STARTED}" -eq 1 ]; then
-        printf 'NMS-05 overlay failed; stopping only ACS services.\n' >&2
+        printf 'Stopping only ACS services.\n' >&2
         compose stop genieacs-ui genieacs-fs genieacs-nbi genieacs-cwmp mongo_acs >/dev/null 2>&1 || true
     fi
     printf 'Base NMS-04 services and all pre-existing Maung projects were not targeted.\n' >&2

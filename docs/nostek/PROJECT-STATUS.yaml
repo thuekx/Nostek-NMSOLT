@@ -4,53 +4,23 @@ updated_at: "2026-10-22"
 source_of_truth:
   repo: https://github.com/thuekx/Nostek-NMSOLT
   default_branch: main
-  checkpoint_main_sha: 2a1547cd7d06e4d07d6526862ea615a105366cd5
+  checkpoint_main_sha: c639f1277e7b37bcd5aee69d7ec58634758fa984
   baseline_sha: 24332a2b4144cff03f04f64e4711ce7938d992ae
-  ci:
-    pr: https://github.com/thuekx/Nostek-NMSOLT/pull/1
-    verified_sha: b20149cad1aff4087108f7dc4cd1433da307495b
-    run: https://github.com/thuekx/Nostek-NMSOLT/actions/runs/39278668150
-    merged_sha: 63f4b77b002fa5ef9b1189d4a4c982c0246a1354
-  security:
-    pr: https://github.com/thuekx/Nostek-NMSOLT/pull/2
-    verified_sha: 0fcb962347c20873f75ba54273e346247db5c613
-    run: https://github.com/thuekx/Nostek-NMSOLT/actions/runs/39284353892
-    merged_sha: 732debb348ca62d74df256a7f233c3601d48710a
-  discovery_readiness:
-    pr: https://github.com/thuekx/Nostek-NMSOLT/pull/3
-    verified_sha: 61e6ca45c20504e12f3ada619e52e4638eaa9534
-    run: https://github.com/thuekx/Nostek-NMSOLT/actions/runs/39290385687
-    merged_sha: f925529ef0b41026a08e8bd9639cedbe3ff6e22b
-  canonical_checkpoint:
-    pr: https://github.com/thuekx/Nostek-NMSOLT/pull/4
-    verified_sha: 4c56601c3aa8197efdde677361896691ea473b8c
-    run: https://github.com/thuekx/Nostek-NMSOLT/actions/runs/39291117764
-    merged_sha: 3bf0d314f8071070cfa5893ca8a1ef421056bd6c
-  staging_readiness:
-    pr: https://github.com/thuekx/Nostek-NMSOLT/pull/5
-    verified_sha: a548131e3aa51901727a5105865e91363f695793
-    run: https://github.com/thuekx/Nostek-NMSOLT/actions/runs/39291789107
-    merged_sha: f3823666b78f6eb5bc840ff3f4217858b0c691d3
-  genieacs_readiness:
-    pr: https://github.com/thuekx/Nostek-NMSOLT/pull/6
-    verified_sha: 97377e53d7532e6d02e257e315b302b6d47215b7
-    run: https://github.com/thuekx/Nostek-NMSOLT/actions/runs/39294335613
-    merged_sha: f5917c06b05b10a1f727a79dd2b5ce0a4b120008
-  ftth_readiness:
-    pr: https://github.com/thuekx/Nostek-NMSOLT/pull/7
-    verified_sha: 2a565b0e5647cf65d1ca0a98f387149c886ec24f
-    run: https://github.com/thuekx/Nostek-NMSOLT/actions/runs/39295106373
-    merged_sha: 9c6722c218e1e7d6cd0d581b3f8f29ad0fbffdfe
-  gated_readiness_pack:
-    pr: https://github.com/thuekx/Nostek-NMSOLT/pull/8
-    verified_sha: e31300ab9e2a6030be6541d5a23435e12ff6fb6b
-    run: https://github.com/thuekx/Nostek-NMSOLT/actions/runs/39296021006
-    merged_sha: 22d609a49cab92d5eb4a2e7303303d6bbc98f3a9
+  nms06_completion:
+    pr: https://github.com/thuekx/Nostek-NMSOLT/pull/18
+    verified_sha: 902f5263b36b2d9a6006d825b4d38b3de0c4060b
+    run: https://github.com/thuekx/Nostek-NMSOLT/actions/runs/39648137609
+    merged_sha: c639f1277e7b37bcd5aee69d7ec58634758fa984
 policy:
   automatic_next_task_within_session: true
   production_write_requires_approval: true
   never_claim_unexecuted_verification: true
   preserve_mit_upstream_notice: true
+product_contract:
+  provider: "NMSOLT is the standalone network platform and authoritative telemetry/API provider."
+  maung: "Consumer only: future /nosteknmsolt page may manage API integration and show summaries, search, alarms and quick customer/ONU details."
+  nostek_ai: "Consumer only through versioned read tools; no direct database or device credentials."
+  prohibited_duplication: "Polling, drivers, GenieACS, optical history and network business logic remain in NMSOLT."
 status:
   NMS-00: VERIFIED
   NMS-01: VERIFIED
@@ -59,7 +29,7 @@ status:
   NMS-04: VERIFIED
   NMS-05: VERIFIED
   NMS-06: VERIFIED
-  NMS-07: BLOCKED
+  NMS-07: IN_PROGRESS
   NMS-08: BLOCKED
   NMS-09: BLOCKED
   NMS-10: BLOCKED
@@ -68,79 +38,43 @@ status:
 deferred:
   mobile_flutter: "Excluded from initial commit; inherited mobile identity is not approved for distribution."
 latest_evidence:
-  NMS-00:
-    initial_commit: https://github.com/thuekx/Nostek-NMSOLT/commit/24332a2b4144cff03f04f64e4711ce7938d992ae
-    result: "678 source files; mobile excluded; MIT attribution retained; initial Windows Gitleaks check reported 0 findings."
-  NMS-01:
-    status: VERIFIED
-    result: "PR #1 exact-head CI passed all five jobs and merged as 63f4b77."
-    vue: "12 files, 57 tests passed"
-    laravel: "122 passed, 4505 assertions, 660 non-fatal warnings, 0 failures"
-  NMS-02:
-    status: VERIFIED
-    result: "PR #2 exact-head CI passed; default-off route, queue and Telegram device-write boundary merged as 732debb."
-    laravel: "122 passed, 4603 assertions, 665 non-fatal warnings, 0 failures"
-  NMS-03:
-    status: VERIFIED
-    source_readiness: "PR #3 passed run 39290385687 and merged as f925529; read-only collector and sanitization checklist exist."
-    collected_at: "2026-10-20T00:52:49+07:00"
-    raw_artifact_sha256: 0187497B9551BE5AB3E0C8598E8F12DE109D8700273EFA1C3C877C5661844ECB
-    sanitized_evidence: docs/nostek/NMS-03-MAUNG-EVIDENCE-2026-10-20.md
-    result: "8 vCPU; 15 GiB RAM / about 13 GiB available; 43 GiB root free; existing Docker/proxy/ports/networks/backups inventoried; bounded base staging budget 2 vCPU / 3 GiB / 12 GiB."
-  NMS-04:
-    status: VERIFIED
-    source_readiness: "PR #5 passed run 39291789107 and merged as f382366; rendered base/ACS topology validators passed."
-    runner: "PR #11 head 983ef45 passed run 39449952838 and merged as 3ad09b8."
-    runtime_fix: "PR #12 head 27ec84e passed run 39470245938 and merged as 4b7437c."
-    deployed_image: "ghcr.io/thuekx/nostek-nmsolt:4b7437c7169e98a2b42be599bc241ece0a7299e7"
-    sanitized_evidence: docs/nostek/NMS-04-MAUNG-STAGING-EVIDENCE-2026-10-21.md
-    result: "Isolated project/network/volumes; loopback 18080; writes disabled; migrations and five supervised processes healthy; backup restored with 38/38 public tables; resource snapshot within 2 CPU/3 GiB limits; stop/restart rollback passed; pre-existing containers unchanged."
-  NMS-05:
-    status: VERIFIED
-    source_readiness: "PR #6 passed source policy; PR #14 added the approved lab runner; PR #15 repaired published-service networking; PR #16 pinned execution to the verified Maung host."
-    runtime_source: "PR #15 merged as 08a57e6be31fbf00bcc9fe4cd5cb8f87bfa6a61f; host guard merged as 2a1547cd7d06e4d07d6526862ea615a105366cd5."
-    sanitized_evidence: docs/nostek/NMS-05-GENIEACS-RUNTIME-EVIDENCE-2026-10-21.md
-    result: "One approved ZTE F660: Bootstrap and Periodic Inform PASS; local serial match PASS; read-only getParameterValues consumed; 0 faults, 0 pending tasks, 0 presets; Mongo persistence and ACS stop/start PASS; base NMS-04 stayed healthy; no device write."
   NMS-06:
     status: VERIFIED
-    source_readiness: "PR #7 head 2a565b0 passed all five jobs in run 39295106373 and merged as 9c6722c; reviewed family routing and unknown fail-closed tests executed."
     sanitized_evidence: docs/nostek/NMS-06-ZTE-C320-RUNTIME-EVIDENCE-2026-10-22.md
-    runtime: "Owner-approved ZTE C320 V2.1.0: SNMP identity PASS; 32 PON; 484 ONU (256 online); sampled PON 14/5 online; optical detail/history around -27 dBm; staging UI PASS with auto-poll and alarms OFF; no mutation."
-    finding: "Net-SNMP Timeticks rendered NaNd; fix and regression test are under CI review. ONU detail used read-only CLI show commands; no write command was sent."
-    verification: "Runtime C320 evidence plus PR #18 exact-head CI: Vue, Laravel, Go, Compose and both image builds PASS; stale/partial, debounce, ODP, role and fail-closed fixtures reconciled."
+    runtime: "ZTE C320 SNMP v2c RO and bounded read-only UI/CLI validation passed; PR #18 CI passed; no device mutation."
   NMS-07:
-    status: BLOCKED
-    preparation: "SSO, app.nmsolt, /nmsolt routing and reversible proxy evidence contract documented."
-    blocker: "Maung identity contract/schema, prerequisite staging, and approved Caddy/SSO test window."
+    status: IN_PROGRESS
+    objective: "Stabilize NMSOLT functions, UI and performance; inventory routes/features, repair misleading or broken read paths, and add regression evidence."
+    safety: "Source and isolated staging only; no production, Caddy, Maung repository or device changes."
   NMS-08:
     status: BLOCKED
-    preparation: "System ownership, canonical IDs, provenance, freshness and idempotency contract documented."
-    blocker: "Approved Maung WO/CRM contracts and synthetic integration environment."
+    objective: "Versioned read-only API v1 and OpenAPI with stable IDs, freshness, pagination, auth scopes, redaction, rate limits and contract tests."
+    blocker: "NMS-07 completion."
   NMS-09:
     status: BLOCKED
-    blocker: "NMS-03 through NMS-08 VERIFIED plus explicit production change approval and rollback proof."
+    objective: "Maung /nosteknmsolt thin consumer page for API settings, summaries, alarms, search and quick detail/deep links."
+    blocker: "NMS-08 verified contract plus separately scoped Maung repository work."
   NMS-10:
     status: BLOCKED
-    blocker: "Current capacity/security evidence and owner host decision; distinct deployment credentials/data required."
+    objective: "Nostek-AI Apps/tool adapter consuming allow-listed NMSOLT read APIs."
+    blocker: "NMS-08 verified contract and tool authorization design."
   NMS-11:
     status: BLOCKED
-    preparation: "High-risk action lifecycle and deny conditions documented; global writes remain disabled."
-    blocker: "Approved broker design, one-time authorization, lab evidence and explicit per-action approval."
+    objective: "High-risk write governance and approval broker; writes remain globally disabled."
+    blocker: "Read platform gates plus explicit per-action approval and lab proof."
   NMS-12:
     status: BLOCKED
-    preparation: "Release, DR, observability, isolation, SBOM/license and commercial decision checklist documented."
-    blocker: "Upstream gates and explicit release/product decisions."
+    objective: "Release, DR, observability, isolation, SBOM/license and production-readiness decision."
+    blocker: "Upstream gates and explicit release approval."
 environment:
-  maung_host: "maung-apps, 192.168.48.99 (historical; current state unverified)"
+  maung_host: "maung-apps, 192.168.48.99 (historical; current state must be rechecked before host actions)"
   maung_deployment: STAGING_BASE_ACTIVE
-  nostek_deployment: NOT_STARTED
   genieacs_lab: ACTIVE_VERIFIED
   live_olt_write: PROHIBITED_WITHOUT_APPROVAL
 next_action:
-  id: NMS-07-MAUNG-SSO-CONTRACT
-  instruction: "Begin safe NMS-07 identity-contract discovery and synthetic SSO/RBAC tests. Caddy or routing changes remain approval-gated. No production mutation."
-
-  owner: "owner supplies the C320 management address and locally retained RO community; executor reviews bounded evidence"
+  id: NMS-07-PRODUCT-STABILIZATION
+  instruction: "Audit NMSOLT routes, screens, read APIs and performance; build a feature matrix and fix the highest-impact safe source issue with tests."
+  owner: "executor"
   approval_required: false
 references:
   - docs/nostek/ROADMAP.md

@@ -147,6 +147,16 @@ def main() -> int:
             attached = service.get("networks", {}) if isinstance(service, dict) else {}
             if "acs_private" not in attached:
                 fail(errors, f"service {name} is not attached to acs_private")
+        for name in ("genieacs-cwmp", "genieacs-ui"):
+            service = services.get(name)
+            attached = service.get("networks", {}) if isinstance(service, dict) else {}
+            if "default" not in attached:
+                fail(errors, f"published service {name} is not attached to the staging default network")
+        for name in ("mongo_acs", "genieacs-nbi", "genieacs-fs"):
+            service = services.get(name)
+            attached = service.get("networks", {}) if isinstance(service, dict) else {}
+            if "default" in attached:
+                fail(errors, f"private service {name} must not join the staging default network")
 
     if errors:
         for error in errors:

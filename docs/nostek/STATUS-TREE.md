@@ -26,11 +26,13 @@ Nostek-NMSOLT — ONE SOURCE / TWO INDEPENDENT DOCKER DEPLOYMENTS
 |   +-- PASS: loopback-only base stack, writes disabled, migrations and processes healthy
 |   +-- PASS: backup restore 38/38 tables; bounded resources; rollback/restart
 |   +-- PASS: pre-existing containers unchanged; Caddy and maung_edge unchanged
-+-- NMS-05 [BLOCKED] Isolated GenieACS lab
-|   +-- source readiness PR #6 / run 39294335613 / merge f5917c0
-|   +-- PASS: GenieACS version/non-root/private-service/loopback policy
-|   +-- BLOCKER: prerequisites + approved lab ONT inform/read evidence
-+-- NMS-06 [BLOCKED] FTTH operations validation
++-- NMS-05 [VERIFIED] Isolated GenieACS lab
+|   +-- overlay PR #14; network repair PR #15; host guard PR #16
+|   +-- PASS: one approved ZTE F660 Bootstrap + Periodic Inform
+|   +-- PASS: local serial match and compatible read-only parameter task
+|   +-- PASS: 0 faults/tasks/presets; Mongo persistence and ACS rollback
+|   +-- PASS: base stack remained healthy; no device/production write
++-- NMS-06 [BLOCKED] FTTH operations validation FTTH operations validation
 |   +-- source readiness PR #7 / run 39295106373 / merge 9c6722c
 |   +-- PASS: reviewed family routing + unknown vendor fail-closed
 |   +-- BLOCKER: approved per-model polling/RX/stale/alarm/ODP/UI lab evidence
@@ -68,12 +70,16 @@ Nostek-NMSOLT — ONE SOURCE / TWO INDEPENDENT DOCKER DEPLOYMENTS
   [#9](https://github.com/thuekx/Nostek-NMSOLT/pull/9),
   [#10](https://github.com/thuekx/Nostek-NMSOLT/pull/10),
   [#11](https://github.com/thuekx/Nostek-NMSOLT/pull/11),
-  [#12](https://github.com/thuekx/Nostek-NMSOLT/pull/12)
+  [#12](https://github.com/thuekx/Nostek-NMSOLT/pull/12),
+  [#13](https://github.com/thuekx/Nostek-NMSOLT/pull/13),
+  [#14](https://github.com/thuekx/Nostek-NMSOLT/pull/14),
+  [#15](https://github.com/thuekx/Nostek-NMSOLT/pull/15),
+  [#16](https://github.com/thuekx/Nostek-NMSOLT/pull/16)
 - Readiness details: [NMS-04](NMS-04-STAGING-READINESS.md),
   [NMS-05](NMS-05-GENIEACS-LAB-MATRIX.md),
   [NMS-06](NMS-06-FTTH-CAPABILITY-MATRIX.md),
   [NMS-07–12](NMS-07-12-GATED-READINESS.md).
 - Definitions: [ROADMAP.md](ROADMAP.md); resume: [HANDOFF.md](HANDOFF.md).
 
-A readiness PASS does not make the phase VERIFIED. NMS-00 through NMS-04
-currently satisfy their full definitions of done; NMS-05 and later remain blocked.
+A readiness PASS does not make the phase VERIFIED. NMS-00 through NMS-05
+currently satisfy their full definitions of done; NMS-06 and later remain blocked.

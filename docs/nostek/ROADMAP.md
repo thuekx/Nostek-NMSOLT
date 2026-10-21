@@ -6,7 +6,7 @@
 **Status:** consult [PROJECT-STATUS.yaml](PROJECT-STATUS.yaml) before each action.  
 **Handoff:** [HANDOFF.md](HANDOFF.md).  
 **Human-readable tree:** [STATUS-TREE.md](STATUS-TREE.md).  
-**Current checkpoint (2026-10-21):** NMS-00 through NMS-04 are VERIFIED. The owner-authorized NMS-04 base staging stack is isolated on loopback port 18080 with device writes disabled; migrations, application processes, backup/restore, resource limits and rollback passed on permanent image commit `4b7437c7169e98a2b42be599bc241ece0a7299e7`. NMS-05 through NMS-12 remain BLOCKED on lab-device, contract, production and approval gates.
+**Current checkpoint (2026-10-21):** NMS-00 through NMS-05 are VERIFIED. The isolated Maung staging base remains healthy with device writes disabled. One approved lab ZTE F660 completed Bootstrap, periodic Inform, local serial match, compatible read-only parameters and ACS stop/start persistence without faults or device mutation. NMS-06 is the active read-only gate; NMS-07 through NMS-12 remain BLOCKED on integration, production and approval gates.
 
 ## Product contract
 
@@ -59,6 +59,7 @@ Non-destructive parallel work is allowed (documentation, API design, unit tests,
 - [NMS-04-STAGING-READINESS.md](NMS-04-STAGING-READINESS.md): isolated Compose deployment/rollback plan.
 - [NMS-04-MAUNG-STAGING-EVIDENCE-2026-10-21.md](NMS-04-MAUNG-STAGING-EVIDENCE-2026-10-21.md): sanitized deploy, health, backup/restore, resource and rollback evidence.
 - [NMS-05-GENIEACS-LAB-MATRIX.md](NMS-05-GENIEACS-LAB-MATRIX.md): approved lab-ONT matrix and stop rules.
+- [NMS-05-GENIEACS-RUNTIME-EVIDENCE-2026-10-21.md](NMS-05-GENIEACS-RUNTIME-EVIDENCE-2026-10-21.md): sanitized Inform/read/rollback evidence.
 - [NMS-06-FTTH-CAPABILITY-MATRIX.md](NMS-06-FTTH-CAPABILITY-MATRIX.md): reviewed vendor fixture coverage and lab gaps.
 - [NMS-07-12-GATED-READINESS.md](NMS-07-12-GATED-READINESS.md): SSO, WO/CRM, go-live, second deployment, action governance and release gates.
 

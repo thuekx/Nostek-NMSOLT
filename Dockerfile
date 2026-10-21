@@ -53,9 +53,17 @@ FROM php:8.3-fpm-bookworm AS app
 # install-php-extensions mengurus dependensi build & runtime tiap ekstensi lalu
 # membersihkannya sendiri (jauh lebih ringkas & andal ketimbang rakit manual).
 COPY --from=mlocati/php-extension-installer:2 /usr/bin/install-php-extensions /usr/local/bin/
+# PECL occasionally returns transient 5xx responses. Clone the same pinned phpredis
+# release with its bundled submodules, then let the installer compile that local tree.
+RUN apt-get update \
+ && apt-get install -y --no-install-recommends git ca-certificates \
+ && rm -rf /var/lib/apt/lists/* \
+ && git clone --depth 1 --branch 6.3.0 --recurse-submodules --shallow-submodules \
+        https://github.com/phpredis/phpredis.git /tmp/phpredis
 RUN install-php-extensions \
         pdo_pgsql pgsql bcmath intl mbstring xml zip gd pcntl sockets snmp \
-        phpredis/phpredis@6.3.0 opcache
+        /tmp/phpredis opcache \
+ && rm -rf /tmp/phpredis
 
 # Runtime pendukung: nginx (web), supervisor (proses), postgresql-client (pg_isready),
 # git+unzip (composer dist), snmp (net-snmp CLI, opsional untuk debug).

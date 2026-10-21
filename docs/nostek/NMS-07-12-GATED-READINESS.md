@@ -1,132 +1,66 @@
-# NMS-07 through NMS-12 — gated readiness pack
+# NMS-07 through NMS-12 — provider-centric gated readiness
 
-**Status:** preparation only. None of NMS-07 through NMS-12 is VERIFIED.
-This document records the contracts, evidence and approvals required after the
-earlier runtime gates. It authorizes no deployment, external write or device
-action.
+NMSOLT is the standalone network platform and source of network truth. Maung and
+Nostek-AI consume its APIs/tools. This document authorizes no production change,
+external write, Caddy change or live device action.
 
-## NMS-07 — Maung SSO and /nmsolt routing
+## NMS-07 — product stabilization
 
-### Contract that must be agreed before implementation
+**State: IN PROGRESS.** Inventory routes, screens, jobs and read APIs; exercise
+core user journeys; repair broken or misleading read behavior; profile expensive
+queries/polling; and add regression tests. Evidence requires a feature matrix,
+reproducible defects, before/after results and green exact-head CI. Work stays in
+source and isolated staging. No Maung repository or device mutation is required.
 
-- Maung remains the identity authority. NMSOLT validates a bearer/session token
-  server-to-server; it never trusts browser-supplied role or feature claims.
-- The validated principal must include an immutable subject, expiry, issued-at,
-  issuer/audience, active/revoked state, roles/scopes, and the explicit
-  app.nmsolt entitlement.
-- Missing, expired, revoked, wrong-audience, malformed, unreachable-introspection
-  and missing-entitlement cases fail closed.
-- Any positive introspection cache must expire before the token and have a short
-  bounded TTL; privileged access must be rechecked after logout/revocation.
-- Local emergency administration, if retained, must be separately documented,
-  restricted and audited rather than silently mapped from Maung roles.
-- The exact Maung endpoint/schema, issuer/audience, role mapping, logout flow and
-  service credential lifecycle remain owner/Maung-team decisions.
+## NMS-08 — read-only API v1 and OpenAPI
 
-### Required evidence
+Blocked on NMS-07. Define stable resources for health, OLTs, PONs, ONUs, ODPs,
+alarms and optical summaries. Every response must carry stable IDs, observed-at
+and freshness/staleness semantics. Require cursor pagination, bounded filters,
+service scopes, tenant/site isolation, field redaction, rate limits, consistent
+errors and an OpenAPI contract. Contract, auth-negative, pagination and stale-data
+tests are required. Legacy mutating endpoints are not part of this consumer API.
 
-Contract fixtures and negative tests; role/tenant matrix; session fixation,
-Cookie path/Secure/SameSite and CSRF tests; asset and redirect tests under
-/nmsolt; app launcher test; server-side introspection logs with tokens redacted;
-reversible Caddy diff, config validation and rollback test. Do not change Caddy
-until NMS-03/NMS-04 and a change approval are complete.
+## NMS-09 — Maung /nosteknmsolt thin consumer
 
-## NMS-08 — Maung WO/CRM integration
+Blocked on NMS-08 and a separately scoped Maung change. The page may provide API
+connection/settings, health summaries, alarms, search, and quick customer/ONU
+details or deep links. Maung must not run NMSOLT polling/drivers, query NMSOLT's
+database, store OLT/ONT credentials or become the telemetry source of truth.
+Required evidence: consumer contract tests, scoped credentials, redaction,
+unavailable/stale states, tenant boundaries, performance budget and rollback.
+Caddy and Maung production remain separately approval-gated.
 
-### Ownership and identifiers
+## NMS-10 — Nostek-AI Apps/tool adapter
 
-| Domain | Owner | Canonical reference carried by NMSOLT |
-| --- | --- | --- |
-| User/role/tenant | Maung identity | immutable subject and tenant/site ID |
-| Customer | Maung WO | customer ID; no copied credentials |
-| Work order | Maung WO | work-order ID, status/version and event ID |
-| Lead/sales | CRM | CRM reference only after read-only feasibility review |
-| OLT/PON/ONU/ODP telemetry | NMSOLT | NMSOLT IDs plus normalized physical keys |
-| ONT inform/config state | GenieACS | ACS device ID plus masked serial/MAC mapping |
-
-Every exchange must include schema version, source system, event ID,
-occurred-at/observed-at timestamps and correlation ID. Consumers must be
-idempotent; duplicate/out-of-order events cannot create duplicate assets or
-overwrite fresher state. No cross-database queries. Unknown mappings go to a
-review queue rather than heuristic writes.
-
-### Required evidence
-
-Approved API/event schemas; sanitized contract fixtures; auth and tenant
-negative tests; duplicate/out-of-order replay tests; provenance/freshness UI;
-a synthetic customer → work order → asset handover → telemetry workflow. Maung
-WO/CRM repositories and environments remain untouched until explicitly scoped.
-
-## NMS-09 — controlled Maung production go-live
-
-No production change is permitted until NMS-03 through NMS-08 are VERIFIED.
-The approval record must name the exact image digest, migration set, time
-window, owner, observers, capacity budget, ingress/egress allow-list, backup
-artifact and rollback trigger.
-
-Required rehearsal evidence: restore to an isolated database; fresh install and
-upgrade migrations; queue/scheduler health; SSO and /nmsolt smoke tests;
-read-only telemetry; alerting; load/resource ceiling; rollback to the previous
-immutable image and database state. Stop on unexpected device writes, tenant
-leakage, SSO bypass, unbounded resource pressure or missing backup verification.
-
-## NMS-10 — second Nostek AI deployment
-
-Select nostek-platform versus nostek-ops only from current capacity, network and
-security evidence. The second installation uses the same approved immutable
-application digest but distinct secrets, PostgreSQL, Redis, GenieACS/MongoDB,
-volumes, project name, site/tenant identifiers, audit stream and backups. It
-must not copy Maung customer data by default.
-
-R0 integration exposes only allow-listed read tools through a broker. Zubair or
-another agent receives no raw database, admin, SSH, Telnet, SNMP-write or ACS
-write credentials. Required evidence includes the host decision record,
-collision/capacity check, isolation tests, pinned digest and read-only tool
-authorization tests.
+Blocked on NMS-08. Expose only allow-listed, read-only tools backed by API v1.
+The adapter receives no raw database, admin, SSH, Telnet, SNMP-write or ACS-write
+credentials. Required evidence: tool schemas, least-privilege scopes, tenant and
+redaction negative tests, bounded output/pagination, rate limiting and audit
+correlation. A second NMSOLT deployment is optional only for evidenced capacity,
+tenant or security isolation.
 
 ## NMS-11 — high-risk action governance
 
-High-risk means ONU/ONT reboot, rename, provision, delete, replace, factory
-reset, firmware or Wi-Fi change; PON state; configuration save; SNMP SET;
-Telnet/CLI mutation; or TR-069 parameter/task write.
+Writes remain globally disabled. Reboot, provisioning, deletion, replacement,
+firmware/Wi-Fi change, PON state, SNMP SET, Telnet/CLI mutation and TR-069 writes
+require: fresh target snapshot; deterministic preview; explicit owner/change
+approval; single-use authorization bound to target and parameters; allow-listed
+broker execution; independent postcondition verification; redacted append-only
+audit; and rollback or safe-stop. Replay, stale state, ambiguous identity,
+expired approval or missing verification must deny execution.
 
-Every action requires this state machine:
+## NMS-12 — release and production readiness
 
-1. authenticated scoped requester and fresh target snapshot;
-2. deterministic plan/impact preview with exact device/site;
-3. policy decision and explicit owner/change approval;
-4. single-use, short-lived authorization bound to action, target and parameters;
-5. execution through an allow-listed broker, never an unrestricted shell;
-6. independent postcondition verification;
-7. append-only audit with secrets/PII redacted;
-8. rollback or safe-stop result.
-
-Replay, stale state, changed parameters, ambiguous identity, missing audit sink,
-expired approval and verification failure must deny execution. Current
-NMSOLT_DEVICE_WRITES_ENABLED=false remains the global fail-closed boundary.
-Source-level negative tests do not authorize live actions.
-
-## NMS-12 — release and commercial readiness
-
-A release decision requires:
-
-- exact supported vendor/model/firmware and GenieACS compatibility matrices;
-- versioned migrations, upgrade/downgrade policy and tested backup/restore;
-- SLOs, logs/metrics/alerts, capacity guidance and incident ownership;
-- signed or otherwise verifiable immutable images, dependency/SBOM review and
-  secret/PII scanning;
-- MIT attribution preserved and GenieACS AGPL distribution obligations reviewed;
-- tenant/site isolation tests and data retention/export/deletion decisions;
-- customer-hosted versus hosted responsibility, support and security boundaries;
-- release notes, known limitations and rollback instructions;
-- explicit owner sign-off on residual risk.
-
-Until these are evidenced, the product may have source-readiness artifacts but
-must not be represented as production- or commercially-ready.
+Requires supported vendor/model/firmware matrices; versioned migrations and
+tested backup/restore; SLOs and observability; capacity guidance; immutable image
+and dependency/SBOM review; secret/PII scanning; MIT attribution and GenieACS
+license review; isolation and retention decisions; responsibility/support
+boundaries; release notes; rollback instructions; and explicit residual-risk
+sign-off. Green source CI alone is not production verification.
 
 ## Global continuation rule
 
-When the first unmet prerequisite requires authorization or external evidence,
-record it as BLOCKED and continue only independent source/design/test work.
-A green CI run for this readiness pack proves document integrity and repository
-regression safety; it does not satisfy any runtime, approval or production gate.
+When an unmet prerequisite requires external evidence or authorization, mark
+that item BLOCKED and continue independent source/design/test work. Never claim
+VERIFIED without exact evidence.

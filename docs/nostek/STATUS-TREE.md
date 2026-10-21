@@ -1,6 +1,6 @@
 # Nostek-NMSOLT — project status tree
 
-Updated **2026-10-21 WIB**. State reflects GitHub evidence, not intended plans.
+Updated **2026-10-22 WIB**. State reflects GitHub evidence, not intended plans.
 See [PROJECT-STATUS.yaml](PROJECT-STATUS.yaml) for the machine-readable checkpoint.
 
 ```text
@@ -32,10 +32,10 @@ Nostek-NMSOLT — ONE SOURCE / TWO INDEPENDENT DOCKER DEPLOYMENTS
 |   +-- PASS: local serial match and compatible read-only parameter task
 |   +-- PASS: 0 faults/tasks/presets; Mongo persistence and ACS rollback
 |   +-- PASS: base stack remained healthy; no device/production write
-+-- NMS-06 [BLOCKED] FTTH operations validation FTTH operations validation
++-- NMS-06 [VERIFIED] FTTH operations validation
 |   +-- source readiness PR #7 / run 39295106373 / merge 9c6722c
-|   +-- PASS: reviewed family routing + unknown vendor fail-closed
-|   +-- BLOCKER: approved per-model polling/RX/stale/alarm/ODP/UI lab evidence
+|   +-- PASS: C320 V2.1.0; 32 PON; 484 ONU; sampled optical/UI evidence
+|   +-- PASS: stale/partial, debounce, ODP, role and fail-closed fixtures; PR #18 CI
 +-- NMS-07 [BLOCKED] Maung SSO/RBAC and /nmsolt routing
 |   +-- PREPARED: fail-closed identity and reversible routing evidence contract
 |   +-- BLOCKER: Maung identity schema + approved staging/proxy test
@@ -81,5 +81,5 @@ Nostek-NMSOLT — ONE SOURCE / TWO INDEPENDENT DOCKER DEPLOYMENTS
   [NMS-07–12](NMS-07-12-GATED-READINESS.md).
 - Definitions: [ROADMAP.md](ROADMAP.md); resume: [HANDOFF.md](HANDOFF.md).
 
-A readiness PASS does not make the phase VERIFIED. NMS-00 through NMS-05
+A readiness PASS does not make the phase VERIFIED. NMS-00 through NMS-06
 currently satisfy their full definitions of done; NMS-06 and later remain blocked.

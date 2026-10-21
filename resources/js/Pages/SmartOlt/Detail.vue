@@ -4,6 +4,7 @@ import OltChassis from '@/Components/SmartOlt/OltChassis.vue';
 import PrimaryButton from '@/Components/PrimaryButton.vue';
 import SecondaryButton from '@/Components/SecondaryButton.vue';
 import { formatDateTime } from '@/lib/datetime';
+import { formatSnmpUptime } from '@/lib/snmpUptime';
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
 import { Head, Link, router, usePage } from '@inertiajs/vue3';
 import { ArrowLeft, Cable, ClipboardList, Database, Pencil, RefreshCw, Server } from '@lucide/vue';
@@ -52,20 +53,7 @@ const refreshHardware = () => {
 
 const formatDate = (value) => formatDateTime(value);
 
-const formatUptime = (timeticks) => {
-    if (!timeticks) return '-';
-    const totalSeconds = Math.floor(Number(timeticks) / 100);
-    const days    = Math.floor(totalSeconds / 86400);
-    const hours   = Math.floor((totalSeconds % 86400) / 3600);
-    const minutes = Math.floor((totalSeconds % 3600) / 60);
-    const seconds = totalSeconds % 60;
-    const parts = [];
-    if (days)    parts.push(`${days}h`);
-    if (hours)   parts.push(`${hours}j`);
-    if (minutes) parts.push(`${minutes}m`);
-    if (seconds || parts.length === 0) parts.push(`${seconds}d`);
-    return parts.join(' ');
-};
+const formatUptime = (timeticks) => formatSnmpUptime(timeticks);
 
 </script>
 

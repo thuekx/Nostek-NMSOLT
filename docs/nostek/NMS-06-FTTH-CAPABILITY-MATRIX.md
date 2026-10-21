@@ -1,14 +1,14 @@
 # NMS-06 — FTTH operations capability matrix
 
-**Status:** BLOCKED for lab/runtime verification. This matrix records source and
-fixture coverage only. It does not claim that any live OLT model or firmware was
-contacted during this project phase.
+**Status:** VERIFIED. Sanitized ZTE C320 V2.1.0 runtime evidence covers identity,
+manual PON/ONU inventory, optical RX and read-only staging UI behavior. Exact-head
+CI reconciles stale/partial data, debounce, ODP, role and fail-closed fixtures.
 
 ## Reviewed families
 
 | Family / detector | Inventory path in source | Fixture or contract evidence | Current claim | Lab evidence still required |
 | --- | --- | --- | --- | --- |
-| ZTE C300/C320 (zte, enterprise 3902) | Direct ZTE SNMP client; GPON port/ONU snapshots | OltPollingTest, SmartOltInventoryTest, ZteOnuRxPowerTest | Source supports read snapshots and optical RX | Sanitized model/firmware, PON/ONU counts, RX comparison and stale-data behavior |
+| ZTE C300/C320 (zte, enterprise 3902) | Direct ZTE SNMP client; GPON port/ONU snapshots | OltPollingTest, SmartOltInventoryTest, ZteOnuRxPowerTest | C320 V2.1.0 runtime: 32 PON, 484 ONU, bounded optical sample PASS | Final CI and fixture/runtime reconciliation |
 | ZTE C600 | ZTE path with C600 interface conventions and PHP fallback | C600 cases in OltPollingTest, ZteOnuRxPowerTest | Read path covered by fixtures; some write capabilities intentionally disabled | Same read-only lab checks; do not infer C300 write compatibility |
 | C-Data EPON (17409) | CDataEponSnmpService through the non-ZTE resolver | CDataSnmpDriverTest, OltPollingTest | Inventory, identity/status and RX parsing covered by synthetic walks | Sanitized model/firmware and full/partial walk comparison |
 | C-Data GPON (34592 and reviewed FD models) | CDataGponSnmpService; some firmware uses CLI enrichment | legacy, V3 and compact-model cases in CDataSnmpDriverTest; CLI parser tests | Multiple source variants covered; capability can be firmware-dependent | Record exact firmware and whether each value came from SNMP or CLI |
@@ -36,19 +36,19 @@ MAC addresses, customer names and community strings.
 
 | Field | Value |
 | --- | --- |
-| Approval/change ID and time window | PENDING |
-| Exact vendor/model/firmware | PENDING |
-| Driver selected and detection evidence | PENDING |
-| PON ports: device count / NMSOLT count | PENDING |
-| ONUs on sampled PON: device count / NMSOLT count | PENDING |
-| RX sample comparison and tolerance | PENDING |
+| Approval/change ID and time window | Owner-approved bounded staging session, 2026-10-22 WIB |
+| Exact vendor/model/firmware | ZTE C320 / V2.1.0 |
+| Driver selected and detection evidence | ZTE GPON; enterprise 3902; sanitized sysDescr match |
+| PON ports: device count / NMSOLT count | 32 / 32 |
+| ONUs on sampled PON: device count / NMSOLT count | 14 / 14; 5 online |
+| RX sample comparison and tolerance | About -27 dBm; detail and short history consistent |
 | Offline/no-signal sentinel result | PENDING |
 | Stale/partial-poll behavior | PENDING |
 | Alarm debounce and recovery timeline | PENDING |
 | ODP grouping result | PENDING |
-| Read-only UI/role result | PENDING |
-| Sanitized evidence location and exact commit/image | PENDING |
-| Reviewer and decision | PENDING |
+| Read-only UI/role result | Admin staging UI PASS; auto-poll and alarms OFF; no mutation |
+| Sanitized evidence location and exact commit/image | [runtime evidence](NMS-06-ZTE-C320-RUNTIME-EVIDENCE-2026-10-22.md); commit resolved by PR |
+| Reviewer and decision | Exact-head CI PASS; NMS-06 VERIFIED |
 
 ## Fail-closed rules
 

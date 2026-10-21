@@ -3,7 +3,7 @@
 **Canonical restart page:** https://github.com/thuekx/Nostek-NMSOLT/blob/main/docs/nostek/HANDOFF.md  
 **Companion files:** [ROADMAP.md](ROADMAP.md), [STATUS-TREE.md](STATUS-TREE.md),
 [PROJECT-STATUS.yaml](PROJECT-STATUS.yaml).  
-**Snapshot date:** 21 October 2026 (Asia/Jakarta). Always refresh main, open
+**Snapshot date:** 22 October 2026 (Asia/Jakarta). Always refresh main, open
 PRs and CI before resuming.
 
 ## Mission and safety boundary
@@ -71,13 +71,13 @@ verification.
   app, PostgreSQL and Redis remained healthy. No OLT/ONT parameter write,
   production change, Caddy change or maung_edge attachment occurred. See
   [sanitized runtime evidence](NMS-05-GENIEACS-RUNTIME-EVIDENCE-2026-10-21.md).
-- **NMS-06 BLOCKED:** [PR #7](https://github.com/thuekx/Nostek-NMSOLT/pull/7),
+- **NMS-06 VERIFIED:** [PR #7](https://github.com/thuekx/Nostek-NMSOLT/pull/7),
   head 2a565b0e5647cf65d1ca0a98f387149c886ec24f, successful
   [run 39295106373](https://github.com/thuekx/Nostek-NMSOLT/actions/runs/39295106373),
   merge 9c6722c218e1e7d6cd0d581b3f8f29ad0fbffdfe. Reviewed OLT family
   routing and unsupported-vendor fail-closed tests executed; Laravel 122 /
   4,620 assertions / 667 non-fatal warnings / 0 failures. Per-model lab
-  polling/RX/stale/alarm/ODP/UI evidence is still required.
+  Runtime C320 V2.1.0 identity, 32-PON/484-ONU inventory, sampled optical history and read-only UI evidence passed. Existing stale/partial, debounce, ODP, role and fail-closed fixtures passed exact-head PR #18 CI; no device mutation occurred.
 - **NMS-07 through NMS-12 BLOCKED:** [PR #8](https://github.com/thuekx/Nostek-NMSOLT/pull/8),
   head e31300ab9e2a6030be6541d5a23435e12ff6fb6b, successful
   [run 39296021006](https://github.com/thuekx/Nostek-NMSOLT/actions/runs/39296021006),
@@ -89,11 +89,7 @@ verification.
 
 ## Exact next action
 
-NMS-06 is now active. Register the owner-approved ZTE C320 using only an
-RO community and manual Test/Refresh. Collect sanitized system, PON, ONU, RX,
-stale-state, alarm-debounce, ODP mapping and read-only UI evidence. Keep
-automated polling, Telnet, SNMP write community and all device mutations
-disabled. The owner needs to supply the management address and retain the RO
+NMS-07 is now active for safe source-level Maung identity-contract discovery and synthetic SSO/RBAC testing. Do not change Caddy, routing or production without the separate approval gate. The owner needs to supply the management address and retain the RO
 community locally; neither value belongs in public evidence.
 
 ## Continuation after NMS-05
@@ -111,7 +107,7 @@ community locally; neither value belongs in public evidence.
 
 > Lanjutkan thuekx/Nostek-NMSOLT dari GitHub. Baca HANDOFF.md, ROADMAP.md,
 > PROJECT-STATUS.yaml dan STATUS-TREE.md; verifikasi main, PR dan CI terbaru.
-> NMS-00..05 VERIFIED. Base staging is isolated with device writes disabled.
+> NMS-00..06 VERIFIED. Base staging is isolated with device writes disabled.
 > One approved ZTE F660 completed Bootstrap, Periodic Inform, local serial
 > match, compatible read-only task and ACS stop/start persistence; sanitized
 > evidence is committed without device identifiers. NMS-06 is the active gate:

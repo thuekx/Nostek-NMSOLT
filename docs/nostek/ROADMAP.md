@@ -13,7 +13,7 @@
 - **One NMSOLT platform per environment** owns network telemetry and operations. Maung and Nostek-AI consume versioned NMSOLT APIs/tools; they do not duplicate polling, drivers, databases or device credentials. A second deployment is optional only when capacity, site or security isolation requires it.
 - A Docker **stack** consists of multiple containers; do not equate "one Docker deployment" with a single container.
 - NMSOLT remains domain owner for OLT/PON/ONU/ODP optical monitoring, state, topology and alarm information.
-- **GenieACS required for desired ONT/TR-069 capabilities**, but its runtime is added in an isolated lab first. The GenieACS NBI, UI, MongoDB and file service are private; device CWMP ingress requires approved network policy.
+- **GenieACS is a bundled NMSOLT subsystem**, not a separately operated product requirement. The supported installer/Compose package provides app, PostgreSQL, Redis, GenieACS CWMP/NBI/FS/UI and MongoDB as one managed product stack. Containers and data remain isolated internally; only approved CWMP ingress is published, while NBI/UI/Mongo stay private or loopback. NMSOLT owns health, upgrade, backup and rollback orchestration.
 - Maung may expose a thin `/nosteknmsolt` consumer page, similar to its CRM integration, for API settings, network summaries, alarms, search and quick customer/ONU detail. The page calls versioned NMSOLT APIs; it never duplicates polling/drivers, queries the NMSOLT database or stores device credentials. CRM remains separately scoped.
 - Nostek AI/Zubair starts with read-only broker tools; no raw admin API tokens and no unrestricted CLI/SSH/SNMP write.
 - Backend stays Laravel 12/Vue/Inertia + Go SNMP poller for first validation. An alternate language/framework requires benchmarks and a separate migration decision; do not replace speculatively.
@@ -39,7 +39,7 @@
 | **NMS-04** | Maung isolated staging Docker | Compose separate project/volumes/network, no accidental published DB/Redis ports, no live OLT write; healthchecks, app login, queue/scheduler, migrations from empty DB, backup/restore rehearsal | Deploy and rollback logs, resource data |
 | **NMS-05** | GenieACS/MongoDB isolated lab | CWMP, NBI, MongoDB health, a specifically approved test ONT "inform", serial/MAC match, compatible read parameters; no production ONT repointing, no unsupported Wi-Fi action | Lab device matrix and logs |
 | **NMS-06** | FTTH operations validation | Supported OLT models, per-PON/ONU snapshots, optical RX, stale data, alarm debounce, ODP mapping, user-facing read-only UI tests pass with fixtures/lab | Vendor capability matrix, fixtures, screenshots generated in lab only (not necessarily committed) |
-| **NMS-07** | Product stabilization | Audit every function/page; repair broken and misleading UI paths; enforce write-gate visibility; profile large ONU/alarm pages, polling and queries; add regression/performance evidence | Feature matrix, tests, measured before/after results, PR |
+| **NMS-07** | Product stabilization and unified package | Audit every function/page; repair broken and misleading UI paths; enforce write-gate visibility; profile large ONU/alarm pages, polling and queries; make the reviewed installer/Compose flow include the optional/default `with-acs` profile, unified health checks, backup, upgrade and rollback; NMSOLT consumes private GenieACS NBI | Feature matrix, package/topology tests, regression tests, measured before/after results, PR |
 | **NMS-08** | Read-only API v1 and tool contract | Versioned schemas, stable IDs, freshness/provenance, pagination/filtering, scoped service tokens, rate limits, redaction, OpenAPI and negative contract tests | OpenAPI spec, API/authorization tests, compatibility policy |
 | **NMS-09** | Maung `/nosteknmsolt` consumer page | Thin Maung page for API settings, summaries, alarms, search, customer/ONU quick detail and deep links; graceful timeout/failure; no duplicated polling, cross-database access or device credentials | Consumer UI/API contract and synthetic E2E fixtures; Maung implementation remains separately scoped |
 | **NMS-10** | Nostek-AI Apps/tool adapter | Read-only allow-listed tools backed by NMSOLT API; no raw database/admin/device credentials; identity, tenant, audit, timeout and result-size controls | Tool schema, broker tests, redacted synthetic conversations |
@@ -62,7 +62,7 @@ Non-destructive parallel work is allowed (documentation, API design, unit tests,
 - [NMS-05-GENIEACS-RUNTIME-EVIDENCE-2026-10-21.md](NMS-05-GENIEACS-RUNTIME-EVIDENCE-2026-10-21.md): sanitized Inform/read/rollback evidence.
 - [NMS-06-FTTH-CAPABILITY-MATRIX.md](NMS-06-FTTH-CAPABILITY-MATRIX.md): verified vendor fixture/runtime coverage.
 - [NMS-06-ZTE-C320-RUNTIME-EVIDENCE-2026-10-22.md](NMS-06-ZTE-C320-RUNTIME-EVIDENCE-2026-10-22.md): sanitized C320 inventory, optical and UI evidence.
-- [NMS-07-12-GATED-READINESS.md](NMS-07-12-GATED-READINESS.md): SSO, WO/CRM, go-live, second deployment, action governance and release gates.
+- [NMS-07-12-GATED-READINESS.md](NMS-07-12-GATED-READINESS.md): product packaging, API/consumer/tool, action-governance and release gates.
 
 ## Stop/continue rule
 

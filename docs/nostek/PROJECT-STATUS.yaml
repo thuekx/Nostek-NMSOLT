@@ -58,7 +58,7 @@ status:
   NMS-03: VERIFIED
   NMS-04: VERIFIED
   NMS-05: VERIFIED
-  NMS-06: IN_PROGRESS
+  NMS-06: VERIFIED
   NMS-07: BLOCKED
   NMS-08: BLOCKED
   NMS-09: BLOCKED
@@ -102,12 +102,12 @@ latest_evidence:
     sanitized_evidence: docs/nostek/NMS-05-GENIEACS-RUNTIME-EVIDENCE-2026-10-21.md
     result: "One approved ZTE F660: Bootstrap and Periodic Inform PASS; local serial match PASS; read-only getParameterValues consumed; 0 faults, 0 pending tasks, 0 presets; Mongo persistence and ACS stop/start PASS; base NMS-04 stayed healthy; no device write."
   NMS-06:
-    status: IN_PROGRESS
+    status: VERIFIED
     source_readiness: "PR #7 head 2a565b0 passed all five jobs in run 39295106373 and merged as 9c6722c; reviewed family routing and unknown fail-closed tests executed."
     sanitized_evidence: docs/nostek/NMS-06-ZTE-C320-RUNTIME-EVIDENCE-2026-10-22.md
     runtime: "Owner-approved ZTE C320 V2.1.0: SNMP identity PASS; 32 PON; 484 ONU (256 online); sampled PON 14/5 online; optical detail/history around -27 dBm; staging UI PASS with auto-poll and alarms OFF; no mutation."
     finding: "Net-SNMP Timeticks rendered NaNd; fix and regression test are under CI review. ONU detail used read-only CLI show commands; no write command was sent."
-    blocker: "Exact-head CI and final reconciliation of existing stale/debounce/ODP/role fixtures with runtime evidence."
+    verification: "Runtime C320 evidence plus PR #18 exact-head CI: Vue, Laravel, Go, Compose and both image builds PASS; stale/partial, debounce, ODP, role and fail-closed fixtures reconciled."
   NMS-07:
     status: BLOCKED
     preparation: "SSO, app.nmsolt, /nmsolt routing and reversible proxy evidence contract documented."
@@ -137,8 +137,9 @@ environment:
   genieacs_lab: ACTIVE_VERIFIED
   live_olt_write: PROHIBITED_WITHOUT_APPROVAL
 next_action:
-  id: NMS-06-ZTE-C320-READ-ONLY
-  instruction: "Complete exact-head CI and final NMS-06 fixture/runtime reconciliation; no further live-device action is currently required."
+  id: NMS-07-MAUNG-SSO-CONTRACT
+  instruction: "Begin safe NMS-07 identity-contract discovery and synthetic SSO/RBAC tests. Caddy or routing changes remain approval-gated. No production mutation."
+
   owner: "owner supplies the C320 management address and locally retained RO community; executor reviews bounded evidence"
   approval_required: false
 references:

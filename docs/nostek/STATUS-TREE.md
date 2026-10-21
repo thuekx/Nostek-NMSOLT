@@ -4,82 +4,52 @@ Updated **2026-10-22 WIB**. State reflects GitHub evidence, not intended plans.
 See [PROJECT-STATUS.yaml](PROJECT-STATUS.yaml) for the machine-readable checkpoint.
 
 ```text
-Nostek-NMSOLT — ONE SOURCE / TWO INDEPENDENT DOCKER DEPLOYMENTS
+Nostek-NMSOLT — STANDALONE NETWORK PLATFORM / API PROVIDER
 |
-+-- NMS-00 [VERIFIED] Git source baseline and public identity
-|   +-- initial commit 24332a2; mobile excluded; MIT attribution retained
++-- NMS-00 [VERIFIED] Public source baseline
 +-- NMS-01 [VERIFIED] Repeatable CI and image builds
-|   +-- PR #1 / run 39278668150 / head b20149c / merge 63f4b77
-|   +-- Compose + images + Go + Vue 57 + Laravel 122 PASS
 +-- NMS-02 [VERIFIED] Default-off device-write boundary
-|   +-- PR #2 / run 39284353892 / head 0fcb962 / merge 732debb
-|   +-- route, queued job and Telegram boundaries covered
-|
-+-- NMS-03 [VERIFIED] Maung read-only discovery
-|   +-- collector executed 2026-10-20T00:52:49+07:00; raw SHA-256 0187497B...1844ECB
-|   +-- 8 vCPU; ~13 GiB available RAM; 43 GiB root free
-|   +-- current Docker/ports/networks/proxy/backup inventory sanitized
-|   +-- bounded NMS-04 base budget: 2 vCPU / 3 GiB / 12 GiB
++-- NMS-03 [VERIFIED] Maung host read-only discovery
 +-- NMS-04 [VERIFIED] Isolated Maung staging
-|   +-- runner PR #11 / run 39449952838 / merge 3ad09b8
-|   +-- permission fix PR #12 / run 39470245938 / merge 4b7437c
-|   +-- PASS: loopback-only base stack, writes disabled, migrations and processes healthy
-|   +-- PASS: backup restore 38/38 tables; bounded resources; rollback/restart
-|   +-- PASS: pre-existing containers unchanged; Caddy and maung_edge unchanged
-+-- NMS-05 [VERIFIED] Isolated GenieACS lab
-|   +-- overlay PR #14; network repair PR #15; host guard PR #16
-|   +-- PASS: one approved ZTE F660 Bootstrap + Periodic Inform
-|   +-- PASS: local serial match and compatible read-only parameter task
-|   +-- PASS: 0 faults/tasks/presets; Mongo persistence and ACS rollback
-|   +-- PASS: base stack remained healthy; no device/production write
-+-- NMS-06 [VERIFIED] FTTH operations validation
-|   +-- source readiness PR #7 / run 39295106373 / merge 9c6722c
-|   +-- PASS: C320 V2.1.0; 32 PON; 484 ONU; sampled optical/UI evidence
-|   +-- PASS: stale/partial, debounce, ODP, role and fail-closed fixtures; PR #18 CI
-+-- NMS-07 [BLOCKED] Maung SSO/RBAC and /nmsolt routing
-|   +-- PREPARED: fail-closed identity and reversible routing evidence contract
-|   +-- BLOCKER: Maung identity schema + approved staging/proxy test
-+-- NMS-08 [BLOCKED] Maung WO/CRM integration
-|   +-- PREPARED: ownership, external IDs, provenance and idempotency contract
-|   +-- BLOCKER: approved contracts + synthetic integration environment
-+-- NMS-09 [BLOCKED] Controlled Maung production go-live
-|   +-- BLOCKER: NMS-03..08 VERIFIED + explicit change approval
-+-- NMS-10 [BLOCKED] Second Nostek AI deployment
-|   +-- BLOCKER: resource/security evidence + host decision
-+-- NMS-11 [BLOCKED] High-risk action governance
-|   +-- PREPARED: preview/approval/single-use execution/verification/audit lifecycle
-|   +-- BLOCKER: broker + lab proof + explicit per-action approval
-+-- NMS-12 [BLOCKED] Release/commercial readiness
-|   +-- PREPARED: release/DR/observability/isolation/SBOM/license checklist
-|   +-- BLOCKER: upstream gates + product/release decisions
++-- NMS-05 [VERIFIED] Isolated GenieACS lab; F660 Inform/read task
++-- NMS-06 [VERIFIED] ZTE C320 read-only runtime validation
+|   +-- PR #18 / run 39648137609 / head 902f526 / merge c639f12
+|   +-- SNMP, PON/ONU inventory, optical detail and UI evidence passed
+|
++-- NMS-07 [IN PROGRESS] NMSOLT product stabilization
+|   +-- audit functions, screens, read paths and performance
+|   +-- repair misleading/broken behavior and add regression evidence
++-- NMS-08 [BLOCKED] API v1 read-only + OpenAPI
+|   +-- stable IDs, freshness, pagination, scopes, redaction, rate limits
++-- NMS-09 [BLOCKED] Maung /nosteknmsolt thin consumer
+|   +-- API settings, summaries, alarms, search and quick customer/ONU detail
++-- NMS-10 [BLOCKED] Nostek-AI Apps/tool adapter
+|   +-- allow-listed read tools over NMSOLT API; no direct DB/device credentials
++-- NMS-11 [BLOCKED] High-risk write governance
+|   +-- explicit preview, approval, single-use execution, verification and audit
++-- NMS-12 [BLOCKED] Release and production readiness
 |
 +-- MOBILE [DEFERRED] Not distributed
 +-- PRODUCTION/DEVICE WRITES [GATED] Not authorized
 ```
 
+## Architecture boundary
+
+- NMSOLT owns polling, device drivers, GenieACS integration, telemetry history and network-domain logic.
+- Maung and Nostek-AI are consumers of versioned NMSOLT APIs/tools.
+- A future Maung `/nosteknmsolt` page is a thin integration and quick-view surface; it must not duplicate NMSOLT collectors or query its database directly.
+- Another NMSOLT deployment is optional only when capacity, tenant or security isolation requires it—not because a consumer needs a page.
+
 ## Durable evidence
 
-- PRs: [#1](https://github.com/thuekx/Nostek-NMSOLT/pull/1),
-  [#2](https://github.com/thuekx/Nostek-NMSOLT/pull/2),
-  [#3](https://github.com/thuekx/Nostek-NMSOLT/pull/3),
-  [#4](https://github.com/thuekx/Nostek-NMSOLT/pull/4),
-  [#5](https://github.com/thuekx/Nostek-NMSOLT/pull/5),
-  [#6](https://github.com/thuekx/Nostek-NMSOLT/pull/6),
-  [#7](https://github.com/thuekx/Nostek-NMSOLT/pull/7),
-  [#8](https://github.com/thuekx/Nostek-NMSOLT/pull/8),
-  [#9](https://github.com/thuekx/Nostek-NMSOLT/pull/9),
-  [#10](https://github.com/thuekx/Nostek-NMSOLT/pull/10),
-  [#11](https://github.com/thuekx/Nostek-NMSOLT/pull/11),
-  [#12](https://github.com/thuekx/Nostek-NMSOLT/pull/12),
-  [#13](https://github.com/thuekx/Nostek-NMSOLT/pull/13),
-  [#14](https://github.com/thuekx/Nostek-NMSOLT/pull/14),
-  [#15](https://github.com/thuekx/Nostek-NMSOLT/pull/15),
-  [#16](https://github.com/thuekx/Nostek-NMSOLT/pull/16)
+- Verified runtime chain: PRs [#1](https://github.com/thuekx/Nostek-NMSOLT/pull/1) through
+  [#18](https://github.com/thuekx/Nostek-NMSOLT/pull/18), with phase-specific references in
+  [HANDOFF.md](HANDOFF.md).
 - Readiness details: [NMS-04](NMS-04-STAGING-READINESS.md),
   [NMS-05](NMS-05-GENIEACS-LAB-MATRIX.md),
-  [NMS-06](NMS-06-FTTH-CAPABILITY-MATRIX.md),
+  [NMS-06](NMS-06-FTTH-CAPABILITY-MATRIX.md), and
   [NMS-07–12](NMS-07-12-GATED-READINESS.md).
 - Definitions: [ROADMAP.md](ROADMAP.md); resume: [HANDOFF.md](HANDOFF.md).
 
-A readiness PASS does not make the phase VERIFIED. NMS-00 through NMS-06
-currently satisfy their full definitions of done; NMS-06 and later remain blocked.
+NMS-00 through NMS-06 satisfy their definitions of done. NMS-07 is active for
+safe source-level work; NMS-08 through NMS-12 remain dependency- or approval-gated.

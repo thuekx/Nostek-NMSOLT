@@ -1,8 +1,8 @@
 # NMS-06 — FTTH operations capability matrix
 
-**Status:** IN_PROGRESS. Sanitized ZTE C320 V2.1.0 runtime evidence now covers
-identity, manual PON/ONU inventory, optical RX and read-only staging UI behavior.
-CI reconciliation and final gate review remain before VERIFIED.
+**Status:** VERIFIED. Sanitized ZTE C320 V2.1.0 runtime evidence covers identity,
+manual PON/ONU inventory, optical RX and read-only staging UI behavior. Exact-head
+CI reconciles stale/partial data, debounce, ODP, role and fail-closed fixtures.
 
 ## Reviewed families
 
@@ -48,7 +48,7 @@ MAC addresses, customer names and community strings.
 | ODP grouping result | PENDING |
 | Read-only UI/role result | Admin staging UI PASS; auto-poll and alarms OFF; no mutation |
 | Sanitized evidence location and exact commit/image | [runtime evidence](NMS-06-ZTE-C320-RUNTIME-EVIDENCE-2026-10-22.md); commit resolved by PR |
-| Reviewer and decision | PENDING |
+| Reviewer and decision | Exact-head CI PASS; NMS-06 VERIFIED |
 
 ## Fail-closed rules
 

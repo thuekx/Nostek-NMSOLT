@@ -6,15 +6,15 @@
 **Status:** consult [PROJECT-STATUS.yaml](PROJECT-STATUS.yaml) before each action.  
 **Handoff:** [HANDOFF.md](HANDOFF.md).  
 **Human-readable tree:** [STATUS-TREE.md](STATUS-TREE.md).  
-**Current checkpoint (2026-10-22):** NMS-00 through NMS-06 are VERIFIED. The isolated Maung staging base remains healthy with device writes disabled. ZTE F660 TR-069 and ZTE C320 read-only FTTH inventory/optical validation passed with sanitized evidence and exact-head CI. NMS-07 is the active identity-contract gate; Caddy/routing changes and NMS-08 through NMS-12 remain approval-gated or blocked.
+**Current checkpoint (2026-10-22):** NMS-00 through NMS-06 are VERIFIED. The isolated Maung staging base remains healthy with device writes disabled. ZTE F660 TR-069 and ZTE C320 read-only FTTH inventory/optical validation passed with sanitized evidence and exact-head CI. NMS-07 is the active product-stabilization gate. NMSOLT remains the network platform/API provider; Maung and Nostek-AI are consumers. Production and device writes remain approval-gated.
 
 ## Product contract
 
-- **One source repository, two independent Docker Compose deployments**: first Maung, second Nostek AI. Each installation has independent app config, PostgreSQL, Redis, GenieACS/MongoDB, credentials, and operational data. No new VM assumed without resource evidence.
+- **One NMSOLT platform per environment** owns network telemetry and operations. Maung and Nostek-AI consume versioned NMSOLT APIs/tools; they do not duplicate polling, drivers, databases or device credentials. A second deployment is optional only when capacity, site or security isolation requires it.
 - A Docker **stack** consists of multiple containers; do not equate "one Docker deployment" with a single container.
 - NMSOLT remains domain owner for OLT/PON/ONU/ODP optical monitoring, state, topology and alarm information.
 - **GenieACS required for desired ONT/TR-069 capabilities**, but its runtime is added in an isolated lab first. The GenieACS NBI, UI, MongoDB and file service are private; device CWMP ingress requires approved network policy.
-- Maung WO owns users/roles, customers, work orders and physical inventory workflow; CRM owns leads and sales. NMSOLT reads/writes only via explicitly authorized contracts, **not cross-database access**.
+- Maung may correlate NMSOLT identifiers with users, customers and work orders through versioned APIs; it never queries the NMSOLT database or stores device credentials. CRM remains out of scope until a separate approved consumer contract.
 - Nostek AI/Zubair starts with read-only broker tools; no raw admin API tokens and no unrestricted CLI/SSH/SNMP write.
 - Backend stays Laravel 12/Vue/Inertia + Go SNMP poller for first validation. An alternate language/framework requires benchmarks and a separate migration decision; do not replace speculatively.
 - Main branch and Maung/Nostek production are protected from experimental changes; use branches, tests, PRs and evidence.
@@ -39,10 +39,10 @@
 | **NMS-04** | Maung isolated staging Docker | Compose separate project/volumes/network, no accidental published DB/Redis ports, no live OLT write; healthchecks, app login, queue/scheduler, migrations from empty DB, backup/restore rehearsal | Deploy and rollback logs, resource data |
 | **NMS-05** | GenieACS/MongoDB isolated lab | CWMP, NBI, MongoDB health, a specifically approved test ONT "inform", serial/MAC match, compatible read parameters; no production ONT repointing, no unsupported Wi-Fi action | Lab device matrix and logs |
 | **NMS-06** | FTTH operations validation | Supported OLT models, per-PON/ONU snapshots, optical RX, stale data, alarm debounce, ODP mapping, user-facing read-only UI tests pass with fixtures/lab | Vendor capability matrix, fixtures, screenshots generated in lab only (not necessarily committed) |
-| **NMS-07** | Maung authentication and /nmsolt routing | Server-side Maung token introspection/feature gate app.nmsolt, no stale privileged auth, route/asset/Cookie/CSRF test on /nmsolt, Caddy reversible, app launcher | SSO/RBAC/API/caddy tests and rollback |
-| **NMS-08** | Maung WO/CRM integration | Canonical external IDs for customers, ONT serials, OLT/PON/ODP, work orders; CRM feasibility read-only; operational handover with provenance and freshness; idempotent deduplicated events; no cross-DB coupling | Contract tests and E2E synthetic workflow |
-| **NMS-09** | Controlled Maung production go-live | Staging acceptance, backups/restore proof, observability, capacity/load budget, explicit owner change approval; restricted ingress/egress; rollback drill | Approved change ticket & production verification |
-| **NMS-10** | Second Nostek AI Docker deployment | Decide nostek-platform vs nostek-ops from actual resource/security evidence; same immutable application version, distinct secrets/DB/ACS/volumes; R0 tool registration and Zubair mapping | Host decision record, pinned image, read-only integration tests |
+| **NMS-07** | Product stabilization | Audit every function/page; repair broken and misleading UI paths; enforce write-gate visibility; profile large ONU/alarm pages, polling and queries; add regression/performance evidence | Feature matrix, tests, measured before/after results, PR |
+| **NMS-08** | Read-only API v1 and tool contract | Versioned schemas, stable IDs, freshness/provenance, pagination/filtering, scoped service tokens, rate limits, redaction, OpenAPI and negative contract tests | OpenAPI spec, API/authorization tests, compatibility policy |
+| **NMS-09** | Maung consumer integration | Maung consumes NMSOLT API for summaries, alarms and asset references; graceful timeout/failure; no cross-database access or device credentials; optional deep links | Consumer contract and synthetic E2E fixtures; Maung changes remain separately scoped |
+| **NMS-10** | Nostek-AI Apps/tool adapter | Read-only allow-listed tools backed by NMSOLT API; no raw database/admin/device credentials; identity, tenant, audit, timeout and result-size controls | Tool schema, broker tests, redacted synthetic conversations |
 | **NMS-11** | High-risk changes governance | Any ONU reboot/rename/provision/delete, PON state, TR-069 write requires scoped identity, plan/impact preview, broker approval, one-time authorization, freshness, verification and audit. No live operations until explicit device/change approval | Threat model, negative tests, approvals, lab evidence |
 | **NMS-12** | Release readiness / commercial extension | Supported-vendor/version matrix, upgrades, DR, observability, release process, tenant/site isolation, customer-hosted/hosted design, license attribution/compliance and SBOM review | Release checklist and product decisions |
 

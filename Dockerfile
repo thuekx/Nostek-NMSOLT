@@ -54,7 +54,8 @@ FROM php:8.3-fpm-bookworm AS app
 # membersihkannya sendiri (jauh lebih ringkas & andal ketimbang rakit manual).
 COPY --from=mlocati/php-extension-installer:2 /usr/bin/install-php-extensions /usr/local/bin/
 RUN install-php-extensions \
-        pdo_pgsql pgsql bcmath intl mbstring xml zip gd pcntl sockets snmp redis opcache
+        pdo_pgsql pgsql bcmath intl mbstring xml zip gd pcntl sockets snmp \
+        phpredis/phpredis@6.3.0 opcache
 
 # Runtime pendukung: nginx (web), supervisor (proses), postgresql-client (pg_isready),
 # git+unzip (composer dist), snmp (net-snmp CLI, opsional untuk debug).

@@ -56,12 +56,21 @@ verification.
   five supervised processes, backup/restore with 38/38 public tables, bounded
   resources, rollback/restart and unchanged pre-existing containers all passed.
   See [sanitized runtime evidence](NMS-04-MAUNG-STAGING-EVIDENCE-2026-10-21.md).
-- **NMS-05 BLOCKED:** [PR #6](https://github.com/thuekx/Nostek-NMSOLT/pull/6),
-  head 97377e53d7532e6d02e257e315b302b6d47215b7, successful
-  [run 39294335613](https://github.com/thuekx/Nostek-NMSOLT/actions/runs/39294335613),
-  merge f5917c06b05b10a1f727a79dd2b5ce0a4b120008. GenieACS lab
-  source policy passed. No ONT was contacted; approved inform/read evidence is
-  still required.
+- **NMS-05 VERIFIED:** source policy [PR #6](https://github.com/thuekx/Nostek-NMSOLT/pull/6);
+  authorized lab runner and explicit private CWMP binding
+  [PR #14](https://github.com/thuekx/Nostek-NMSOLT/pull/14), merged
+  a6daef774f46d5aaeadcbba1529258fef90b29b6; published-service network repair
+  [PR #15](https://github.com/thuekx/Nostek-NMSOLT/pull/15), merged
+  08a57e6be31fbf00bcc9fe4cd5cb8f87bfa6a61f; Maung host guard
+  [PR #16](https://github.com/thuekx/Nostek-NMSOLT/pull/16), successful run
+  39591657569, merged 2a1547cd7d06e4d07d6526862ea615a105366cd5.
+  One approved non-production ZTE F660 completed Bootstrap and Periodic Inform.
+  Serial identity matched locally without disclosure; a read-only
+  getParameterValues task completed on Periodic Inform; 0 faults, 0 pending
+  tasks and 0 presets. ACS stop/start preserved the device record while the base
+  app, PostgreSQL and Redis remained healthy. No OLT/ONT parameter write,
+  production change, Caddy change or maung_edge attachment occurred. See
+  [sanitized runtime evidence](NMS-05-GENIEACS-RUNTIME-EVIDENCE-2026-10-21.md).
 - **NMS-06 BLOCKED:** [PR #7](https://github.com/thuekx/Nostek-NMSOLT/pull/7),
   head 2a565b0e5647cf65d1ca0a98f387149c886ec24f, successful
   [run 39295106373](https://github.com/thuekx/Nostek-NMSOLT/actions/runs/39295106373),
@@ -78,24 +87,23 @@ verification.
   blocked on upstream gates, external contracts, runtime evidence and explicit
   approvals. No Maung, CRM/WO, production or device mutation was performed.
 
-## Exact next action requiring owner authority
+## Exact next action
 
-NMS-05 requires a separate owner decision identifying one exact non-production
-lab ONT and approving its network path to the isolated GenieACS lab. Do not use
-a production ONT, expose CWMP publicly, change Caddy, enable device writes, or
-perform write-parameter tests. Until that identity and boundary are supplied,
-NMS-05 remains BLOCKED; source-readiness work is already complete.
+NMS-06 is now active. Register the owner-approved ZTE C320 using only an
+RO community and manual Test/Refresh. Collect sanitized system, PON, ONU, RX,
+stale-state, alarm-debounce, ODP mapping and read-only UI evidence. Keep
+automated polling, Telnet, SNMP write community and all device mutations
+disabled. The owner needs to supply the management address and retain the RO
+community locally; neither value belongs in public evidence.
 
-## Continuation after NMS-04
+## Continuation after NMS-05
 
-1. Record the exact lab ONT identity/model and confirm it is non-production.
-2. Approve only the isolated NMS-05 inform/read matrix and rollback boundary.
-3. Deploy the private GenieACS/MongoDB overlay within the remaining approved
-   incremental budget; expose only approved loopback/test-network endpoints.
-4. Collect sanitized CWMP health, inform identity match, NBI/read-parameter and
-   rollback evidence without publishing serials, MACs or credentials.
-5. Continue NMS-06 read-only vendor validation. NMS-07 Caddy/SSO, NMS-08
-   WO/CRM, production and every device write remain separately approval-gated.
+1. Record the approved C320 management path locally; do not publish its address or community.
+2. Add the C320 in SmartOLT with SNMP v2c RO only; leave write community and CLI blank.
+3. Run manual Test SNMP and one bounded Refresh; collect sanitized system/PON/ONU/RX evidence.
+4. Exercise stale-state, alarm debounce, ODP mapping and UI paths using lab data/fixtures without device mutation.
+5. Mark NMS-06 VERIFIED only when its complete matrix passes. NMS-07 Caddy/SSO,
+   NMS-08 WO/CRM, production and every device write remain separately gated.
 
 
 
@@ -103,11 +111,11 @@ NMS-05 remains BLOCKED; source-readiness work is already complete.
 
 > Lanjutkan thuekx/Nostek-NMSOLT dari GitHub. Baca HANDOFF.md, ROADMAP.md,
 > PROJECT-STATUS.yaml dan STATUS-TREE.md; verifikasi main, PR dan CI terbaru.
-> NMS-00..04 VERIFIED. Base staging NMS-04 aktif secara terisolasi pada image
-> 4b7437c, loopback-only, writes disabled; bukti migrasi, proses, backup/restore,
-> resource dan rollback tersimpan secara tersanitasi. NMS-05..12 BLOCKED.
-> Lanjutkan pekerjaan aman secara berurutan, tetapi jangan menyentuh produksi,
-> live OLT/ONT, Maung WO/CRM, Caddy atau rahasia, dan jangan melewati approval.
-> Gate berikutnya adalah persetujuan satu ONT lab non-produksi yang spesifik
-> untuk matriks inform/read NMS-05. Jangan mengaktifkan device writes atau
-> mengekspos CWMP, dan jangan klaim VERIFIED tanpa bukti runtime yang diwajibkan.
+> NMS-00..05 VERIFIED. Base staging is isolated with device writes disabled.
+> One approved ZTE F660 completed Bootstrap, Periodic Inform, local serial
+> match, compatible read-only task and ACS stop/start persistence; sanitized
+> evidence is committed without device identifiers. NMS-06 is the active gate:
+> validate the approved ZTE C320 using SNMP v2c read-only, manual Test/Refresh
+> and sanitized PON/ONU/RX/stale/alarm/ODP/UI evidence. Keep automated polling,
+> Telnet, write community, Caddy, Maung WO/CRM, production and all device writes
+> disabled or separately approval-gated. Never claim VERIFIED without evidence.

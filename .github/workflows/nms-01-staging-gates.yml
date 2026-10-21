@@ -28,6 +28,15 @@ jobs:
         run: bash -n scripts/nostek/deploy-maung-staging.sh
       - name: Validate authorized NMS-05 GenieACS runner syntax
         run: bash -n scripts/nostek/deploy-maung-genieacs-lab.sh
+      - name: Enforce NMS-05 Maung host identity guard
+        shell: bash
+        run: |
+          set -euo pipefail
+          runner=scripts/nostek/deploy-maung-genieacs-lab.sh
+          grep -Fq 'EXPECTED_HOSTNAME="maung-apps"' "${runner}"
+          grep -Fq 'EXPECTED_HOST_IPV4="192.168.48.99"' "${runner}"
+          grep -Fq 'wrong host: expected hostname' "${runner}"
+          grep -Fq 'wrong routed source:' "${runner}"
       - name: Create local-only environment template
         run: cp .env.docker.example .env
       - name: Validate base NMSOLT stack

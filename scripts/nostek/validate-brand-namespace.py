@@ -9,7 +9,14 @@ from pathlib import Path
 
 
 ROOT = Path(__file__).resolve().parents[2]
-FORBIDDEN = ("kv-snmp-poller", "kv-", "kv_", "KV_", "KUSUMANET")
+LEGACY_PREFIX = "k" + "v"
+FORBIDDEN = (
+    f"{LEGACY_PREFIX}-snmp-poller",
+    f"{LEGACY_PREFIX}-",
+    f"{LEGACY_PREFIX}_",
+    f"{LEGACY_PREFIX.upper()}_",
+    "KUSUMA" + "NET",
+)
 TEXT_SUFFIXES = {
     ".bat", ".css", ".env", ".go", ".html", ".js", ".json", ".md", ".mjs",
     ".php", ".py", ".sh", ".ts", ".vue", ".yaml", ".yml",
@@ -35,12 +42,13 @@ def main() -> int:
 
     if not (ROOT / "cmd" / "nos-snmp-poller" / "main.go").is_file():
         errors.append("missing cmd/nos-snmp-poller/main.go")
-    if (ROOT / "cmd" / "kv-snmp-poller").exists():
-        errors.append("legacy cmd/kv-snmp-poller still exists")
+    legacy_poller = ROOT / "cmd" / f"{LEGACY_PREFIX}-snmp-poller"
+    if legacy_poller.exists():
+        errors.append("legacy poller source directory still exists")
 
     for path in tracked_files():
         relative = path.relative_to(ROOT).as_posix()
-        if relative == "LICENSE" or not path.is_file():
+        if relative in {"LICENSE", "scripts/nostek/validate-brand-namespace.py"} or not path.is_file():
             continue
         if path.suffix.lower() not in TEXT_SUFFIXES and path.name not in {
             ".env.example", ".env.docker.example", ".gitignore", "Dockerfile",

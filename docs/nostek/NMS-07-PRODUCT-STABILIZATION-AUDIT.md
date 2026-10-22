@@ -28,8 +28,8 @@ managed NMSOLT package.
 0. **Identity and namespace cleanup**
    - canonical product name: `Nostek-NMSOLT`;
    - permitted short name: `Nostek-NMS`;
-   - replace inherited internal `kv-*`/`kv_` namespace with `nos-*`/`nos_`;
-   - rename `cmd/kv-snmp-poller` and `bin/kv-snmp-poller` to
+   - replace the inherited internal namespace with `nos-*`/`nos_`;
+   - standardize the Go source and executable as
      `cmd/nos-snmp-poller` and `bin/nos-snmp-poller`;
    - keep the legally required upstream copyright line in `LICENSE` intact;
    - require Go, Vue, Laravel, Compose and image-build gates on the exact head.

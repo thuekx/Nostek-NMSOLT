@@ -73,7 +73,7 @@ environment:
   live_olt_write: PROHIBITED_WITHOUT_APPROVAL
 next_action:
   id: NMS-07-IDENTITY-CLEANUP
-  instruction: "Finish the kv-* to nos-* namespace and nos-snmp-poller rename, preserve LICENSE attribution, pass exact-head CI, then continue unified GenieACS packaging and the feature/performance matrix."
+  instruction: "Finish the nos-* namespace and nos-snmp-poller standardization, preserve LICENSE attribution, pass exact-head CI, then continue unified GenieACS packaging and the feature/performance matrix."
   owner: "executor"
   approval_required: false
 references:

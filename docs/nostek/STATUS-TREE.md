@@ -19,6 +19,7 @@ Nostek-NMSOLT — STANDALONE NETWORK PLATFORM / API PROVIDER
 +-- NMS-07 [IN PROGRESS] NMSOLT product stabilization
 |   +-- canonical identity: Nostek-NMSOLT; short name: Nostek-NMS
 |   +-- PASS: PR #21 / run 39770297399 / merge f43baa3; nos-* identity enforced
+|   +-- PR #20 OPEN: search fixes/tests aligned with PR #22 main; exact-head CI required
 |   +-- audit functions, screens, read paths and performance
 |   +-- repair misleading/broken behavior and add regression evidence
 +-- NMS-08 [BLOCKED] API v1 read-only + OpenAPI
@@ -55,3 +56,6 @@ Nostek-NMSOLT — STANDALONE NETWORK PLATFORM / API PROVIDER
 
 NMS-00 through NMS-06 satisfy their definitions of done. NMS-07 is active for
 safe source-level work; NMS-08 through NMS-12 remain dependency- or approval-gated.
+
+PR #20 is pending review/owner merge approval. Historical search CI run 39715103922
+verifies only head 02949e5, not the main-aligned branch. See HANDOFF for evidence.

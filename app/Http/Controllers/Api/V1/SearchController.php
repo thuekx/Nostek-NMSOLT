@@ -19,7 +19,8 @@ class SearchController extends Controller
 
     public function index(Request $request): JsonResponse
     {
-        $items = $this->search->search((string) $request->query('q', ''), 10);
+        $validated = $request->validate(['q' => ['nullable', 'string', 'max:200']]);
+        $items = $this->search->search($validated['q'] ?? '', 10);
 
         $data = array_map(fn (array $item): array => [
             'type' => $item['type'],

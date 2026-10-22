@@ -27,6 +27,16 @@ management networks or credentials stored on the original PC.
 - Device writes, production, Caddy, `maung_edge`, Maung/CRM/WO repositories and
   secrets remain outside Cloud scope.
 
+## PR #20 alignment and resume rules
+
+The search-audit branch `work/nms-07-search-audit` is aligned with PR #22 main
+`b0cbf36ac6f59552a3ef4f3a01f187997d221f86`. Search changes are pending merge, not part of main.
+Fetch main and PR #20 before deciding where to resume. Do not recreate or discard
+the search fixes. Require exact-head CI and review after alignment; run
+`39715103922` verifies only original search head `02949e5`. Owner merge approval
+is still required for PR #20. Do not merge or delete branches merely because
+historical CI is green.
+
 ## Active work
 
 NMS-07 is IN PROGRESS:
@@ -49,14 +59,26 @@ plan or a green documentation-only test.
 
 ## Copy-ready Cloud prompt
 
-> Continue `thuekx/Nostek-NMSOLT` from current GitHub main in a Codex Cloud
-> environment. Read the six canonical files under `docs/nostek`, verify main,
-> open PRs and exact-head CI, then continue NMS-07 automatically through safe
-> source work. Nostek-NMSOLT is the provider; Maung and Nostek-AI are consumers.
-> GenieACS must ship as a bundled subsystem in the full NMSOLT package while
-> remaining isolated internally. Preserve Laravel/Vue/Go unless profiling proves
-> otherwise. Do not access or change production, Maung, Caddy, maung_edge,
-> CRM/WO, secrets or live OLT/ONT. Keep device writes disabled. Use branches,
-> tests, PR review and exact evidence; merge and delete branches only when all
-> gates pass. Mark external or approval-dependent steps BLOCKED and continue
-> independent safe work.
+> Pelajari dan lanjutkan thuekx/Nostek-NMSOLT dari GitHub terkini. Baca enam
+> file kanonis: HANDOFF.md, ROADMAP.md, PROJECT-STATUS.yaml, STATUS-TREE.md,
+> NMS-07-PRODUCT-STABILIZATION-AUDIT.md dan CLOUD-HANDOFF.md di docs/nostek.
+> Periksa main, PR terbuka, current head SHA, CI exact-head dan review. Baseline
+> penyelarasan PR #20 adalah main b0cbf36 (PR #22); refresh karena bisa berubah.
+> PR #21 identity cleanup sudah merged. Pertahankan perbaikan search, validasi
+> input, MAC navigation dan regression tests PR #20; jangan menganggapnya sudah
+> ada di main sebelum memverifikasi merge. Baca feature matrix dan source inventory.
+> PR #20 memerlukan CI pada head hasil penyelarasan, review diff dan approval
+> owner sebelum merge; jangan gunakan run lama sebagai bukti head baru.
+> NMS-00–06 tercatat VERIFIED; NMS-07 IN_PROGRESS; NMS-08–12 BLOCKED.
+> Lanjutkan pekerjaan source yang aman setelah pemeriksaan: unified full package
+> app/PostgreSQL/Redis + GenieACS/MongoDB, health/preflight, backup/restore,
+> upgrade/rollback, audit UI/write visibility dan profiling terukur. NMSOLT
+> provider; Maung dan Nostek-AI consumer lewat API/tools, tanpa akses DB langsung.
+> GenieACS bundled dengan isolasi internal. Pertahankan Laravel/Vue/Go,
+> Nostek-NMSOLT/Nostek-NMS, namespace nos-* dan cmd/nos-snmp-poller; LICENSE
+> attribution wajib dipertahankan. Jangan akses produksi, Maung, Caddy,
+> maung_edge, CRM/WO, secrets atau live OLT/ONT. Device writes tetap disabled.
+> Gunakan branch, synthetic tests, PR review dan bukti exact-head; langkah yang
+> butuh akses eksternal/approval dicatat BLOCKED. Sinkronkan checkpoint dan
+> handoff; jangan klaim runtime VERIFIED dari source tests. Tidak boleh merge
+> atau hapus branch tanpa seluruh gate dan approval yang berlaku.

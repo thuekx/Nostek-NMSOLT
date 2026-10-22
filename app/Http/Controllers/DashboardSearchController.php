@@ -12,7 +12,8 @@ class DashboardSearchController extends Controller
 
     public function __invoke(Request $request): JsonResponse
     {
-        $items = $this->search->search((string) $request->query('q', ''), 10);
+        $validated = $request->validate(['q' => ['nullable', 'string', 'max:200']]);
+        $items = $this->search->search($validated['q'] ?? '', 10);
 
         $results = array_map(function (array $item): array {
             if ($item['type'] === 'olt') {

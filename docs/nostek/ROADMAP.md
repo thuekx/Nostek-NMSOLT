@@ -67,3 +67,11 @@ Non-destructive parallel work is allowed (documentation, API design, unit tests,
 ## Stop/continue rule
 
 On every session start: retrieve this file, status YAML and HANDOFF; validate GitHub main and open PR/CI; update the evidence before changing statuses. When a task passes, move to the next unblocked safe task in the same session. When work is blocked, work on independent safe tasks, not unrelated production systems. Never modify Maung-Wo-Inv/maung-crm or Nostek runtime without scoped approval/review. Do not fabricate tests or handoffs.
+
+## Search-audit alignment checkpoint
+
+PR #20 is aligned with main `b0cbf36ac6f59552a3ef4f3a01f187997d221f86` (PR #22).
+PR #21 identity cleanup remains complete. Search fixes and synthetic tests are
+retained; NMS-07 is incomplete. Historical search run `39715103922` passed only
+head `02949e5`; require exact-head CI and review of the combined branch before
+owner merge approval. See HANDOFF and the feature matrix for remaining work.

@@ -4,7 +4,7 @@ updated_at: "2026-10-22"
 source_of_truth:
   repo: https://github.com/thuekx/Nostek-NMSOLT
   default_branch: main
-  checkpoint_main_sha: f43baa3fa0f4959b8513011e01e79a6db8509f51
+  checkpoint_main_sha: b0cbf36ac6f59552a3ef4f3a01f187997d221f86
   baseline_sha: 24332a2b4144cff03f04f64e4711ce7938d992ae
   nms06_completion:
     pr: https://github.com/thuekx/Nostek-NMSOLT/pull/18
@@ -46,6 +46,14 @@ latest_evidence:
     status: IN_PROGRESS
     objective: "Standardize Nostek-NMSOLT/Nostek-NMS identity and nos-* namespace, then stabilize packaging, functions, UI and performance with regression evidence."
     safety: "Source and isolated staging only; no production, Caddy, Maung repository or device changes."
+    review_pr: https://github.com/thuekx/Nostek-NMSOLT/pull/20
+    review_branch: work/nms-07-search-audit
+    audit: docs/nostek/NMS-07-FEATURE-MATRIX.md
+    inventory: docs/nostek/NMS-07-SOURCE-INVENTORY.json
+    search_alignment: "Merged PR #22 main into PR #20; preserve identity cleanup and search fixes."
+    previous_search_ci: "39715103922 SUCCESS on 02949e56e41967956938dcb716c7003c91edc957 only."
+    aligned_ci: "PENDING: consult exact current PR head checks; old CI does not verify alignment."
+    merge_gate: "Exact-head CI, combined diff review and owner approval; no automatic merge."
     identity_cleanup: "PR #21 head 6bc53a3 passed run 39770297399 and merged as f43baa3; canonical Nostek-NMSOLT/Nostek-NMS and nos-* namespace enforced."
   NMS-08:
     status: BLOCKED

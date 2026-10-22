@@ -71,11 +71,30 @@ data remain outside the public repository.
 
 See [NMS-07-12-GATED-READINESS.md](NMS-07-12-GATED-READINESS.md) for exact gates.
 
+## Search audit alignment (PR #20)
+
+PR #20 retains bounded snapshot loading, MAC-only navigation, query validation
+and synthetic regression coverage. Its original head `02949e56e41967956938dcb716c7003c91edc957`
+passed all five jobs in run `39715103922`. That evidence applies only to the
+original head, not to this alignment with main `b0cbf36ac6f59552a3ef4f3a01f187997d221f86` (PR #22).
+The earlier failed fixture run `39714702681` remains historical evidence.
+
+Main's completed PR #21 identity cleanup and PR #22 Cloud checkpoint take
+precedence over the older PR #20 baseline. This branch merges that main without
+reverting the canonical Nostek-NMSOLT/Nostek-NMS, nos-* namespace or LICENSE.
+The feature matrix and source inventory retain their original audit baseline;
+new UI/package/performance work remains unverified.
+
+Before merge: inspect the current PR head, require all five CI jobs on that
+exact head, review the combined diff and obtain owner merge approval. Never use
+the old green run as proof of the combined tree. No deployment or runtime/device
+validation is implied. NMS-07 remains IN_PROGRESS and NMS-08–12 remain BLOCKED.
+
 ## Exact next action
 
 Identity cleanup is complete and merged. Continue NMS-07 with unified GenieACS packaging, unified health/backup/upgrade/rollback, and the functional/performance matrix. Do not modify the retained LICENSE attribution.
 
-For cross-device continuation, use [CLOUD-HANDOFF.md](CLOUD-HANDOFF.md) from current main.
+For cross-device continuation, use [CLOUD-HANDOFF.md](CLOUD-HANDOFF.md). While PR #20 is open, read its current head as well as main; the search fixes are not yet merged.
 
 ## New-session prompt
 

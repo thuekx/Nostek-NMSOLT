@@ -37,7 +37,7 @@ Nostek-NMSOLT — STANDALONE NETWORK PLATFORM / API PROVIDER
 |           one OLT (PR merged); E3 alarm page 3x faster + RX charts measured
 |           (PR merged); E4 Go poller vs simulated C300 measured (PR merged);
 |           host-only: queue latency, real-OLT max-repetitions check
-|   +-- A2 [SOURCE PASS, PR pending] `build` also builds the local GenieACS image;
+|   +-- A2 [SOURCE PASS, PR merged] `build` also builds the local GenieACS image;
 |           `start`/`preflight` check locally built images (finding from NET-1-2)
 +-- TRF-1 [SOURCE PASS, PR merged] PON port traffic graph: IF-MIB octet counters (Go poller),
 |   per-port rates raw 8 d / hourly 100 d / daily 3 y, chart on the PON port page;

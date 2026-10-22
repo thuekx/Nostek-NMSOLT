@@ -72,3 +72,10 @@ synthetic fixtures until a separate runtime gate is approved.
 NMS-07 remains **IN PROGRESS**. This audit establishes that the safest next
 implementation is unified GenieACS packaging and health validation, followed by
 the functional/performance matrix. Nothing in this document marks NMS-07 VERIFIED.
+
+## Post-merge checkpoint
+
+PR #20 search fixes are now merged as `1a38c6b`; all five CI jobs passed on
+exact head `fc5ce840` in run `39773898154`. Identity cleanup remains complete.
+NMS-07 is still IN_PROGRESS; implementation after this merge is paused by owner.
+This documentation closeout does not implement unified packaging or validate runtime.

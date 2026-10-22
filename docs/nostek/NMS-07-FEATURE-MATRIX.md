@@ -2,7 +2,9 @@
 
 Original audit base: `62b414f04ac4b5e4f024669e431be29f4d0845d1` (PR #19).
 Alignment: main `b0cbf36ac6f59552a3ef4f3a01f187997d221f86` (PR #22); identity cleanup preserved.
-CI: original search head passed run `39715103922`; aligned-head checks must pass separately.
+PR #20: MERGED as `1a38c6b309a84f07db89398f2f26d727d92c3128`.
+CI: aligned head `fc5ce840bcc548479a308e1de16fc292f1d21e49` passed all five jobs in run `39773898154`; original run `39715103922` is historical.
+Execution: further NMS-07 implementation paused by owner; documentation closeout only.
 Scope: source inspection and synthetic CI only; no host/device/network operations.
 State: **IN_PROGRESS**, not whole-product verification.
 
@@ -50,6 +52,6 @@ this inventory does not claim that every user journey works.
 - [ ] All high-risk UI controls accurately reflect the installation write gate.
 - [ ] Large ONU/alarm/search/polling latency, query and memory budgets measured.
 - [ ] Unified base/ACS installer, health, backup, upgrade and rollback verified.
-- [ ] Full CI passes on the exact reviewed PR head; merge requires owner approval.
+- [x] Search PR #20: exact-head full CI passed and owner-approved merge completed. This does not verify whole-phase UI/performance/package criteria.
 
 NMS-08 must not be marked unblocked by this partial audit alone.

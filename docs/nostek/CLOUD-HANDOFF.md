@@ -27,15 +27,17 @@ management networks or credentials stored on the original PC.
 - Device writes, production, Caddy, `maung_edge`, Maung/CRM/WO repositories and
   secrets remain outside Cloud scope.
 
-## PR #20 alignment and resume rules
+## PR #20 merged checkpoint
 
-The search-audit branch `work/nms-07-search-audit` is aligned with PR #22 main
-`b0cbf36ac6f59552a3ef4f3a01f187997d221f86`. Search changes are pending merge, not part of main.
-Fetch main and PR #20 before deciding where to resume. Do not recreate or discard
-the search fixes. Require exact-head CI and review after alignment; run
-`39715103922` verifies only original search head `02949e5`. Owner merge approval
-is still required for PR #20. Do not merge or delete branches merely because
-historical CI is green.
+PR #20 is MERGED as `1a38c6b309a84f07db89398f2f26d727d92c3128` with owner approval.
+All five CI jobs passed on exact head `fc5ce840bcc548479a308e1de16fc292f1d21e49` in
+[run 39773898154](https://github.com/thuekx/Nostek-NMSOLT/actions/runs/39773898154). The squash merge tree matches
+the tested head; no separate merge-SHA workflow execution is claimed.
+The search changes are already in main; do not recreate or re-merge PR #20.
+The source inventory retains its original audit provenance. Refresh main, open
+PRs and CI on restart; this checkpoint is not a claim that main can never move.
+Further NMS-07 implementation is currently paused by owner; this closeout only
+updates documentation. A future implementation session must be explicitly started.
 
 ## Active work
 
@@ -59,26 +61,48 @@ plan or a green documentation-only test.
 
 ## Copy-ready Cloud prompt
 
-> Pelajari dan lanjutkan thuekx/Nostek-NMSOLT dari GitHub terkini. Baca enam
-> file kanonis: HANDOFF.md, ROADMAP.md, PROJECT-STATUS.yaml, STATUS-TREE.md,
-> NMS-07-PRODUCT-STABILIZATION-AUDIT.md dan CLOUD-HANDOFF.md di docs/nostek.
-> Periksa main, PR terbuka, current head SHA, CI exact-head dan review. Baseline
-> penyelarasan PR #20 adalah main b0cbf36 (PR #22); refresh karena bisa berubah.
-> PR #21 identity cleanup sudah merged. Pertahankan perbaikan search, validasi
-> input, MAC navigation dan regression tests PR #20; jangan menganggapnya sudah
-> ada di main sebelum memverifikasi merge. Baca feature matrix dan source inventory.
-> PR #20 memerlukan CI pada head hasil penyelarasan, review diff dan approval
-> owner sebelum merge; jangan gunakan run lama sebagai bukti head baru.
-> NMS-00–06 tercatat VERIFIED; NMS-07 IN_PROGRESS; NMS-08–12 BLOCKED.
-> Lanjutkan pekerjaan source yang aman setelah pemeriksaan: unified full package
-> app/PostgreSQL/Redis + GenieACS/MongoDB, health/preflight, backup/restore,
-> upgrade/rollback, audit UI/write visibility dan profiling terukur. NMSOLT
-> provider; Maung dan Nostek-AI consumer lewat API/tools, tanpa akses DB langsung.
-> GenieACS bundled dengan isolasi internal. Pertahankan Laravel/Vue/Go,
-> Nostek-NMSOLT/Nostek-NMS, namespace nos-* dan cmd/nos-snmp-poller; LICENSE
-> attribution wajib dipertahankan. Jangan akses produksi, Maung, Caddy,
-> maung_edge, CRM/WO, secrets atau live OLT/ONT. Device writes tetap disabled.
-> Gunakan branch, synthetic tests, PR review dan bukti exact-head; langkah yang
-> butuh akses eksternal/approval dicatat BLOCKED. Sinkronkan checkpoint dan
-> handoff; jangan klaim runtime VERIFIED dari source tests. Tidak boleh merge
-> atau hapus branch tanpa seluruh gate dan approval yang berlaku.
+Use the following prompt only when ready to resume implementation:
+
+```text
+Continue thuekx/Nostek-NMSOLT from current GitHub main in a Codex Cloud environment.
+Read docs/nostek/HANDOFF.md, ROADMAP.md, PROJECT-STATUS.yaml, STATUS-TREE.md,
+NMS-07-PRODUCT-STABILIZATION-AUDIT.md and CLOUD-HANDOFF.md; also read
+NMS-07-FEATURE-MATRIX.md and NMS-07-SOURCE-INVENTORY.json. Follow applicable AGENTS.md.
+
+Refresh main, open PRs, reviews and exact-head CI before source changes.
+PR #20 is already merged as 1a38c6b309a84f07db89398f2f26d727d92c3128.
+Its tested head fc5ce840bcc548479a308e1de16fc292f1d21e49 passed all five jobs:
+https://github.com/thuekx/Nostek-NMSOLT/actions/runs/39773898154
+The squash merge tree matches that head; no separate merge-SHA run is claimed.
+Search batching, MAC navigation, input validation and regression tests are in main.
+Do not recreate them or treat PR #20 as open. PR #21 identity cleanup remains intact.
+No further NMS-07 implementation followed that merge; the owner paused work to
+complete this documentation handoff. This new prompt authorizes resuming safe source work.
+NMS-00–06 are recorded VERIFIED; NMS-07 IN_PROGRESS; NMS-08–12 BLOCKED.
+
+Nostek-NMSOLT is the standalone network platform and telemetry/API provider.
+Maung and Nostek-AI are consumers via versioned APIs/tools, without direct database
+access or duplication of polling, drivers, GenieACS, history or device credentials.
+GenieACS must ship bundled in the full app/PostgreSQL/Redis + GenieACS/MongoDB package
+while retaining internal container/network/volume isolation. NBI/FS/Mongo private,
+UI loopback, CWMP bound only to explicitly approved addresses.
+Preserve Laravel/Vue/Inertia and Go unless measured profiling and a separate decision
+justify migration. Preserve Nostek-NMSOLT/Nostek-NMS, nos-* namespace,
+cmd/nos-snmp-poller, bin/nos-snmp-poller and required MIT LICENSE attribution.
+
+Continue NMS-07: unified core/with-acs installation (recommended full with-acs),
+preflight/config validation, health/status, PostgreSQL/storage/Mongo backup/restore,
+pinned images/versions and reversible upgrade/rollback. Then audit UI journeys,
+stale/partial/unavailable/permission states, write-gate visibility, and measured
+ONU/alarm/search/optical/query/memory/queue/poller/retention performance.
+Use isolated synthetic tests and Compose rendering; do not run host installers/deployments.
+
+Do not access/change production, Maung hosts/repositories, Caddy, maung_edge,
+CRM/WO, Nostek-AI runtime, secrets or live OLT/ONT. Device writes stay disabled.
+Mark external/approval-dependent tasks BLOCKED and continue independent safe source work.
+Use feature branches, PR review and exact-head tests/CI. Owner approval for PR #20
+does not authorize merging future PRs. Never bypass a gate or approval.
+Synchronize handoff, roadmap, YAML, status tree, audit and Cloud prompt after work.
+Do not claim NMS-07 VERIFIED or unblock NMS-08 without all acceptance evidence.
+Continue safe independent work within the active session until complete or genuinely blocked.
+```

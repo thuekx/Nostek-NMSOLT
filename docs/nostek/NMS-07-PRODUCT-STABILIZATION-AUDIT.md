@@ -122,6 +122,18 @@ no server error and no sidebar link into a refused page; RX values that lag the 
 are now labelled with their age. The stale, partial and permission part of work package 3 is
 source PASS. See [NMS-07-UI-JOURNEY.md](NMS-07-UI-JOURNEY.md).
 
+## NMS-07-E2/E3/E4 results (2026-10-22)
+
+Work package 4 (performance audit), synthetic part, is complete in PRs:
+
+- E2: the ONU monitor reads and sends only the selected OLT (27.6 MB at 51,000 ONUs before);
+- E3: alarm page 263 → 74 ms (active) and 454 → 137 ms (all) at 200,000 alarms; alarm
+  engine and RX charts measured;
+- E4: Go poller against a simulated C300; max-repetitions sets the poll time on a WAN link.
+
+Host or owner evidence still open: queue latency under real workers, a real OLT's response
+time and bulk-size tolerance. See [NMS-07-PERFORMANCE.md](NMS-07-PERFORMANCE.md).
+
 ## NMS-07-C/E result (2026-10-22)
 
 Work package 4 (performance audit), first part, is on branch `step/nms-07-c-perf-matrix`.

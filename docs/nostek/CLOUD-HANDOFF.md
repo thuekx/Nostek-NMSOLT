@@ -96,7 +96,8 @@ step/nms-07-d2-stale-states) and D-2b (stale ONU/map/alarm states,
 step/nms-07-d2b-onu-states) and D-2c (partial RX + role sweep,
 step/nms-07-d2c-permission-states) and E2 (ONU monitor scoped to one OLT,
 step/nms-07-e2-onu-monitor-scope) and E3 (alarm/RX timings,
-step/nms-07-e3-alarm-rx-perf) PRs first. Then the rest of E (queue latency, Go poller throughput), measured
+step/nms-07-e3-alarm-rx-perf) and E4 (Go poller bench,
+step/nms-07-e4-poller-bench) PRs first. Then only host/owner evidence remains (real app image, queue latency under real workers, real-OLT max-repetitions check), measured
 with tests/perf/run-onu-list-bench.sh style harnesses. The onu_state table was measured
 and not adopted (NMS-07-PERFORMANCE.md); do not re-add it without new evidence.
 Use isolated synthetic tests and Compose rendering; do not run host installers/deployments.

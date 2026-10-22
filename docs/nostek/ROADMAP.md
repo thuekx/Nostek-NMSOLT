@@ -76,6 +76,10 @@ Branch `step/nms-07-a-unified-package`: core/with-acs/platform Compose, `scripts
 
 Branch `step/nms-07-b-data-growth`: retention command `history:prune`, duplicate RX index dropped, dedicated poll worker pool. See [NMS-07-DATA-GROWTH.md](NMS-07-DATA-GROWTH.md).
 
+## NMS-07-E3 alarm and RX chart checkpoint
+
+Branch `step/nms-07-e3-alarm-rx-perf`: alarm page 3x faster at 200k alarms (snapshot decoded once per OLT; status + last_seen_at indexes); alarm engine and RX chart timings measured. See [NMS-07-PERFORMANCE.md](NMS-07-PERFORMANCE.md).
+
 ## NMS-07-E2 ONU monitor scope checkpoint
 
 Branch `step/nms-07-e2-onu-monitor-scope`: the ONU monitor reads and sends only the selected OLT's ONUs (was every ONU: 27.6 MB at 51k). See [NMS-07-PERFORMANCE.md](NMS-07-PERFORMANCE.md).

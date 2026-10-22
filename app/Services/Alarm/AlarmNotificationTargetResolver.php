@@ -43,6 +43,14 @@ class AlarmNotificationTargetResolver
     private array $serialIndex = [];
 
     /**
+     * Driver por OLT, memoizado (NMS-07-E3): el cast `array` decodifica el snapshot completo
+     * en cada acceso; la lista de alarmas de la API llamaba resolve() una vez por alarma.
+     *
+     * @var array<int, string>
+     */
+    private array $drivers = [];
+
+    /**
      * Destino WEB (ruta interna de Inertia).
      *
      * @return array{url:?string, fallback_url:string, reason:?string}
@@ -58,11 +66,15 @@ class AlarmNotificationTargetResolver
 
         // $alarm->olt pasa por PartnerOltScope/DemoScope → null si el usuario no lo ve.
         $olt = $alarm->olt;
-        $driver = SmartOltSupport::driverKey(
-            $olt,
-            data_get($olt->last_test_result, 'system.sys_descr'),
-            data_get($olt->last_test_result, 'system.sys_object_id'),
-        );
+        $driver = $this->drivers[$olt->id] ??= (function () use ($olt): string {
+            $snapshot = $olt->last_test_result;
+
+            return SmartOltSupport::driverKey(
+                $olt,
+                data_get($snapshot, 'system.sys_descr'),
+                data_get($snapshot, 'system.sys_object_id'),
+            );
+        })();
         $prefix = SmartOltSupport::inventoryRoutePrefix($driver);
 
         if ($location['resource_type'] === 'onu') {

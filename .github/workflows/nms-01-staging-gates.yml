@@ -32,7 +32,7 @@ jobs:
         run: bash -n scripts/nostek/deploy-maung-genieacs-lab.sh
 
       - name: Lint NMS-07 operations tool and its integration test
-        run: shellcheck -S warning scripts/nostek/nmsolt-ops.sh tests/ops/integration.sh tests/perf/run-onu-list-bench.sh
+        run: shellcheck -S warning scripts/nostek/nmsolt-ops.sh tests/ops/integration.sh tests/perf/run-onu-list-bench.sh tests/perf/run-ops-bench.sh
       - name: Enforce Nostek-NMSOLT identity and nos namespace
         run: python3 scripts/nostek/validate-brand-namespace.py
       - name: Enforce NMS-05 Maung host identity guard

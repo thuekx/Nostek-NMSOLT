@@ -103,12 +103,53 @@ largest single OLT, not the whole installation: at 51,000 ONUs it was 1,735 ms, 
 27.6 MB. Browser check (demo data): the first page load carries no ONU; switching OLT loads
 about 7 KB for 14 ONUs.
 
+## NMS-07-E3 — alarm page, alarm engine and optical charts (2026-10-22)
+
+**Branch:** `step/nms-07-e3-alarm-rx-perf` (on top of E2). Harness:
+`tests/perf/run-ops-bench.sh [onus] [rx_onus] [cleared_alarms] [repeats]` with
+`tests/perf/ops_bench.php`: throwaway PostgreSQL 16 (stack digest, generated password in a
+0600 file), one 3,400-ONU OLT, 200,000 cleared alarms (what `history:prune` keeps for 180
+days) plus 500 active, and RX history for 300 ONUs (raw 3 days at 5 min, hourly 400 days,
+daily 3 years: 0.26 M + 2.9 M + 0.33 M rows). Page timings are a warm worker (one warm-up
+request first), as under PHP-FPM. `BENCH_SLOW_MS=n` prints queries slower than n ms;
+`BENCH_MODES` picks modes; `BENCH_NO_ALARM_INDEX=1` measures without the new indexes.
+
+| Path | Before | After |
+| --- | --- | --- |
+| Alarm page, active (20 per page) | 263 ms | 74 ms |
+| Alarm page, all (active + cleared) | 454 ms | 137 ms |
+| Alarm engine, steady poll (nothing changes) | 32–42 ms | unchanged |
+| Alarm engine, burst (340 ONUs go LOS at once; debounce on) | 0.41–0.57 s | unchanged |
+| RX chart, one ONU: 24 h / 7 d / 30 d (raw) | 14–31 ms | unchanged |
+| RX chart, one ONU: 90 d (hourly), 1 y / 3 y (daily) | 10–15 ms | unchanged |
+
+**Defects found and fixed:**
+
+1. The alarm page decoded the whole OLT snapshot (about 1.5 MB at 3,400 ONUs) twice for
+   every alarm row, only to decide whether the row links to a ZTE page: the `array` cast
+   decodes on every access. The decision is now made once per OLT. The same pattern in
+   `AlarmNotificationTargetResolver::resolve()` (API v1 alarm list, bell clicks) is memoized
+   per OLT too. Effect: 263 → 77 ms on the active page without any index.
+2. No index served "filter by status, newest first": PostgreSQL sorted every alarm on each
+   view of the page, the bell and the summary. Migration
+   `2026_10_22_030000_add_alarm_events_list_indexes` adds `(status, last_seen_at)` and
+   `(last_seen_at)` (reversible). Effect on "all": 320 → 137 ms.
+
+Remaining: `select distinct type` for the filter options takes 30–40 ms at 200,000 rows;
+the "all" count with the unread check about 70–100 ms. Both are acceptable now.
+
+The engine's burst cost (about 1.5 ms per new alarm) is far inside one poll interval (5
+minutes); it is not changed.
+
+The harness waits for the image's second "ready" line before connecting (the first belongs
+to the initdb server; connecting then failed once with "server closed the connection
+unexpectedly"), and removes the container's volume on exit; the same fix is applied to
+`run-onu-list-bench.sh`.
+
 ## Not measured yet (rest of NMS-07-E)
 
 Not measured yet:
 
-- alarm list and alarm engine timing under synthetic load;
-- the optical RX history queries (raw, hourly, daily);
 - queue latency with the dedicated poll pool;
 - the Go poller's throughput against a simulated SNMP agent;
 - the disk saved by dropping the duplicate index (NMS-07-B).

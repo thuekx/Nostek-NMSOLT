@@ -62,6 +62,22 @@ class AlarmController extends Controller
         $alarmPage = $query->paginate(20)->withQueryString();
         $customerNames = $this->customerNamesFor($alarmPage->getCollection());
 
+        // NMS-07-E3: the `array` cast decodes the whole OLT snapshot (about 1.5 MB at 3,400
+        // ONUs) on every access, and this ran twice per alarm row. Decide once per OLT.
+        $zteNavigation = [];
+        $contextualNavigation = function (AlarmEvent $alarm) use (&$zteNavigation): bool {
+            if (! array_key_exists($alarm->snmp_olt_id, $zteNavigation)) {
+                $snapshot = $alarm->olt?->last_test_result;
+                $zteNavigation[$alarm->snmp_olt_id] = SmartOltSupport::driverKey(
+                    $alarm->olt,
+                    data_get($snapshot, 'system.sys_descr'),
+                    data_get($snapshot, 'system.sys_object_id'),
+                ) === SmartOltSupport::DRIVER_ZTE;
+            }
+
+            return $zteNavigation[$alarm->snmp_olt_id];
+        };
+
         $alarms = $alarmPage->through(fn (AlarmEvent $alarm) => [
             'id' => $alarm->id,
             'olt' => [
@@ -84,11 +100,7 @@ class AlarmController extends Controller
             'dismiss_on_read' => ! $notifications->persistsUntilRecovery($alarm),
             // La navegación contextual web se limita al alcance solicitado: ZTE.
             // Vue recibe una decisión del servidor y no intenta inferir el fabricante.
-            'contextual_navigation' => SmartOltSupport::driverKey(
-                $alarm->olt,
-                data_get($alarm->olt?->last_test_result, 'system.sys_descr'),
-                data_get($alarm->olt?->last_test_result, 'system.sys_object_id'),
-            ) === SmartOltSupport::DRIVER_ZTE,
+            'contextual_navigation' => $contextualNavigation($alarm),
         ]);
 
         $summary = AlarmEvent::query()

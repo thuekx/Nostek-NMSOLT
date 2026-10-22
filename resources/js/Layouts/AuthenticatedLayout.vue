@@ -11,7 +11,7 @@ import ThemeSegmented from '@/Components/Shell/ThemeSegmented.vue';
 import UserMenu from '@/Components/Shell/UserMenu.vue';
 import { Link, usePage } from '@inertiajs/vue3';
 import { useI18n } from 'vue-i18n';
-import { BellRing, BookOpen, Cable, ChevronLeft, Eye, FileBarChart, LayoutDashboard, LogOut, MapPin, Menu, Radar, ScrollText, Search, Send, Settings, User, Users, Waypoints, WifiOff } from '@lucide/vue';
+import { BellRing, BookOpen, Cable, ChevronLeft, Eye, FileBarChart, LayoutDashboard, Lock, LogOut, MapPin, Menu, Radar, ScrollText, Search, Send, Settings, User, Users, Waypoints, WifiOff } from '@lucide/vue';
 
 const { t } = useI18n({ useScope: 'global' });
 
@@ -34,6 +34,7 @@ let sidebarMediaQuery = null;
 
 const can = computed(() => page.props.auth?.can ?? {});
 const isDemo = computed(() => Boolean(can.value.is_demo));
+const deviceWritesLocked = computed(() => page.props.device_writes?.enabled === false);
 const appName = computed(() => page.props.branding?.name ?? 'Nostek-NMSOLT');
 // Atribusi pemilik permanen (dari konstanta backend, bukan Settings). Lihat GeneralSetting::OWNER.
 const owner = computed(() => page.props.branding?.owner ?? 'thuekx');
@@ -364,6 +365,17 @@ onUnmounted(() => {
                     </div>
                 </div>
             </header>
+
+            <!-- NMS-07-D: device write boundary is off — every OLT/ONT write control is locked -->
+            <div
+                v-if="deviceWritesLocked"
+                class="flex items-center gap-2 border-b border-sky-500/30 bg-sky-500/10 px-4 py-2 text-xs font-medium text-sky-200 sm:px-6 lg:px-8"
+                role="status"
+                data-testid="device-writes-banner"
+            >
+                <Lock class="h-4 w-4 flex-shrink-0" />
+                <span>{{ $t('shell.device_writes_banner') }}</span>
+            </div>
 
             <!-- Demo mode banner -->
             <div

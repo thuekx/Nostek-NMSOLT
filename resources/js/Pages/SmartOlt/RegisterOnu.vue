@@ -576,7 +576,7 @@ const submitC600 = async (execute) => {
                                 <LayoutList class="mr-2 h-4 w-4" />
                                 {{ $t('registeronu.generate') }}
                             </SecondaryButton>
-                            <PrimaryButton type="button" :disabled="c600Form.processing || !canExecute" @click="submitC600(true)">
+                            <PrimaryButton type="button" :disabled="c600Form.processing || !canExecute" v-device-write @click="submitC600(true)">
                                 <Zap class="mr-2 h-4 w-4" />
                                 {{ c600Form.processing ? $t('registeronu.executing') : $t('registeronu.execute_to_olt') }}
                             </PrimaryButton>
@@ -946,7 +946,7 @@ const submitC600 = async (execute) => {
                                 <LayoutList class="mr-2 h-4 w-4" />
                                 {{ $t('registeronu.generate_only') }}
                             </SecondaryButton>
-                            <PrimaryButton v-if="canExecute" type="button" :disabled="form.processing" class="w-full sm:w-auto" @click="submit(true)">
+                            <PrimaryButton v-if="canExecute" type="button" :disabled="form.processing" class="w-full sm:w-auto" v-device-write @click="submit(true)">
                                 <Zap class="mr-2 h-4 w-4" />
                                 {{ form.processing ? $t('registeronu.executing') : $t(preregister ? 'registeronu.prereg_execute' : 'registeronu.execute_to_olt') }}
                             </PrimaryButton>
@@ -1034,7 +1034,7 @@ const submitC600 = async (execute) => {
                                     <LayoutList class="mr-2 h-4 w-4" />
                                     {{ $t('registeronu.generate_only') }}
                                 </SecondaryButton>
-                                <PrimaryButton v-if="canExecute" type="button" :disabled="advForm.processing" class="w-full sm:w-auto" @click="submitAdvanced(true)">
+                                <PrimaryButton v-if="canExecute" type="button" :disabled="advForm.processing" class="w-full sm:w-auto" v-device-write @click="submitAdvanced(true)">
                                     <Zap class="mr-2 h-4 w-4" />
                                     {{ advForm.processing ? $t('registeronu.executing') : $t(preregister ? 'registeronu.prereg_execute' : 'registeronu.execute_to_olt') }}
                                 </PrimaryButton>

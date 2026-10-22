@@ -54,7 +54,11 @@ const pump = () => {
 
 let stopListening = null;
 
+// Client-side toasts (e.g. the device write guard in app.js) arrive as a window event.
+const onClientToast = (event) => push(event.detail?.type === 'success' ? 'success' : 'error', event.detail?.message);
+
 onMounted(() => {
+    window.addEventListener('nos:toast', onClientToast);
     pump();
     // `success` hanya terpicu pada kunjungan berikutnya, bukan initial mount —
     // jadi tidak ada toast ganda untuk flash awal.
@@ -62,6 +66,7 @@ onMounted(() => {
 });
 
 onUnmounted(() => {
+    window.removeEventListener('nos:toast', onClientToast);
     stopListening?.();
     timers.forEach((t) => clearTimeout(t));
     timers.clear();

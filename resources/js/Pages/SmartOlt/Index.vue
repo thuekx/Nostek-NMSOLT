@@ -376,7 +376,7 @@ const formatDate = (value) => formatDateTime(value);
                                         v-if="canManageOlt && olt.cli_transport === 'telnet' && olt.capabilities.supports_config_save"
                                         :title="$t('smartolt.title_save_config')"
                                         :disabled="savingId === olt.id"
-                                        @click="saveConfig(olt)"
+                                        v-device-write @click="saveConfig(olt)"
                                     >
                                         <Save class="h-4 w-4" :class="{ 'animate-pulse': savingId === olt.id }" />
                                     </IconButton>
@@ -501,7 +501,7 @@ const formatDate = (value) => formatDateTime(value);
                                                 v-if="canManageOlt && olt.cli_transport === 'telnet' && olt.capabilities.supports_config_save"
                                                 :title="$t('smartolt.title_save_config')"
                                                 :disabled="savingId === olt.id"
-                                                @click="saveConfig(olt)"
+                                                v-device-write @click="saveConfig(olt)"
                                             >
                                                 <Save class="h-4 w-4" :class="{ 'animate-pulse': savingId === olt.id }" />
                                             </IconButton>
@@ -635,7 +635,7 @@ const formatDate = (value) => formatDateTime(value);
                                         v-if="canManageOlt && olt.cli_transport === 'telnet' && olt.capabilities.supports_config_save"
                                         :title="$t('smartolt.title_save_config_short')"
                                         :disabled="savingId === olt.id"
-                                        @click="saveConfig(olt)"
+                                        v-device-write @click="saveConfig(olt)"
                                     >
                                         <Save class="h-4 w-4" :class="{ 'animate-pulse': savingId === olt.id }" />
                                     </IconButton>
@@ -756,7 +756,7 @@ const formatDate = (value) => formatDateTime(value);
                                                 v-if="canManageOlt && olt.cli_transport === 'telnet' && olt.capabilities.supports_config_save"
                                                 :title="$t('smartolt.title_save_config_short')"
                                                 :disabled="savingId === olt.id"
-                                                @click="saveConfig(olt)"
+                                                v-device-write @click="saveConfig(olt)"
                                             >
                                                 <Save class="h-4 w-4" :class="{ 'animate-pulse': savingId === olt.id }" />
                                             </IconButton>

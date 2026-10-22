@@ -4,6 +4,7 @@ namespace App\Http\Middleware;
 
 use App\Models\GeneralSetting;
 use App\Services\Alarm\AlarmNotificationService;
+use App\Support\DeviceWriteGate;
 use App\Support\Locale;
 use App\Support\Theme;
 use Illuminate\Http\Request;
@@ -51,6 +52,8 @@ class HandleInertiaRequests extends Middleware
             // Pilihan tema mentah (dark|light|system); lihat App\Support\Theme.
             'theme' => Theme::preference($request),
             'locales' => Locale::options(),
+            // NMS-07-D: the UI shows the device write boundary instead of failing with a 403.
+            'device_writes' => fn () => $user ? DeviceWriteGate::sharedPayload() : null,
         ];
     }
 

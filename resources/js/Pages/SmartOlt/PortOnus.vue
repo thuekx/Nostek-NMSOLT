@@ -738,7 +738,7 @@ const rxBadgeClass = (value) => {
                                 <button type="button" class="nos-filter-reset" @click="clearSelection">{{ $t('portonus.clear_selection') }}</button>
                             </div>
                             <div class="flex flex-wrap items-center gap-2">
-                                <DangerButton v-if="canBulkDelete" type="button" size="sm" :disabled="bulkDeleting" @click="deleteSelected">
+                                <DangerButton v-if="canBulkDelete" type="button" size="sm" :disabled="bulkDeleting" v-device-write @click="deleteSelected">
                                     <Trash2 class="h-4 w-4" />
                                     {{ bulkDeleting ? $t('portonus.deleting_selected') : $t('portonus.delete_selected') }}
                                 </DangerButton>
@@ -900,7 +900,7 @@ const rxBadgeClass = (value) => {
                                         :variant="onu.admin_state === 'active' ? 'warning' : 'success'"
                                         :disabled="busy[actionKey(onu)]"
                                         :title="onu.admin_state === 'active' ? $t('portonus.act_disable') : $t('portonus.act_enable')"
-                                        @click="toggleOnu(onu)"
+                                        v-device-write @click="toggleOnu(onu)"
                                     >
                                         <ToggleRight v-if="onu.admin_state === 'active'" class="h-4 w-4" />
                                         <ToggleLeft v-else class="h-4 w-4" />
@@ -910,7 +910,7 @@ const rxBadgeClass = (value) => {
                                         variant="danger"
                                         :disabled="busy[actionKey(onu)]"
                                         :title="$t('portonus.act_reboot')"
-                                        @click="rebootOnu(onu)"
+                                        v-device-write @click="rebootOnu(onu)"
                                     >
                                         <Power class="h-4 w-4" />
                                     </IconButton>
@@ -919,7 +919,7 @@ const rxBadgeClass = (value) => {
                                         variant="danger"
                                         :disabled="busy[actionKey(onu)]"
                                         :title="$t('portonus.act_delete')"
-                                        @click="deleteOnu(onu)"
+                                        v-device-write @click="deleteOnu(onu)"
                                     >
                                         <Trash2 class="h-4 w-4" />
                                     </IconButton>
@@ -1073,7 +1073,7 @@ const rxBadgeClass = (value) => {
                                                 :variant="onu.admin_state === 'active' ? 'warning' : 'success'"
                                                 :disabled="busy[actionKey(onu)]"
                                                 :title="onu.admin_state === 'active' ? $t('portonus.act_disable') : $t('portonus.act_enable')"
-                                                @click="toggleOnu(onu)"
+                                                v-device-write @click="toggleOnu(onu)"
                                             >
                                                 <ToggleRight v-if="onu.admin_state === 'active'" class="h-4 w-4" />
                                                 <ToggleLeft v-else class="h-4 w-4" />
@@ -1083,7 +1083,7 @@ const rxBadgeClass = (value) => {
                                                 variant="danger"
                                                 :disabled="busy[actionKey(onu)]"
                                                 :title="$t('portonus.act_reboot')"
-                                                @click="rebootOnu(onu)"
+                                                v-device-write @click="rebootOnu(onu)"
                                             >
                                                 <Power class="h-4 w-4" />
                                             </IconButton>
@@ -1092,7 +1092,7 @@ const rxBadgeClass = (value) => {
                                                 variant="danger"
                                                 :disabled="busy[actionKey(onu)]"
                                                 :title="$t('portonus.act_delete')"
-                                                @click="deleteOnu(onu)"
+                                                v-device-write @click="deleteOnu(onu)"
                                             >
                                                 <Trash2 class="h-4 w-4" />
                                             </IconButton>
@@ -1137,7 +1137,7 @@ const rxBadgeClass = (value) => {
                 </div>
                 <div class="mt-6 grid gap-2 sm:flex sm:justify-end">
                     <SecondaryButton type="button" @click="editing.open = false">{{ $t('common.cancel') }}</SecondaryButton>
-                    <PrimaryButton type="submit" :disabled="editForm.processing">{{ $t('common.save') }}</PrimaryButton>
+                    <PrimaryButton v-device-write type="submit" :disabled="editForm.processing">{{ $t('common.save') }}</PrimaryButton>
                 </div>
             </form>
         </Modal>
@@ -1223,7 +1223,7 @@ const rxBadgeClass = (value) => {
                     </div>
 
                     <label class="flex items-start gap-2.5 text-sm text-slate-300">
-                        <input v-model="copyExecute" type="checkbox" class="mt-0.5 h-4 w-4 rounded border-white/10 text-cyan-400 focus:ring-cyan-500" />
+                        <input v-device-write v-model="copyExecute" type="checkbox" class="mt-0.5 h-4 w-4 rounded border-white/10 text-cyan-400 focus:ring-cyan-500" />
                         <span>
                             {{ $t('portonus.execute_after') }}
                             <span class="text-slate-500">{{ $t('portonus.execute_hint') }}</span>

@@ -239,7 +239,7 @@ const deleteRegistration = async (registration) => {
                                         <component :is="statusMeta(registration.status).icon" class="h-3.5 w-3.5" />
                                         {{ statusMeta(registration.status).label }}
                                     </span>
-                                    <IconButton v-if="canExecute(registration)" variant="success" :title="isFailed(registration) ? $t('registrations.retry_title') : $t('registrations.execute_title')" @click="executeRegistration(registration)">
+                                    <IconButton v-if="canExecute(registration)" variant="success" :title="isFailed(registration) ? $t('registrations.retry_title') : $t('registrations.execute_title')" v-device-write @click="executeRegistration(registration)">
                                         <Play class="h-4 w-4" />
                                     </IconButton>
                                     <IconButton v-if="canDelete(registration)" variant="danger" :title="$t('registrations.delete_script_title')" @click="deleteRegistration(registration)">
@@ -291,7 +291,7 @@ const deleteRegistration = async (registration) => {
                                         <component :is="statusMeta(registration.status).icon" class="h-3.5 w-3.5" />
                                         {{ statusMeta(registration.status).label }}
                                     </span>
-                                    <IconButton v-if="canExecute(registration)" variant="success" :title="isFailed(registration) ? $t('registrations.retry_title') : $t('registrations.execute_title')" @click="executeRegistration(registration)">
+                                    <IconButton v-if="canExecute(registration)" variant="success" :title="isFailed(registration) ? $t('registrations.retry_title') : $t('registrations.execute_title')" v-device-write @click="executeRegistration(registration)">
                                         <Play class="h-4 w-4" />
                                     </IconButton>
                                     <IconButton v-if="canDelete(registration)" variant="danger" :title="$t('registrations.delete_script_title')" @click="deleteRegistration(registration)">

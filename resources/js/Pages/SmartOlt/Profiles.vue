@@ -219,7 +219,7 @@ const syncFromOlt = () => {
                             </div>
                             <div class="md:col-span-2">
                                 <label class="inline-flex items-center gap-2 text-sm text-slate-200">
-                                    <input v-model="createForms[type.key].execute_cli" type="checkbox" class="rounded border-white/10 text-cyan-400 shadow-sm focus:ring-cyan-500" />
+                                    <input v-device-write v-model="createForms[type.key].execute_cli" type="checkbox" class="rounded border-white/10 text-cyan-400 shadow-sm focus:ring-cyan-500" />
                                     {{ $t('profiles.execute_cli') }}
                                 </label>
                             </div>
@@ -264,7 +264,7 @@ const syncFromOlt = () => {
                                         </label>
                                         <label class="block">
                                             <span class="inline-flex items-center gap-2 text-sm text-slate-200">
-                                                <input v-model="editing[profile.id].execute_cli" type="checkbox" class="rounded border-white/10 text-cyan-400 shadow-sm focus:ring-cyan-500" />
+                                                <input v-device-write v-model="editing[profile.id].execute_cli" type="checkbox" class="rounded border-white/10 text-cyan-400 shadow-sm focus:ring-cyan-500" />
                                                 {{ $t('profiles.execute_cli') }}
                                             </span>
                                         </label>
@@ -316,7 +316,7 @@ const syncFromOlt = () => {
                                     <IconButton v-if="ownedByCurrentOlt(profile)" variant="danger" :title="$t('profiles.del_local')" @click="destroyProfile(profile, false)">
                                         <Trash2 class="h-4 w-4" />
                                     </IconButton>
-                                    <IconButton v-if="ownedByCurrentOlt(profile)" variant="danger" :title="$t('profiles.del_olt')" @click="destroyProfile(profile, true)">
+                                    <IconButton v-if="ownedByCurrentOlt(profile)" variant="danger" :title="$t('profiles.del_olt')" v-device-write @click="destroyProfile(profile, true)">
                                         <ServerOff class="h-4 w-4" />
                                     </IconButton>
                                     <span v-if="!ownedByCurrentOlt(profile)" class="text-xs text-slate-400">{{ $t('profiles.fallback_global') }}</span>
@@ -366,7 +366,7 @@ const syncFromOlt = () => {
                                                 {{ $t('profiles.active') }}
                                             </label>
                                             <label class="mt-2 inline-flex items-center gap-2 text-xs text-slate-200">
-                                                <input v-model="editing[profile.id].execute_cli" type="checkbox" class="rounded border-white/10 text-cyan-400 shadow-sm focus:ring-cyan-500" />
+                                                <input v-device-write v-model="editing[profile.id].execute_cli" type="checkbox" class="rounded border-white/10 text-cyan-400 shadow-sm focus:ring-cyan-500" />
                                                 {{ $t('profiles.execute_cli') }}
                                             </label>
                                         </td>
@@ -410,7 +410,7 @@ const syncFromOlt = () => {
                                                 <IconButton v-if="ownedByCurrentOlt(profile)" variant="danger" :title="$t('profiles.del_local')" @click="destroyProfile(profile, false)">
                                                     <Trash2 class="h-4 w-4" />
                                                 </IconButton>
-                                                <IconButton v-if="ownedByCurrentOlt(profile)" variant="danger" :title="$t('profiles.del_olt')" @click="destroyProfile(profile, true)">
+                                                <IconButton v-if="ownedByCurrentOlt(profile)" variant="danger" :title="$t('profiles.del_olt')" v-device-write @click="destroyProfile(profile, true)">
                                                     <ServerOff class="h-4 w-4" />
                                                 </IconButton>
                                                 <span v-if="!ownedByCurrentOlt(profile)" class="text-xs text-slate-400">{{ $t('profiles.fallback_global') }}</span>

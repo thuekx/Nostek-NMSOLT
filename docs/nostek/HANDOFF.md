@@ -139,10 +139,19 @@ over 48 hours, which also stopped the raw-sample prune. Disk note for NET-1: 400
 hourly at 5,000 ONUs is about 7.8 GB [INFERRED from the measured 160 B/row]. Details:
 [NMS-07-DATA-GROWTH.md](NMS-07-DATA-GROWTH.md#nms-07-b2--daily-rx-rollup-owner-nms-ai-q5-a-hourly-400-days-daily-3-years).
 
+## NMS-07-D-1 write-gate visibility (2026-10-22)
+
+Branch `step/nms-07-d-ui-journey` (on top of B2). The UI now shows the device write
+boundary: a shared `device_writes` prop is built from the route table, there is a
+read-only banner, a request guard (Inertia + axios) stops gated requests with a toast, and
+`v-device-write` locks 56 controls. A drift test fails if a screen calls a gated route
+without marking it. Checked in a real browser. Details:
+[NMS-07-UI-JOURNEY.md](NMS-07-UI-JOURNEY.md).
+
 ## Exact next action
 
-Refresh GitHub. Check the NMS-07-A, B, C/E and B2 PRs (exact-head CI, owner merge). Then
-continue D (UI journey and write-gate audit, with E2 server-side ONU
+Refresh GitHub. Check the NMS-07-A, B, C/E, B2 and D-1 PRs (exact-head CI, owner merge).
+Then continue D-2 (UI journey and write-gate audit, with E2 server-side ONU
 list paging), and the rest of E (alarm, optical, queue, poller on synthetic data). Do not
 modify the retained LICENSE attribution.
 

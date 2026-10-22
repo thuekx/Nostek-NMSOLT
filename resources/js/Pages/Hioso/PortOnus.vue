@@ -402,14 +402,14 @@ const viewOnMap = (onu) => {
                                                 <IconButton v-if="canRename" :title="$t('cdataportonus.rename_title')" @click="openRename(o)">
                                                     <Pencil class="h-4 w-4" />
                                                 </IconButton>
-                                                <IconButton v-if="canToggle" :variant="isEnabled(o) ? 'warning' : 'success'" :title="isEnabled(o) ? $t('portonus.act_disable') : $t('portonus.act_enable')" @click="toggleOnu(o)">
+                                                <IconButton v-if="canToggle" :variant="isEnabled(o) ? 'warning' : 'success'" :title="isEnabled(o) ? $t('portonus.act_disable') : $t('portonus.act_enable')" v-device-write @click="toggleOnu(o)">
                                                     <ToggleRight v-if="isEnabled(o)" class="h-4 w-4" />
                                                     <ToggleLeft v-else class="h-4 w-4" />
                                                 </IconButton>
-                                                <IconButton v-if="canReboot" variant="danger" :title="$t('portonus.act_reboot')" @click="rebootOnu(o)">
+                                                <IconButton v-if="canReboot" variant="danger" :title="$t('portonus.act_reboot')" v-device-write @click="rebootOnu(o)">
                                                     <Power class="h-4 w-4" />
                                                 </IconButton>
-                                                <IconButton v-if="canDelete" variant="danger" :title="$t('portonus.act_delete')" @click="deleteOnu(o)">
+                                                <IconButton v-if="canDelete" variant="danger" :title="$t('portonus.act_delete')" v-device-write @click="deleteOnu(o)">
                                                     <Trash2 class="h-4 w-4" />
                                                 </IconButton>
                                                 <IconButton :variant="isPinned(o) ? 'success' : 'primary'" :title="isPinned(o) ? $t('portonus.act_view_map') : $t('portonus.act_add_map')" @click="isPinned(o) ? viewOnMap(o) : openAddMap(o)">
@@ -459,14 +459,14 @@ const viewOnMap = (onu) => {
                                     <IconButton v-if="canRename" :title="$t('cdataportonus.rename_title')" @click="openRename(o)">
                                         <Pencil class="h-4 w-4" />
                                     </IconButton>
-                                    <IconButton v-if="canToggle" :variant="isEnabled(o) ? 'warning' : 'success'" :title="isEnabled(o) ? $t('portonus.act_disable') : $t('portonus.act_enable')" @click="toggleOnu(o)">
+                                    <IconButton v-if="canToggle" :variant="isEnabled(o) ? 'warning' : 'success'" :title="isEnabled(o) ? $t('portonus.act_disable') : $t('portonus.act_enable')" v-device-write @click="toggleOnu(o)">
                                         <ToggleRight v-if="isEnabled(o)" class="h-4 w-4" />
                                         <ToggleLeft v-else class="h-4 w-4" />
                                     </IconButton>
-                                    <IconButton v-if="canReboot" variant="danger" :title="$t('portonus.act_reboot')" @click="rebootOnu(o)">
+                                    <IconButton v-if="canReboot" variant="danger" :title="$t('portonus.act_reboot')" v-device-write @click="rebootOnu(o)">
                                         <Power class="h-4 w-4" />
                                     </IconButton>
-                                    <IconButton v-if="canDelete" variant="danger" :title="$t('portonus.act_delete')" @click="deleteOnu(o)">
+                                    <IconButton v-if="canDelete" variant="danger" :title="$t('portonus.act_delete')" v-device-write @click="deleteOnu(o)">
                                         <Trash2 class="h-4 w-4" />
                                     </IconButton>
                                     <IconButton :variant="isPinned(o) ? 'success' : 'primary'" :title="isPinned(o) ? $t('portonus.act_view_map') : $t('portonus.act_add_map')" @click="isPinned(o) ? viewOnMap(o) : openAddMap(o)">
@@ -569,7 +569,7 @@ const viewOnMap = (onu) => {
                     <TextInput id="rename" v-model="renameValue" class="mt-1 block w-full" maxlength="32" autocomplete="off" />
                     <div class="mt-5 flex justify-end gap-3">
                         <SecondaryButton type="button" @click="renameOnu = null">{{ $t('common.cancel') }}</SecondaryButton>
-                        <PrimaryButton type="submit">{{ $t('common.save') }}</PrimaryButton>
+                        <PrimaryButton v-device-write type="submit">{{ $t('common.save') }}</PrimaryButton>
                     </div>
                 </form>
             </div>

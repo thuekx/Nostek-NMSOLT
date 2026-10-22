@@ -335,7 +335,7 @@ const errorList = computed(() => Object.values(form.errors ?? {}));
                     <Link :href="route('smartolt.port-onus', [olt.id, slot, port])" class="block w-full sm:w-auto">
                         <SecondaryButton type="button" class="w-full sm:w-auto">{{ $t('common.cancel') }}</SecondaryButton>
                     </Link>
-                    <PrimaryButton v-if="canWrite && mode === 'full'" class="w-full sm:w-auto" :disabled="form.processing || preview.conflicts.length > 0" @click="apply">
+                    <PrimaryButton v-if="canWrite && mode === 'full'" class="w-full sm:w-auto" :disabled="form.processing || preview.conflicts.length > 0" v-device-write @click="apply">
                         <Check class="mr-2 h-4 w-4" />
                         {{ $t('configonu.apply') }}
                     </PrimaryButton>

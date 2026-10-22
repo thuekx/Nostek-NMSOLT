@@ -76,6 +76,10 @@ Branch `step/nms-07-a-unified-package`: core/with-acs/platform Compose, `scripts
 
 Branch `step/nms-07-b-data-growth`: retention command `history:prune`, duplicate RX index dropped, dedicated poll worker pool. See [NMS-07-DATA-GROWTH.md](NMS-07-DATA-GROWTH.md).
 
+## NMS-07-D-1 write-gate visibility checkpoint
+
+Branch `step/nms-07-d-ui-journey`: read-only banner, request guard and locked controls driven by the server's gated-route table; drift test. See [NMS-07-UI-JOURNEY.md](NMS-07-UI-JOURNEY.md).
+
 ## NMS-07-B2 daily RX rollup checkpoint
 
 Branch `step/nms-07-b2-rx-daily`: daily RX rollup kept 3 years (owner Q5 A), 90d/1y/3y chart ranges, fix for the hourly aggregation stall after a polling gap. See [NMS-07-DATA-GROWTH.md](NMS-07-DATA-GROWTH.md).

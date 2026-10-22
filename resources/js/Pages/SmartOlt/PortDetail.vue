@@ -372,11 +372,11 @@ const setAdminState = async (enabled) => {
                         {{ $t('portdetail.refresh_from_olt') }}
                     </PrimaryButton>
                     <template v-if="canSetAdminState">
-                        <SecondaryButton v-if="portIsShutdown" type="button" :disabled="adminForm.submitting" @click="setAdminState(true)">
+                        <SecondaryButton v-if="portIsShutdown" type="button" :disabled="adminForm.submitting" v-device-write @click="setAdminState(true)">
                             <Power class="mr-2 h-4 w-4" />
                             {{ adminForm.submitting ? $t('portdetail.admin_state_running') : $t('portdetail.enable_port') }}
                         </SecondaryButton>
-                        <DangerButton v-else type="button" :disabled="adminForm.submitting" @click="setAdminState(false)">
+                        <DangerButton v-else type="button" :disabled="adminForm.submitting" v-device-write @click="setAdminState(false)">
                             <Power class="mr-2 h-4 w-4" />
                             {{ adminForm.submitting ? $t('portdetail.admin_state_running') : $t('portdetail.disable_port') }}
                         </DangerButton>
@@ -463,7 +463,7 @@ const setAdminState = async (enabled) => {
                                             @keyup.enter="submitDesc"
                                         />
                                         <div class="flex items-center gap-2">
-                                            <PrimaryButton type="button" :disabled="descForm.submitting" @click="submitDesc">
+                                            <PrimaryButton type="button" :disabled="descForm.submitting" v-device-write @click="submitDesc">
                                                 {{ descForm.submitting ? $t('portdetail.saving') : $t('common.save') }}
                                             </PrimaryButton>
                                             <SecondaryButton type="button" :disabled="descForm.submitting" @click="descForm.editing = false">
@@ -609,7 +609,7 @@ const setAdminState = async (enabled) => {
                                     type="number" min="1" max="4094" placeholder="VLAN ID (1-4094)"
                                     class="nos-input w-full text-sm sm:w-48"
                                 />
-                                <PrimaryButton type="submit" :disabled="vlanForm.submitting || !vlanForm.vlan_id">
+                                <PrimaryButton v-device-write type="submit" :disabled="vlanForm.submitting || !vlanForm.vlan_id">
                                     <Plus class="mr-2 h-4 w-4" />
                                     {{ vlanForm.submitting ? $t('portdetail.saving') : $t('portdetail.add_tag_vlan') }}
                                 </PrimaryButton>

@@ -182,7 +182,7 @@ const deletePin = async () => {
                     type="button"
                     class="nos-action-btn"
                     :disabled="busy"
-                    @click="rebootOnu"
+                    v-device-write @click="rebootOnu"
                 >
                     <Power class="h-4 w-4" /> Reboot
                 </button>
@@ -214,7 +214,7 @@ const deletePin = async () => {
                 <p class="mt-1 text-xs text-slate-500">{{ $t('map.rename_hint', { target: pin.olt_cdata ? 'C-Data CLI' : 'ZTE SNMP' }) }}</p>
                 <div class="mt-6 flex justify-end gap-3">
                     <SecondaryButton @click="renameOpen = false">{{ $t('common.cancel') }}</SecondaryButton>
-                    <PrimaryButton :disabled="renameForm.processing" @click="submitRename">{{ $t('common.save') }}</PrimaryButton>
+                    <PrimaryButton :disabled="renameForm.processing" v-device-write @click="submitRename">{{ $t('common.save') }}</PrimaryButton>
                 </div>
             </div>
         </Modal>

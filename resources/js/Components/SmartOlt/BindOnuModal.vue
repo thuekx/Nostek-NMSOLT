@@ -232,7 +232,7 @@ const submit = () => {
 
                 <div class="mt-6 grid gap-2 sm:flex sm:justify-end">
                     <SecondaryButton type="button" :disabled="form.processing" @click="phase = 'pick'">{{ $t('common.back') }}</SecondaryButton>
-                    <component :is="selected.online ? DangerButton : PrimaryButton" type="button" :disabled="form.processing" @click="submit">
+                    <component :is="selected.online ? DangerButton : PrimaryButton" type="button" :disabled="form.processing" v-device-write @click="submit">
                         <RefreshCw v-if="form.processing" class="mr-2 h-4 w-4 animate-spin" />
                         {{ form.processing ? $t('bindonu.processing') : $t('bindonu.submit') }}
                     </component>

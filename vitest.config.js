@@ -17,5 +17,6 @@ export default defineConfig({
         environment: 'jsdom',
         include: ['tests/js/**/*.spec.js'],
         restoreMocks: true,
+        setupFiles: ['tests/js/setup.js'],
     },
 });

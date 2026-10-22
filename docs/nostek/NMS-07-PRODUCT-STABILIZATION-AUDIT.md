@@ -187,4 +187,8 @@ latency under real workers) and the owner's real-OLT `max-repetitions` check are
 Found while building TRF-1 (PON traffic graph, [TRF-1-PON-TRAFFIC.md](TRF-1-PON-TRAFFIC.md)):
 the 90-day RX chart was served from the daily rollup instead of the hourly one, because
 `$since` was computed a moment before the range check. It is fixed in the TRF-1 PR with a
-regression test.
+regression test. TRF-1 is merged (PR #35).
+
+NMS-07-A2 (finding from Nostek-AI NET-1-2): on a fresh host `start` failed because `build` made
+only the app image and the GenieACS image is local-only. `build` now builds both (with-acs),
+`start` refuses a missing locally built image before `compose up`, `preflight` warns.

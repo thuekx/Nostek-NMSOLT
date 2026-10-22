@@ -50,9 +50,9 @@ then prints a WARN that a firewall source allow-list is required). Device writes
 | `config-check` | env file mode 600, required secrets set (≥ 16 chars, MongoDB charset), write gate false, `APP_DEBUG` false, rendered topology and GenieACS policy validators |
 | `preflight` | config-check + Docker/compose present, data directories present (not symlinks), free space (default ≥ 20 GiB), ports free. Read-only |
 | `init-data` | create missing data directories (mode 0750); existing ones are left as they are |
-| `start` / `stop` | start without building and wait until every service is healthy / stop containers, keep data |
+| `start` / `stop` | start without building and wait until every service is healthy (refuses before `compose up` when a locally built image is missing, A2) / stop containers, keep data |
 | `status` | per service running + healthy, app `/up`, write gate in the running app, worker and scheduler processes, NBI reachable from the app over the private network |
-| `build --tag T` | build the app image `<NMSOLT_IMAGE_REPO>:T` |
+| `build --tag T` | build the app image `<NMSOLT_IMAGE_REPO>:T`; with-acs also the local GenieACS image `nmsolt-genieacs:1.2.16-local` (A2) |
 | `backup --out DIR` | `pg_dump -Fc` (raw `onu_rx_samples` data excluded unless `--include-raw-rx`), `mongodump` of `genieacs` without transient `cache`/`tasks`/`faults`/`operations`, app storage tarball **without APP_KEY** (`storage/app/.appkey`), logs and framework caches; per-table and per-collection counts; `MANIFEST.sha256`. A failed set stays as `*.partial` |
 | `verify-backup --from DIR` | checksums and profile |
 | `restore --from DIR --confirm RESTORE` | verify, safety backup of the current data, stop the app, `pg_restore --clean`, `mongorestore --drop`, storage extract (existing APP_KEY kept), start, compare counts |
@@ -78,6 +78,9 @@ confirm refused, restore with counts equal, upgrade refused for a missing image,
 v1→v2, manual rollback, broken upgrade with automatic data rollback, core-only profile,
 and no generated secret in any of the 25 tool logs. The same test runs in CI job
 `ops-integration`.
+
+A2 (2026-10-22): **RESULT ops-integration passed=69 failed=0** after adding the missing-image
+checks (preflight WARN, start refused before `compose up`) and the with-acs build of the GenieACS image.
 
 Not verified here: the real app image under this tool (CI builds it; first runtime is the
 NET-1-2 install), performance, and any host. The Maung runners

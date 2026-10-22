@@ -200,9 +200,22 @@ poller reads IF-MIB `ifHCIn/OutOctets` for each GPON port, the poll job stores p
 (raw 8 d, hourly 100 d, daily 3 y) and the PON port page shows the chart. Six extra GETs per poll
 in the bench. Details: [TRF-1-PON-TRAFFIC.md](TRF-1-PON-TRAFFIC.md).
 
+TRF-1 is merged (PR #35, 2026-10-22).
+
+## NMS-07-A2 GenieACS image build (2026-10-22)
+
+Finding from the Nostek-AI NET-1-2 work: `start` runs `compose up --no-build`, but `build --tag`
+built only the app image, so on a fresh host the local-only image `nmsolt-genieacs:1.2.16-local`
+was missing and `start` failed. Branch `step/nms-07-a2-acs-image-build`: `build` (with-acs) also
+builds the GenieACS image; `start` refuses with `RESULT image_<service>=FAIL ... not built yet`
+before `compose up` when a locally built image is missing; `preflight` reports the same as WARN.
+Workspace `tests/ops/integration.sh`: **RESULT ops-integration passed=69 failed=0** (new: preflight
+WARN and start refusal with the GenieACS image untagged, build runs both compose builds via a
+docker shim). NET-1-2 keeps its own `compose build genieacs-cwmp` workaround until a later package drops it.
+
 ## Exact next action
 
-Refresh GitHub. Check the TRF-1 PR (exact-head CI, owner merge). Next safe source work: per-ONT
+Refresh GitHub. Check the NMS-07-A2 PR (exact-head CI, owner merge). Next safe source work: per-ONT
 traffic through GenieACS (`parseAcsTrafficMonitor` exists, unused). Still BLOCKED on the owner:
 real-OLT check of the PON counters and of `max-repetitions` 25, the ZTE ONU traffic OID walk.
 NMS-07 evidence that needs a host stays open (real app image, queue latency under real

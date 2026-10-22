@@ -46,12 +46,13 @@ NMS-07 is IN PROGRESS:
 1. preserve the completed identity standard: `Nostek-NMSOLT`, short name
    `Nostek-NMS`, internal `nos-*` namespace and `nos-snmp-poller`;
 2. preserve the existing LICENSE attribution required by the inherited MIT code;
-3. NMS-07-A (source PASS, PR pending): unified core/with-acs package, platform
+3. NMS-07-A (merged, PR #24): unified core/with-acs package, platform
    bind-mount overlay, `scripts/nostek/nmsolt-ops.sh`, `monitor/checks.json`,
    ops integration test (CI job `ops-integration`);
 4. NMS-07-B data growth (retention, duplicate RX index, poll worker pool; B2 daily RX
    rollup on step/nms-07-b2-rx-daily), C `onu_state` table measured and not adopted (NMS-07-PERFORMANCE.md),
-   D UI journey and write-gate audit (D-1, D-2a/b/c) and E2 ONU monitor scope in PRs; rest of E;
+   D UI journey and write-gate audit (D-1, D-2a/b/c), E2/E3/E4: all merged (#24-#34);
+   TRF-1 PON traffic graph on step/trf-1-pon-traffic;
 5. runtime target is the Nostek-AI VM `nostek-platform`; host steps are Nostek-AI
    packages (track NET-1), never run from this repository;
 6. proceed to NMS-08 only when NMS-07 has complete evidence.
@@ -77,8 +78,7 @@ NMS-07-SOURCE-INVENTORY.json and CLOUD-HANDOFF.md. Follow applicable AGENTS.md.
 Refresh main, open PRs, reviews and exact-head CI before source changes.
 NMS-00–06 are VERIFIED; NMS-07 IN_PROGRESS; NMS-08–12 BLOCKED.
 NMS-07-A (unified core/with-acs package, compose.platform.yaml, scripts/nostek/nmsolt-ops.sh,
-monitor/checks.json, tests/ops/integration.sh) was built on step/nms-07-a-unified-package;
-check whether its PR is merged before continuing. Do not recreate it.
+monitor/checks.json, tests/ops/integration.sh) is merged (PR #24). Do not recreate it.
 
 Nostek-NMSOLT is the standalone network platform and telemetry/API provider.
 Maung and Nostek-AI are consumers via versioned APIs/tools, without direct database
@@ -89,16 +89,12 @@ Preserve Laravel/Vue/Inertia and Go unless measured profiling and a separate dec
 justify migration. Preserve Nostek-NMSOLT/Nostek-NMS, nos-* namespace,
 cmd/nos-snmp-poller, bin/nos-snmp-poller and required MIT LICENSE attribution.
 
-Continue NMS-07: check the A (unified package), B (data growth) and C/E (ONU read path,
-step/nms-07-c-perf-matrix), B2 (daily RX rollup, step/nms-07-b2-rx-daily) and D-1
-(write-gate visibility, step/nms-07-d-ui-journey) D-2a (status honesty,
-step/nms-07-d2-stale-states) and D-2b (stale ONU/map/alarm states,
-step/nms-07-d2b-onu-states) and D-2c (partial RX + role sweep,
-step/nms-07-d2c-permission-states) and E2 (ONU monitor scoped to one OLT,
-step/nms-07-e2-onu-monitor-scope) and E3 (alarm/RX timings,
-step/nms-07-e3-alarm-rx-perf) and E4 (Go poller bench,
-step/nms-07-e4-poller-bench) PRs first. Then only host/owner evidence remains (real app image, queue latency under real workers, real-OLT max-repetitions check), measured
-with tests/perf/run-onu-list-bench.sh style harnesses. The onu_state table was measured
+The NMS-07 PRs #24-#34 (A, B, C/E, B2, D-1, D-2a/b/c, E2, E3, E4) are merged. NMS-07 host/owner
+evidence remains (real app image, queue latency under real workers, real-OLT max-repetitions
+check). TRF-1 PON traffic graph (owner decision: PON first, ONT later) is on
+step/trf-1-pon-traffic (docs/nostek/TRF-1-PON-TRAFFIC.md); check its PR first. Next safe
+source work: per-ONT traffic through GenieACS (parseAcsTrafficMonitor exists, unused); the ZTE
+ONU traffic OID and the real-OLT counter check are BLOCKED on the owner. The onu_state table was measured
 and not adopted (NMS-07-PERFORMANCE.md); do not re-add it without new evidence.
 Use isolated synthetic tests and Compose rendering; do not run host installers/deployments.
 

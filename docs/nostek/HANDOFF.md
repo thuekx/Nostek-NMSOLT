@@ -192,12 +192,21 @@ poll takes 74.5 s at max-repetitions 10 and 34.4 s at 25. Raising the default ne
 read-only check on a real OLT by the owner (BLOCKED). Details:
 [NMS-07-PERFORMANCE.md](NMS-07-PERFORMANCE.md).
 
+## TRF-1 PON port traffic graph (2026-10-22)
+
+The NMS-07 PRs #24 to #34 are merged (owner, 2026-10-22). Owner request: traffic graphs per PON
+port and per ONT; owner decision: PON first, ONT later. Branch `step/trf-1-pon-traffic`: the Go
+poller reads IF-MIB `ifHCIn/OutOctets` for each GPON port, the poll job stores per-port rates
+(raw 8 d, hourly 100 d, daily 3 y) and the PON port page shows the chart. Six extra GETs per poll
+in the bench. Details: [TRF-1-PON-TRAFFIC.md](TRF-1-PON-TRAFFIC.md).
+
 ## Exact next action
 
-Refresh GitHub. Check the NMS-07-A, B, C/E, B2, D-1, D-2a, D-2b, D-2c, E2, E3 and E4 PRs (exact-head CI, owner
-merge). Source-side NMS-07 work is then done; what remains needs a host (real app image,
-queue latency under real workers) or the owner (max-repetitions check on a real OLT). Do not
-modify the retained LICENSE attribution.
+Refresh GitHub. Check the TRF-1 PR (exact-head CI, owner merge). Next safe source work: per-ONT
+traffic through GenieACS (`parseAcsTrafficMonitor` exists, unused). Still BLOCKED on the owner:
+real-OLT check of the PON counters and of `max-repetitions` 25, the ZTE ONU traffic OID walk.
+NMS-07 evidence that needs a host stays open (real app image, queue latency under real
+workers). Do not modify the retained LICENSE attribution.
 
 For cross-device continuation, use the post-merge prompt in [CLOUD-HANDOFF.md](CLOUD-HANDOFF.md). PR #20 search fixes are already in main; do not recreate them.
 

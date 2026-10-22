@@ -9,6 +9,7 @@ use App\Services\AlarmEvaluator;
 use App\Services\CData\CDataOltScanner;
 use App\Services\Snmp\GoSnmpPoller;
 use App\Services\Snmp\OltSnmpClient;
+use App\Services\Traffic\PonTrafficRecorder;
 use App\Support\SmartOltSupport;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Queue\Queueable;
@@ -152,6 +153,18 @@ class PollOltJob implements ShouldQueue
 
         if ($rxPollSucceeded && is_array($onus)) {
             $this->recordRxSamples($olt->id, $onus, $now);
+        }
+
+        // TRF-1: laju trafik PON dari dua bacaan counter berturut-turut (poll ini vs poll lalu).
+        if ($snapshot['ok'] ?? false) {
+            app(PonTrafficRecorder::class)->record(
+                $olt->id,
+                (int) ($olt->poll_interval_minutes ?: 5),
+                is_array($previousSnapshot['ports'] ?? null) ? $previousSnapshot['ports'] : [],
+                is_string($previousSnapshot['polled_at'] ?? null) ? $previousSnapshot['polled_at'] : null,
+                $snapshot['ports'],
+                $now,
+            );
         }
 
         $alarms->evaluate($olt, $previousSnapshot);

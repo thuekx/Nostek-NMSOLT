@@ -12,6 +12,7 @@ use App\Models\OnuMapPin;
 use App\Models\OnuOdpLink;
 use App\Models\OnuRxSample;
 use App\Models\PollingEvent;
+use App\Models\PonTrafficSample;
 use App\Models\SmartOltInterfaceStatus;
 use App\Models\SmartOltOnuRegistration;
 use App\Models\SmartOltProfile;
@@ -202,6 +203,7 @@ class SmartOltController extends Controller
         }
 
         $isGponPort = $type === 'gpon' && $slot !== null;
+        $trafficRange = $this->rxRange($request->query('range'));
 
         return Inertia::render('SmartOlt/PortDetail', [
             'olt' => $this->serializeOlt($olt),
@@ -212,6 +214,14 @@ class SmartOltController extends Controller
             'card_type' => $detail['card_type'] ?? null,
             'detail' => $detail,
             'onu_summary' => $onuSummary,
+            // TRF-1: grafik trafik port PON. Riwayat sebagai closure supaya ganti rentang
+            // (partial reload `only: traffic_history`) tidak menghitung prop lain.
+            'traffic_range' => $trafficRange['key'],
+            'traffic_history' => fn () => $isGponPort
+                ? PonTrafficSample::seriesFor($olt->id, $slot, $port, $trafficRange['since'])->values()
+                : [],
+            'traffic_counters' => $isGponPort ? $this->ponPortHasCounters($olt, $slot, $port) : null,
+            'freshness' => $olt->freshness(),
             // Matikan/nyalakan port: admin atau partner pemilik OLT (lihat storePortAdminState()).
             'can_set_admin_state' => $isGponPort && (bool) $request->user()?->canSetPonPortAdminState($olt),
             'can_write_uplink_vlan' => $type === 'uplink' && (bool) $request->user()?->canWriteOltUplinkConfig($olt),
@@ -1056,6 +1066,19 @@ class SmartOltController extends Controller
      *
      * @return array{key:string, since:Carbon}
      */
+    /**
+     * TRF-1: apakah poll terakhir membawa counter oktet untuk port ini. false = OLT/agent tidak
+     * menjawab ifHCIn/OutOctets (atau poller PHP cadangan yang dipakai): grafik menyebut sebabnya,
+     * bukan menampilkan nol.
+     */
+    private function ponPortHasCounters(SnmpOlt $olt, int $slot, int $port): bool
+    {
+        $row = collect(data_get($olt->last_test_result ?? [], 'ports', []))
+            ->first(fn ($p) => is_array($p) && (int) ($p['slot'] ?? 0) === $slot && (int) ($p['port'] ?? 0) === $port);
+
+        return is_array($row) && ($row['in_octets'] ?? '') !== '' && ($row['out_octets'] ?? '') !== '';
+    }
+
     private function rxRange(?string $range): array
     {
         $key = in_array($range, ['24h', '7d', '30d', '90d', '1y', '3y'], true) ? $range : '7d';

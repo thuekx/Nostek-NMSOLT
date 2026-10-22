@@ -13,6 +13,7 @@ import { Activity, ArrowLeft, Cable, Gauge, Network, Plus, Power, RefreshCw, Tag
 import { computed, onBeforeUnmount, reactive, ref } from 'vue';
 // Chart.js dimuat malas di dalam ChartCanvas — lihat komentar di sana.
 import ChartCanvas from '@/Components/Charts/ChartCanvas.vue';
+import PonTrafficCard from '@/Components/SmartOlt/PonTrafficCard.vue';
 import { areaFill, axisY, hairline, lineChartOptions } from '@/lib/chartOptions';
 
 const { t } = useI18n({ useScope: 'global' });
@@ -32,6 +33,11 @@ const props = defineProps({
     port_disabled: { type: Boolean, default: false },
     // Tambah & tag VLAN uplink (auto write): admin/operator, atau partner di OLT miliknya sendiri.
     can_write_uplink_vlan: { type: Boolean, default: false },
+    // TRF-1: riwayat trafik port PON (SmartOltController::portDetail).
+    traffic_history: { type: Array, default: () => [] },
+    traffic_range: { type: String, default: '7d' },
+    traffic_counters: { type: Boolean, default: null },
+    freshness: { type: Object, default: null },
 });
 
 const page = usePage();
@@ -653,6 +659,14 @@ const setAdminState = async (enabled) => {
                         </div>
                     </div>
                 </div>
+
+                <PonTrafficCard
+                    v-if="isGpon && slot !== null"
+                    :history="traffic_history"
+                    :range="traffic_range"
+                    :counters="traffic_counters"
+                    :freshness="freshness"
+                />
             </div>
         </div>
         <ConfirmModal :state="confirmState" @confirm="handleConfirm" @cancel="handleCancel" />

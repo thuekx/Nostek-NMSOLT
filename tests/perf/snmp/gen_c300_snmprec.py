@@ -32,6 +32,9 @@ def main():
         rec[f"1.3.6.1.2.1.2.2.1.2.{if_index}"] = f"4|{name}"
         rec[f"1.3.6.1.2.1.2.2.1.8.{if_index}"] = "2|1"
         rec[f"1.3.6.1.2.1.31.1.1.1.1.{if_index}"] = f"4|{name}"
+        # TRF-1: ifHCInOctets / ifHCOutOctets (Counter64, snmprec tag 70) for the traffic GETs.
+        rec[f"1.3.6.1.2.1.31.1.1.1.6.{if_index}"] = f"70|{rng.getrandbits(40)}"
+        rec[f"1.3.6.1.2.1.31.1.1.1.10.{if_index}"] = f"70|{rng.getrandbits(44)}"
     for i in range(onus):
         p, onu_id = i // 64, 1 + i % 64
         slot, port = 1 + p // 16, 1 + p % 16

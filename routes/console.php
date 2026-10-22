@@ -15,6 +15,9 @@ Schedule::command('optical:aggregate-rx')->hourlyAt(5)->withoutOverlapping();
 // NMS-07-B2: after the 00:05 hourly run has summarised the last hour of yesterday.
 Schedule::command('optical:aggregate-rx-daily')->dailyAt('00:25')->withoutOverlapping();
 Schedule::command('optical:prune-rx')->dailyAt('03:15')->withoutOverlapping();
+// TRF-1: trafik PON — ringkasan jam & hari dulu, prune sesudahnya (prune menolak melewati yang belum terangkum).
+Schedule::command('traffic:aggregate')->hourlyAt(10)->withoutOverlapping();
+Schedule::command('traffic:prune')->dailyAt('03:20')->withoutOverlapping();
 
 // Sesi aplikasi yang kedaluwarsa (sanctum.expiration) dibuang — token push FCM
 // yang terkait ikut terhapus lewat FK cascade, jadi ponselnya berhenti dikirimi alarm.

@@ -3,7 +3,7 @@
 # ZTE C300 agent (snmpsim, synthetic data) behind a UDP proxy that adds a round-trip time and
 # counts requests. Workspace only; no real OLT.
 #   tests/perf/run-poller-bench.sh [onus] [repeats]
-# BENCH_MAXREP="10 25" and BENCH_RTT_MS="0 20" choose the matrix. SNMPSIM_BIN may point to an
+# BENCH_MAXREP="10 25", BENCH_RTT_MS="0 20" and BENCH_TRAFFIC="0 1" choose the matrix. SNMPSIM_BIN may point to an
 # installed snmpsim-command-responder; otherwise a pinned snmpsim is installed in a temp venv.
 set -euo pipefail
 
@@ -55,18 +55,24 @@ for rtt in ${BENCH_RTT_MS:-0 20}; do
   PIDS+=("$!")
   sleep 1
   for maxrep in ${BENCH_MAXREP:-10 25}; do
+  # TRF-1: BENCH_TRAFFIC="0 1" measures the cost of the PON octet-counter GETs (--include-traffic).
+  for traffic in ${BENCH_TRAFFIC:-0}; do
+    extra=()
+    [ "$traffic" = 1 ] && extra=(--include-traffic)
     for i in $(seq 1 "$REPEATS"); do
-      echo "PROGRESS rtt=${rtt}ms maxrep=${maxrep} ${i}/${REPEATS}" >&2
+      echo "PROGRESS rtt=${rtt}ms maxrep=${maxrep} traffic=${traffic} ${i}/${REPEATS}" >&2
       before="$(cat "$TMP/count")"
       t="$( { time NOS_SNMP_COMMUNITY=bench "$TMP/nos-snmp-poller" --host 127.0.0.1 --port "$PROXY_PORT" \
-        --include-rx --walk-mode bulk --max-repetitions "$maxrep" --timeout 10s >"$TMP/poll.json"; } 2>&1 )"
+        --include-rx "${extra[@]}" --walk-mode bulk --max-repetitions "$maxrep" --timeout 10s >"$TMP/poll.json"; } 2>&1 )"
       onus="$(python3 -c 'import json,sys; d=json.load(open(sys.argv[1])); print(len(d["onus"]) if d["ok"] else -1)' "$TMP/poll.json")"
+      ports="$(python3 -c 'import json,sys; d=json.load(open(sys.argv[1])); print((d.get("traffic") or {}).get("count", 0))' "$TMP/poll.json")"
       read -r real user sys <<<"$t"
-      echo "BENCH rtt=${rtt} maxrep=${maxrep} wall_s=${real} cpu_s=$(awk -v u="$user" -v s="$sys" 'BEGIN {printf "%.2f", u + s}') requests=$(( $(cat "$TMP/count") - before )) onus=${onus}" | tee -a "$TMP/bench.out"
+      echo "BENCH rtt=${rtt} maxrep=${maxrep} traffic=${traffic} wall_s=${real} cpu_s=$(awk -v u="$user" -v s="$sys" 'BEGIN {printf "%.2f", u + s}') requests=$(( $(cat "$TMP/count") - before )) onus=${onus} traffic_ports=${ports}" | tee -a "$TMP/bench.out"
     done
-    grep "^BENCH rtt=${rtt} maxrep=${maxrep} " "$TMP/bench.out" |
-      sed -E 's/.*wall_s=([0-9.]+) cpu_s=([0-9.]+) requests=([0-9]+) onus=(-?[0-9]+)/\1 \2 \3 \4/' | sort -n |
-      awk -v r="$rtt" -v m="$maxrep" '{w[NR]=$1; c[NR]=$2; q=$3; o=$4} END {printf "RESULT perf_poller_rtt%sms_maxrep%s=MEASURED onus=%d median_wall_s=%.1f poller_cpu_s=%.2f requests=%d runs=%d\n", r, m, o, w[int((NR+1)/2)], c[int((NR+1)/2)], q, NR}'
+    grep "^BENCH rtt=${rtt} maxrep=${maxrep} traffic=${traffic} " "$TMP/bench.out" |
+      sed -E 's/.*wall_s=([0-9.]+) cpu_s=([0-9.]+) requests=([0-9]+) onus=(-?[0-9]+) traffic_ports=([0-9]+)/\1 \2 \3 \4 \5/' | sort -n |
+      awk -v r="$rtt" -v m="$maxrep" -v tr="$traffic" '{w[NR]=$1; c[NR]=$2; q=$3; o=$4; p=$5} END {printf "RESULT perf_poller_rtt%sms_maxrep%s_traffic%s=MEASURED onus=%d traffic_ports=%d median_wall_s=%.1f poller_cpu_s=%.2f requests=%d runs=%d\n", r, m, tr, o, p, w[int((NR+1)/2)], c[int((NR+1)/2)], q, NR}'
+  done
   done
   kill "${PIDS[-1]}" >/dev/null 2>&1 || true
   unset 'PIDS[-1]'

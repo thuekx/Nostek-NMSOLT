@@ -76,6 +76,10 @@ Branch `step/nms-07-a-unified-package`: core/with-acs/platform Compose, `scripts
 
 Branch `step/nms-07-b-data-growth`: retention command `history:prune`, duplicate RX index dropped, dedicated poll worker pool. See [NMS-07-DATA-GROWTH.md](NMS-07-DATA-GROWTH.md).
 
+## TRF-1 PON traffic graph checkpoint
+
+Feature track (owner request 2026-10-22, decision PON first, ONT later). Branch `step/trf-1-pon-traffic`: PON port octet counters in the Go poller, per-port rates with hourly/daily rollups, chart on the PON port page. Per-ONT traffic follows (GenieACS WAN counters first). See [TRF-1-PON-TRAFFIC.md](TRF-1-PON-TRAFFIC.md).
+
 ## NMS-07-E4 poller checkpoint
 
 Branch `step/nms-07-e4-poller-bench`: Go poller measured against a simulated C300 (3,400 ONUs); request count (max-repetitions) dominates poll time over a WAN link; raising the default needs a real-OLT check by the owner. See [NMS-07-PERFORMANCE.md](NMS-07-PERFORMANCE.md).

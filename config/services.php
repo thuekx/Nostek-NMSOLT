@@ -72,6 +72,13 @@ return [
         // NMS-07-B2: ringkasan per hari untuk grafik 1–3 tahun (owner NMS-AI-Q5 A: 3 tahun).
         // Satu baris per ONU per hari; 5.000 ONU × 3 tahun ≈ 5,5 juta baris kecil.
         'rx_daily_retention_days' => (int) env('SNMP_POLLER_RX_DAILY_RETENTION_DAYS', 1095),
+        // TRF-1: baca counter oktet IF-MIB tiap port PON (GET, 2 counter per port) untuk grafik
+        // trafik PON. Mentah 8 hari melayani grafik 24 jam & 7 hari; per jam 100 hari melayani
+        // 30 & 90 hari; per hari 3 tahun. Satu C300 128 port ≈ 37 ribu baris mentah per hari.
+        'traffic' => (bool) env('SNMP_POLLER_TRAFFIC', true),
+        'traffic_sample_retention_days' => (int) env('SNMP_POLLER_TRAFFIC_RETENTION_DAYS', 8),
+        'traffic_hourly_retention_days' => (int) env('SNMP_POLLER_TRAFFIC_HOURLY_RETENTION_DAYS', 100),
+        'traffic_daily_retention_days' => (int) env('SNMP_POLLER_TRAFFIC_DAILY_RETENTION_DAYS', 1095),
     ],
 
     // Titik awal Peta ONU/ODP (web & aplikasi). "Wilayah utama" opsional: bila diisi, peta

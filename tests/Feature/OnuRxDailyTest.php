@@ -142,6 +142,11 @@ class OnuRxDailyTest extends TestCase
 
         // 30 days stays on the hourly table.
         $this->assertEqualsWithDelta(-21.0, OnuRxSample::seriesFor($olt->id, 1, 1, 1, now()->subDays(30))[0]['rx_power_dbm'], 0.001);
+        // 90 days stays on the hourly table too, although the caller computes $since a moment
+        // before seriesFor() runs (TRF-1 found 90d tipping over to the daily rollup).
+        $since = now()->subDays(90);
+        usleep(2000);
+        $this->assertEqualsWithDelta(-21.0, OnuRxSample::seriesFor($olt->id, 1, 1, 1, $since)[0]['rx_power_dbm'], 0.001);
     }
 
     public function test_onu_detail_accepts_the_long_ranges_and_rejects_unknown_ones(): void

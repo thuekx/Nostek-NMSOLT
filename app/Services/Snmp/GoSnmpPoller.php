@@ -48,6 +48,10 @@ class GoSnmpPoller
             $command[] = '--include-rx';
         }
 
+        if (config('services.snmp_poller.traffic', true)) {
+            $command[] = '--include-traffic';
+        }
+
         $process = new Process(
             $command,
             base_path(),

@@ -185,7 +185,7 @@ const start = async (execute) => {
             <div class="mt-6 grid gap-2 sm:flex sm:justify-end">
                 <SecondaryButton type="button" @click="close">{{ $t('common.close') }}</SecondaryButton>
                 <SecondaryButton type="button" :disabled="submitting" @click="start(false)">{{ $t('tr069.rescan') }}</SecondaryButton>
-                <PrimaryButton v-if="progress.applied > 0" type="button" :disabled="submitting" @click="start(true)">
+                <PrimaryButton v-if="progress.applied > 0" type="button" :disabled="submitting" v-device-write @click="start(true)">
                     <Cloud class="mr-2 h-4 w-4" />
                     {{ submitting ? $t('portonus.processing') : $t('tr069.execute_to_olt', { applied: progress.applied }) }}
                 </PrimaryButton>

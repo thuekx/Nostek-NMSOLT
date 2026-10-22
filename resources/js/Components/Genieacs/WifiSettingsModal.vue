@@ -194,7 +194,7 @@ const errorText = computed(() =>
 
             <div class="mt-6 flex justify-end gap-3 border-t border-white/10 pt-4">
                 <SecondaryButton type="button" @click="emit('close')">{{ $t('common.close') }}</SecondaryButton>
-                <PrimaryButton :disabled="saving || loading || !!loadError || !ssid || password.length < 8">
+                <PrimaryButton v-device-write :disabled="saving || loading || !!loadError || !ssid || password.length < 8">
                     {{ saving ? $t('acswifi.sending') : $t('acswifi.apply') }}
                 </PrimaryButton>
             </div>

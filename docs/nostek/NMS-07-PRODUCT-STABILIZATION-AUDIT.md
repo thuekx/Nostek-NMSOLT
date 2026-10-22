@@ -82,6 +82,19 @@ no IPv6 (`bind EAFNOSUPPORT :::7557`); fixed with explicit `0.0.0.0` interfaces.
 Remaining: the real app image under the tool (first runtime = Nostek-AI NET-1-2) and
 work packages 3–5. See [NMS-07-UNIFIED-PACKAGE.md](NMS-07-UNIFIED-PACKAGE.md).
 
+## NMS-07-D-1 result (2026-10-22)
+
+Part of work package 3 (UI journeys), "every mutating control visibly reflects the global
+write gate", is implemented on `step/nms-07-d-ui-journey`:
+
+- a read-only banner;
+- a request guard;
+- 56 locked controls;
+- a drift test.
+
+It was checked in a real browser. Stale, partial and permission states (D-2) are next. See
+[NMS-07-UI-JOURNEY.md](NMS-07-UI-JOURNEY.md).
+
 ## NMS-07-C/E result (2026-10-22)
 
 Work package 4 (performance audit), first part, is on branch `step/nms-07-c-perf-matrix`.

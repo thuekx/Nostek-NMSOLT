@@ -180,7 +180,7 @@ const submitTag = async () => {
                             {{ $t('cdataport.vlan_page') }}
                         </SecondaryButton>
                     </Link>
-                    <SecondaryButton v-if="canSaveConfig" type="button" :disabled="saving" @click="saveConfig">
+                    <SecondaryButton v-if="canSaveConfig" type="button" :disabled="saving" v-device-write @click="saveConfig">
                         <Save class="mr-2 h-4 w-4" :class="{ 'animate-pulse': saving }" />
                         {{ $t('cdatavlan.save_config') }}
                     </SecondaryButton>
@@ -424,7 +424,7 @@ const submitTag = async () => {
                                             <label for="tag-vlan" class="mb-2 block text-xs font-semibold uppercase tracking-wide text-slate-500">{{ $t('cdataport.add_tag_label') }}</label>
                                             <div class="flex flex-col gap-2 sm:flex-row sm:items-center">
                                                 <TextInput id="tag-vlan" v-model="tagForm.vlan_id" type="number" min="1" max="4094" required class="w-full tabular-nums sm:w-48" :placeholder="$t('cdataport.add_tag_placeholder')" />
-                                                <PrimaryButton type="submit" :disabled="tagForm.processing || !tagForm.vlan_id">
+                                                <PrimaryButton v-device-write type="submit" :disabled="tagForm.processing || !tagForm.vlan_id">
                                                     <Plus class="mr-2 h-4 w-4" />
                                                     {{ tagForm.processing ? $t('cdatavlan.submitting') : $t('cdataport.add_tag') }}
                                                 </PrimaryButton>

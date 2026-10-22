@@ -29,7 +29,8 @@ Nostek-NMSOLT — STANDALONE NETWORK PLATFORM / API PROVIDER
 |   |           hourly aggregation stall after >48 h polling gap fixed
 |   +-- C [MEASURED, NOT ADOPTED] onu_state read model 25 % slower than the snapshot
 |   |       path (10k/51k ONUs, PostgreSQL); dropped, numbers in NMS-07-PERFORMANCE.md
-|   +-- D [PENDING] UI journeys, stale/partial/permission states, write-gate visibility
+|   +-- D [IN PROGRESS] D-1 write gate visible (banner, request guard, 56 locked controls,
+|   |       browser-checked; PR pending); D-2 stale/partial/permission states next
 |   +-- E [IN PROGRESS] ONU list/search measured (4.5k/10k/51k); E2 server-side ONU list
 |           paging (with D); alarm/optical/queue/poller open
 +-- NMS-08 [BLOCKED] API v1 read-only + OpenAPI

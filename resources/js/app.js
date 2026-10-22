@@ -4,8 +4,10 @@ import './bootstrap';
 import { createInertiaApp, router } from '@inertiajs/vue3';
 import { resolvePageComponent } from 'laravel-vite-plugin/inertia-helpers';
 import { createApp, h } from 'vue';
+import axios from 'axios';
 import { ZiggyVue } from '../../vendor/tightenco/ziggy';
 import { i18n, setI18nLocale } from './i18n';
+import { currentDeviceWriteGate, deviceWriteDirective, installDeviceWriteGuard, setDeviceWriteGate } from './lib/deviceWrites';
 
 const appName = import.meta.env.VITE_APP_NAME || 'Laravel';
 const chunkReloadKey = 'nostek-nmsolt:chunk-reload-at';
@@ -49,10 +51,22 @@ createInertiaApp({
             if (locale) setI18nLocale(locale);
         });
 
+        // NMS-07-D: requests the device write boundary would refuse stop here with a toast.
+        setDeviceWriteGate(props.initialPage.props.device_writes);
+        router.on('navigate', (event) => setDeviceWriteGate(event.detail.page?.props?.device_writes));
+        installDeviceWriteGuard({
+            router,
+            axios,
+            getGate: currentDeviceWriteGate,
+            message: () => i18n.global.t('shell.device_writes_blocked'),
+            notify: (message) => window.dispatchEvent(new CustomEvent('nos:toast', { detail: { type: 'error', message } })),
+        });
+
         return createApp({ render: () => h(App, props) })
             .use(plugin)
             .use(ZiggyVue)
             .use(i18n)
+            .directive('device-write', deviceWriteDirective(() => i18n.global.t('shell.device_writes_locked')))
             .mount(el);
     },
     progress: {

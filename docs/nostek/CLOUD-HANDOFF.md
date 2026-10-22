@@ -90,8 +90,8 @@ justify migration. Preserve Nostek-NMSOLT/Nostek-NMS, nos-* namespace,
 cmd/nos-snmp-poller, bin/nos-snmp-poller and required MIT LICENSE attribution.
 
 Continue NMS-07: check the A (unified package), B (data growth) and C/E (ONU read path,
-step/nms-07-c-perf-matrix) and B2 (daily RX rollup, step/nms-07-b2-rx-daily) PRs first.
-Then D UI journeys,
+step/nms-07-c-perf-matrix), B2 (daily RX rollup, step/nms-07-b2-rx-daily) and D-1
+(write-gate visibility, step/nms-07-d-ui-journey) PRs first. Then D-2 UI journeys,
 stale/partial/unavailable/permission states, write-gate visibility, E2 server-side paging of
 the ONU monitor/API list, and the rest of E (alarm/optical/queue/poller/retention), measured
 with tests/perf/run-onu-list-bench.sh style harnesses. The onu_state table was measured

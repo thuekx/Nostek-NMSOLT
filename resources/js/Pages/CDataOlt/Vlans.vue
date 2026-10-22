@@ -159,7 +159,7 @@ const fmt = (v) => formatDateTime(v);
                             {{ $t('common.back') }}
                         </SecondaryButton>
                     </Link>
-                    <SecondaryButton v-if="canSaveConfig" type="button" :disabled="saving" @click="saveConfig">
+                    <SecondaryButton v-if="canSaveConfig" type="button" :disabled="saving" v-device-write @click="saveConfig">
                         <Save class="mr-2 h-4 w-4" :class="{ 'animate-pulse': saving }" />
                         {{ $t('cdatavlan.save_config') }}
                     </SecondaryButton>
@@ -234,7 +234,7 @@ const fmt = (v) => formatDateTime(v);
                                         <InputError class="mt-1" :message="form.errors.description" />
                                     </div>
                                     <div class="md:pt-6">
-                                        <PrimaryButton type="submit" class="w-full justify-center md:w-auto" :disabled="form.processing || !form.vlan_id">
+                                        <PrimaryButton v-device-write type="submit" class="w-full justify-center md:w-auto" :disabled="form.processing || !form.vlan_id">
                                             <Plus class="mr-2 h-4 w-4" />
                                             {{ form.processing ? $t('cdatavlan.submitting') : $t('cdatavlan.submit') }}
                                         </PrimaryButton>

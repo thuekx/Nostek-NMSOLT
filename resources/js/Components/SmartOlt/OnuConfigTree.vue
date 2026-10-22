@@ -509,7 +509,7 @@ onUnmounted(() => { clearTimeout(previewTimer); clearTimeout(flashTimer); });
                                         </div>
                                         <div v-if="canWrite && !locked(row)" class="flex gap-2">
                                             <IconButton variant="primary" :title="$t('onucfg.action_edit')" :disabled="busy" @click="openEdit(index)"><Pencil class="h-4 w-4" /></IconButton>
-                                            <IconButton variant="danger" :title="$t('onucfg.action_delete')" :disabled="busy" @click="removeRow(index)"><Trash2 class="h-4 w-4" /></IconButton>
+                                            <IconButton variant="danger" :title="$t('onucfg.action_delete')" :disabled="busy" v-device-write @click="removeRow(index)"><Trash2 class="h-4 w-4" /></IconButton>
                                         </div>
                                     </div>
                                     <div class="nos-mobile-fields">
@@ -583,7 +583,7 @@ onUnmounted(() => { clearTimeout(previewTimer); clearTimeout(flashTimer); });
                             <pre data-theme="dark" class="nos-terminal overflow-x-auto rounded-lg bg-slate-950/70 px-4 py-3 font-mono text-xs leading-relaxed text-amber-200">{{ (baseline.profile_lines ?? []).join('\n') }}</pre>
                             <div class="rounded-lg border border-white/10 bg-canvas-3/40 px-4 py-3">
                                 <p class="text-slate-300">{{ $t('onucfg.unbind_explain', { onuId }) }}</p>
-                                <DangerButton v-if="canWrite" class="mt-3" type="button" :disabled="busy" @click="unbindProfile">
+                                <DangerButton v-if="canWrite" class="mt-3" type="button" :disabled="busy" v-device-write @click="unbindProfile">
                                     <RefreshCw v-if="unbinding" class="h-4 w-4 animate-spin" />
                                     <Unlock v-else class="h-4 w-4" />
                                     {{ unbinding ? $t('onucfg.unbinding') : $t('onucfg.unbind_button') }}
@@ -729,7 +729,7 @@ onUnmounted(() => { clearTimeout(previewTimer); clearTimeout(flashTimer); });
             <footer class="flex flex-col-reverse gap-2 border-t border-white/10 px-6 py-4 sm:flex-row sm:items-center sm:justify-end sm:gap-3">
                 <p class="text-xs text-slate-500 sm:mr-auto sm:max-w-[16rem]">{{ $t('onucfg.dialog_note') }}</p>
                 <SecondaryButton type="button" size="sm" class="whitespace-nowrap" :disabled="busy" @click="closeDialog">{{ $t('common.cancel') }}</SecondaryButton>
-                <PrimaryButton type="submit" size="sm" class="whitespace-nowrap" :disabled="busy || preview.loading || preview.conflicts.length > 0 || !preview.script">
+                <PrimaryButton v-device-write type="submit" size="sm" class="whitespace-nowrap" :disabled="busy || preview.loading || preview.conflicts.length > 0 || !preview.script">
                     <RefreshCw v-if="busy" class="h-4 w-4 animate-spin" />
                     <Check v-else class="h-4 w-4" />
                     {{ busy ? $t('onucfg.sending') : $t('onucfg.ok_send') }}

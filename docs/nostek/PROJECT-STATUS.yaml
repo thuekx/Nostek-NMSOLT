@@ -4,7 +4,7 @@ updated_at: "2026-10-22"
 source_of_truth:
   repo: https://github.com/thuekx/Nostek-NMSOLT
   default_branch: main
-  checkpoint_main_sha: c639f1277e7b37bcd5aee69d7ec58634758fa984
+  checkpoint_main_sha: f43baa3fa0f4959b8513011e01e79a6db8509f51
   baseline_sha: 24332a2b4144cff03f04f64e4711ce7938d992ae
   nms06_completion:
     pr: https://github.com/thuekx/Nostek-NMSOLT/pull/18
@@ -46,6 +46,7 @@ latest_evidence:
     status: IN_PROGRESS
     objective: "Standardize Nostek-NMSOLT/Nostek-NMS identity and nos-* namespace, then stabilize packaging, functions, UI and performance with regression evidence."
     safety: "Source and isolated staging only; no production, Caddy, Maung repository or device changes."
+    identity_cleanup: "PR #21 head 6bc53a3 passed run 39770297399 and merged as f43baa3; canonical Nostek-NMSOLT/Nostek-NMS and nos-* namespace enforced."
   NMS-08:
     status: BLOCKED
     objective: "Versioned read-only API v1 and OpenAPI with stable IDs, freshness, pagination, auth scopes, redaction, rate limits and contract tests."
@@ -72,8 +73,8 @@ environment:
   genieacs_lab: ACTIVE_VERIFIED
   live_olt_write: PROHIBITED_WITHOUT_APPROVAL
 next_action:
-  id: NMS-07-IDENTITY-CLEANUP
-  instruction: "Finish the nos-* namespace and nos-snmp-poller standardization, preserve LICENSE attribution, pass exact-head CI, then continue unified GenieACS packaging and the feature/performance matrix."
+  id: NMS-07-UNIFIED-GENIEACS-PACKAGE
+  instruction: "Build and test the unified full package for app/PostgreSQL/Redis plus private GenieACS/MongoDB, then continue the feature/performance matrix. Preserve LICENSE attribution and keep device writes disabled."
   owner: "executor"
   approval_required: false
 references:

@@ -137,6 +137,7 @@ scenario_with_acs() {
     expect_line acs-status '^RESULT acs_nbi_from_app=PASS'
     expect_line acs-status '^RESULT device_writes=PASS'
     expect_line acs-status '^RESULT process_worker=PASS'
+    expect_line acs-status '^RESULT process_poll-worker=PASS 2 RUNNING'
 
     # Data lands on the bind mounts, not in Docker volumes.
     # Database directories belong to container users (mode 0700): look through a container.

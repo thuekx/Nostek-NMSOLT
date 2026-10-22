@@ -115,12 +115,17 @@ MongoDB auth, GenieACS secrets out of argv, healthchecks, limits, digest pins,
 runs in CI job `ops-integration`. Details: [NMS-07-UNIFIED-PACKAGE.md](NMS-07-UNIFIED-PACKAGE.md).
 The PR needs exact-head CI and owner merge. NMS-07 stays IN_PROGRESS.
 
+## NMS-07-B data growth (2026-10-22)
+
+Branch `step/nms-07-b-data-growth` (on top of NMS-07-A): `history:prune` (daily 03:30),
+duplicate `onu_rx_hourly` index dropped, `PollOltJob` on queue `polling` with a dedicated
+worker pool. Details: [NMS-07-DATA-GROWTH.md](NMS-07-DATA-GROWTH.md).
+
 ## Exact next action
 
-Refresh GitHub. If the NMS-07-A PR is open, check its exact-head CI; if merged, continue
-NMS-07-B (retention for polling/alarm/audit/config-backup tables, duplicate RX index,
-separate poll worker pool), then C (`onu_state` table), D (UI journey and write-gate
-audit), E (performance matrix on synthetic data). Do not modify the retained LICENSE
+Refresh GitHub. Check the NMS-07-A and NMS-07-B PRs (exact-head CI, owner merge). Then
+continue NMS-07-C (`onu_state` table), B2 (daily RX rollup), D (UI journey and
+write-gate audit), E (performance matrix on synthetic data). Do not modify the retained LICENSE
 attribution.
 
 For cross-device continuation, use the post-merge prompt in [CLOUD-HANDOFF.md](CLOUD-HANDOFF.md). PR #20 search fixes are already in main; do not recreate them.

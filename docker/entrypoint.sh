@@ -111,5 +111,16 @@ php artisan optimize
 # 7. Ownership akhir + jalankan semua proses
 # ---------------------------------------------------------------------------
 chown -R www-data:www-data storage bootstrap/cache
+# Poll worker pool (NMS-07-B): supervisord reads these through %(ENV_...)s.
+NMSOLT_POLL_QUEUE="${NMSOLT_POLL_QUEUE:-polling}"
+case "${NMSOLT_POLL_QUEUE}" in
+  *[!a-z0-9_-]*|"") log "NMSOLT_POLL_QUEUE tidak valid — pakai 'polling'"; NMSOLT_POLL_QUEUE=polling ;;
+esac
+NMSOLT_POLL_WORKERS="${NMSOLT_POLL_WORKERS:-2}"
+case "${NMSOLT_POLL_WORKERS}" in
+  [1-8]) ;;
+  *) log "NMSOLT_POLL_WORKERS harus 1-8 — pakai 2"; NMSOLT_POLL_WORKERS=2 ;;
+esac
+export NMSOLT_POLL_QUEUE NMSOLT_POLL_WORKERS
 log "Siap — menyalakan php-fpm, nginx, worker, scheduler, telnet-proxy"
 exec supervisord -n -c /etc/supervisor/supervisord.conf

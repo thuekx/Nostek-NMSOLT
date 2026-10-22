@@ -23,7 +23,8 @@ Nostek-NMSOLT — STANDALONE NETWORK PLATFORM / API PROVIDER
 |   +-- A [SOURCE PASS, PR pending] unified package core/with-acs + platform overlay,
 |   |       nmsolt-ops.sh (preflight/status/backup/restore/upgrade/rollback), checks.json;
 |   |       workspace ops integration 58/58 (real PG/Redis/Mongo/GenieACS, stand-in app)
-|   +-- B [PENDING] retention, duplicate RX index, separate poll worker pool
+|   +-- B [SOURCE PASS, PR pending] history:prune retention, duplicate RX index dropped,
+|   |       poll queue + worker pool; B2 daily RX rollup (3 y) open
 |   +-- C [PENDING] onu_state table instead of per-OLT JSON snapshot for lists
 |   +-- D [PENDING] UI journeys, stale/partial/permission states, write-gate visibility
 |   +-- E [PENDING] measured ONU/alarm/search/optical/queue/poller performance

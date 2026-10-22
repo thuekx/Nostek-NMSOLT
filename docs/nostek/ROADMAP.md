@@ -72,6 +72,10 @@ On every session start: retrieve this file, status YAML and HANDOFF; validate Gi
 
 Branch `step/nms-07-a-unified-package`: core/with-acs/platform Compose, `scripts/nostek/nmsolt-ops.sh`, `monitor/checks.json` and the ops integration test (workspace 58/58 PASS with real PostgreSQL/Redis/MongoDB/GenieACS and a stand-in app). NMS-07 stays IN_PROGRESS until work packages B–E and the whole-phase evidence exist. See [NMS-07-UNIFIED-PACKAGE.md](NMS-07-UNIFIED-PACKAGE.md).
 
+## NMS-07-B data growth checkpoint
+
+Branch `step/nms-07-b-data-growth`: retention command `history:prune`, duplicate RX index dropped, dedicated poll worker pool. See [NMS-07-DATA-GROWTH.md](NMS-07-DATA-GROWTH.md).
+
 ## Post-merge search checkpoint
 
 PR #20 merged as `1a38c6b309a84f07db89398f2f26d727d92c3128` after owner approval.

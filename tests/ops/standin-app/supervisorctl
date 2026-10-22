@@ -1,4 +1,6 @@
 #!/bin/sh
 # Stand-in supervisorctl for the ops integration test (the real image runs supervisord).
+printf 'nostek-nmsolt-poll-worker:nostek-nmsolt-poll-worker_00 RUNNING   pid 13, uptime 0:01:00\n'
+printf 'nostek-nmsolt-poll-worker:nostek-nmsolt-poll-worker_01 RUNNING   pid 14, uptime 0:01:00\n'
 printf 'nostek-nmsolt-scheduler          RUNNING   pid 11, uptime 0:01:00\n'
 printf 'nostek-nmsolt-worker             RUNNING   pid 12, uptime 0:01:00\n'

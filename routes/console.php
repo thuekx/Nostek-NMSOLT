@@ -17,6 +17,9 @@ Schedule::command('optical:prune-rx')->dailyAt('03:15')->withoutOverlapping();
 // Sesi aplikasi yang kedaluwarsa (sanctum.expiration) dibuang — token push FCM
 // yang terkait ikut terhapus lewat FK cascade, jadi ponselnya berhenti dikirimi alarm.
 Schedule::command('sanctum:prune-expired --hours=24')->dailyAt('03:40');
+// Retensi tabel yang tumbuh tanpa batas (polling/alarm cleared/audit/backup config).
+// 03:30: setelah prune RX, sebelum dump backup platform (04:00) dan restic (04:30).
+Schedule::command('history:prune')->dailyAt('03:30')->withoutOverlapping();
 Schedule::command('olts:backup-config')->dailyAt('02:30')->withoutOverlapping();
 // Pencocokan device GenieACS ke posisi ONU. Sengaja 15 menit, BUKAN tiap menit:
 // peta ONU tidak berubah secepat itu dan server ini sudah sibuk oleh poller SNMP.

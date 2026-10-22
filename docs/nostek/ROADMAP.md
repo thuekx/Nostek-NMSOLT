@@ -76,6 +76,10 @@ Branch `step/nms-07-a-unified-package`: core/with-acs/platform Compose, `scripts
 
 Branch `step/nms-07-b-data-growth`: retention command `history:prune`, duplicate RX index dropped, dedicated poll worker pool. See [NMS-07-DATA-GROWTH.md](NMS-07-DATA-GROWTH.md).
 
+## NMS-07-C/E ONU read path checkpoint
+
+Branch `step/nms-07-c-perf-matrix`: `onu_state` table measured and not adopted (25 % slower than the snapshot path); performance harness `tests/perf/run-onu-list-bench.sh`; next is E2 server-side ONU list paging with D. See [NMS-07-PERFORMANCE.md](NMS-07-PERFORMANCE.md).
+
 ## Post-merge search checkpoint
 
 PR #20 merged as `1a38c6b309a84f07db89398f2f26d727d92c3128` after owner approval.

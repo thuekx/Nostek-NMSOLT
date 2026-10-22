@@ -25,9 +25,11 @@ Nostek-NMSOLT — STANDALONE NETWORK PLATFORM / API PROVIDER
 |   |       workspace ops integration 58/58 (real PG/Redis/Mongo/GenieACS, stand-in app)
 |   +-- B [SOURCE PASS, PR pending] history:prune retention, duplicate RX index dropped,
 |   |       poll queue + worker pool; B2 daily RX rollup (3 y) open
-|   +-- C [PENDING] onu_state table instead of per-OLT JSON snapshot for lists
+|   +-- C [MEASURED, NOT ADOPTED] onu_state read model 25 % slower than the snapshot
+|   |       path (10k/51k ONUs, PostgreSQL); dropped, numbers in NMS-07-PERFORMANCE.md
 |   +-- D [PENDING] UI journeys, stale/partial/permission states, write-gate visibility
-|   +-- E [PENDING] measured ONU/alarm/search/optical/queue/poller performance
+|   +-- E [IN PROGRESS] ONU list/search measured (4.5k/10k/51k); E2 server-side ONU list
+|           paging (with D); alarm/optical/queue/poller open
 +-- NMS-08 [BLOCKED] API v1 read-only + OpenAPI
 |   +-- stable IDs, freshness, pagination, scopes, redaction, rate limits
 +-- NMS-09 [BLOCKED] Maung /nosteknmsolt thin consumer

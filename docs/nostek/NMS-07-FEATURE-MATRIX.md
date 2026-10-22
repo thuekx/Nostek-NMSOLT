@@ -17,7 +17,7 @@ this inventory does not claim that every user journey works.
 | --- | --- | --- |
 | Login, registration, profile, roles | Auth/*, RoleAccessTest, PartnerRoleTest, OperatorOltScopeTest | Existing tests; browser journeys still need isolated verification |
 | Dashboard/search | DashboardTest, ApiV1ReadExtrasTest, GlobalSearchReadinessTest | Search now fetches telemetry in batches; MAC-only navigation fixed; invalid query shapes rejected |
-| ZTE inventory, ports, ONU detail/history | SmartOltInventoryTest, SmartOltGponPortsPageTest, OnuRxHistoryTest | NMS-06 historical runtime evidence; page/performance audit still open |
+| ZTE inventory, ports, ONU detail/history | SmartOltInventoryTest, SmartOltGponPortsPageTest, OnuRxHistoryTest, tests/perf/run-onu-list-bench.sh | NMS-06 historical runtime evidence; ONU list/search measured at 4.5k/10k/51k ONUs (NMS-07-PERFORMANCE.md); whole-list response needs server-side paging (E2); page audit still open |
 | C-Data and HiOSO | CDataOltInventoryTest, CDataGponPortPagesTest, HiosoOltTest | Fixture evidence only for models not in approved runtime evidence |
 | ODP/map/photos | OdpTest, OnuMapPageTest, OdpPhotoTest | Tenant isolation and stale/missing targets need journey matrix |
 | Alarms/reports/notifications | AlarmEngineTest, AlarmNotificationNavigationTest, ReportTest | Large alarm page and export query budgets remain unmeasured |

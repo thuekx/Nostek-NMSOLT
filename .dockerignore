@@ -54,3 +54,7 @@ scripts/
 **/backups/
 mobile/android/key.properties
 mobile/android/app/google-services.json
+
+# nmsolt-ops.sh state and local data
+.nmsolt-state/
+data/

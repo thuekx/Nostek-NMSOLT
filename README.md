@@ -20,7 +20,7 @@ No new VM is required by design, subject to capacity measurements.
 
 - Rebranded application identity and package/service names from initial source import.
 - Docker Compose baseline with PostgreSQL and Redis; web port binds to loopback for staging.
-- Optional `compose.acs.yaml` **lab-only** draft for GenieACS 1.2.16 with MongoDB. Not included in the base Compose deployment.
+- `compose.acs.yaml` is the **with-acs** profile (GenieACS 1.2.16 + MongoDB with authentication, private network), the recommended full product next to the core `docker-compose.yml`; `compose.platform.yaml` moves data to bind mounts. Operate it with `scripts/nostek/nmsolt-ops.sh` ([NMS-07 unified package](docs/nostek/NMS-07-UNIFIED-PACKAGE.md)).
 - Original copyright notice preserved in `LICENSE` as required by MIT terms.
 - Maung SSO, `/nmsolt` reverse-proxy routing, Nostek tool registry, SNMPv3, write-approval broker and production hardening are **not implemented in this baseline**.
 - Demonstration screenshots and PDF user guides have been removed. Android/mobile launcher assets remain excluded from the web Docker build and require a separate identity/legal review before APK release.

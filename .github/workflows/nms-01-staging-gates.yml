@@ -20,6 +20,8 @@ jobs:
     env:
       DB_PASSWORD: ci-placeholder-not-real-credentials
       GENIEACS_UI_JWT_SECRET: ci-placeholder-not-real-credentials
+      MONGO_ACS_ROOT_PASSWORD: ci-placeholder-not-real-credentials
+      MONGO_ACS_APP_PASSWORD: ci-placeholder-not-real-credentials
     steps:
       - uses: actions/checkout@v4
       - name: Validate NMS-03 read-only collector syntax
@@ -29,6 +31,8 @@ jobs:
       - name: Validate authorized NMS-05 GenieACS runner syntax
         run: bash -n scripts/nostek/deploy-maung-genieacs-lab.sh
 
+      - name: Lint NMS-07 operations tool and its integration test
+        run: shellcheck -S warning scripts/nostek/nmsolt-ops.sh tests/ops/integration.sh
       - name: Enforce Nostek-NMSOLT identity and nos namespace
         run: python3 scripts/nostek/validate-brand-namespace.py
       - name: Enforce NMS-05 Maung host identity guard
@@ -60,6 +64,23 @@ jobs:
             python3 scripts/nostek/validate-staging-compose.py --profile acs --approved-cwmp-host-ip 192.168.48.99
           ACS_CWMP_BIND_IP=192.168.48.99 docker compose -f docker-compose.yml -f compose.acs.yaml config --format json |
             python3 scripts/nostek/validate-genieacs-lab.py --dockerfile docker/genieacs/Dockerfile --compose-source compose.acs.yaml --approved-cwmp-host-ip 192.168.48.99
+      - name: NMS-07 unified package config-check (core, with-acs, platform overlay)
+        shell: bash
+        run: |
+          set -euo pipefail
+          umask 077
+          env_file="$(mktemp)"
+          {
+            cat .env.docker.example
+            printf 'DB_PASSWORD=%s\nGENIEACS_UI_JWT_SECRET=%s\n' "${DB_PASSWORD}" "${GENIEACS_UI_JWT_SECRET}"
+            printf 'MONGO_ACS_ROOT_PASSWORD=%s\nMONGO_ACS_APP_PASSWORD=%s\n' "${MONGO_ACS_ROOT_PASSWORD}" "${MONGO_ACS_APP_PASSWORD}"
+            printf 'NMSOLT_DATA_DIR=/srv/data/nmsolt\n'
+          } > "${env_file}"
+          ops=scripts/nostek/nmsolt-ops.sh
+          bash "${ops}" --env-file "${env_file}" --profile core config-check
+          bash "${ops}" --env-file "${env_file}" --profile with-acs config-check
+          bash "${ops}" --env-file "${env_file}" --profile with-acs --platform config-check
+          python3 -c 'import json; d=json.load(open("monitor/checks.json")); assert d["schema"] == "nostek-checks/1" and d["app"] == "nostek-nmsolt"; print("monitor/checks.json: PASS")'
       - name: Ensure loopback-only publishing in base stack
         shell: bash
         run: |
@@ -133,5 +154,16 @@ jobs:
         run: docker build --tag nostek-nmsolt:ci --file Dockerfile .
       - name: Build GenieACS lab image
         run: docker build --tag nostek-genieacs:ci --file docker/genieacs/Dockerfile .
+
+  ops-integration:
+    name: NMS-07 ops integration (real PostgreSQL/Redis/MongoDB/GenieACS, stand-in app)
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+      - name: Build GenieACS image
+        run: docker build --tag nmsolt-genieacs:1.2.16-local --file docker/genieacs/Dockerfile .
+      - name: Run nmsolt-ops integration test (secrets generated at run time)
+        run: bash tests/ops/integration.sh
 
 # GitHub-hosted ephemeral runners only; no registry push or production access.

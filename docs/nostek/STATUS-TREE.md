@@ -20,18 +20,25 @@ Nostek-NMSOLT — STANDALONE NETWORK PLATFORM / API PROVIDER
 |   +-- canonical identity: Nostek-NMSOLT; short name: Nostek-NMS
 |   +-- PASS: PR #21 / run 39770297399 / merge f43baa3; nos-* identity enforced
 |   +-- PR #20 MERGED: 1a38c6b; exact-head fc5ce840 / CI 39773898154 PASS
-|   +-- audit functions, screens, read paths and performance
-|   +-- repair misleading/broken behavior and add regression evidence
+|   +-- A [SOURCE PASS, PR pending] unified package core/with-acs + platform overlay,
+|   |       nmsolt-ops.sh (preflight/status/backup/restore/upgrade/rollback), checks.json;
+|   |       workspace ops integration 58/58 (real PG/Redis/Mongo/GenieACS, stand-in app)
+|   +-- B [PENDING] retention, duplicate RX index, separate poll worker pool
+|   +-- C [PENDING] onu_state table instead of per-OLT JSON snapshot for lists
+|   +-- D [PENDING] UI journeys, stale/partial/permission states, write-gate visibility
+|   +-- E [PENDING] measured ONU/alarm/search/optical/queue/poller performance
 +-- NMS-08 [BLOCKED] API v1 read-only + OpenAPI
 |   +-- stable IDs, freshness, pagination, scopes, redaction, rate limits
 +-- NMS-09 [BLOCKED] Maung /nosteknmsolt thin consumer
 |   +-- API settings, summaries, alarms, search and quick customer/ONU detail
-+-- NMS-10 [BLOCKED] Nostek-AI Apps/tool adapter
-|   +-- allow-listed read tools over NMSOLT API; no direct DB/device credentials
++-- NMS-10 [BLOCKED] Nostek-AI tool adapter (Nostek-AI track NET-1-5)
+|   +-- host broker + stdio MCP nms_* (owner-only) over API v1; no direct DB/device credentials
 +-- NMS-11 [BLOCKED] High-risk write governance
 |   +-- explicit preview, approval, single-use execution, verification and audit
 +-- NMS-12 [BLOCKED] Release and production readiness
 |
++-- RUNTIME [DECIDED] nostek-platform via Nostek-AI track NET-1 (install = NET-1-2 package,
+|   wraps nmsolt-ops.sh); Maung staging retired after migration
 +-- MOBILE [DEFERRED] Not distributed
 +-- PRODUCTION/DEVICE WRITES [GATED] Not authorized
 ```
@@ -60,4 +67,5 @@ safe source-level work; NMS-08 through NMS-12 remain dependency- or approval-gat
 PR #20 is merged as `1a38c6b309a84f07db89398f2f26d727d92c3128` after owner approval.
 All five CI jobs passed on `fc5ce840bcc548479a308e1de16fc292f1d21e49` in run
 39773898154. Merge tree matches the tested head; no separate merge-SHA run is
-claimed. Further NMS-07 implementation is PAUSED_BY_OWNER; documentation only.
+claimed. NMS-07 implementation resumed 2026-10-22 (owner prompt); NMS-07-A is on
+branch `step/nms-07-a-unified-package`, see [NMS-07-UNIFIED-PACKAGE.md](NMS-07-UNIFIED-PACKAGE.md).

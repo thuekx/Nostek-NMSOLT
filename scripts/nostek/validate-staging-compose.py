@@ -28,15 +28,30 @@ def volume_sources(service: dict[str, Any]) -> set[str]:
     return result
 
 
+DIGEST_SUFFIX = "@sha256:"
+APP_FOREIGN_SECRETS = ("MONGO_ACS_ROOT_PASSWORD", "MONGO_ACS_APP_PASSWORD", "GENIEACS_UI_JWT_SECRET")
+DATA_VOLUMES = {
+    "pgdata": "pg",
+    "redisdata": "redis",
+    "app_storage": "app-storage",
+    "nmsolt_mongo_data": "mongo",
+}
+
+
 def is_false(value: Any) -> bool:
     return str(value).strip().lower() in {"", "0", "false", "no", "off", "none"}
 
 
 def main() -> int:
     parser = argparse.ArgumentParser()
-    parser.add_argument("--profile", choices=("base", "acs"), required=True)
+    parser.add_argument("--profile", choices=("base", "acs", "core", "with-acs"), required=True)
     parser.add_argument("--approved-cwmp-host-ip")
+    parser.add_argument(
+        "--data-dir",
+        help="platform overlay: every data volume must be a bind mount under this directory",
+    )
     args = parser.parse_args()
+    args.profile = {"core": "base", "with-acs": "acs"}.get(args.profile, args.profile)
 
     try:
         config = json.load(sys.stdin)
@@ -61,6 +76,27 @@ def main() -> int:
             continue
         if "healthcheck" not in services[name]:
             fail(errors, f"service {name} has no healthcheck")
+
+    built_images = {
+        str(service.get("image"))
+        for service in services.values()
+        if isinstance(service, dict) and "build" in service and service.get("image")
+    }
+    for name, service in sorted(services.items()):
+        if not isinstance(service, dict):
+            continue
+        if "healthcheck" not in service:
+            fail(errors, f"service {name} has no healthcheck")
+        if not service.get("mem_limit") or not service.get("cpus"):
+            fail(errors, f"service {name} has no cpus/mem_limit resource limit")
+        image = str(service.get("image", ""))
+        if "build" not in service and image not in built_images and DIGEST_SUFFIX not in image:
+            fail(errors, f"service {name} image {image or '<none>'} is not pinned by digest")
+        command = service.get("command") or []
+        if isinstance(command, list) and any(
+            "secret" in str(arg).lower() or "password" in str(arg).lower() for arg in command
+        ):
+            fail(errors, f"service {name} passes a secret-looking command argument")
 
     allowed_publishers = {"app"}
     if args.profile == "acs":
@@ -99,6 +135,9 @@ def main() -> int:
             fail(errors, "APP_DEBUG must remain false in staging")
         if environment.get("QUEUE_CONNECTION") != "redis":
             fail(errors, "QUEUE_CONNECTION must use redis")
+        for secret in APP_FOREIGN_SECRETS:
+            if str(environment.get(secret, "")):
+                fail(errors, f"app must not receive {secret}")
 
     expected_mounts = {
         "app": "app_storage",
@@ -120,6 +159,20 @@ def main() -> int:
                 fail(errors, f"named volume {name} is not declared")
             elif isinstance(definition, dict) and definition.get("external"):
                 fail(errors, f"named volume {name} must not be external")
+
+    if args.data_dir:
+        root = args.data_dir.rstrip("/")
+        volumes_map = declared_volumes if isinstance(declared_volumes, dict) else {}
+        wanted = dict(DATA_VOLUMES)
+        if args.profile != "acs":
+            wanted.pop("nmsolt_mongo_data")
+        for name, sub in sorted(wanted.items()):
+            definition = volumes_map.get(name) or {}
+            opts = definition.get("driver_opts", {}) if isinstance(definition, dict) else {}
+            if not isinstance(opts, dict) or opts.get("type") != "none" or opts.get("o") != "bind":
+                fail(errors, f"volume {name} is not a bind mount (platform overlay missing)")
+            elif opts.get("device") != f"{root}/{sub}":
+                fail(errors, f"volume {name} binds {opts.get('device')}; expected {root}/{sub}")
 
     if args.profile == "acs":
         acs_services = {"mongo_acs", "genieacs-cwmp", "genieacs-nbi", "genieacs-fs", "genieacs-ui"}

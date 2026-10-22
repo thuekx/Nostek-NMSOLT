@@ -1,7 +1,17 @@
-# OPTIONAL lab-only ACS overlay, NOT included in default docker compose.
-# Run only after reading docs/nostek/GENIEACS-STAGING.md and setting secrets.
-# UI binds to loopback for SSH-tunnel access. CWMP defaults to loopback and may
-# bind one explicitly approved private host address for a bounded lab path.
+# Nostek-NMSOLT "with-acs" profile (NMS-07 unified package, recommended full product).
+#
+#   docker compose -f docker-compose.yml -f compose.acs.yaml ...
+#   (or: scripts/nostek/nmsolt-ops.sh --profile with-acs <command>)
+#
+# GenieACS 1.2.16 + MongoDB 7.0 run as separate containers on the internal
+# network acs_private. MongoDB, NBI and FS are never published. The GenieACS UI
+# binds to loopback only (SSH tunnel). CWMP binds to loopback unless
+# ACS_CWMP_BIND_IP names one explicitly approved management address.
+# MongoDB runs with authentication: the root account (backup/restore only) and a
+# least-privilege "genieacs" account (readWrite on the genieacs database) are
+# created on first start by docker/mongo/init-genieacs-user.js. Secrets come from
+# the local .env through environment variables, never through command arguments.
+# In Settings, point the NMSOLT ACS/NBI URL at http://genieacs-nbi:7557.
 services:
   app:
     networks:
@@ -9,10 +19,18 @@ services:
       - acs_private
 
   mongo_acs:
-    image: mongo:7.0
+    image: mongo:7.0@sha256:c53852c00c23ca9f23fc39690350ffa9a80e3642fe8f96879726d8da0abe80a7
     restart: unless-stopped
+    command: ["mongod", "--auth", "--wiredTigerCacheSizeGB", "${MONGO_ACS_CACHE_GB:-0.25}"]
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: ${MONGO_ACS_ROOT_USERNAME:-nos_root}
+      MONGO_INITDB_ROOT_PASSWORD: ${MONGO_ACS_ROOT_PASSWORD:?set MONGO_ACS_ROOT_PASSWORD in local .env}
+      MONGO_INITDB_DATABASE: genieacs
+      MONGO_ACS_APP_USERNAME: ${MONGO_ACS_APP_USERNAME:-genieacs}
+      MONGO_ACS_APP_PASSWORD: ${MONGO_ACS_APP_PASSWORD:?set MONGO_ACS_APP_PASSWORD in local .env}
     volumes:
       - nmsolt_mongo_data:/data/db
+      - ./docker/mongo/init-genieacs-user.js:/docker-entrypoint-initdb.d/10-genieacs-user.js:ro
     networks:
       - acs_private
     healthcheck:
@@ -20,6 +38,10 @@ services:
       interval: 30s
       timeout: 10s
       retries: 5
+      start_period: 30s
+      start_interval: 5s
+    cpus: ${NMSOLT_MONGO_CPUS:-0.5}
+    mem_limit: ${NMSOLT_MONGO_MEM:-768m}
 
   genieacs-cwmp:
     build:
@@ -29,7 +51,8 @@ services:
     command: ["genieacs-cwmp"]
     restart: unless-stopped
     environment:
-      GENIEACS_MONGODB_CONNECTION_URL: mongodb://mongo_acs:27017/genieacs
+      GENIEACS_CWMP_INTERFACE: 0.0.0.0
+      GENIEACS_MONGODB_CONNECTION_URL: mongodb://${MONGO_ACS_APP_USERNAME:-genieacs}:${MONGO_ACS_APP_PASSWORD:?set MONGO_ACS_APP_PASSWORD in local .env}@mongo_acs:27017/genieacs?authSource=genieacs
     depends_on:
       mongo_acs: {condition: service_healthy}
     networks:
@@ -37,39 +60,70 @@ services:
       - default
     ports:
       - "${ACS_CWMP_BIND_IP:-127.0.0.1}:${ACS_CWMP_PORT:-17547}:7547"
+    healthcheck:
+      test: ["CMD", "node", "/usr/local/lib/nos-genieacs-health.js", "7547"]
+      interval: 30s
+      timeout: 5s
+      retries: 5
+      start_period: 30s
+      start_interval: 5s
+    cpus: ${NMSOLT_CWMP_CPUS:-0.5}
+    mem_limit: ${NMSOLT_CWMP_MEM:-384m}
 
   genieacs-nbi:
     image: nmsolt-genieacs:1.2.16-local
     command: ["genieacs-nbi"]
     restart: unless-stopped
     environment:
-      GENIEACS_MONGODB_CONNECTION_URL: mongodb://mongo_acs:27017/genieacs
+      GENIEACS_NBI_INTERFACE: 0.0.0.0
+      GENIEACS_MONGODB_CONNECTION_URL: mongodb://${MONGO_ACS_APP_USERNAME:-genieacs}:${MONGO_ACS_APP_PASSWORD:?set MONGO_ACS_APP_PASSWORD in local .env}@mongo_acs:27017/genieacs?authSource=genieacs
     depends_on:
       mongo_acs: {condition: service_healthy}
       genieacs-cwmp: {condition: service_started}
     networks:
       - acs_private
     # Intentionally NO published NBI port (7557).
+    healthcheck:
+      test: ["CMD", "node", "/usr/local/lib/nos-genieacs-health.js", "7557"]
+      interval: 30s
+      timeout: 5s
+      retries: 5
+      start_period: 30s
+      start_interval: 5s
+    cpus: ${NMSOLT_NBI_CPUS:-0.25}
+    mem_limit: ${NMSOLT_NBI_MEM:-256m}
 
   genieacs-fs:
     image: nmsolt-genieacs:1.2.16-local
     command: ["genieacs-fs"]
     restart: unless-stopped
     environment:
-      GENIEACS_MONGODB_CONNECTION_URL: mongodb://mongo_acs:27017/genieacs
+      GENIEACS_FS_INTERFACE: 0.0.0.0
+      GENIEACS_MONGODB_CONNECTION_URL: mongodb://${MONGO_ACS_APP_USERNAME:-genieacs}:${MONGO_ACS_APP_PASSWORD:?set MONGO_ACS_APP_PASSWORD in local .env}@mongo_acs:27017/genieacs?authSource=genieacs
     depends_on:
       mongo_acs: {condition: service_healthy}
       genieacs-cwmp: {condition: service_started}
     networks:
       - acs_private
     # Intentionally NO published FS port (7567).
+    healthcheck:
+      test: ["CMD", "node", "/usr/local/lib/nos-genieacs-health.js", "7567"]
+      interval: 30s
+      timeout: 5s
+      retries: 5
+      start_period: 30s
+      start_interval: 5s
+    cpus: ${NMSOLT_FS_CPUS:-0.1}
+    mem_limit: ${NMSOLT_FS_MEM:-128m}
 
   genieacs-ui:
     image: nmsolt-genieacs:1.2.16-local
-    command: ["genieacs-ui", "--ui-jwt-secret", "${GENIEACS_UI_JWT_SECRET:?set GENIEACS_UI_JWT_SECRET in local .env}"]
+    command: ["genieacs-ui"]
     restart: unless-stopped
     environment:
-      GENIEACS_MONGODB_CONNECTION_URL: mongodb://mongo_acs:27017/genieacs
+      GENIEACS_UI_INTERFACE: 0.0.0.0
+      GENIEACS_MONGODB_CONNECTION_URL: mongodb://${MONGO_ACS_APP_USERNAME:-genieacs}:${MONGO_ACS_APP_PASSWORD:?set MONGO_ACS_APP_PASSWORD in local .env}@mongo_acs:27017/genieacs?authSource=genieacs
+      GENIEACS_UI_JWT_SECRET: ${GENIEACS_UI_JWT_SECRET:?set GENIEACS_UI_JWT_SECRET in local .env}
     depends_on:
       mongo_acs: {condition: service_healthy}
       genieacs-nbi: {condition: service_started}
@@ -78,6 +132,15 @@ services:
       - default
     ports:
       - "127.0.0.1:${ACS_UI_PORT:-13000}:3000"
+    healthcheck:
+      test: ["CMD", "node", "/usr/local/lib/nos-genieacs-health.js", "3000"]
+      interval: 30s
+      timeout: 5s
+      retries: 5
+      start_period: 30s
+      start_interval: 5s
+    cpus: ${NMSOLT_UI_CPUS:-0.1}
+    mem_limit: ${NMSOLT_UI_MEM:-192m}
 
 networks:
   acs_private:

@@ -1,0 +1,8 @@
+{
+  "schema": "nostek-checks/1",
+  "app": "nostek-nmsolt",
+  "env": "staging",
+  "checks": [
+    {"id": "stack", "type": "compose", "expect": "healthy", "policy": "alert"}
+  ]
+}

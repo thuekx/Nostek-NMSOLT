@@ -67,6 +67,21 @@ credential retrieval, live OLT/ONT mutation or ACS write is authorized. Package
 tests must use rendered Compose validation, unit/feature tests and isolated
 synthetic fixtures until a separate runtime gate is approved.
 
+## NMS-07-A result (2026-10-22)
+
+Work package 1 (unified package contract) and the source half of work package 2
+(unified operations) are implemented on branch `step/nms-07-a-unified-package`:
+core/with-acs Compose, platform bind-mount overlay, MongoDB authentication, GenieACS
+secrets out of command arguments, healthchecks for all services, resource limits,
+digest-pinned images, `scripts/nostek/nmsolt-ops.sh` (config-check, preflight,
+init-data, start/stop, status, build, backup, verify-backup, restore, upgrade with
+automatic rollback, rollback) and `monitor/checks.json`. Workspace evidence: ops
+integration 58/58 with real PostgreSQL/Redis/MongoDB/GenieACS and a stand-in app.
+Defect found by the test: GenieACS listens on `::` by default and dies where Docker has
+no IPv6 (`bind EAFNOSUPPORT :::7557`); fixed with explicit `0.0.0.0` interfaces.
+Remaining: the real app image under the tool (first runtime = Nostek-AI NET-1-2) and
+work packages 3–5. See [NMS-07-UNIFIED-PACKAGE.md](NMS-07-UNIFIED-PACKAGE.md).
+
 ## Current conclusion
 
 NMS-07 remains **IN PROGRESS**. This audit establishes that the safest next
@@ -77,5 +92,5 @@ the functional/performance matrix. Nothing in this document marks NMS-07 VERIFIE
 
 PR #20 search fixes are now merged as `1a38c6b`; all five CI jobs passed on
 exact head `fc5ce840` in run `39773898154`. Identity cleanup remains complete.
-NMS-07 is still IN_PROGRESS; implementation after this merge is paused by owner.
-This documentation closeout does not implement unified packaging or validate runtime.
+NMS-07 is still IN_PROGRESS; implementation after that merge was paused by owner (resumed 2026-10-22).
+Implementation resumed 2026-10-22; NMS-07-A above does not validate a host runtime.

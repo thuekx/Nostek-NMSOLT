@@ -20,6 +20,11 @@ and freshness/staleness semantics. Require cursor pagination, bounded filters,
 service scopes, tenant/site isolation, field redaction, rate limits, consistent
 errors and an OpenAPI contract. Contract, auth-negative, pagination and stale-data
 tests are required. Legacy mutating endpoints are not part of this consumer API.
+Control Center conditions (Nostek-AI baseline v1, 2026-10-22): OLT rows carry `org_id`,
+`org_slug` and `site_key`; org/site context comes only from the server-verified token,
+never from request parameters; a token bound to site A reading an OLT of site B by a
+valid id returns 403/404 (negative contract test); vendor/support access follows the
+Control Center support contract (ADR-14).
 
 ## NMS-09 — Maung /nosteknmsolt thin consumer
 
@@ -31,9 +36,13 @@ Required evidence: consumer contract tests, scoped credentials, redaction,
 unavailable/stale states, tenant boundaries, performance budget and rollback.
 Caddy and Maung production remain separately approval-gated.
 
-## NMS-10 — Nostek-AI Apps/tool adapter
+## NMS-10 — Nostek-AI tool adapter
 
-Blocked on NMS-08. Expose only allow-listed, read-only tools backed by API v1.
+Blocked on NMS-08. Built in the Nostek-AI repo (track NET-1-5) as a host broker plus
+stdio MCP stub `nms_*` on agentic-ai; all `nms_*` tools are owner-only (owner decision
+NMS-AI-Q6 = B). Owner alerts come from Nostek-AI (Zubair) in the readable alert format;
+the NMSOLT Telegram bot stays off on the platform deployment. Expose only allow-listed,
+read-only tools backed by API v1.
 The adapter receives no raw database, admin, SSH, Telnet, SNMP-write or ACS-write
 credentials. Required evidence: tool schemas, least-privilege scopes, tenant and
 redaction negative tests, bounded output/pagination, rate limiting and audit

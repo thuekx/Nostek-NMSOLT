@@ -6,6 +6,15 @@
 #
 # Data (DB, Redis, storage/upload/log) tersimpan di named volume → aman antar restart.
 # Nilai yang bisa diubah user ada di file .env (host-side); lihat .env.docker.example.
+#
+# NMS-07 unified package: this file is the "core" profile. The recommended full
+# product adds compose.acs.yaml ("with-acs": GenieACS + MongoDB, private).
+# compose.platform.yaml moves every data volume to bind mounts under
+# NMSOLT_DATA_DIR (nostek-platform: /srv/data/nmsolt). Operate the stack with
+# scripts/nostek/nmsolt-ops.sh (config-check, preflight, status, backup,
+# restore, upgrade, rollback); see docs/nostek/NMS-07-UNIFIED-PACKAGE.md.
+# Third-party images are pinned by digest; resource limits default to the
+# "S" size (<= 2 OLT, <= 2k ONU) and are tunable in .env.
 
 name: ${COMPOSE_PROJECT_NAME:-nostek-nmsolt-lab}
 
@@ -14,7 +23,7 @@ services:
     build:
       context: .
       dockerfile: Dockerfile
-    image: ghcr.io/thuekx/nostek-nmsolt:${IMAGE_TAG:-local}
+    image: ${NMSOLT_IMAGE_REPO:-ghcr.io/thuekx/nostek-nmsolt}:${IMAGE_TAG:-local}
     restart: unless-stopped
     depends_on:
       db:
@@ -25,7 +34,7 @@ services:
       - "127.0.0.1:${APP_PORT:-18080}:80"
     # env_file membawa nilai tunable user (APP_URL, DB_*, ACS_*, ADMIN_*).
     env_file:
-      - .env
+      - ${NMSOLT_ENV_FILE:-.env}
     # environment menyetel config infrastruktur tetap (nama service jaringan compose,
     # driver redis, poller go) — menimpa nilai apa pun dari env_file.
     environment:
@@ -48,6 +57,11 @@ services:
       TELNET_PROXY_HOST: 127.0.0.1
       TELNET_PROXY_PORT: "6002"
       TELNET_PROXY_WS_URL: /telnet-ws
+      # The whole .env reaches the app through env_file; blank the secrets that
+      # belong to other containers so the app never holds them.
+      MONGO_ACS_ROOT_PASSWORD: ""
+      MONGO_ACS_APP_PASSWORD: ""
+      GENIEACS_UI_JWT_SECRET: ""
     volumes:
       - app_storage:/var/www/html/storage
     healthcheck:
@@ -56,9 +70,11 @@ services:
       timeout: 5s
       retries: 5
       start_period: 60s
+    cpus: ${NMSOLT_APP_CPUS:-1.5}
+    mem_limit: ${NMSOLT_APP_MEM:-1536m}
 
   db:
-    image: postgres:16-alpine
+    image: postgres:16-alpine@sha256:deb28ee471183cb0c303113dac9b2433c51eeeeb678def7af9a9ec5820367815
     restart: unless-stopped
     environment:
       POSTGRES_DB: ${DB_DATABASE:-nostek_nmsolt}
@@ -72,9 +88,12 @@ services:
       timeout: 5s
       retries: 10
       start_period: 20s
+    cpus: ${NMSOLT_DB_CPUS:-1.0}
+    mem_limit: ${NMSOLT_DB_MEM:-1024m}
+    shm_size: 128m
 
   redis:
-    image: redis:7-alpine
+    image: redis:7-alpine@sha256:892022f9f18c26c92c30e15194d132f90044af87b94a491a75429bbc3982eab1
     restart: unless-stopped
     command: ["redis-server", "--appendonly", "yes"]
     volumes:
@@ -84,6 +103,8 @@ services:
       interval: 10s
       timeout: 5s
       retries: 10
+    cpus: ${NMSOLT_REDIS_CPUS:-0.25}
+    mem_limit: ${NMSOLT_REDIS_MEM:-256m}
 
 volumes:
   pgdata:

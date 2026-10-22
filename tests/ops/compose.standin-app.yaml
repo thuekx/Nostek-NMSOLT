@@ -1,0 +1,10 @@
+# Ops integration test only: replaces the application image with a small PHP
+# stand-in so nmsolt-ops.sh runs against real PostgreSQL, Redis, MongoDB and
+# GenieACS containers without building the full app image. Never deploy this.
+services:
+  app:
+    build: !reset null
+    image: ${NMSOLT_IMAGE_REPO:?}:${IMAGE_TAG:?}
+    healthcheck:
+      interval: 5s
+      start_period: 5s

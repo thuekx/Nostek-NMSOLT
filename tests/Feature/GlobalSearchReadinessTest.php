@@ -20,6 +20,7 @@ class GlobalSearchReadinessTest extends TestCase
             'vendor' => 'ZTE C320',
             'ip' => '192.0.2.'.$number,
             'snmp_port' => 161,
+            'snmp_read_community' => 'fixture-only',
             'snmp_version' => 'v2c',
             'last_test_result' => ['port_onus' => ['1_1' => [
                 'slot' => 1, 'port' => 1, 'onus' => $onus,

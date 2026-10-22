@@ -56,7 +56,7 @@ latest_evidence:
     branch: work/nms-07-search-audit
     source_patch: "Bound search snapshots, preserve MAC navigation, validate search inputs; regression tests added."
     remaining: "UI journeys/write visibility, measured performance, unified ACS lifecycle package, exact-head CI and review."
-    source_ci: "PENDING on review branch; no new verification claimed."
+    source_ci: "Latest-head CI tracked on PR #20; phase verification not claimed."
     objective: "Stabilize NMSOLT functions, UI and performance; inventory routes/features, repair misleading or broken read paths, and add regression evidence."
     safety: "Source and isolated staging only; no production, Caddy, Maung repository or device changes."
   NMS-08:

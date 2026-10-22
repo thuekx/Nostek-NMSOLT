@@ -71,6 +71,10 @@ NMS-07 review branch: `work/nms-07-search-audit`, PR #20 (merge not authorized).
 NMS-07 source patch: bounded lazy search snapshots, preserved MAC-only deep-link
 filter, validated search inputs and synthetic regression tests. See
 [NMS-07-FEATURE-MATRIX.md](NMS-07-FEATURE-MATRIX.md) and the source inventory JSON.
+Initial PR #20 CI run `39714702681` passed Compose, Go, 60 JS tests and both
+image builds but failed four new cases due to a missing required fixture field.
+The fixture is corrected; check latest-head CI on PR #20 before merging.
+
 Full NMS-07 remains IN_PROGRESS: UI journeys/write visibility, measured large-data
 performance and unified ACS lifecycle packaging remain open. NMS-08–12 statuses
 are unchanged; source tests do not satisfy their runtime/approval gates.

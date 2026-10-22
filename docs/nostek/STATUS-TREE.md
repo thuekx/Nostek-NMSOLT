@@ -18,7 +18,7 @@ Nostek-NMSOLT — STANDALONE NETWORK PLATFORM / API PROVIDER
 |
 +-- NMS-07 [IN PROGRESS] NMSOLT product stabilization
 |   +-- source inventory: 49 Vue files, 5 jobs, 10 commands; feature matrix added
-|   +-- search batching/MAC navigation/input validation patch; CI pending
+|   +-- search batching/MAC navigation/input validation patch; exact-head CI tracked on PR #20
 |   +-- remaining UI journeys, measured performance and ACS lifecycle packaging
 |   +-- repair misleading/broken behavior and add regression evidence
 +-- NMS-08 [BLOCKED] API v1 read-only + OpenAPI

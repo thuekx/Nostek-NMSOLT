@@ -374,6 +374,15 @@ cmd_status() {
             result "process_${program#nostek-nmsolt-}" FAIL "not RUNNING"
         fi
     done
+    local pollers
+    pollers="$(printf '%s\n' "${procs}" | grep -Ec '^nostek-nmsolt-poll-worker:[^[:space:]]+[[:space:]]+RUNNING' || true)"
+    if [ "${pollers}" -ge 1 ]; then
+        result process_poll-worker PASS "${pollers} RUNNING"
+    elif [ -z "${procs}" ]; then
+        result process_poll-worker UNKNOWN "supervisorctl not reachable"
+    else
+        result process_poll-worker FAIL "no poll worker RUNNING"
+    fi
 
     if [ "${PROFILE}" = "with-acs" ]; then
         code="$(compose exec -T app curl -s -o /dev/null -w '%{http_code}' \

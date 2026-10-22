@@ -579,7 +579,8 @@ stdout_logfile=/var/log/supervisor/${name}.log
 stopwaitsecs=15
 SUP
 }
-write_supervisor "nostek-nmsolt-worker"       "${PHP_BIN} ${PROJECT_DIR}/artisan queue:work redis --tries=1 --max-time=3600"
+write_supervisor "nostek-nmsolt-worker"       "${PHP_BIN} ${PROJECT_DIR}/artisan queue:work redis --queue=default,polling --tries=1 --max-time=3600"
+write_supervisor "nostek-nmsolt-poll-worker"  "${PHP_BIN} ${PROJECT_DIR}/artisan queue:work redis --queue=polling --tries=1 --timeout=900 --max-time=3600"
 write_supervisor "nostek-nmsolt-scheduler"    "${PHP_BIN} ${PROJECT_DIR}/artisan schedule:work"
 write_supervisor "nostek-nmsolt-telnet-proxy" "${PHP_BIN} ${PROJECT_DIR}/artisan telnet:proxy"
 

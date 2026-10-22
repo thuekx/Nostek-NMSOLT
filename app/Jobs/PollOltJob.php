@@ -26,7 +26,12 @@ class PollOltJob implements ShouldQueue
 
     public bool $failOnTimeout = true;
 
-    public function __construct(public int $oltId) {}
+    public function __construct(public int $oltId)
+    {
+        // Own queue: a slow OLT or a long report job cannot hold back the other
+        // polls; the container runs a dedicated worker pool for it.
+        $this->onQueue((string) config('nostek.poll_queue', 'polling'));
+    }
 
     /**
      * @return array<int, object>

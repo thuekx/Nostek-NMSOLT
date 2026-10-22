@@ -24,7 +24,7 @@ this inventory does not claim that every user journey works.
 | Settings/users/audit/Telegram | SecurityHardeningTest, UserListPageTest, AuditLogTest, TelegramWebhookTest | Settings redaction and all write-control visibility need audit |
 | GenieACS reads/Wi-Fi controls | GenieacsConnectedDevicesTest, GenieacsOnuMatchTest, DeviceWriteBoundaryTest | Existing lab evidence retained; UI must clearly distinguish available reads from blocked writes |
 | Queued mutations and interactive CLI | DeviceWriteBoundaryTest | Default-off gate retained; not a single-use approval broker (NMS-11 remains blocked) |
-| Poller/scheduler/optical aggregation | OltPollingTest, Go tests/vet | No live polling executed here; capacity benchmark remains open |
+| Poller/scheduler/optical aggregation | OltPollingTest, HistoryPruneTest, Go tests/vet | NMS-07-B: poll queue + worker pool, retention for history tables, duplicate RX index dropped; no live polling executed; capacity benchmark remains open |
 | Unified product package | Compose validators, image builds, `tests/ops/integration.sh` (CI `ops-integration`) | NMS-07-A: core/with-acs/platform Compose + `nmsolt-ops.sh`; workspace 58/58 with real PG/Redis/Mongo/GenieACS and a stand-in app; real app image under the tool first runs in Nostek-AI NET-1-2 |
 | Consumer API | Existing Api/* tests | Legacy API exists, but NMS-08 scope/freshness/cursor/OpenAPI contract is not complete |
 

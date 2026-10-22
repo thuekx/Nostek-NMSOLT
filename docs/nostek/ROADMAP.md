@@ -68,10 +68,11 @@ Non-destructive parallel work is allowed (documentation, API design, unit tests,
 
 On every session start: retrieve this file, status YAML and HANDOFF; validate GitHub main and open PR/CI; update the evidence before changing statuses. When a task passes, move to the next unblocked safe task in the same session. When work is blocked, work on independent safe tasks, not unrelated production systems. Never modify Maung-Wo-Inv/maung-crm or Nostek runtime without scoped approval/review. Do not fabricate tests or handoffs.
 
-## Search-audit alignment checkpoint
+## Post-merge search checkpoint
 
-PR #20 is aligned with main `b0cbf36ac6f59552a3ef4f3a01f187997d221f86` (PR #22).
-PR #21 identity cleanup remains complete. Search fixes and synthetic tests are
-retained; NMS-07 is incomplete. Historical search run `39715103922` passed only
-head `02949e5`; require exact-head CI and review of the combined branch before
-owner merge approval. See HANDOFF and the feature matrix for remaining work.
+PR #20 merged as `1a38c6b309a84f07db89398f2f26d727d92c3128` after owner approval.
+Exact head `fc5ce840bcc548479a308e1de16fc292f1d21e49` passed all five jobs in
+[run 39773898154](https://github.com/thuekx/Nostek-NMSOLT/actions/runs/39773898154). Merge tree matches that tested
+head; no separate merge-SHA run or runtime verification is claimed. Identity
+cleanup and search fixes are in main. NMS-07 remains incomplete; subsequent
+implementation is paused by owner. See HANDOFF and CLOUD-HANDOFF before resuming.

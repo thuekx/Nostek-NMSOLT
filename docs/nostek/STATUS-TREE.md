@@ -19,7 +19,7 @@ Nostek-NMSOLT — STANDALONE NETWORK PLATFORM / API PROVIDER
 +-- NMS-07 [IN PROGRESS] NMSOLT product stabilization
 |   +-- canonical identity: Nostek-NMSOLT; short name: Nostek-NMS
 |   +-- PASS: PR #21 / run 39770297399 / merge f43baa3; nos-* identity enforced
-|   +-- PR #20 OPEN: search fixes/tests aligned with PR #22 main; exact-head CI required
+|   +-- PR #20 MERGED: 1a38c6b; exact-head fc5ce840 / CI 39773898154 PASS
 |   +-- audit functions, screens, read paths and performance
 |   +-- repair misleading/broken behavior and add regression evidence
 +-- NMS-08 [BLOCKED] API v1 read-only + OpenAPI
@@ -57,5 +57,7 @@ Nostek-NMSOLT — STANDALONE NETWORK PLATFORM / API PROVIDER
 NMS-00 through NMS-06 satisfy their definitions of done. NMS-07 is active for
 safe source-level work; NMS-08 through NMS-12 remain dependency- or approval-gated.
 
-PR #20 is pending review/owner merge approval. Historical search CI run 39715103922
-verifies only head 02949e5, not the main-aligned branch. See HANDOFF for evidence.
+PR #20 is merged as `1a38c6b309a84f07db89398f2f26d727d92c3128` after owner approval.
+All five CI jobs passed on `fc5ce840bcc548479a308e1de16fc292f1d21e49` in run
+39773898154. Merge tree matches the tested head; no separate merge-SHA run is
+claimed. Further NMS-07 implementation is PAUSED_BY_OWNER; documentation only.

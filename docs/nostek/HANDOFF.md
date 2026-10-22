@@ -71,30 +71,34 @@ data remain outside the public repository.
 
 See [NMS-07-12-GATED-READINESS.md](NMS-07-12-GATED-READINESS.md) for exact gates.
 
-## Search audit alignment (PR #20)
+## PR #20 merged checkpoint
 
-PR #20 retains bounded snapshot loading, MAC-only navigation, query validation
-and synthetic regression coverage. Its original head `02949e56e41967956938dcb716c7003c91edc957`
-passed all five jobs in run `39715103922`. That evidence applies only to the
-original head, not to this alignment with main `b0cbf36ac6f59552a3ef4f3a01f187997d221f86` (PR #22).
-The earlier failed fixture run `39714702681` remains historical evidence.
+Owner approved merging PR #20. GitHub confirms it is merged as
+`1a38c6b309a84f07db89398f2f26d727d92c3128`. Its exact reviewed head
+`fc5ce840bcc548479a308e1de16fc292f1d21e49` passed all five CI jobs in
+[run 39773898154](https://github.com/thuekx/Nostek-NMSOLT/actions/runs/39773898154): Go, Vue/JS, Compose, Laravel
+(including Vite build), and application/GenieACS image builds.
+The merge tree is identical to that tested head; this is not a separate
+workflow execution on the squash-merge SHA and is not runtime verification.
 
-Main's completed PR #21 identity cleanup and PR #22 Cloud checkpoint take
-precedence over the older PR #20 baseline. This branch merges that main without
-reverting the canonical Nostek-NMSOLT/Nostek-NMS, nos-* namespace or LICENSE.
-The feature matrix and source inventory retain their original audit baseline;
-new UI/package/performance work remains unverified.
+Search batching, MAC-only navigation, input validation and regression tests
+are now in main. PR #21 identity cleanup and PR #22 Cloud checkpoint remain
+preserved. PR #20 is closed/merged, not pending review or CI. The earlier failed
+fixture run `39714702681` and original successful run `39715103922` are historical.
+No open PR existed at this checkpoint recheck; always refresh GitHub on restart.
 
-Before merge: inspect the current PR head, require all five CI jobs on that
-exact head, review the combined diff and obtain owner merge approval. Never use
-the old green run as proof of the combined tree. No deployment or runtime/device
-validation is implied. NMS-07 remains IN_PROGRESS and NMS-08–12 remain BLOCKED.
+Local namespace, inventory-path, YAML gate and link checks passed; all 60 JS
+tests passed. Local Vite build lacked PHP/Ziggy dependencies; the properly
+provisioned CI Vite build passed. No host/device/production action occurred.
+NMS-07 implementation was explicitly paused by the owner after merge. This
+update only reconciles documentation; NMS-07 remains IN_PROGRESS and NMS-08–12
+remain BLOCKED. Start implementation only when the next session is instructed.
 
 ## Exact next action
 
-Identity cleanup is complete and merged. Continue NMS-07 with unified GenieACS packaging, unified health/backup/upgrade/rollback, and the functional/performance matrix. Do not modify the retained LICENSE attribution.
+Identity cleanup and PR #20 search fixes are complete and merged. After the owner resumes implementation, continue NMS-07 with unified GenieACS packaging, unified health/backup/upgrade/rollback, and the functional/performance matrix. Do not modify the retained LICENSE attribution.
 
-For cross-device continuation, use [CLOUD-HANDOFF.md](CLOUD-HANDOFF.md). While PR #20 is open, read its current head as well as main; the search fixes are not yet merged.
+For cross-device continuation, use the post-merge prompt in [CLOUD-HANDOFF.md](CLOUD-HANDOFF.md). PR #20 search fixes are already in main; do not recreate them.
 
 ## New-session prompt
 

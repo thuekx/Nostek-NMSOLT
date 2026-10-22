@@ -4,7 +4,7 @@ updated_at: "2026-10-22"
 source_of_truth:
   repo: https://github.com/thuekx/Nostek-NMSOLT
   default_branch: main
-  checkpoint_main_sha: b0cbf36ac6f59552a3ef4f3a01f187997d221f86
+  checkpoint_main_sha: 1a38c6b309a84f07db89398f2f26d727d92c3128
   baseline_sha: 24332a2b4144cff03f04f64e4711ce7938d992ae
   nms06_completion:
     pr: https://github.com/thuekx/Nostek-NMSOLT/pull/18
@@ -46,14 +46,18 @@ latest_evidence:
     status: IN_PROGRESS
     objective: "Standardize Nostek-NMSOLT/Nostek-NMS identity and nos-* namespace, then stabilize packaging, functions, UI and performance with regression evidence."
     safety: "Source and isolated staging only; no production, Caddy, Maung repository or device changes."
-    review_pr: https://github.com/thuekx/Nostek-NMSOLT/pull/20
-    review_branch: work/nms-07-search-audit
+    search_pr: https://github.com/thuekx/Nostek-NMSOLT/pull/20
+    search_pr_state: MERGED
+    search_merged_sha: 1a38c6b309a84f07db89398f2f26d727d92c3128
+    search_verified_sha: fc5ce840bcc548479a308e1de16fc292f1d21e49
     audit: docs/nostek/NMS-07-FEATURE-MATRIX.md
     inventory: docs/nostek/NMS-07-SOURCE-INVENTORY.json
     search_alignment: "Merged PR #22 main into PR #20; preserve identity cleanup and search fixes."
     previous_search_ci: "39715103922 SUCCESS on 02949e56e41967956938dcb716c7003c91edc957 only."
-    aligned_ci: "PENDING: consult exact current PR head checks; old CI does not verify alignment."
-    merge_gate: "Exact-head CI, combined diff review and owner approval; no automatic merge."
+    aligned_ci: "39773898154 SUCCESS on fc5ce840bcc548479a308e1de16fc292f1d21e49; all five jobs passed."
+    merge_tree_evidence: "Squash merge has the same tree as tested head; no separate merge-SHA workflow run claimed."
+    execution_state: "PAUSED_BY_OWNER: documentation closeout only; no further NMS-07 implementation."
+    search_merge_gate: "Owner approved PR #20; GitHub merge confirmed. Future PRs require their own applicable gates and approval."
     identity_cleanup: "PR #21 head 6bc53a3 passed run 39770297399 and merged as f43baa3; canonical Nostek-NMSOLT/Nostek-NMS and nos-* namespace enforced."
   NMS-08:
     status: BLOCKED
@@ -82,7 +86,7 @@ environment:
   live_olt_write: PROHIBITED_WITHOUT_APPROVAL
 next_action:
   id: NMS-07-UNIFIED-GENIEACS-PACKAGE
-  instruction: "Build and test the unified full package for app/PostgreSQL/Redis plus private GenieACS/MongoDB, then continue the feature/performance matrix. Preserve LICENSE attribution and keep device writes disabled."
+  instruction: "When owner resumes implementation, build and test the unified full package for app/PostgreSQL/Redis plus private GenieACS/MongoDB, then continue the feature/performance matrix. Preserve LICENSE attribution and keep device writes disabled."
   owner: "executor"
   approval_required: false
 references:

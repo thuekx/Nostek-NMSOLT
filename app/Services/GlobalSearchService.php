@@ -24,12 +24,13 @@ class GlobalSearchService
     public function search(string $query, int $limit = 10): array
     {
         $query = trim($query);
+        $limit = max(0, min($limit, 50));
 
-        if (mb_strlen($query) < 2) {
+        if ($limit === 0 || mb_strlen($query) < 2) {
             return [];
         }
 
-        $results = $this->matchOlts($query);
+        $results = $this->matchOlts($query, $limit);
         $results = array_merge($results, $this->matchOnus($query, $limit - count($results)));
 
         return array_slice($results, 0, $limit);
@@ -38,7 +39,7 @@ class GlobalSearchService
     /**
      * @return array<int, array<string, mixed>>
      */
-    private function matchOlts(string $query): array
+    private function matchOlts(string $query, int $limit): array
     {
         $matches = [];
 
@@ -47,7 +48,8 @@ class GlobalSearchService
                 $q->where('name', 'like', "%{$query}%")
                     ->orWhere('ip', 'like', "%{$query}%");
             })
-            ->limit(5)
+            ->orderBy('id')
+            ->limit(min(5, $limit))
             ->get(['id', 'name', 'ip', 'vendor', 'last_test_result']);
 
         foreach ($olts as $olt) {
@@ -81,7 +83,11 @@ class GlobalSearchService
         $needle = strtolower($query);
         $matches = [];
 
-        $olts = SnmpOlt::query()->get(['id', 'name', 'vendor', 'last_test_result']);
+        // Bound hydrated telemetry snapshots and stop fetching once results are full.
+        // Keep model scopes intact for partner/operator and demo isolation.
+        $olts = SnmpOlt::query()
+            ->select(['id', 'name', 'vendor', 'last_test_result'])
+            ->lazyById(25);
         foreach ($olts as $olt) {
             $routePrefix = SmartOltSupport::inventoryRoutePrefix($this->driver($olt));
 
@@ -124,7 +130,9 @@ class GlobalSearchService
                         'port' => $hasPort ? (int) $portNo : null,
                         'onu_id' => isset($onu['onu_id']) ? (int) $onu['onu_id'] : (isset($onu['id']) ? (int) $onu['id'] : null),
                         'serial_number' => $serialValue !== '' ? $serialValue : null,
-                        'search_value' => $serialValue !== '' ? $serialValue : ($onu['name'] ?? null),
+                        'search_value' => $serialValue !== '' ? $serialValue
+                            : (($onu['mac'] ?? '') !== '' ? $onu['mac']
+                                : (($onu['name'] ?? '') !== '' ? $onu['name'] : ($onu['interface'] ?? null))),
                         'label' => $label,
                         'sublabel' => implode(' · ', $sublabelParts),
                     ];

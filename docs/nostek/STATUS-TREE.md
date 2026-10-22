@@ -17,7 +17,9 @@ Nostek-NMSOLT — STANDALONE NETWORK PLATFORM / API PROVIDER
 |   +-- SNMP, PON/ONU inventory, optical detail and UI evidence passed
 |
 +-- NMS-07 [IN PROGRESS] NMSOLT product stabilization
-|   +-- audit functions, screens, read paths and performance
+|   +-- source inventory: 49 Vue files, 5 jobs, 10 commands; feature matrix added
+|   +-- search batching/MAC navigation/input validation patch; CI pending
+|   +-- remaining UI journeys, measured performance and ACS lifecycle packaging
 |   +-- repair misleading/broken behavior and add regression evidence
 +-- NMS-08 [BLOCKED] API v1 read-only + OpenAPI
 |   +-- stable IDs, freshness, pagination, scopes, redaction, rate limits
@@ -53,3 +55,7 @@ Nostek-NMSOLT — STANDALONE NETWORK PLATFORM / API PROVIDER
 
 NMS-00 through NMS-06 satisfy their definitions of done. NMS-07 is active for
 safe source-level work; NMS-08 through NMS-12 remain dependency- or approval-gated.
+
+Latest baseline recheck: PR #1 and #19 merged; main `62b414f`. Existing CI
+run `39652098876` passed PR #19 head with the same tree as main; no separate
+main-SHA CI run. See the NMS-07 feature matrix for partial work and open gates.

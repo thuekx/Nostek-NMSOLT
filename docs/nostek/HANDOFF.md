@@ -57,13 +57,28 @@ data remain outside the public repository.
 
 See [NMS-07-12-GATED-READINESS.md](NMS-07-12-GATED-READINESS.md) for exact gates.
 
+## Current source audit (22 October 2026)
+
+GitHub recheck: PR #1 is merged (`63f4b77`); PR #19 is already merged as
+`62b414f`, so the former instruction to merge it is obsolete. No open PR was
+present at the initial recheck. Latest existing CI run `39652098876` passed all
+five jobs on PR #19 head `18b4735`; main has the identical tree
+`44c11c13e9988485bd106a77a6075efbc3b87383`, but no separate main-SHA run.
+
+NMS-07 source patch: bounded lazy search snapshots, preserved MAC-only deep-link
+filter, validated search inputs and synthetic regression tests. See
+[NMS-07-FEATURE-MATRIX.md](NMS-07-FEATURE-MATRIX.md) and the source inventory JSON.
+Full NMS-07 remains IN_PROGRESS: UI journeys/write visibility, measured large-data
+performance and unified ACS lifecycle packaging remain open. NMS-08–12 statuses
+are unchanged; source tests do not satisfy their runtime/approval gates.
+
 ## Exact next action
 
-Review and merge the provider-centric roadmap PR after exact-head CI passes.
-Delete its merged branch. Then create a fresh NMS-07 branch, inventory application
-routes/screens/read APIs/jobs, record a tested feature matrix, and fix the
-highest-impact safe source defect. Continue automatically while work stays
-within source/isolated tests and needs no new authority.
+Check the NMS-07 search-audit PR and exact-head CI. Resolve failures before
+requesting review/merge approval. Do not merge automatically. Continue remaining
+NMS-07 checklist work on the review branch while within authorized source scope.
+After NMS-07 is fully verified, proceed to NMS-08; keep NMS-09 Maung repository
+work, live operations and releases separately approval-gated.
 
 ## New-session prompt
 

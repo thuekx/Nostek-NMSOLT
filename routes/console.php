@@ -12,6 +12,8 @@ Schedule::command('olts:poll')->everyMinute()->withoutOverlapping();
 // Agregasi wajib mendahului prune: sampel mentah baru boleh dibuang setelah
 // jamnya terangkum, kalau tidak riwayat panjangnya hilang permanen.
 Schedule::command('optical:aggregate-rx')->hourlyAt(5)->withoutOverlapping();
+// NMS-07-B2: after the 00:05 hourly run has summarised the last hour of yesterday.
+Schedule::command('optical:aggregate-rx-daily')->dailyAt('00:25')->withoutOverlapping();
 Schedule::command('optical:prune-rx')->dailyAt('03:15')->withoutOverlapping();
 
 // Sesi aplikasi yang kedaluwarsa (sanctum.expiration) dibuang — token push FCM

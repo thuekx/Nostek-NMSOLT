@@ -50,7 +50,7 @@ NMS-07 is IN PROGRESS:
    bind-mount overlay, `scripts/nostek/nmsolt-ops.sh`, `monitor/checks.json`,
    ops integration test (CI job `ops-integration`);
 4. NMS-07-B data growth (retention, duplicate RX index, poll worker pool; B2 daily RX
-   rollup open), C `onu_state` table measured and not adopted (NMS-07-PERFORMANCE.md),
+   rollup on step/nms-07-b2-rx-daily), C `onu_state` table measured and not adopted (NMS-07-PERFORMANCE.md),
    D UI journey and write-gate audit with E2 server-side ONU list paging, rest of E;
 5. runtime target is the Nostek-AI VM `nostek-platform`; host steps are Nostek-AI
    packages (track NET-1), never run from this repository;
@@ -90,7 +90,8 @@ justify migration. Preserve Nostek-NMSOLT/Nostek-NMS, nos-* namespace,
 cmd/nos-snmp-poller, bin/nos-snmp-poller and required MIT LICENSE attribution.
 
 Continue NMS-07: check the A (unified package), B (data growth) and C/E (ONU read path,
-step/nms-07-c-perf-matrix) PRs first. Then B2 daily RX rollup (3 years), D UI journeys,
+step/nms-07-c-perf-matrix) and B2 (daily RX rollup, step/nms-07-b2-rx-daily) PRs first.
+Then D UI journeys,
 stale/partial/unavailable/permission states, write-gate visibility, E2 server-side paging of
 the ONU monitor/API list, and the rest of E (alarm/optical/queue/poller/retention), measured
 with tests/perf/run-onu-list-bench.sh style harnesses. The onu_state table was measured

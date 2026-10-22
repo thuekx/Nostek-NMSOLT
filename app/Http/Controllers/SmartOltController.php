@@ -1046,11 +1046,15 @@ class SmartOltController extends Controller
      */
     private function rxRange(?string $range): array
     {
-        $key = in_array($range, ['24h', '7d', '30d'], true) ? $range : '7d';
+        $key = in_array($range, ['24h', '7d', '30d', '90d', '1y', '3y'], true) ? $range : '7d';
 
+        // 90d dari ringkasan per jam; 1y/3y dari ringkasan per hari (NMS-07-B2).
         $since = match ($key) {
             '24h' => now()->subDay(),
             '30d' => now()->subDays(30),
+            '90d' => now()->subDays(90),
+            '1y' => now()->subYear(),
+            '3y' => now()->subYears(3),
             default => now()->subDays(7),
         };
 

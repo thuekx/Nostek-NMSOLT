@@ -25,6 +25,7 @@ describe('sumbu waktu grafik', () => {
         // 17.30 UTC = 00.30 WIB keesokan harinya.
         expect(formatAxisTime('2026-10-01T17:30:00Z')).toBe('00.30');
         expect(formatAxisTime('2026-10-01T17:30:00Z', { date: true })).toBe('2 Okt');
+        expect(formatAxisTime('2026-10-01T17:30:00Z', { date: true, year: true })).toMatch(/^Okt 26$/);
         expect(formatAxisTime(null)).toBe('');
     });
 });

@@ -69,6 +69,9 @@ return [
         // tiap 30 hari retensi di sini berharga ~3,6 juta baris — retensi panjang
         // di tabel per jam justru bisa lebih besar dari tabel mentahnya.
         'rx_hourly_retention_days' => (int) env('SNMP_POLLER_RX_HOURLY_RETENTION_DAYS', 45),
+        // NMS-07-B2: ringkasan per hari untuk grafik 1–3 tahun (owner NMS-AI-Q5 A: 3 tahun).
+        // Satu baris per ONU per hari; 5.000 ONU × 3 tahun ≈ 5,5 juta baris kecil.
+        'rx_daily_retention_days' => (int) env('SNMP_POLLER_RX_DAILY_RETENTION_DAYS', 1095),
     ],
 
     // Titik awal Peta ONU/ODP (web & aplikasi). "Wilayah utama" opsional: bila diisi, peta

@@ -24,7 +24,9 @@ Nostek-NMSOLT — STANDALONE NETWORK PLATFORM / API PROVIDER
 |   |       nmsolt-ops.sh (preflight/status/backup/restore/upgrade/rollback), checks.json;
 |   |       workspace ops integration 58/58 (real PG/Redis/Mongo/GenieACS, stand-in app)
 |   +-- B [SOURCE PASS, PR pending] history:prune retention, duplicate RX index dropped,
-|   |       poll queue + worker pool; B2 daily RX rollup (3 y) open
+|   |       poll queue + worker pool
+|   |   +-- B2 [SOURCE PASS, PR pending] daily RX rollup 3 y, 90d/1y/3y charts,
+|   |           hourly aggregation stall after >48 h polling gap fixed
 |   +-- C [MEASURED, NOT ADOPTED] onu_state read model 25 % slower than the snapshot
 |   |       path (10k/51k ONUs, PostgreSQL); dropped, numbers in NMS-07-PERFORMANCE.md
 |   +-- D [PENDING] UI journeys, stale/partial/permission states, write-gate visibility

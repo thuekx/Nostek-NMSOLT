@@ -2,6 +2,7 @@
 
 namespace App\Console\Commands;
 
+use App\Models\OnuRxDaily;
 use App\Models\OnuRxHourly;
 use App\Models\OnuRxSample;
 use Illuminate\Console\Command;
@@ -12,7 +13,7 @@ class PruneOnuRxSamplesCommand extends Command
 {
     protected $signature = 'optical:prune-rx {--days= : Hapus sample RX lebih lama dari N hari (default dari config)}';
 
-    protected $description = 'Prune riwayat RX power ONU (onu_rx_samples & onu_rx_hourly) yang melewati masa retensi';
+    protected $description = 'Prune riwayat RX power ONU (onu_rx_samples, onu_rx_hourly & onu_rx_daily) yang melewati masa retensi';
 
     public function handle(): int
     {
@@ -90,8 +91,44 @@ class PruneOnuRxSamplesCommand extends Command
         }
 
         $cutoff = now()->subDays($days);
-        $deleted = OnuRxHourly::query()->where('bucket_hour', '<', $cutoff)->delete();
+
+        // NMS-07-B2: jam yang belum terangkum ke onu_rx_daily tidak boleh dibuang. Hari terakhir
+        // yang terangkum diproses ulang oleh agregasi harian, jadi jam-jamnya ikut dipertahankan.
+        if (Schema::hasTable('onu_rx_daily') && (int) config('services.snmp_poller.rx_daily_retention_days', 1095) >= 1) {
+            $lastDay = OnuRxDaily::query()->max('bucket_day');
+            $rolledUpTo = $lastDay === null ? null : Carbon::parse($lastDay)->startOfDay();
+            if ($rolledUpTo === null || $rolledUpTo < $cutoff) {
+                $this->warn('Agregasi harian belum mencapai cutoff per jam — ringkasan jam dipertahankan sampai '
+                    .($rolledUpTo?->toDateString() ?? 'agregasi harian pertama').'.');
+                $cutoff = $rolledUpTo;
+            }
+        }
+
+        $deleted = $cutoff === null ? 0 : OnuRxHourly::query()->where('bucket_hour', '<', $cutoff)->delete();
 
         $this->info("Pruned {$deleted} ringkasan jam lebih lama dari {$days} hari.");
+
+        $this->pruneDaily();
+    }
+
+    /**
+     * Buang ringkasan harian yang sudah lewat masa simpannya (default 3 tahun, NMS-AI-Q5).
+     */
+    private function pruneDaily(): void
+    {
+        if (! Schema::hasTable('onu_rx_daily')) {
+            return;
+        }
+
+        $days = (int) config('services.snmp_poller.rx_daily_retention_days', 1095);
+
+        if ($days < 1) {
+            return;
+        }
+
+        $cutoff = now()->subDays($days)->toDateString();
+        $deleted = OnuRxDaily::query()->where('bucket_day', '<', $cutoff)->delete();
+
+        $this->info("Pruned {$deleted} ringkasan hari lebih lama dari {$days} hari.");
     }
 }

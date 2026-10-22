@@ -148,10 +148,18 @@ read-only banner, a request guard (Inertia + axios) stops gated requests with a 
 without marking it. Checked in a real browser. Details:
 [NMS-07-UI-JOURNEY.md](NMS-07-UI-JOURNEY.md).
 
+## NMS-07-D-2a status honesty (2026-10-22)
+
+Branch `step/nms-07-d2-stale-states` (on top of D-1). `App\Support\Freshness` marks an OLT
+STALE when its data is older than 3 poll intervals, UNKNOWN when it was never polled, and
+PAUSED when polling is off. Only FRESH is green on the dashboard (pills and cards), the OLT
+list, the OLT detail and the PON-port page. API v1 and Telegram keep the legacy counts
+until NMS-08. Details: [NMS-07-UI-JOURNEY.md](NMS-07-UI-JOURNEY.md).
+
 ## Exact next action
 
-Refresh GitHub. Check the NMS-07-A, B, C/E, B2 and D-1 PRs (exact-head CI, owner merge).
-Then continue D-2 (UI journey and write-gate audit, with E2 server-side ONU
+Refresh GitHub. Check the NMS-07-A, B, C/E, B2, D-1 and D-2a PRs (exact-head CI, owner
+merge). Then continue D-2b (UI journey and write-gate audit, with E2 server-side ONU
 list paging), and the rest of E (alarm, optical, queue, poller on synthetic data). Do not
 modify the retained LICENSE attribution.
 

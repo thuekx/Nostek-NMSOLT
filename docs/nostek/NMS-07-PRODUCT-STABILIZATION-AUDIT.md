@@ -95,6 +95,19 @@ write gate", is implemented on `step/nms-07-d-ui-journey`:
 It was checked in a real browser. Stale, partial and permission states (D-2) are next. See
 [NMS-07-UI-JOURNEY.md](NMS-07-UI-JOURNEY.md).
 
+## NMS-07-D-2a result (2026-10-22)
+
+Part of work package 3, "verify stale states", is on `step/nms-07-d2-stale-states`. Stale
+OLT data is no longer shown green:
+
+- `App\Support\Freshness` (FRESH, STALE after 3 poll intervals, UNKNOWN, PAUSED);
+- the dashboard cards count non-fresh OLTs and their ONUs as "not current";
+- the OLT list, SmartOLT index, OLT detail and PON port pages show the state and the age.
+
+API v1 `/summary` and `/public/status` still count by the last reachable flag. That is kept
+on purpose (contract unchanged) and is now an NMS-08 requirement. Next: D-2b. See
+[NMS-07-UI-JOURNEY.md](NMS-07-UI-JOURNEY.md).
+
 ## NMS-07-C/E result (2026-10-22)
 
 Work package 4 (performance audit), first part, is on branch `step/nms-07-c-perf-matrix`.

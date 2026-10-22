@@ -26,6 +26,8 @@ class DashboardTest extends TestCase
             'snmp_port' => 161,
             'snmp_read_community' => 'public',
             'snmp_version' => 'v2c',
+            // NMS-07-D-2: "up" needs a fresh poll; a never-polled OLT is unknown.
+            'last_polled_at' => now(),
             'last_test_result' => [
                 'ok' => true,
                 'system' => ['sysDescr' => 'OLT-C320-PATI'],

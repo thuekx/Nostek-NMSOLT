@@ -37,6 +37,8 @@ const heroCards = computed(() => [
         sublabels: [
             { label: t('dashboard.status_online'), value: props.cards.olt.online, color: '#10b981' },
             { label: t('dashboard.status_offline'), value: props.cards.olt.offline, color: '#94a3b8' },
+            // NMS-07-D-2: stale/unknown/paused OLTs are not counted as online.
+            ...(props.cards.olt.not_fresh ? [{ label: t('dashboard.status_not_fresh'), value: props.cards.olt.not_fresh, color: '#f59e0b' }] : []),
         ],
     },
     {
@@ -48,6 +50,7 @@ const heroCards = computed(() => [
         sublabels: [
             { label: t('dashboard.status_online'), value: props.cards.onu.online, color: '#10b981' },
             { label: t('dashboard.status_offline'), value: props.cards.onu.offline, color: '#ef4444' },
+            ...(props.cards.onu.not_fresh ? [{ label: t('dashboard.status_not_fresh'), value: props.cards.onu.not_fresh, color: '#f59e0b' }] : []),
         ],
     },
     {

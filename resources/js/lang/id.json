@@ -21,6 +21,8 @@
         "group_watch": "Pantauan"
     },
     "common": {
+        "stale": "Basi",
+        "polling_off": "Polling mati",
         "clear_search": "Kosongkan pencarian",
         "profile": "Profil",
         "logout": "Keluar",
@@ -187,6 +189,10 @@
         "status_warning": "Warning",
         "status_up": "Up",
         "status_down": "Down",
+        "status_stale": "Basi",
+        "status_unknown": "Belum diketahui",
+        "status_paused": "Polling mati",
+        "status_not_fresh": "Tidak terkini",
         "severity_critical": "Critical",
         "severity_major": "Major",
         "online_share": "{pct}% dari total ONU",

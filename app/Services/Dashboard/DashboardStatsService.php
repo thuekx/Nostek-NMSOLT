@@ -6,6 +6,7 @@ use App\Models\AlarmEvent;
 use App\Models\PollingEvent;
 use App\Models\SmartOltOnuRegistration;
 use App\Models\SnmpOlt;
+use App\Support\Freshness;
 use App\Support\SmartOltSupport;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Collection;
@@ -15,6 +16,10 @@ class DashboardStatsService
     /**
      * Top-line counters used by the four hero stat cards (with sparkline history).
      *
+     * $freshOnly (NMS-07-D-2, web dashboard): OLTs whose snapshot is not fresh are counted as
+     * `not_fresh` instead of online/offline, and so are their ONUs. API v1 and Telegram keep
+     * the legacy counting until the NMS-08 contract adds freshness metadata.
+     *
      * @return array{
      *   olt: array{total:int, online:int, offline:int, history:array<int,int>},
      *   onu: array{total:int, online:int, offline:int, warning:int, history:array<int,int>},
@@ -22,21 +27,34 @@ class DashboardStatsService
      *   alarms: array{total:int, critical:int, major:int, minor:int, warning:int, history:array<int,int>}
      * }
      */
-    public function statCards(): array
+    public function statCards(bool $freshOnly = false): array
     {
         $olts = SnmpOlt::query()->get();
         $oltsOnline = 0;
+        $oltsOffline = 0;
+        $oltsNotFresh = 0;
         $onuTotal = 0;
         $onuOnline = 0;
         $onuWarning = 0;
+        $onuNotFresh = 0;
 
         foreach ($olts as $olt) {
             $result = $olt->last_test_result ?? [];
             $reachable = (bool) ($result['ok'] ?? false);
-            $oltsOnline += $reachable ? 1 : 0;
-
             $portOnus = collect($result['port_onus'] ?? []);
-            $onuTotal += (int) $portOnus->sum('count');
+            $count = (int) $portOnus->sum('count');
+            $onuTotal += $count;
+
+            // NMS-07-D-2: an OLT whose snapshot is stale/unknown/paused is neither online nor
+            // offline here, and its ONUs are counted as "not current", not as online.
+            if ($freshOnly && $olt->freshness()['state'] !== Freshness::FRESH) {
+                $oltsNotFresh++;
+                $onuNotFresh += $count;
+
+                continue;
+            }
+
+            $reachable ? $oltsOnline++ : $oltsOffline++;
             $onuOnline += $portOnus->flatMap(fn ($p) => $p['onus'] ?? [])->where('online', true)->count();
             $onuWarning += $portOnus->flatMap(fn ($p) => $p['onus'] ?? [])
                 ->filter(function (array $onu) {
@@ -52,19 +70,23 @@ class DashboardStatsService
                 ->count();
         }
 
-        $onuOffline = max($onuTotal - $onuOnline, 0);
+        $onuOffline = max($onuTotal - $onuOnline - $onuNotFresh, 0);
+
+        $freshness = $freshOnly ? ['not_fresh' => $oltsNotFresh] : [];
 
         return [
             'olt' => [
                 'total' => $olts->count(),
                 'online' => $oltsOnline,
-                'offline' => max($olts->count() - $oltsOnline, 0),
+                'offline' => $oltsOffline,
+                ...$freshness,
                 'history' => $this->oltHistorySparkline(),
             ],
             'onu' => [
                 'total' => $onuTotal,
                 'online' => $onuOnline,
                 'offline' => $onuOffline,
+                ...($freshOnly ? ['not_fresh' => $onuNotFresh] : []),
                 'warning' => $onuWarning,
                 'history' => $this->onuHistorySparkline($onuOnline),
             ],
@@ -181,15 +203,20 @@ class DashboardStatsService
     {
         return SnmpOlt::query()->orderBy('name')->get()->map(function (SnmpOlt $olt) {
             $reachable = (bool) ($olt->last_test_result['ok'] ?? false);
+            $freshness = $olt->freshness();
+            // NMS-07-D-2: "up"/"down" only describe a fresh snapshot; anything else is stale/unknown.
+            $fresh = $freshness['state'] === Freshness::FRESH;
 
             return [
                 'id' => $olt->id,
                 'name' => $olt->name,
                 'model' => $this->detectOltModel($olt),
                 'reachable' => $reachable,
+                'freshness' => $freshness,
                 'unit' => 1,
-                'up' => $reachable ? 1 : 0,
-                'down' => $reachable ? 0 : 1,
+                'up' => $fresh && $reachable ? 1 : 0,
+                'down' => $fresh && ! $reachable ? 1 : 0,
+                'not_fresh' => $fresh ? 0 : 1,
             ];
         })->values();
     }
@@ -242,6 +269,8 @@ class DashboardStatsService
                 'onu_online' => $oOnline,
                 'onu_offline' => max($oTotal - $oOnline, 0),
                 'last_polled_at' => $olt->last_polled_at?->toIso8601String(),
+                // NMS-07-D-2: an old snapshot must not read as "up".
+                'freshness' => $olt->freshness(),
             ];
         })->all();
     }

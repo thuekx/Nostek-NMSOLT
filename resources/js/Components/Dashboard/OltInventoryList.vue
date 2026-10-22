@@ -2,6 +2,8 @@
 import { computed } from 'vue';
 import { Link } from '@inertiajs/vue3';
 import { ChevronRight, Server } from '@lucide/vue';
+import { oltStatus, STATUS_PILL } from '@/lib/freshness';
+import { formatRelative } from '@/lib/datetime';
 
 const props = defineProps({
     items: { type: Array, default: () => [] },
@@ -12,9 +14,14 @@ const totals = computed(() => props.items.reduce(
         unit: acc.unit + (row.unit ?? 0),
         up: acc.up + (row.up ?? 0),
         down: acc.down + (row.down ?? 0),
+        notFresh: acc.notFresh + (row.not_fresh ?? 0),
     }),
-    { unit: 0, up: 0, down: 0 },
+    { unit: 0, up: 0, down: 0, notFresh: 0 },
 ));
+
+// NMS-07-D-2: a stale or never-polled snapshot is never shown as Up/Down.
+const statusOf = (row) => oltStatus(row.reachable, row.freshness);
+const statusTitle = (row) => (row.freshness?.at ? formatRelative(row.freshness.at) : '');
 </script>
 
 <template>
@@ -44,8 +51,8 @@ const totals = computed(() => props.items.reduce(
                             <p class="truncate text-xs text-slate-500">{{ row.model }}</p>
                         </div>
                     </div>
-                    <span :class="row.reachable ? 'nos-pill-success' : 'nos-pill-danger'">
-                        {{ row.reachable ? $t('dashboard.status_up') : $t('dashboard.status_down') }}
+                    <span :class="STATUS_PILL[statusOf(row)]" :title="statusTitle(row)" :data-status="statusOf(row)">
+                        {{ $t(`dashboard.status_${statusOf(row)}`) }}
                     </span>
                 </li>
             </ul>
@@ -59,6 +66,7 @@ const totals = computed(() => props.items.reduce(
             <div class="flex items-center gap-2">
                 <span class="nos-pill-success">{{ $t('dashboard.status_up') }} {{ totals.up }}</span>
                 <span class="nos-pill-danger">{{ $t('dashboard.status_down') }} {{ totals.down }}</span>
+                <span v-if="totals.notFresh > 0" class="nos-pill-warning">{{ $t('dashboard.status_not_fresh') }} {{ totals.notFresh }}</span>
             </div>
         </div>
     </div>

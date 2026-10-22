@@ -19,7 +19,7 @@ import ListSkeleton from '@/Components/Shell/ListSkeleton.vue';
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
 import { useConfirm } from '@/Composables/useConfirm';
 import { usePagination } from '@/Composables/usePagination';
-import { formatDateTime } from '@/lib/datetime';
+import { formatDateTime, formatRelative } from '@/lib/datetime';
 import { lastDownCauseLabel, onuPrimaryLabel, onuSecondaryLabel, phaseStateLabel } from '@/lib/onu';
 import { Head, Link, router, useForm, usePage } from '@inertiajs/vue3';
 import { useI18n } from 'vue-i18n';
@@ -543,6 +543,16 @@ const rxBadgeClass = (value) => {
     if (value <= -25 || value >= -10) return 'bg-amber-500/15 text-amber-300 ring-1 ring-amber-500/30';
     return 'bg-emerald-500/15 text-emerald-300 ring-1 ring-emerald-500/30';
 };
+
+// NMS-07-D-2: data status is green only for a fresh snapshot (not older than 3 poll intervals).
+const DATA_STATE = {
+    fresh: { label: 'portonus.stat_available', text: 'text-emerald-400', dot: 'bg-emerald-500' },
+    stale: { label: 'common.stale', text: 'text-amber-300', dot: 'bg-amber-400' },
+    unknown: { label: 'common.unknown', text: 'text-slate-400', dot: 'bg-slate-400' },
+    paused: { label: 'common.polling_off', text: 'text-slate-400', dot: 'bg-slate-400' },
+    empty: { label: 'portonus.stat_empty', text: 'text-slate-400', dot: 'bg-slate-300' },
+};
+const dataState = computed(() => (props.snapshot?.ok ? (props.snapshot.freshness?.state ?? 'unknown') : 'empty'));
 </script>
 
 <template>
@@ -625,14 +635,15 @@ const rxBadgeClass = (value) => {
                             <p class="text-xs font-medium uppercase tracking-wider text-slate-500">{{ $t('portonus.stat_status') }}</p>
                             <span
                                 class="h-2 w-2 rounded-full"
-                                :class="snapshot.ok ? 'bg-emerald-500' : 'bg-slate-300'"
+                                :class="DATA_STATE[dataState].dot"
                             ></span>
                         </div>
                         <p
                             class="mt-3 text-2xl font-bold"
-                            :class="snapshot.ok ? 'text-emerald-400' : 'text-slate-400'"
+                            :class="DATA_STATE[dataState].text"
+                            :data-state="dataState"
                         >
-                            {{ snapshot.ok ? $t('portonus.stat_available') : $t('portonus.stat_empty') }}
+                            {{ $t(DATA_STATE[dataState].label) }}
                         </p>
                     </div>
                     <!-- Total ONU -->
@@ -654,6 +665,9 @@ const rxBadgeClass = (value) => {
                     <div class="nos-stat">
                         <p class="text-xs font-medium uppercase tracking-wider text-slate-500">{{ $t('portonus.stat_last_refresh') }}</p>
                         <p class="mt-3 text-sm font-semibold text-white">{{ formatDate(snapshot.refreshed_at) }}</p>
+                        <p v-if="snapshot.refreshed_at" class="mt-1 text-xs" :class="dataState === 'stale' ? 'text-amber-300' : 'text-slate-500'">
+                            {{ formatRelative(snapshot.refreshed_at) }}
+                        </p>
                     </div>
                 </div>
 

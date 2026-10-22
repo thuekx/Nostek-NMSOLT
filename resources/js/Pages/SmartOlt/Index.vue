@@ -224,6 +224,18 @@ const saveConfig = async (olt) => {
 const firmwareBadge = (olt) => (olt.last_test_result?.cdata?.firmware_v3 ? 'FlashV3.x' : null);
 
 const formatDate = (value) => formatDateTime(value);
+
+// NMS-07-D-2: "OK" is green only while the last poll is fresh (≤ 3 poll intervals old).
+const pollStatus = (olt) => {
+    const result = olt.last_test_result;
+    if (!result) return { key: 'not_tested', cls: 'text-slate-500', text: t('common.not_tested') };
+    if (!result.ok) return { key: 'failed', cls: 'text-red-300', text: t('common.failed') };
+    const state = olt.freshness?.state ?? 'unknown';
+    if (state === 'fresh') return { key: 'fresh', cls: 'text-emerald-300', text: t('common.ok') };
+    if (state === 'stale') return { key: 'stale', cls: 'text-amber-300', text: `${t('common.ok')} · ${t('common.stale')}` };
+    if (state === 'paused') return { key: 'paused', cls: 'text-slate-400', text: `${t('common.ok')} · ${t('common.polling_off')}` };
+    return { key: 'unknown', cls: 'text-slate-400', text: `${t('common.ok')} · ${t('common.unknown')}` };
+};
 </script>
 
 <template>
@@ -336,13 +348,9 @@ const formatDate = (value) => formatDateTime(value);
                                         <span class="nos-mobile-label">{{ $t('smartolt.col_test') }}</span>
                                         <span
                                             class="nos-mobile-value font-semibold"
-                                            :class="olt.last_test_result?.ok
-                                                ? 'text-emerald-300'
-                                                : olt.last_test_result
-                                                    ? 'text-red-300'
-                                                    : 'text-slate-500'"
+                                            :class="pollStatus(olt).cls" :data-state="pollStatus(olt).key"
                                         >
-                                            {{ olt.last_test_result?.ok ? $t('common.ok') : (olt.last_test_result ? $t('common.failed') : $t('common.not_tested')) }}
+                                            {{ pollStatus(olt).text }}
                                         </span>
                                     </div>
                                     <div class="nos-mobile-field">
@@ -464,13 +472,9 @@ const formatDate = (value) => formatDateTime(value);
                                             ></span>
                                             <span
                                                 class="text-xs font-semibold"
-                                                :class="olt.last_test_result?.ok
-                                                    ? 'text-emerald-300'
-                                                    : olt.last_test_result
-                                                        ? 'text-red-300'
-                                                        : 'text-slate-500'"
+                                                :class="pollStatus(olt).cls" :data-state="pollStatus(olt).key"
                                             >
-                                                {{ olt.last_test_result?.ok ? $t('common.ok') : (olt.last_test_result ? $t('common.failed') : $t('common.not_tested')) }}
+                                                {{ pollStatus(olt).text }}
                                             </span>
                                         </div>
                                         <div class="mt-1 text-xs text-slate-500">{{ formatDate(olt.last_tested_at) }}</div>
@@ -586,13 +590,9 @@ const formatDate = (value) => formatDateTime(value);
                                         <span class="nos-mobile-label">{{ $t('smartolt.col_test') }}</span>
                                         <span
                                             class="nos-mobile-value font-semibold"
-                                            :class="olt.last_test_result?.ok
-                                                ? 'text-emerald-300'
-                                                : olt.last_test_result
-                                                    ? 'text-red-300'
-                                                    : 'text-slate-500'"
+                                            :class="pollStatus(olt).cls" :data-state="pollStatus(olt).key"
                                         >
-                                            {{ olt.last_test_result?.ok ? $t('common.ok') : (olt.last_test_result ? $t('common.failed') : $t('common.not_tested')) }}
+                                            {{ pollStatus(olt).text }}
                                         </span>
                                     </div>
                                     <div class="nos-mobile-field">
@@ -722,13 +722,9 @@ const formatDate = (value) => formatDateTime(value);
                                             ></span>
                                             <span
                                                 class="text-xs font-semibold"
-                                                :class="olt.last_test_result?.ok
-                                                    ? 'text-emerald-300'
-                                                    : olt.last_test_result
-                                                        ? 'text-red-300'
-                                                        : 'text-slate-500'"
+                                                :class="pollStatus(olt).cls" :data-state="pollStatus(olt).key"
                                             >
-                                                {{ olt.last_test_result?.ok ? $t('common.ok') : (olt.last_test_result ? $t('common.failed') : $t('common.not_tested')) }}
+                                                {{ pollStatus(olt).text }}
                                             </span>
                                         </div>
                                         <div class="mt-1 text-xs text-slate-500">{{ formatDate(olt.last_tested_at) }}</div>

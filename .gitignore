@@ -62,3 +62,7 @@ mobile/android/app/src/main/assets/*.json
 
 # Mobile app deferred until web release
 /mobile/
+
+# nmsolt-ops.sh state (rollback points, env history) and local data
+/.nmsolt-state/
+/data/

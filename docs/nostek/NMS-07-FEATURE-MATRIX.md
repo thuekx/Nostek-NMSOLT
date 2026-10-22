@@ -4,7 +4,7 @@ Original audit base: `62b414f04ac4b5e4f024669e431be29f4d0845d1` (PR #19).
 Alignment: main `b0cbf36ac6f59552a3ef4f3a01f187997d221f86` (PR #22); identity cleanup preserved.
 PR #20: MERGED as `1a38c6b309a84f07db89398f2f26d727d92c3128`.
 CI: aligned head `fc5ce840bcc548479a308e1de16fc292f1d21e49` passed all five jobs in run `39773898154`; original run `39715103922` is historical.
-Execution: further NMS-07 implementation paused by owner; documentation closeout only.
+Execution: resumed 2026-10-22 (owner prompt); NMS-07-A unified package on branch `step/nms-07-a-unified-package`.
 Scope: source inspection and synthetic CI only; no host/device/network operations.
 State: **IN_PROGRESS**, not whole-product verification.
 
@@ -25,7 +25,7 @@ this inventory does not claim that every user journey works.
 | GenieACS reads/Wi-Fi controls | GenieacsConnectedDevicesTest, GenieacsOnuMatchTest, DeviceWriteBoundaryTest | Existing lab evidence retained; UI must clearly distinguish available reads from blocked writes |
 | Queued mutations and interactive CLI | DeviceWriteBoundaryTest | Default-off gate retained; not a single-use approval broker (NMS-11 remains blocked) |
 | Poller/scheduler/optical aggregation | OltPollingTest, Go tests/vet | No live polling executed here; capacity benchmark remains open |
-| Unified product package | Compose validators and image builds | ACS remains explicit overlay; unified health/backup/upgrade/rollback flow still required |
+| Unified product package | Compose validators, image builds, `tests/ops/integration.sh` (CI `ops-integration`) | NMS-07-A: core/with-acs/platform Compose + `nmsolt-ops.sh`; workspace 58/58 with real PG/Redis/Mongo/GenieACS and a stand-in app; real app image under the tool first runs in Nostek-AI NET-1-2 |
 | Consumer API | Existing Api/* tests | Legacy API exists, but NMS-08 scope/freshness/cursor/OpenAPI contract is not complete |
 
 ## Reproducible search defects and regression evidence
@@ -51,7 +51,7 @@ this inventory does not claim that every user journey works.
 - [ ] Every named route and page journey exercised using isolated synthetic data.
 - [ ] All high-risk UI controls accurately reflect the installation write gate.
 - [ ] Large ONU/alarm/search/polling latency, query and memory budgets measured.
-- [ ] Unified base/ACS installer, health, backup, upgrade and rollback verified.
+- [ ] Unified base/ACS installer, health, backup, upgrade and rollback verified. (Source + synthetic runtime PASS in NMS-07-A; real app image on a host still open.)
 - [x] Search PR #20: exact-head full CI passed and owner-approved merge completed. This does not verify whole-phase UI/performance/package criteria.
 
 NMS-08 must not be marked unblocked by this partial audit alone.

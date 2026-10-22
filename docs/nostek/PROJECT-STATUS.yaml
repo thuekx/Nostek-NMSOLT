@@ -4,7 +4,7 @@ updated_at: "2026-10-22"
 source_of_truth:
   repo: https://github.com/thuekx/Nostek-NMSOLT
   default_branch: main
-  checkpoint_main_sha: 1a38c6b309a84f07db89398f2f26d727d92c3128
+  checkpoint_main_sha: 3e31232c510075db0f289d063b2966948baf3bc3
   baseline_sha: 24332a2b4144cff03f04f64e4711ce7938d992ae
   nms06_completion:
     pr: https://github.com/thuekx/Nostek-NMSOLT/pull/18
@@ -19,7 +19,8 @@ policy:
 product_contract:
   provider: "NMSOLT is the standalone network platform and authoritative telemetry/API provider."
   maung: "Consumer only: future /nosteknmsolt page may manage API integration and show summaries, search, alarms and quick customer/ONU details."
-  nostek_ai: "Consumer only through versioned read tools; no direct database or device credentials."
+  nostek_ai: "Consumer only through versioned read tools (Nostek-AI host broker + stdio MCP nms_*, all owner-only); no direct database or device credentials."
+  runtime: "Nostek-AI VM nostek-platform (owner NMS-AI-Q1 = A, 2026-10-22): read-only device credentials only, data under /srv/data/nmsolt, host steps are Nostek-AI packages (track NET-1)."
   prohibited_duplication: "Polling, drivers, GenieACS, optical history and network business logic remain in NMSOLT."
 status:
   NMS-00: VERIFIED
@@ -56,7 +57,14 @@ latest_evidence:
     previous_search_ci: "39715103922 SUCCESS on 02949e56e41967956938dcb716c7003c91edc957 only."
     aligned_ci: "39773898154 SUCCESS on fc5ce840bcc548479a308e1de16fc292f1d21e49; all five jobs passed."
     merge_tree_evidence: "Squash merge has the same tree as tested head; no separate merge-SHA workflow run claimed."
-    execution_state: "PAUSED_BY_OWNER: documentation closeout only; no further NMS-07 implementation."
+    execution_state: "RESUMED 2026-10-22 by owner prompt: safe source work only (synthetic tests, Compose rendering, no hosts)."
+    work_packages:
+      A_unified_package: "SOURCE_PASS_PENDING_PR: core/with-acs/platform Compose, MongoDB auth, no argv secrets, healthchecks, limits, digest pins, scripts/nostek/nmsolt-ops.sh, monitor/checks.json; workspace ops integration 58/58 (real PG/Redis/Mongo/GenieACS, stand-in app). Branch step/nms-07-a-unified-package."
+      B_data_growth: PENDING
+      C_onu_state_table: PENDING
+      D_ui_journey_and_write_gate_audit: PENDING
+      E_performance_matrix: PENDING
+    package_doc: docs/nostek/NMS-07-UNIFIED-PACKAGE.md
     search_merge_gate: "Owner approved PR #20; GitHub merge confirmed. Future PRs require their own applicable gates and approval."
     identity_cleanup: "PR #21 head 6bc53a3 passed run 39770297399 and merged as f43baa3; canonical Nostek-NMSOLT/Nostek-NMS and nos-* namespace enforced."
   NMS-08:
@@ -80,13 +88,15 @@ latest_evidence:
     objective: "Release, DR, observability, isolation, SBOM/license and production-readiness decision."
     blocker: "Upstream gates and explicit release approval."
 environment:
-  maung_host: "maung-apps, 192.168.48.99 (historical; current state must be rechecked before host actions)"
+  target_runtime: "nostek-platform (Nostek-AI VM, 192.168.49.99); install = Nostek-AI package NET-1-2 wrapping nmsolt-ops.sh; not started"
+  maung_host: "maung-apps, 192.168.48.99 (historical; retired after the NET-1 migration; recheck before host actions)"
   maung_deployment: STAGING_BASE_ACTIVE
+  maung_runners: "scripts/nostek/deploy-maung-*.sh are historical NMS-04/05 evidence; do not re-run against NMS-07-A or later (MongoDB auth)"
   genieacs_lab: ACTIVE_VERIFIED
   live_olt_write: PROHIBITED_WITHOUT_APPROVAL
 next_action:
-  id: NMS-07-UNIFIED-GENIEACS-PACKAGE
-  instruction: "When owner resumes implementation, build and test the unified full package for app/PostgreSQL/Redis plus private GenieACS/MongoDB, then continue the feature/performance matrix. Preserve LICENSE attribution and keep device writes disabled."
+  id: NMS-07-B-DATA-GROWTH
+  instruction: "After the NMS-07-A PR passes exact-head CI and the owner merges it, add retention commands (polling_events, alarm_events, audit_logs, olt_config_backups), drop the duplicate onu_rx_hourly index and split the poll worker pool; then C onu_state table, D UI/write-gate audit, E performance matrix. Preserve LICENSE attribution and keep device writes disabled."
   owner: "executor"
   approval_required: false
 references:
@@ -94,3 +104,4 @@ references:
   - docs/nostek/STATUS-TREE.md
   - docs/nostek/HANDOFF.md
   - docs/nostek/NMS-07-12-GATED-READINESS.md
+  - docs/nostek/NMS-07-UNIFIED-PACKAGE.md

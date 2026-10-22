@@ -94,17 +94,44 @@ NMS-07 implementation was explicitly paused by the owner after merge. This
 update only reconciles documentation; NMS-07 remains IN_PROGRESS and NMS-08–12
 remain BLOCKED. Start implementation only when the next session is instructed.
 
+## Alignment with Nostek AI (2026-10-22)
+
+Owner decisions NMS-AI-Q1…Q9 (Nostek-AI thread "Arsitektur NMSOLT di nostek-platform"):
+NMSOLT runs on the Nostek-AI VM `nostek-platform` with read-only device credentials,
+data under `/srv/data/nmsolt`, CWMP only from approved ONT subnets behind a DNS name; the
+Maung staging data is migrated (write credentials blanked, APP_KEY moved by the owner,
+NMSOLT Telegram off, Maung polling off first) and Maung staging is kept 14 days, then
+retired. Host steps are Nostek-AI packages (track NET-1: NET-1-1 disk, NET-1-2 install +
+backup 1.2, NET-1-3 migrate, NET-1-4 trial, NET-1-5 `nms_*` tools = NMS-10). NMS-08 also
+carries the Control Center conditions (org/site bound to the token server-side, negative
+cross-site test, support access per CC ADR-14).
+
+## NMS-07-A unified package (2026-10-22)
+
+Branch `step/nms-07-a-unified-package`: core/with-acs Compose, `compose.platform.yaml`,
+MongoDB auth, GenieACS secrets out of argv, healthchecks, limits, digest pins,
+`scripts/nostek/nmsolt-ops.sh` and `monitor/checks.json`. Workspace ops integration
+58/58 PASS with real PostgreSQL/Redis/MongoDB/GenieACS and a stand-in app; the same test
+runs in CI job `ops-integration`. Details: [NMS-07-UNIFIED-PACKAGE.md](NMS-07-UNIFIED-PACKAGE.md).
+The PR needs exact-head CI and owner merge. NMS-07 stays IN_PROGRESS.
+
 ## Exact next action
 
-Identity cleanup and PR #20 search fixes are complete and merged. After the owner resumes implementation, continue NMS-07 with unified GenieACS packaging, unified health/backup/upgrade/rollback, and the functional/performance matrix. Do not modify the retained LICENSE attribution.
+Refresh GitHub. If the NMS-07-A PR is open, check its exact-head CI; if merged, continue
+NMS-07-B (retention for polling/alarm/audit/config-backup tables, duplicate RX index,
+separate poll worker pool), then C (`onu_state` table), D (UI journey and write-gate
+audit), E (performance matrix on synthetic data). Do not modify the retained LICENSE
+attribution.
 
 For cross-device continuation, use the post-merge prompt in [CLOUD-HANDOFF.md](CLOUD-HANDOFF.md). PR #20 search fixes are already in main; do not recreate them.
 
 ## New-session prompt
 
 > Continue thuekx/Nostek-NMSOLT from GitHub. Read HANDOFF.md, ROADMAP.md,
-> PROJECT-STATUS.yaml and STATUS-TREE.md; verify main, open PRs and exact-head
-> CI. NMS-00 through NMS-06 are VERIFIED; PR #18 merged as c639f127. NMSOLT is
+> PROJECT-STATUS.yaml, STATUS-TREE.md and NMS-07-UNIFIED-PACKAGE.md; verify main,
+> open PRs and exact-head CI. NMS-00 through NMS-06 are VERIFIED; NMS-07-A unified
+> package is on branch step/nms-07-a-unified-package; runtime target is the
+> Nostek-AI VM nostek-platform (track NET-1). NMSOLT is
 > the standalone network platform/API provider. Maung and Nostek-AI are
 > consumers; a future Maung /nosteknmsolt page is a thin API settings and
 > quick-view surface, not a polling or database layer. Continue NMS-07 product

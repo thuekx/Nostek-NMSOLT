@@ -36,8 +36,8 @@ the tested head; no separate merge-SHA workflow execution is claimed.
 The search changes are already in main; do not recreate or re-merge PR #20.
 The source inventory retains its original audit provenance. Refresh main, open
 PRs and CI on restart; this checkpoint is not a claim that main can never move.
-Further NMS-07 implementation is currently paused by owner; this closeout only
-updates documentation. A future implementation session must be explicitly started.
+NMS-07 implementation resumed on 2026-10-22 (owner prompt). NMS-07-A unified package
+is on branch `step/nms-07-a-unified-package` (see NMS-07-UNIFIED-PACKAGE.md).
 
 ## Active work
 
@@ -46,16 +46,20 @@ NMS-07 is IN PROGRESS:
 1. preserve the completed identity standard: `Nostek-NMSOLT`, short name
    `Nostek-NMS`, internal `nos-*` namespace and `nos-snmp-poller`;
 2. preserve the existing LICENSE attribution required by the inherited MIT code;
-3. unify the full installation path for app/PostgreSQL/Redis plus
-   GenieACS/MongoDB with private internal services and explicitly bound CWMP;
-4. add unified health, preflight, backup/restore, upgrade and rollback evidence;
-5. audit functions, UI journeys, stale/partial states and performance;
+3. NMS-07-A (source PASS, PR pending): unified core/with-acs package, platform
+   bind-mount overlay, `scripts/nostek/nmsolt-ops.sh`, `monitor/checks.json`,
+   ops integration test (CI job `ops-integration`);
+4. NMS-07-B data growth (retention, duplicate RX index, poll worker pool),
+   C `onu_state` table, D UI journey and write-gate audit, E performance matrix;
+5. runtime target is the Nostek-AI VM `nostek-platform`; host steps are Nostek-AI
+   packages (track NET-1), never run from this repository;
 6. proceed to NMS-08 only when NMS-07 has complete evidence.
 
 ## Required first actions in Cloud
 
 Read `docs/nostek/HANDOFF.md`, `ROADMAP.md`, `PROJECT-STATUS.yaml`,
-`STATUS-TREE.md`, `NMS-07-PRODUCT-STABILIZATION-AUDIT.md` and this file. Verify
+`STATUS-TREE.md`, `NMS-07-PRODUCT-STABILIZATION-AUDIT.md`,
+`NMS-07-UNIFIED-PACKAGE.md` and this file. Verify
 the current `main` SHA, open PRs and exact-head CI. Never infer VERIFIED from a
 plan or a green documentation-only test.
 
@@ -64,45 +68,36 @@ plan or a green documentation-only test.
 Use the following prompt only when ready to resume implementation:
 
 ```text
-Continue thuekx/Nostek-NMSOLT from current GitHub main in a Codex Cloud environment.
+Continue thuekx/Nostek-NMSOLT from current GitHub main.
 Read docs/nostek/HANDOFF.md, ROADMAP.md, PROJECT-STATUS.yaml, STATUS-TREE.md,
-NMS-07-PRODUCT-STABILIZATION-AUDIT.md and CLOUD-HANDOFF.md; also read
-NMS-07-FEATURE-MATRIX.md and NMS-07-SOURCE-INVENTORY.json. Follow applicable AGENTS.md.
+NMS-07-PRODUCT-STABILIZATION-AUDIT.md, NMS-07-UNIFIED-PACKAGE.md, NMS-07-FEATURE-MATRIX.md,
+NMS-07-SOURCE-INVENTORY.json and CLOUD-HANDOFF.md. Follow applicable AGENTS.md.
 
 Refresh main, open PRs, reviews and exact-head CI before source changes.
-PR #20 is already merged as 1a38c6b309a84f07db89398f2f26d727d92c3128.
-Its tested head fc5ce840bcc548479a308e1de16fc292f1d21e49 passed all five jobs:
-https://github.com/thuekx/Nostek-NMSOLT/actions/runs/39773898154
-The squash merge tree matches that head; no separate merge-SHA run is claimed.
-Search batching, MAC navigation, input validation and regression tests are in main.
-Do not recreate them or treat PR #20 as open. PR #21 identity cleanup remains intact.
-No further NMS-07 implementation followed that merge; the owner paused work to
-complete this documentation handoff. This new prompt authorizes resuming safe source work.
-NMS-00–06 are recorded VERIFIED; NMS-07 IN_PROGRESS; NMS-08–12 BLOCKED.
+NMS-00–06 are VERIFIED; NMS-07 IN_PROGRESS; NMS-08–12 BLOCKED.
+NMS-07-A (unified core/with-acs package, compose.platform.yaml, scripts/nostek/nmsolt-ops.sh,
+monitor/checks.json, tests/ops/integration.sh) was built on step/nms-07-a-unified-package;
+check whether its PR is merged before continuing. Do not recreate it.
 
 Nostek-NMSOLT is the standalone network platform and telemetry/API provider.
 Maung and Nostek-AI are consumers via versioned APIs/tools, without direct database
 access or duplication of polling, drivers, GenieACS, history or device credentials.
-GenieACS must ship bundled in the full app/PostgreSQL/Redis + GenieACS/MongoDB package
-while retaining internal container/network/volume isolation. NBI/FS/Mongo private,
-UI loopback, CWMP bound only to explicitly approved addresses.
+Runtime target: Nostek-AI VM nostek-platform (owner decisions NMS-AI-Q1…Q9); host steps are
+Nostek-AI packages (track NET-1), never run from this repository.
 Preserve Laravel/Vue/Inertia and Go unless measured profiling and a separate decision
 justify migration. Preserve Nostek-NMSOLT/Nostek-NMS, nos-* namespace,
 cmd/nos-snmp-poller, bin/nos-snmp-poller and required MIT LICENSE attribution.
 
-Continue NMS-07: unified core/with-acs installation (recommended full with-acs),
-preflight/config validation, health/status, PostgreSQL/storage/Mongo backup/restore,
-pinned images/versions and reversible upgrade/rollback. Then audit UI journeys,
-stale/partial/unavailable/permission states, write-gate visibility, and measured
-ONU/alarm/search/optical/query/memory/queue/poller/retention performance.
+Continue NMS-07: B data growth (retention for polling_events, alarm_events, audit_logs,
+olt_config_backups; duplicate onu_rx_hourly index; separate poll worker pool), C onu_state
+table, D UI journeys, stale/partial/unavailable/permission states, write-gate visibility,
+E measured ONU/alarm/search/optical/query/memory/queue/poller/retention performance.
 Use isolated synthetic tests and Compose rendering; do not run host installers/deployments.
 
 Do not access/change production, Maung hosts/repositories, Caddy, maung_edge,
 CRM/WO, Nostek-AI runtime, secrets or live OLT/ONT. Device writes stay disabled.
 Mark external/approval-dependent tasks BLOCKED and continue independent safe source work.
-Use feature branches, PR review and exact-head tests/CI. Owner approval for PR #20
-does not authorize merging future PRs. Never bypass a gate or approval.
-Synchronize handoff, roadmap, YAML, status tree, audit and Cloud prompt after work.
+Use step/ branches, PR review and exact-head CI. Never merge; the owner merges.
+Synchronize handoff, roadmap, YAML, status tree, audit and this prompt after work.
 Do not claim NMS-07 VERIFIED or unblock NMS-08 without all acceptance evidence.
-Continue safe independent work within the active session until complete or genuinely blocked.
 ```

@@ -11,6 +11,7 @@ use App\Models\TelegramSetting;
 use App\Services\AlarmEvaluator;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\Http;
+use Tests\Concerns\SequentialOltHost;
 use Tests\TestCase;
 
 /**
@@ -20,6 +21,7 @@ use Tests\TestCase;
  */
 class AlarmOdpCorrelationTest extends TestCase
 {
+    use SequentialOltHost;
     use RefreshDatabase;
 
     private function makeOlt(array $lastTestResult): SnmpOlt
@@ -27,7 +29,7 @@ class AlarmOdpCorrelationTest extends TestCase
         return SnmpOlt::create([
             'name' => 'PATI-ZTE-C320',
             'vendor' => 'ZTE C320',
-            'ip' => '10.30.0.'.random_int(2, 250),
+            'ip' => '10.30.0.'.$this->nextOltHost(),
             'snmp_port' => 161,
             'snmp_read_community' => 'public',
             'snmp_version' => 'v2c',

@@ -12,10 +12,12 @@ use App\Services\Snmp\OltSnmpClient;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\Queue;
 use RuntimeException;
+use Tests\Concerns\SequentialOltHost;
 use Tests\TestCase;
 
 class OltPollingTest extends TestCase
 {
+    use SequentialOltHost;
     use RefreshDatabase;
 
     private function makeOlt(array $overrides = []): SnmpOlt
@@ -23,7 +25,7 @@ class OltPollingTest extends TestCase
         return SnmpOlt::create(array_merge([
             'name' => 'PATI-ZTE-C320',
             'vendor' => 'ZTE C320',
-            'ip' => '10.20.0.'.random_int(2, 250),
+            'ip' => '10.20.0.'.$this->nextOltHost(),
             'snmp_port' => 161,
             'snmp_read_community' => 'public',
             'snmp_version' => 'v2c',

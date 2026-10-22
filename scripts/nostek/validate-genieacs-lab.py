@@ -12,7 +12,9 @@ from typing import Any
 
 
 EXPECTED_IMAGE = "nmsolt-genieacs:1.2.16-local"
-EXPECTED_MONGO_URL = "mongodb://mongo_acs:27017/genieacs"
+MONGO_URL = re.compile(
+    r"^mongodb://[A-Za-z0-9._-]+:[^@/\s]+@mongo_acs:27017/genieacs\?authSource=genieacs$"
+)
 EXPECTED_COMMANDS = {
     "genieacs-cwmp": "genieacs-cwmp",
     "genieacs-nbi": "genieacs-nbi",
@@ -52,8 +54,8 @@ def main() -> int:
 
     errors: list[str] = []
 
-    if not re.search(r"(?m)^FROM node:22-bookworm-slim\s*$", dockerfile):
-        fail(errors, "GenieACS lab base image must remain node:22-bookworm-slim")
+    if not re.search(r"(?m)^FROM node:22-bookworm-slim@sha256:[0-9a-f]{64}\s*$", dockerfile):
+        fail(errors, "GenieACS base image must remain node:22-bookworm-slim pinned by digest")
     if "genieacs@1.2.16" not in dockerfile:
         fail(errors, "GenieACS npm package must remain pinned to 1.2.16")
     if not re.search(r"(?m)^USER node\s*$", dockerfile):
@@ -62,6 +64,11 @@ def main() -> int:
         fail(errors, "GenieACS image must not switch to root")
     if "${GENIEACS_UI_JWT_SECRET:?set GENIEACS_UI_JWT_SECRET in local .env}" not in compose_source:
         fail(errors, "GenieACS UI secret must be required through local environment interpolation")
+    if "--ui-jwt-secret" in compose_source:
+        fail(errors, "GenieACS UI secret must not be passed as a command argument")
+    for secret in ("MONGO_ACS_ROOT_PASSWORD", "MONGO_ACS_APP_PASSWORD"):
+        if f"${{{secret}:?" not in compose_source:
+            fail(errors, f"{secret} must be required through local environment interpolation")
 
     for name, expected_command in EXPECTED_COMMANDS.items():
         service = services.get(name)
@@ -73,13 +80,29 @@ def main() -> int:
         command = service.get("command", [])
         if not isinstance(command, list) or not command or command[0] != expected_command:
             fail(errors, f"{name} has an unexpected command")
+        if any("secret" in str(arg).lower() or "password" in str(arg).lower() for arg in command[1:]):
+            fail(errors, f"{name} passes a secret-looking command argument")
         environment = service.get("environment", {})
-        if not isinstance(environment, dict) or environment.get("GENIEACS_MONGODB_CONNECTION_URL") != EXPECTED_MONGO_URL:
-            fail(errors, f"{name} must use the private mongo_acs database URL")
+        if not isinstance(environment, dict) or not MONGO_URL.match(
+            str(environment.get("GENIEACS_MONGODB_CONNECTION_URL", ""))
+        ):
+            fail(errors, f"{name} must use the authenticated private mongo_acs database URL")
+        if "healthcheck" not in service:
+            fail(errors, f"{name} has no healthcheck")
+
+    ui_env = services.get("genieacs-ui", {}).get("environment", {}) if isinstance(services.get("genieacs-ui"), dict) else {}
+    if not isinstance(ui_env, dict) or not str(ui_env.get("GENIEACS_UI_JWT_SECRET", "")):
+        fail(errors, "genieacs-ui must receive GENIEACS_UI_JWT_SECRET through its environment")
 
     mongo = services.get("mongo_acs")
-    if not isinstance(mongo, dict) or mongo.get("image") != "mongo:7.0":
-        fail(errors, "mongo_acs must remain pinned to the reviewed 7.0 lab tag")
+    if not isinstance(mongo, dict) or not re.match(r"^mongo:7\.0@sha256:[0-9a-f]{64}$", str(mongo.get("image", ""))):
+        fail(errors, "mongo_acs must remain the reviewed 7.0 tag pinned by digest")
+    elif "--auth" not in [str(arg) for arg in mongo.get("command", []) or []]:
+        fail(errors, "mongo_acs must run with --auth")
+    else:
+        mongo_env = mongo.get("environment", {})
+        if not isinstance(mongo_env, dict) or not str(mongo_env.get("MONGO_INITDB_ROOT_PASSWORD", "")):
+            fail(errors, "mongo_acs must initialise a root password")
 
     for name in ("mongo_acs", "genieacs-nbi", "genieacs-fs"):
         service = services.get(name)

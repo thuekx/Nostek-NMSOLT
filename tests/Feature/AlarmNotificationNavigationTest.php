@@ -9,6 +9,7 @@ use App\Models\User;
 use App\Services\Alarm\AlarmNotificationService;
 use App\Services\Alarm\AlarmNotificationTargetResolver;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Tests\Concerns\SequentialOltHost;
 use Tests\TestCase;
 
 /**
@@ -20,6 +21,7 @@ use Tests\TestCase;
  */
 class AlarmNotificationNavigationTest extends TestCase
 {
+    use SequentialOltHost;
     use RefreshDatabase;
 
     /**
@@ -30,7 +32,7 @@ class AlarmNotificationNavigationTest extends TestCase
         return SnmpOlt::create([
             'name' => 'OLT-'.$vendor,
             'vendor' => $vendor,
-            'ip' => '10.60.0.'.random_int(2, 250),
+            'ip' => '10.60.0.'.$this->nextOltHost(),
             'snmp_read_community' => 'public',
             'snmp_version' => 'v2c',
             'last_test_result' => [

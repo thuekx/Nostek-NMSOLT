@@ -1,0 +1,36 @@
+# Nostek-NMSOLT platform overlay (NMS-07 unified package).
+#
+#   docker compose -f docker-compose.yml [-f compose.acs.yaml] -f compose.platform.yaml ...
+#   (or: scripts/nostek/nmsolt-ops.sh --platform <command>)
+#
+# Moves every data volume to a bind mount under NMSOLT_DATA_DIR so the host's
+# file backup covers it (on nostek-platform: /srv/data/nmsolt; named volumes in
+# /srv/docker are excluded from the platform backup). Live database directories
+# (pg/, mongo/, redis/) are not a consistent backup by themselves: the backup
+# relies on the dumps that `nmsolt-ops.sh backup` writes. The directories must
+# exist before start (`nmsolt-ops.sh --platform init-data`).
+volumes:
+  pgdata:
+    driver: local
+    driver_opts:
+      type: none
+      o: bind
+      device: ${NMSOLT_DATA_DIR:?set NMSOLT_DATA_DIR in local .env}/pg
+  redisdata:
+    driver: local
+    driver_opts:
+      type: none
+      o: bind
+      device: ${NMSOLT_DATA_DIR:?set NMSOLT_DATA_DIR in local .env}/redis
+  app_storage:
+    driver: local
+    driver_opts:
+      type: none
+      o: bind
+      device: ${NMSOLT_DATA_DIR:?set NMSOLT_DATA_DIR in local .env}/app-storage
+  nmsolt_mongo_data:
+    driver: local
+    driver_opts:
+      type: none
+      o: bind
+      device: ${NMSOLT_DATA_DIR:?set NMSOLT_DATA_DIR in local .env}/mongo

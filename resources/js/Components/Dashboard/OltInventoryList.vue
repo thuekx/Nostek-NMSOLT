@@ -18,10 +18,10 @@ const totals = computed(() => props.items.reduce(
 </script>
 
 <template>
-    <div class="kv-glass-panel flex h-full flex-col overflow-hidden">
+    <div class="nos-glass-panel flex h-full flex-col overflow-hidden">
         <div class="flex items-center justify-between border-b border-white/5 px-5 py-4">
             <div class="flex items-center gap-3">
-                <span class="kv-circle-sky">
+                <span class="nos-circle-sky">
                     <Server class="h-5 w-5" />
                 </span>
                 <h3 class="text-base font-semibold text-white">{{ $t('dashboard.olt_inventory') }}</h3>
@@ -44,7 +44,7 @@ const totals = computed(() => props.items.reduce(
                             <p class="truncate text-xs text-slate-500">{{ row.model }}</p>
                         </div>
                     </div>
-                    <span :class="row.reachable ? 'kv-pill-success' : 'kv-pill-danger'">
+                    <span :class="row.reachable ? 'nos-pill-success' : 'nos-pill-danger'">
                         {{ row.reachable ? $t('dashboard.status_up') : $t('dashboard.status_down') }}
                     </span>
                 </li>
@@ -57,8 +57,8 @@ const totals = computed(() => props.items.reduce(
         <div v-if="items.length > 0" class="flex items-center justify-between border-t border-white/10 bg-canvas-3/30 px-5 py-3">
             <p class="text-sm font-semibold text-slate-300">{{ $t('dashboard.total') }} <span class="ml-2 text-xs font-normal text-slate-500">{{ $t('dashboard.unit_count', { count: totals.unit }) }}</span></p>
             <div class="flex items-center gap-2">
-                <span class="kv-pill-success">{{ $t('dashboard.status_up') }} {{ totals.up }}</span>
-                <span class="kv-pill-danger">{{ $t('dashboard.status_down') }} {{ totals.down }}</span>
+                <span class="nos-pill-success">{{ $t('dashboard.status_up') }} {{ totals.up }}</span>
+                <span class="nos-pill-danger">{{ $t('dashboard.status_down') }} {{ totals.down }}</span>
             </div>
         </div>
     </div>

@@ -401,7 +401,7 @@ const setAdminState = async (enabled) => {
 
                 <div class="grid gap-6 lg:grid-cols-2">
                     <!-- Status -->
-                    <div class="kv-surface overflow-hidden rounded-lg border border-white/10 bg-slate-900/40 shadow-lg shadow-black/30 backdrop-blur-xl">
+                    <div class="nos-surface overflow-hidden rounded-lg border border-white/10 bg-slate-900/40 shadow-lg shadow-black/30 backdrop-blur-xl">
                         <div class="flex items-center gap-3 border-b border-white/10 px-4 py-4 sm:px-6">
                             <Network class="h-5 w-5 text-cyan-400" />
                             <h3 class="text-base font-semibold text-white">{{ $t('portdetail.port_status') }}</h3>
@@ -458,7 +458,7 @@ const setAdminState = async (enabled) => {
                                             v-model="descForm.value"
                                             type="text"
                                             maxlength="64"
-                                            class="kv-filter-control w-full"
+                                            class="nos-filter-control w-full"
                                             :placeholder="$t('portdetail.description_placeholder')"
                                             @keyup.enter="submitDesc"
                                         />
@@ -497,7 +497,7 @@ const setAdminState = async (enabled) => {
                     </div>
 
                     <!-- Optical / SFP -->
-                    <div class="kv-surface overflow-hidden rounded-lg border border-white/10 bg-slate-900/40 shadow-lg shadow-black/30 backdrop-blur-xl">
+                    <div class="nos-surface overflow-hidden rounded-lg border border-white/10 bg-slate-900/40 shadow-lg shadow-black/30 backdrop-blur-xl">
                         <div class="flex items-center gap-3 border-b border-white/10 px-4 py-4 sm:px-6">
                             <Zap class="h-5 w-5 text-cyan-400" />
                             <h3 class="text-base font-semibold text-white">{{ $t('portdetail.optical_title') }}</h3>
@@ -530,7 +530,7 @@ const setAdminState = async (enabled) => {
                 </div>
 
                 <!-- Trafik -->
-                <div class="kv-surface overflow-hidden rounded-lg border border-white/10 bg-slate-900/40 shadow-lg shadow-black/30 backdrop-blur-xl">
+                <div class="nos-surface overflow-hidden rounded-lg border border-white/10 bg-slate-900/40 shadow-lg shadow-black/30 backdrop-blur-xl">
                     <div class="flex flex-col gap-3 border-b border-white/10 px-4 py-4 sm:flex-row sm:items-center sm:justify-between sm:px-6">
                         <div class="flex items-center gap-3">
                             <Activity class="h-5 w-5 text-cyan-400" />
@@ -572,13 +572,13 @@ const setAdminState = async (enabled) => {
                 </div>
 
                 <!-- VLAN (uplink) -->
-                <div v-if="isUplink" class="kv-surface overflow-hidden rounded-lg border border-white/10 bg-slate-900/40 shadow-lg shadow-black/30 backdrop-blur-xl">
+                <div v-if="isUplink" class="nos-surface overflow-hidden rounded-lg border border-white/10 bg-slate-900/40 shadow-lg shadow-black/30 backdrop-blur-xl">
                     <div class="flex items-center justify-between gap-3 border-b border-white/10 px-4 py-4 sm:px-6">
                         <div class="flex items-center gap-3">
                             <Tag class="h-5 w-5 text-cyan-400" />
                             <h3 class="text-base font-semibold text-white">VLAN Tagged</h3>
                         </div>
-                        <span v-if="taggedVlans.length" class="kv-pill-info">{{ totalVlanCount }} VLAN</span>
+                        <span v-if="taggedVlans.length" class="nos-pill-info">{{ totalVlanCount }} VLAN</span>
                     </div>
                     <div class="p-4 sm:p-6">
                         <div v-if="taggedVlans.length" class="flex flex-wrap gap-1.5">
@@ -607,7 +607,7 @@ const setAdminState = async (enabled) => {
                                     id="vlan-add"
                                     v-model="vlanForm.vlan_id"
                                     type="number" min="1" max="4094" placeholder="VLAN ID (1-4094)"
-                                    class="kv-input w-full text-sm sm:w-48"
+                                    class="nos-input w-full text-sm sm:w-48"
                                 />
                                 <PrimaryButton type="submit" :disabled="vlanForm.submitting || !vlanForm.vlan_id">
                                     <Plus class="mr-2 h-4 w-4" />
@@ -629,7 +629,7 @@ const setAdminState = async (enabled) => {
                 </div>
 
                 <!-- ONU (gpon) -->
-                <div v-if="isGpon" class="kv-surface overflow-hidden rounded-lg border border-white/10 bg-slate-900/40 shadow-lg shadow-black/30 backdrop-blur-xl">
+                <div v-if="isGpon" class="nos-surface overflow-hidden rounded-lg border border-white/10 bg-slate-900/40 shadow-lg shadow-black/30 backdrop-blur-xl">
                     <div class="flex flex-col gap-3 border-b border-white/10 px-4 py-4 sm:flex-row sm:items-center sm:justify-between sm:px-6">
                         <div class="flex items-center gap-3">
                             <Users class="h-5 w-5 text-cyan-400" />

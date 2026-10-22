@@ -62,7 +62,7 @@ const odpCardStyle = computed(() =>
         : {},
 );
 
-// Ujung bawah kartu berjarak 34 px di atas ujung pin (lihat .kv-pin-popup). Saat pin dipilih
+// Ujung bawah kartu berjarak 34 px di atas ujung pin (lihat .nos-pin-popup). Saat pin dipilih
 // peta digeser supaya kartu + pin tampil utuh di tengah area peta, bukan terpotong di atas.
 const POPUP_GAP = 34;
 const EDGE = 12;
@@ -304,20 +304,20 @@ const onOdpMoved = ({ id, latitude, longitude }) => {
                 <!-- Kartu detail pin ONU — menempel tepat di atas pin, maks setinggi peta -->
                 <div
                     v-if="selectedPin && cardPos"
-                    class="kv-pin-popup absolute z-[500] w-72"
+                    class="nos-pin-popup absolute z-[500] w-72"
                     :style="cardStyle"
                 >
                     <div ref="pinCardEl" class="overflow-y-auto overscroll-contain rounded-2xl" :style="{ maxHeight: cardMaxHeight }">
                         <PinDetailCard :pin="selectedPin" @close="closeDetail" />
                     </div>
-                    <span class="kv-pin-popup__arrow"></span>
+                    <span class="nos-pin-popup__arrow"></span>
                 </div>
 
                 <!-- Kartu detail pin ODP — sedikit lebih lebar dari kartu ONU karena memuat
                      daftar ONU anggota; dibatasi lebar layar supaya tak meluber di ponsel. -->
                 <div
                     v-if="selectedOdp && odpCardPos"
-                    class="kv-pin-popup absolute z-[500] w-80 max-w-[calc(100vw-1.5rem)]"
+                    class="nos-pin-popup absolute z-[500] w-80 max-w-[calc(100vw-1.5rem)]"
                     :style="odpCardStyle"
                 >
                     <div ref="odpCardEl" class="overflow-y-auto overscroll-contain rounded-2xl" :style="{ maxHeight: cardMaxHeight }">
@@ -328,7 +328,7 @@ const onOdpMoved = ({ id, latitude, longitude }) => {
                             @close="closeOdpDetail"
                         />
                     </div>
-                    <span class="kv-pin-popup__arrow"></span>
+                    <span class="nos-pin-popup__arrow"></span>
                 </div>
 
                 <!-- Empty hint -->
@@ -356,13 +356,13 @@ const onOdpMoved = ({ id, latitude, longitude }) => {
 
 <style scoped>
 /* Kartu detail melayang tepat di atas pin (titik = ujung bawah pin). */
-.kv-pin-popup {
+.nos-pin-popup {
     transform: translate(-50%, calc(-100% - 34px));
-    filter: drop-shadow(0 10px 25px rgb(var(--kv-black) / 0.45));
+    filter: drop-shadow(0 10px 25px rgb(var(--nos-black) / 0.45));
 }
 
 /* Panah penunjuk ke pin — diamond serasi kaca kartu. */
-.kv-pin-popup__arrow {
+.nos-pin-popup__arrow {
     position: absolute;
     left: 50%;
     bottom: -6px;
@@ -370,9 +370,9 @@ const onOdpMoved = ({ id, latitude, longitude }) => {
     height: 12px;
     margin-left: -6px;
     /* Sewarna kartu (bg-canvas-3/95) — ikut tema. */
-    background: rgb(var(--kv-canvas-3) / 0.95);
-    border-right: 1px solid rgb(var(--kv-white) / 0.1);
-    border-bottom: 1px solid rgb(var(--kv-white) / 0.1);
+    background: rgb(var(--nos-canvas-3) / 0.95);
+    border-right: 1px solid rgb(var(--nos-white) / 0.1);
+    border-bottom: 1px solid rgb(var(--nos-white) / 0.1);
     transform: rotate(45deg);
     backdrop-filter: blur(16px);
 }

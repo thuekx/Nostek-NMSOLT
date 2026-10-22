@@ -44,7 +44,7 @@ services:
       REDIS_HOST: redis
       REDIS_PORT: "6379"
       SNMP_POLLER_DRIVER: go
-      SNMP_POLLER_BINARY: bin/kv-snmp-poller
+      SNMP_POLLER_BINARY: bin/nos-snmp-poller
       TELNET_PROXY_HOST: 127.0.0.1
       TELNET_PROXY_PORT: "6002"
       TELNET_PROXY_WS_URL: /telnet-ws

@@ -10,7 +10,7 @@ return new class extends Migration
      * Preferensi tema antarmuka: 'dark', 'light', atau 'system'.
      *
      * NULL berarti pengguna belum pernah memilih; resolusinya jatuh ke cookie
-     * `kv_theme` lalu ke bawaan 'dark', sehingga tidak ada yang tampilannya
+     * `nos_theme` lalu ke bawaan 'dark', sehingga tidak ada yang tampilannya
      * berubah sendiri setelah kolom ini ada.
      */
     public function up(): void

@@ -5,7 +5,7 @@
  *
  * Slot:
  * - default  : isi filter (toolbar 1 baris: <div class="flex flex-wrap items-center gap-2"> …
- *              input cari + kontrol .kv-filter-control w-full sm:w-auto … </div>)
+ *              input cari + kontrol .nos-filter-control w-full sm:w-auto … </div>)
  * - actions  : tombol kanan-atas header (mis. Reset untuk filter live)
  */
 import { SlidersHorizontal } from '@lucide/vue';
@@ -19,8 +19,8 @@ defineProps({
 </script>
 
 <template>
-    <section class="kv-filter">
-        <div class="kv-filter-head">
+    <section class="nos-filter">
+        <div class="nos-filter-head">
             <span class="flex h-9 w-9 flex-shrink-0 items-center justify-center rounded-lg bg-sky-500/15 ring-1 ring-cyan-500/30">
                 <component :is="icon ?? SlidersHorizontal" class="h-5 w-5 text-cyan-400" />
             </span>
@@ -32,7 +32,7 @@ defineProps({
                 <slot name="actions" />
             </div>
         </div>
-        <div class="kv-filter-body">
+        <div class="nos-filter-body">
             <slot />
         </div>
     </section>

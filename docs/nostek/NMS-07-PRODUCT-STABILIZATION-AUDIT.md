@@ -25,6 +25,15 @@ managed NMSOLT package.
 
 ## NMS-07 work packages
 
+0. **Identity and namespace cleanup**
+   - canonical product name: `Nostek-NMSOLT`;
+   - permitted short name: `Nostek-NMS`;
+   - replace inherited internal `kv-*`/`kv_` namespace with `nos-*`/`nos_`;
+   - rename `cmd/kv-snmp-poller` and `bin/kv-snmp-poller` to
+     `cmd/nos-snmp-poller` and `bin/nos-snmp-poller`;
+   - keep the legally required upstream copyright line in `LICENSE` intact;
+   - require Go, Vue, Laravel, Compose and image-build gates on the exact head.
+
 1. **Unified package contract**
    - retain separate containers and data volumes;
    - provide explicit `core` and `with-acs` installation profiles, with

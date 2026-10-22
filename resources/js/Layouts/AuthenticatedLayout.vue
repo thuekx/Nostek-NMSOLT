@@ -15,7 +15,7 @@ import { BellRing, BookOpen, Cable, ChevronLeft, Eye, FileBarChart, LayoutDashbo
 
 const { t } = useI18n({ useScope: 'global' });
 
-const SIDEBAR_COLLAPSED_KEY = 'kv-sidebar-collapsed';
+const SIDEBAR_COLLAPSED_KEY = 'nos-sidebar-collapsed';
 const sidebarOpen = ref(false);
 const sidebarCollapsed = ref(
     typeof window !== 'undefined' && window.localStorage.getItem(SIDEBAR_COLLAPSED_KEY) === '1',
@@ -145,18 +145,18 @@ onUnmounted(() => {
 
 <template>
     <!-- Desktop = kerangka setinggi layar: sidebar, header, dan footer diam;
-         hanya area konten (.kv-app-scroll, `scroll-region` untuk preserveScroll Inertia) yang
+         hanya area konten (.nos-app-scroll, `scroll-region` untuk preserveScroll Inertia) yang
          menggulir. HP tetap menggulir di level dokumen dengan bar atas sticky.
          Snapshot full-page membuka kerangka ini lewat CSS (lihat scripts/snapshot.mjs). -->
-    <div class="kv-grid-stage kv-app-shell flex min-h-screen flex-col lg:flex-row text-slate-100 font-sans antialiased selection:bg-cyan-500 selection:text-onaccent">
+    <div class="nos-grid-stage nos-app-shell flex min-h-screen flex-col lg:flex-row text-slate-100 font-sans antialiased selection:bg-cyan-500 selection:text-onaccent">
         <!-- 1. Background Grid Pattern Layer -->
-        <div class="kv-grid-pattern" aria-hidden="true"></div>
+        <div class="nos-grid-pattern" aria-hidden="true"></div>
 
         <!-- 2. Efek Light Beam di Tengah Atas (Natural Spotlight) -->
-        <div class="kv-top-light" aria-hidden="true"></div>
-        <div class="kv-ambient-glow" aria-hidden="true"></div>
+        <div class="nos-top-light" aria-hidden="true"></div>
+        <div class="nos-ambient-glow" aria-hidden="true"></div>
         <!-- Mobile top bar (sticky, tetap terlihat saat scroll) -->
-        <div class="kv-shell-bar sticky top-0 z-50 flex h-14 flex-shrink-0 items-center gap-3 border-b border-white/10 bg-canvas-3/40 px-4 backdrop-blur-xl lg:hidden">
+        <div class="nos-shell-bar sticky top-0 z-50 flex h-14 flex-shrink-0 items-center gap-3 border-b border-white/10 bg-canvas-3/40 px-4 backdrop-blur-xl lg:hidden">
             <button
                 type="button"
                 class="flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-md text-slate-400 transition-colors hover:bg-white/10 hover:text-white"
@@ -202,7 +202,7 @@ onUnmounted(() => {
         <!-- Sidebar — mobile: drawer fixed; desktop: setinggi layar, diam saat konten digulir.
              Menu yang panjang menggulir di dalam <nav>, panel sistem tetap di dasar. -->
         <aside
-            class="kv-shell-sidebar fixed inset-y-0 left-0 z-50 flex max-w-[calc(100vw-1rem)] flex-col border-r border-white/10 bg-canvas-3/35 backdrop-blur-xl transition-all duration-200 ease-in-out lg:relative lg:flex-shrink-0 lg:translate-x-0"
+            class="nos-shell-sidebar fixed inset-y-0 left-0 z-50 flex max-w-[calc(100vw-1rem)] flex-col border-r border-white/10 bg-canvas-3/35 backdrop-blur-xl transition-all duration-200 ease-in-out lg:relative lg:flex-shrink-0 lg:translate-x-0"
             :class="[
                 sidebarOpen ? 'translate-x-0' : '-translate-x-full',
                 sidebarCollapsed ? 'w-64 lg:w-20' : 'w-64',
@@ -327,7 +327,7 @@ onUnmounted(() => {
         <div class="flex min-w-0 flex-1 flex-col lg:min-h-0">
             <!-- Top header (desktop, diam di atas area konten) — search + notif + user -->
             <header
-                class="kv-shell-bar sticky top-0 z-30 hidden flex-shrink-0 border-b border-white/10 bg-canvas-3/35 backdrop-blur-xl lg:block"
+                class="nos-shell-bar sticky top-0 z-30 hidden flex-shrink-0 border-b border-white/10 bg-canvas-3/35 backdrop-blur-xl lg:block"
             >
                 <div class="flex h-[72px] w-full items-center gap-4 px-6 lg:px-8">
                     <!-- Search trigger -->
@@ -352,7 +352,7 @@ onUnmounted(() => {
             </header>
 
             <!-- Header per-halaman + konten — satu-satunya bagian yang menggulir di desktop -->
-            <div class="kv-app-scroll flex flex-1 flex-col" scroll-region>
+            <div class="nos-app-scroll flex flex-1 flex-col" scroll-region>
             <!-- Page header slot (optional, used by inner pages) — ikut scroll -->
             <header
                 v-if="$slots.header"
@@ -386,7 +386,7 @@ onUnmounted(() => {
             <!-- /Konten -->
 
             <!-- Footer — desktop: diam di dasar layar (di luar area gulir); HP: di akhir halaman -->
-            <footer class="kv-shell-bar z-10 flex-shrink-0 border-t border-white/10 bg-canvas-3/40 backdrop-blur-xl">
+            <footer class="nos-shell-bar z-10 flex-shrink-0 border-t border-white/10 bg-canvas-3/40 backdrop-blur-xl">
                 <div class="flex flex-col items-center justify-between gap-1 px-4 py-3 text-xs text-slate-500 sm:flex-row sm:px-6 lg:px-8">
                     <p>&copy; {{ copyrightYear }} {{ appName }} NMS &middot; {{ owner }}</p>
                     <p class="hidden sm:block">{{ $t('shell.footer_tagline') }}</p>

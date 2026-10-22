@@ -96,7 +96,7 @@ const iconFor = (type) => ({
                 @click.self="close"
                 @keydown="onKeydown"
             >
-                <div class="kv-popover w-full max-w-xl overflow-hidden rounded-2xl border border-white/10 bg-slate-900/95 shadow-2xl shadow-black/60 backdrop-blur-xl">
+                <div class="nos-popover w-full max-w-xl overflow-hidden rounded-2xl border border-white/10 bg-slate-900/95 shadow-2xl shadow-black/60 backdrop-blur-xl">
                     <div class="flex items-center gap-3 border-b border-white/10 px-4">
                         <Search class="h-5 w-5 flex-shrink-0 text-slate-400" />
                         <input

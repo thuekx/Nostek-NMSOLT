@@ -52,7 +52,7 @@ const onChange = (event) => {
             :title="current.name"
         ></span>
         <select
-            class="kv-input w-auto min-w-[8rem] max-w-full text-xs"
+            class="nos-input w-auto min-w-[8rem] max-w-full text-xs"
             :value="currentOdpId ?? ''"
             :disabled="disabled || busy || odps.length === 0"
             @change="onChange"

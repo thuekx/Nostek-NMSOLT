@@ -155,7 +155,7 @@ else
 fi
 
 section "$(t "Runtime artefak (info)" "Runtime artifacts (info)")"
-check_artifact "Go SNMP poller binary" "bin/kv-snmp-poller"
+check_artifact "Go SNMP poller binary" "bin/nos-snmp-poller"
 check_artifact "Frontend build"        "public/build/manifest.json"
 check_artifact "$(t "File .env" ".env file")" ".env"
 if [ -f "$PROJECT_DIR/.env" ]; then

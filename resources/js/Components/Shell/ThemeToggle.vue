@@ -3,7 +3,7 @@
  * Tombol tema ringkas untuk halaman tanpa menu pengguna (Welcome, halaman tamu).
  *
  * Berputar Gelap → Terang → Ikuti Sistem. Tamu tidak punya baris pengguna,
- * jadi pilihannya hanya disimpan di cookie `kv_theme` (lihat lib/theme.js).
+ * jadi pilihannya hanya disimpan di cookie `nos_theme` (lihat lib/theme.js).
  * Pengguna yang login memilih lewat UserMenu.
  */
 import { computed } from 'vue';

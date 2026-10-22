@@ -31,15 +31,15 @@ const want = (name) => ONLY.length === 0 || ONLY.includes(name);
 const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
 
 mkdirSync(OUT_DIR, { recursive: true });
-const tmp = mkdtempSync(join(tmpdir(), 'kv-snap-'));
+const tmp = mkdtempSync(join(tmpdir(), 'nos-snap-'));
 
 /** Screenshot halaman aktif → simpan sebagai <name>.webp di OUT_DIR. */
 async function shoot(page, name, { fullPage = false } = {}) {
   const png = join(tmp, `${name}.png`);
   if (fullPage) {
-    // Layout desktop menggulir di dalam .kv-app-scroll (kerangka setinggi layar); buka kerangkanya
+    // Layout desktop menggulir di dalam .nos-app-scroll (kerangka setinggi layar); buka kerangkanya
     // supaya screenshot full-page tetap merekam seluruh konten.
-    await page.addStyleTag({ content: '.kv-app-shell{height:auto!important;overflow:visible!important}.kv-app-scroll{overflow:visible!important}' });
+    await page.addStyleTag({ content: '.nos-app-shell{height:auto!important;overflow:visible!important}.nos-app-scroll{overflow:visible!important}' });
   }
   await page.screenshot({ path: png, fullPage });
   const webp = join(OUT_DIR, `${name}.webp`);

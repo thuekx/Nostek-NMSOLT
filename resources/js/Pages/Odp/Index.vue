@@ -373,7 +373,7 @@ const mapHref = (odp) =>
 
                 <FilterCard :title="$t('odp.filter_title')" :subtitle="$t('odp.filter_subtitle')" :icon="Search">
                     <template #actions>
-                        <button v-if="hasFilter" type="button" class="kv-filter-reset" @click="clearFilters">
+                        <button v-if="hasFilter" type="button" class="nos-filter-reset" @click="clearFilters">
                             <X class="h-4 w-4" /> {{ $t('common.reset') }}
                         </button>
                     </template>
@@ -384,7 +384,7 @@ const mapHref = (odp) =>
                                 v-model="search"
                                 type="text"
                                 :placeholder="$t('odp.search_placeholder')"
-                                class="kv-filter-control !pl-9 !pr-9"
+                                class="nos-filter-control !pl-9 !pr-9"
                             />
                             <button
                                 v-if="search"
@@ -397,11 +397,11 @@ const mapHref = (odp) =>
                                 <X class="h-4 w-4" />
                             </button>
                         </div>
-                        <select v-model="oltFilter" class="kv-filter-control w-full sm:w-auto" @change="onOltChange">
+                        <select v-model="oltFilter" class="nos-filter-control w-full sm:w-auto" @change="onOltChange">
                             <option value="all">{{ $t('odp.all_olts') }}</option>
                             <option v-for="olt in olts" :key="olt.id" :value="olt.id">{{ olt.name }}</option>
                         </select>
-                        <select v-model="portFilter" class="kv-filter-control w-full sm:w-auto">
+                        <select v-model="portFilter" class="nos-filter-control w-full sm:w-auto">
                             <option value="all">{{ $t('odp.all_ports') }}</option>
                             <option value="none">{{ $t('odp.no_port') }}</option>
                             <option v-for="p in portOptions" :key="`${p.slot}/${p.port}`" :value="`${p.slot}/${p.port}`">
@@ -411,7 +411,7 @@ const mapHref = (odp) =>
                     </div>
                 </FilterCard>
 
-                <div class="kv-surface overflow-hidden rounded-lg border border-white/10 bg-slate-900/40 shadow-lg shadow-black/30 backdrop-blur-xl">
+                <div class="nos-surface overflow-hidden rounded-lg border border-white/10 bg-slate-900/40 shadow-lg shadow-black/30 backdrop-blur-xl">
                     <div class="flex items-center gap-3 border-b border-white/10 px-4 py-4 sm:px-6">
                         <div class="flex h-9 w-9 flex-shrink-0 items-center justify-center rounded-lg bg-sky-500/15 ring-1 ring-cyan-500/30">
                             <Waypoints class="h-5 w-5 text-cyan-400" />
@@ -446,22 +446,22 @@ const mapHref = (odp) =>
 
                     <template v-else>
                         <!-- Mobile -->
-                        <div class="kv-mobile-list">
-                            <article v-for="odp in pagedOdps" :key="odp.id" class="kv-mobile-card">
-                                <div class="kv-mobile-card-header">
+                        <div class="nos-mobile-list">
+                            <article v-for="odp in pagedOdps" :key="odp.id" class="nos-mobile-card">
+                                <div class="nos-mobile-card-header">
                                     <div class="min-w-0">
-                                        <h4 class="kv-mobile-card-title flex items-center gap-1.5">
+                                        <h4 class="nos-mobile-card-title flex items-center gap-1.5">
                                             <span class="inline-block h-2.5 w-2.5 shrink-0 rounded-sm ring-1 ring-slate-400/70" :style="{ background: odpColor(odp) }"></span>
                                             {{ odp.name }}
                                         </h4>
-                                        <p class="kv-mobile-card-subtitle">{{ odp.olt_name }} · {{ $t('odp.col_port') }} {{ portLabel(odp) }}</p>
+                                        <p class="nos-mobile-card-subtitle">{{ odp.olt_name }} · {{ $t('odp.col_port') }} {{ portLabel(odp) }}</p>
                                     </div>
                                 </div>
-                                <div class="kv-mobile-field">
+                                <div class="nos-mobile-field">
                                     <span>{{ $t('odp.col_onu_count') }}</span>
                                     <span class="tabular-nums text-slate-200">{{ odp.onu_count }}</span>
                                 </div>
-                                <div class="kv-mobile-field">
+                                <div class="nos-mobile-field">
                                     <span>{{ $t('odp.col_coords') }}</span>
                                     <a :href="mapHref(odp)" class="text-cyan-300 hover:underline">
                                         {{ Number(odp.latitude).toFixed(5) }}, {{ Number(odp.longitude).toFixed(5) }}
@@ -491,7 +491,7 @@ const mapHref = (odp) =>
                         </div>
 
                         <!-- Desktop -->
-                        <div class="kv-table-desktop">
+                        <div class="nos-table-desktop">
                             <table class="w-full min-w-[820px] text-xs">
                                 <thead>
                                     <tr class="border-b border-white/10 bg-canvas-3/40">
@@ -586,14 +586,14 @@ const mapHref = (odp) =>
                     </div>
                     <div class="sm:col-span-2">
                         <InputLabel for="odp_olt" :value="$t('odp.col_olt')" />
-                        <select id="odp_olt" v-model="form.snmp_olt_id" class="kv-input mt-1 block min-h-11 w-full" @change="onFormOltChange">
+                        <select id="odp_olt" v-model="form.snmp_olt_id" class="nos-input mt-1 block min-h-11 w-full" @change="onFormOltChange">
                             <option v-for="olt in olts" :key="olt.id" :value="olt.id">{{ olt.name }}</option>
                         </select>
                         <InputError class="mt-1" :message="form.errors.snmp_olt_id" />
                     </div>
                     <div v-if="formPorts.length" class="sm:col-span-2">
                         <InputLabel for="odp_pon_port" :value="$t('odp.pon_port_label')" />
-                        <select id="odp_pon_port" v-model="portSel" class="kv-input mt-1 block min-h-11 w-full">
+                        <select id="odp_pon_port" v-model="portSel" class="nos-input mt-1 block min-h-11 w-full">
                             <option value="">{{ $t('odp.port_unknown') }}</option>
                             <option v-if="portSelMissing" :value="portSel">{{ $t('odp.port_not_scanned', { slot: form.slot, port: form.port }) }}</option>
                             <optgroup v-for="g in portSlots" :key="g.slot" :label="$t('odp.slot_group', { slot: g.slot })">
@@ -647,7 +647,7 @@ const mapHref = (odp) =>
                     </div>
                     <div class="sm:col-span-2">
                         <InputLabel for="odp_notes" :value="$t('odp.notes_label')" />
-                        <textarea id="odp_notes" v-model="form.notes" rows="2" class="kv-input mt-1 block w-full"></textarea>
+                        <textarea id="odp_notes" v-model="form.notes" rows="2" class="nos-input mt-1 block w-full"></textarea>
                         <InputError class="mt-1" :message="form.errors.notes" />
                     </div>
                 </div>
@@ -722,7 +722,7 @@ const mapHref = (odp) =>
                                 v-model="candidateSearch"
                                 type="text"
                                 :placeholder="$t('odp.add_onu_search')"
-                                class="kv-input block w-full !pl-9"
+                                class="nos-input block w-full !pl-9"
                             />
                         </div>
                         <p v-if="!candidates.length" class="mt-2 text-sm text-slate-500">{{ $t('odp.add_onu_empty') }}</p>

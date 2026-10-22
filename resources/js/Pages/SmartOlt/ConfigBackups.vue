@@ -131,7 +131,7 @@ const labelFor = (id) => {
 
             <!-- Toolbar -->
             <div class="mb-4 grid gap-4 md:grid-cols-2">
-                <div class="kv-card flex items-center justify-between gap-4 p-4">
+                <div class="nos-card flex items-center justify-between gap-4 p-4">
                     <div>
                         <p class="flex items-center gap-1.5 text-sm font-medium text-white"><Clock class="h-4 w-4 text-cyan-400" /> {{ $t('configbackups.daily_backup') }}</p>
                         <p class="mt-1 text-xs text-slate-400">{{ $t('configbackups.daily_hint') }}</p>
@@ -149,7 +149,7 @@ const labelFor = (id) => {
                     </button>
                 </div>
 
-                <div class="kv-card flex items-center justify-between gap-4 p-4">
+                <div class="nos-card flex items-center justify-between gap-4 p-4">
                     <div>
                         <p class="flex items-center gap-1.5 text-sm font-medium text-white"><Save class="h-4 w-4 text-cyan-400" /> {{ $t('configbackups.backup_now') }}</p>
                         <p class="mt-1 text-xs text-slate-400">{{ $t('configbackups.backup_now_hint') }}</p>
@@ -167,30 +167,30 @@ const labelFor = (id) => {
             </div>
 
             <!-- Bandingkan versi -->
-            <div v-if="okBackups.length >= 2" class="kv-card mb-4 p-4">
+            <div v-if="okBackups.length >= 2" class="nos-card mb-4 p-4">
                 <p class="mb-3 flex items-center gap-1.5 text-sm font-medium text-white"><History class="h-4 w-4 text-cyan-400" /> {{ $t('configbackups.compare_versions') }}</p>
                 <div class="flex flex-wrap items-end gap-3">
                     <label class="text-xs text-slate-400">
                         {{ $t('configbackups.old_version') }}
-                        <select v-model.number="diffFrom" class="kv-filter-control mt-1 block w-full sm:w-64">
+                        <select v-model.number="diffFrom" class="nos-filter-control mt-1 block w-full sm:w-64">
                             <option :value="null">{{ $t('configbackups.choose') }}</option>
                             <option v-for="b in okBackups" :key="`a${b.id}`" :value="b.id">{{ formatDateTime(b.captured_at) }} · {{ formatSize(b.size_bytes) }}</option>
                         </select>
                     </label>
                     <label class="text-xs text-slate-400">
                         {{ $t('configbackups.new_version') }}
-                        <select v-model.number="diffTo" class="kv-filter-control mt-1 block w-full sm:w-64">
+                        <select v-model.number="diffTo" class="nos-filter-control mt-1 block w-full sm:w-64">
                             <option :value="null">{{ $t('configbackups.choose') }}</option>
                             <option v-for="b in okBackups" :key="`b${b.id}`" :value="b.id">{{ formatDateTime(b.captured_at) }} · {{ formatSize(b.size_bytes) }}</option>
                         </select>
                     </label>
-                    <button type="button" class="kv-filter-apply" @click="runDiff">{{ $t('configbackups.compare_btn') }}</button>
+                    <button type="button" class="nos-filter-apply" @click="runDiff">{{ $t('configbackups.compare_btn') }}</button>
                 </div>
                 <p v-if="diffError" class="mt-2 text-xs text-amber-300">{{ diffError }}</p>
             </div>
 
             <!-- Daftar versi -->
-            <div class="kv-card overflow-hidden">
+            <div class="nos-card overflow-hidden">
                 <div v-if="rows.length === 0" class="px-6 py-12 text-center text-slate-400">
                     <Database class="mx-auto mb-3 h-8 w-8 text-slate-600" />
                     <p v-html="$t('configbackups.empty')"></p>
@@ -198,7 +198,7 @@ const labelFor = (id) => {
 
                 <template v-else>
                     <!-- Desktop -->
-                    <div class="kv-table-desktop">
+                    <div class="nos-table-desktop">
                         <table class="min-w-[720px] w-full text-xs">
                             <thead>
                                 <tr class="border-b border-white/5">
@@ -246,18 +246,18 @@ const labelFor = (id) => {
                     </div>
 
                     <!-- Mobile -->
-                    <div class="kv-mobile-list">
-                        <article v-for="b in rows" :key="`m${b.id}`" class="kv-mobile-card">
+                    <div class="nos-mobile-list">
+                        <article v-for="b in rows" :key="`m${b.id}`" class="nos-mobile-card">
                             <div class="flex items-center justify-between gap-2">
-                                <h4 class="kv-mobile-card-title">{{ formatDateTime(b.captured_at) }}</h4>
+                                <h4 class="nos-mobile-card-title">{{ formatDateTime(b.captured_at) }}</h4>
                                 <span v-if="b.status === 'ok'" class="inline-flex items-center gap-1 rounded-full bg-emerald-500/15 px-2 py-0.5 text-xs font-medium text-emerald-300 ring-1 ring-emerald-500/30">OK</span>
                                 <span v-else class="inline-flex items-center gap-1 rounded-full bg-rose-500/15 px-2 py-0.5 text-xs font-medium text-rose-300 ring-1 ring-rose-500/30">{{ $t('common.failed') }}</span>
                             </div>
-                            <div class="kv-mobile-fields">
-                                <div class="kv-mobile-field"><span class="kv-mobile-label">{{ $t('configbackups.col_size') }}</span><span class="kv-mobile-value">{{ formatSize(b.size_bytes) }}</span></div>
-                                <div class="kv-mobile-field"><span class="kv-mobile-label">{{ $t('configbackups.col_source') }}</span><span class="kv-mobile-value">{{ triggerLabel(b.trigger) }}</span></div>
-                                <div class="kv-mobile-field"><span class="kv-mobile-label">{{ $t('configbackups.col_by') }}</span><span class="kv-mobile-value">{{ b.created_by || '—' }}</span></div>
-                                <div v-if="b.status !== 'ok' && b.error" class="kv-mobile-field"><span class="kv-mobile-label">{{ $t('configbackups.col_error') }}</span><span class="kv-mobile-value text-rose-300">{{ b.error }}</span></div>
+                            <div class="nos-mobile-fields">
+                                <div class="nos-mobile-field"><span class="nos-mobile-label">{{ $t('configbackups.col_size') }}</span><span class="nos-mobile-value">{{ formatSize(b.size_bytes) }}</span></div>
+                                <div class="nos-mobile-field"><span class="nos-mobile-label">{{ $t('configbackups.col_source') }}</span><span class="nos-mobile-value">{{ triggerLabel(b.trigger) }}</span></div>
+                                <div class="nos-mobile-field"><span class="nos-mobile-label">{{ $t('configbackups.col_by') }}</span><span class="nos-mobile-value">{{ b.created_by || '—' }}</span></div>
+                                <div v-if="b.status !== 'ok' && b.error" class="nos-mobile-field"><span class="nos-mobile-label">{{ $t('configbackups.col_error') }}</span><span class="nos-mobile-value text-rose-300">{{ b.error }}</span></div>
                             </div>
                             <div v-if="b.status === 'ok'" class="mt-3 flex gap-2">
                                 <button type="button" class="inline-flex items-center gap-1.5 rounded-lg bg-slate-800/60 px-3 py-1.5 text-xs text-slate-200 ring-1 ring-slate-600/40" @click="openView(b)"><Eye class="h-4 w-4" /> {{ $t('common.view') }}</button>
@@ -281,7 +281,7 @@ const labelFor = (id) => {
                     <a v-if="viewBackup" :href="downloadUrl(viewBackup)" class="inline-flex items-center gap-1.5 text-xs text-cyan-300 hover:text-cyan-200"><Download class="h-4 w-4" /> {{ $t('common.download') }}</a>
                 </div>
                 <div v-if="viewLoading" class="py-10 text-center text-sm text-slate-400">{{ $t('common.loading') }}</div>
-                <pre data-theme="dark" v-else class="kv-terminal max-h-[60vh] overflow-auto rounded-lg bg-slate-950/70 p-3 text-xs leading-relaxed text-slate-200 ring-1 ring-white/5">{{ viewContent }}</pre>
+                <pre data-theme="dark" v-else class="nos-terminal max-h-[60vh] overflow-auto rounded-lg bg-slate-950/70 p-3 text-xs leading-relaxed text-slate-200 ring-1 ring-white/5">{{ viewContent }}</pre>
             </div>
         </Modal>
 
@@ -297,7 +297,7 @@ const labelFor = (id) => {
                 </div>
                 <div v-if="diffLoading" class="py-10 text-center text-sm text-slate-400">{{ $t('configbackups.comparing') }}</div>
                 <div v-else-if="stats.changed === 0" class="py-10 text-center text-sm text-emerald-300">{{ $t('configbackups.no_diff') }}</div>
-                <div data-theme="dark" v-else class="kv-terminal max-h-[60vh] overflow-auto rounded-lg bg-slate-950/70 p-3 font-mono text-xs leading-relaxed ring-1 ring-white/5">
+                <div data-theme="dark" v-else class="nos-terminal max-h-[60vh] overflow-auto rounded-lg bg-slate-950/70 p-3 font-mono text-xs leading-relaxed ring-1 ring-white/5">
                     <div v-for="(r, i) in changedRows" :key="i" class="whitespace-pre-wrap"
                         :class="r.type === 'add' ? 'bg-emerald-500/10 text-emerald-200' : 'bg-rose-500/10 text-rose-200'">
                         <span class="select-none pr-1 opacity-60">{{ r.type === 'add' ? '+' : '−' }}</span>{{ r.text }}

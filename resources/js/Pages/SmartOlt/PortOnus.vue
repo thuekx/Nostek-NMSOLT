@@ -620,7 +620,7 @@ const rxBadgeClass = (value) => {
                 <!-- Stat cards -->
                 <div class="grid gap-4 sm:grid-cols-2 md:grid-cols-4">
                     <!-- Data status -->
-                    <div class="kv-stat">
+                    <div class="nos-stat">
                         <div class="flex items-center justify-between">
                             <p class="text-xs font-medium uppercase tracking-wider text-slate-500">{{ $t('portonus.stat_status') }}</p>
                             <span
@@ -636,12 +636,12 @@ const rxBadgeClass = (value) => {
                         </p>
                     </div>
                     <!-- Total ONU -->
-                    <div class="kv-stat">
+                    <div class="nos-stat">
                         <p class="text-xs font-medium uppercase tracking-wider text-slate-500">{{ $t('portonus.stat_total_onu') }}</p>
                         <p class="mt-3 text-2xl font-bold text-white">{{ snapshot.count }}</p>
                     </div>
                     <!-- Online -->
-                    <div class="kv-stat">
+                    <div class="nos-stat">
                         <p class="text-xs font-medium uppercase tracking-wider text-slate-500">{{ $t('portonus.stat_online') }}</p>
                         <div class="mt-3 flex items-end gap-2">
                             <p class="text-2xl font-bold text-emerald-400">
@@ -651,14 +651,14 @@ const rxBadgeClass = (value) => {
                         </div>
                     </div>
                     <!-- Refresh terakhir -->
-                    <div class="kv-stat">
+                    <div class="nos-stat">
                         <p class="text-xs font-medium uppercase tracking-wider text-slate-500">{{ $t('portonus.stat_last_refresh') }}</p>
                         <p class="mt-3 text-sm font-semibold text-white">{{ formatDate(snapshot.refreshed_at) }}</p>
                     </div>
                 </div>
 
                 <!-- ONU table card -->
-                <div class="kv-table-card">
+                <div class="nos-table-card">
                     <div class="flex flex-col gap-3 border-b border-white/10 px-4 py-4 sm:flex-row sm:items-center sm:justify-between sm:px-6">
                         <div class="flex items-center gap-3">
                             <div class="flex h-9 w-9 flex-shrink-0 items-center justify-center rounded-lg bg-sky-500/15 ring-1 ring-cyan-500/30">
@@ -697,7 +697,7 @@ const rxBadgeClass = (value) => {
                                 v-model="search"
                                 type="text"
                                 :placeholder="$t('portonus.search_placeholder')"
-                                class="kv-filter-control !pl-9 !pr-9"
+                                class="nos-filter-control !pl-9 !pr-9"
                             />
                             <button v-if="search" type="button" class="absolute right-2.5 top-1/2 -translate-y-1/2 text-slate-500 hover:text-white" :title="$t('common.clear')" @click="search = ''">
                                 <X class="h-4 w-4" />
@@ -719,7 +719,7 @@ const rxBadgeClass = (value) => {
                                 <option value="none">{{ $t('portonus.odp_unassigned') }}</option>
                                 <option v-for="odp in odps" :key="odp.id" :value="odp.id">{{ odp.name }}</option>
                             </select>
-                            <button v-if="hasFilter" type="button" class="kv-filter-reset" @click="clearFilters">{{ $t('common.reset') }}</button>
+                            <button v-if="hasFilter" type="button" class="nos-filter-reset" @click="clearFilters">{{ $t('common.reset') }}</button>
                         </div>
                     </div>
 
@@ -735,7 +735,7 @@ const rxBadgeClass = (value) => {
                         <div v-if="canSelect && selectedCount > 0" class="flex flex-col gap-3 border-b border-cyan-500/30 bg-cyan-500/10 px-4 py-3 sm:flex-row sm:items-center sm:justify-between sm:px-6">
                             <div class="flex items-center gap-3 text-sm">
                                 <span class="font-semibold text-cyan-100">{{ $t('portonus.n_selected', { count: selectedCount }) }}</span>
-                                <button type="button" class="kv-filter-reset" @click="clearSelection">{{ $t('portonus.clear_selection') }}</button>
+                                <button type="button" class="nos-filter-reset" @click="clearSelection">{{ $t('portonus.clear_selection') }}</button>
                             </div>
                             <div class="flex flex-wrap items-center gap-2">
                                 <DangerButton v-if="canBulkDelete" type="button" size="sm" :disabled="bulkDeleting" @click="deleteSelected">
@@ -777,15 +777,15 @@ const rxBadgeClass = (value) => {
                         </div>
 
                         <template v-else>
-                        <div class="kv-mobile-list">
+                        <div class="nos-mobile-list">
                             <article
                                 v-for="onu in pagedOnus"
                                 :key="`${onu.if_index}-${onu.onu_id}`"
                                 :data-onu-id="onu.onu_id"
-                                class="kv-mobile-card transition-shadow"
+                                class="nos-mobile-card transition-shadow"
                                 :class="onu.onu_id === focusId ? 'ring-2 ring-cyan-500/60' : ''"
                             >
-                                <div class="kv-mobile-card-header">
+                                <div class="nos-mobile-card-header">
                                     <div class="flex min-w-0 items-start gap-2.5">
                                         <input
                                             v-if="canSelect"
@@ -795,8 +795,8 @@ const rxBadgeClass = (value) => {
                                             @change="toggleSelect(onu)"
                                         />
                                         <div class="min-w-0">
-                                            <h4 class="kv-mobile-card-title" :title="onu.interface">{{ onuPrimaryLabel(onu) }}</h4>
-                                            <p class="kv-mobile-card-subtitle">{{ onuSecondaryLabel(onu) }}</p>
+                                            <h4 class="nos-mobile-card-title" :title="onu.interface">{{ onuPrimaryLabel(onu) }}</h4>
+                                            <p class="nos-mobile-card-subtitle">{{ onuSecondaryLabel(onu) }}</p>
                                         </div>
                                     </div>
                                     <span
@@ -807,17 +807,17 @@ const rxBadgeClass = (value) => {
                                     </span>
                                 </div>
 
-                                <div class="kv-mobile-fields">
-                                    <div class="kv-mobile-field">
-                                        <span class="kv-mobile-label">{{ $t('portonus.col_serial') }}</span>
-                                        <span class="kv-mobile-value font-mono text-xs">{{ onu.serial_number || '—' }}</span>
+                                <div class="nos-mobile-fields">
+                                    <div class="nos-mobile-field">
+                                        <span class="nos-mobile-label">{{ $t('portonus.col_serial') }}</span>
+                                        <span class="nos-mobile-value font-mono text-xs">{{ onu.serial_number || '—' }}</span>
                                     </div>
-                                    <div class="kv-mobile-field">
-                                        <span class="kv-mobile-label">{{ $t('portonus.col_acs') }}</span>
+                                    <div class="nos-mobile-field">
+                                        <span class="nos-mobile-label">{{ $t('portonus.col_acs') }}</span>
                                         <AcsPinCell :acs="acsFor(onu)" :can-manage="canUseAcs" @pin="openPin(onu)" />
                                     </div>
-                                    <div class="kv-mobile-field">
-                                        <span class="kv-mobile-label">{{ $t('portonus.col_odp') }}</span>
+                                    <div class="nos-mobile-field">
+                                        <span class="nos-mobile-label">{{ $t('portonus.col_odp') }}</span>
                                         <OnuOdpCell
                                             :onu="onu"
                                             :odps="odps"
@@ -827,18 +827,18 @@ const rxBadgeClass = (value) => {
                                             :port="port"
                                         />
                                     </div>
-                                    <div class="kv-mobile-field">
-                                        <span class="kv-mobile-label">{{ $t('portonus.col_type') }}</span>
-                                        <span class="kv-mobile-value">{{ onu.type_name || '—' }}</span>
+                                    <div class="nos-mobile-field">
+                                        <span class="nos-mobile-label">{{ $t('portonus.col_type') }}</span>
+                                        <span class="nos-mobile-value">{{ onu.type_name || '—' }}</span>
                                     </div>
-                                    <div class="kv-mobile-field">
-                                        <span class="kv-mobile-label">{{ $t('portonus.col_phase') }}</span>
-                                        <span class="kv-mobile-value" :class="onu.online ? 'text-emerald-400' : 'text-slate-500'" :title="onu.phase_state || ''">
+                                    <div class="nos-mobile-field">
+                                        <span class="nos-mobile-label">{{ $t('portonus.col_phase') }}</span>
+                                        <span class="nos-mobile-value" :class="onu.online ? 'text-emerald-400' : 'text-slate-500'" :title="onu.phase_state || ''">
                                             {{ phaseStateLabel(onu.phase_state) }}
                                         </span>
                                     </div>
-                                    <div class="kv-mobile-field">
-                                        <span class="kv-mobile-label">{{ $t('portonus.col_admin') }}</span>
+                                    <div class="nos-mobile-field">
+                                        <span class="nos-mobile-label">{{ $t('portonus.col_admin') }}</span>
                                         <span
                                             class="inline-flex rounded-full px-2 py-0.5 text-xs font-medium ring-1"
                                             :class="onu.admin_state === 'active'
@@ -848,9 +848,9 @@ const rxBadgeClass = (value) => {
                                             {{ onu.admin_state }}
                                         </span>
                                     </div>
-                                    <div class="kv-mobile-field">
-                                        <span class="kv-mobile-label">{{ $t('portonus.col_last_down') }}</span>
-                                        <span class="kv-mobile-value" :title="onu.last_down_cause || ''">{{ lastDownCauseLabel(onu.last_down_cause) }}</span>
+                                    <div class="nos-mobile-field">
+                                        <span class="nos-mobile-label">{{ $t('portonus.col_last_down') }}</span>
+                                        <span class="nos-mobile-value" :title="onu.last_down_cause || ''">{{ lastDownCauseLabel(onu.last_down_cause) }}</span>
                                     </div>
                                 </div>
 
@@ -927,7 +927,7 @@ const rxBadgeClass = (value) => {
                             </article>
                         </div>
 
-                        <div class="kv-table-desktop">
+                        <div class="nos-table-desktop">
                         <table class="min-w-[720px] w-full tabular-nums text-xs">
                             <thead>
                                 <tr class="border-b border-white/10 bg-canvas-3/40">

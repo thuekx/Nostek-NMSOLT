@@ -43,7 +43,7 @@ WORKDIR /src
 COPY go.mod go.sum ./
 RUN go mod download
 COPY cmd ./cmd
-RUN CGO_ENABLED=0 go build -mod=mod -trimpath -ldflags='-s -w' -o /out/kv-snmp-poller ./cmd/kv-snmp-poller
+RUN CGO_ENABLED=0 go build -mod=mod -trimpath -ldflags='-s -w' -o /out/nos-snmp-poller ./cmd/nos-snmp-poller
 
 # ---------------------------------------------------------------------------
 # Stage 3 — image runtime PHP-FPM + nginx + supervisor.
@@ -101,7 +101,7 @@ RUN composer install --no-dev --no-scripts --no-autoloader --no-interaction --no
 # Sumber aplikasi + artefak dari stage lain.
 COPY . .
 COPY --from=frontend /app/public/build /var/www/html/public/build
-COPY --from=gobuild  /out/kv-snmp-poller /var/www/html/bin/kv-snmp-poller
+COPY --from=gobuild  /out/nos-snmp-poller /var/www/html/bin/nos-snmp-poller
 
 # Autoload optimal + package discovery. .env sementara agar artisan bisa boot saat
 # build; dihapus lagi supaya runtime murni membaca environment dari compose.
@@ -111,7 +111,7 @@ RUN cp .env.example .env \
  # Build contexts prepared under a restrictive host umask can otherwise leave\
  # application files unreadable by php-fpm/worker processes running as www-data.\
  && chmod -R a+rX /var/www/html \
- && chmod +x bin/kv-snmp-poller \
+ && chmod +x bin/nos-snmp-poller \
  && chown -R www-data:www-data storage bootstrap/cache
 
 EXPOSE 80

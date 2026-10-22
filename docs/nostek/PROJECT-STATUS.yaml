@@ -44,7 +44,7 @@ latest_evidence:
     runtime: "ZTE C320 SNMP v2c RO and bounded read-only UI/CLI validation passed; PR #18 CI passed; no device mutation."
   NMS-07:
     status: IN_PROGRESS
-    objective: "Stabilize NMSOLT functions, UI and performance; inventory routes/features, repair misleading or broken read paths, and add regression evidence."
+    objective: "Standardize Nostek-NMSOLT/Nostek-NMS identity and nos-* namespace, then stabilize packaging, functions, UI and performance with regression evidence."
     safety: "Source and isolated staging only; no production, Caddy, Maung repository or device changes."
   NMS-08:
     status: BLOCKED
@@ -72,8 +72,8 @@ environment:
   genieacs_lab: ACTIVE_VERIFIED
   live_olt_write: PROHIBITED_WITHOUT_APPROVAL
 next_action:
-  id: NMS-07-PRODUCT-STABILIZATION
-  instruction: "Audit NMSOLT routes, screens, read APIs and performance; build a feature matrix and fix the highest-impact safe source issue with tests."
+  id: NMS-07-IDENTITY-CLEANUP
+  instruction: "Finish the kv-* to nos-* namespace and nos-snmp-poller rename, preserve LICENSE attribution, pass exact-head CI, then continue unified GenieACS packaging and the feature/performance matrix."
   owner: "executor"
   approval_required: false
 references:

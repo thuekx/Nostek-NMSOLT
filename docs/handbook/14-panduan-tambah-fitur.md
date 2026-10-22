@@ -102,7 +102,7 @@ tayang:
    izin yang lebih sempit seperti `canAccessOltSecrets()`, `canEditOltConnection()`,
    `canSetPonPortAdminState()`). Entitas milik OLT ikut `PartnerOltScope` lewat route-model binding.
 5b. **Teks**: kunci `$t()` baru di kedua `lang/{id,en}.json`; pesan backend lewat `__()`.
-6. **Tampilan**: ikuti tema (kartu kaca, kelas `kv-*`, palet cyan/sky, tabel responsif, item
+6. **Tampilan**: ikuti tema (kartu kaca, kelas `nos-*`, palet cyan/sky, tabel responsif, item
    sidebar) — aturan lengkap di [15 — UI & Tema Dashboard](15-ui-tema-dashboard.md).
 7. `php artisan route:list` untuk verifikasi; di produksi **`php artisan route:cache`** (sebagai
    `www-data`) sebelum `npm run build` — tanpa itu rute baru 404 walau test hijau.
@@ -123,7 +123,7 @@ Lihat detail & contoh di [05 — Database & Model](05-database-model.md).
 
 ## Resep 3 — Menambah aksi SNMP (read) ke OLT
 
-1. Tambah konstanta OID di `OltSnmpClient` (dan `cmd/kv-snmp-poller/main.go` bila perlu dipoll
+1. Tambah konstanta OID di `OltSnmpClient` (dan `cmd/nos-snmp-poller/main.go` bila perlu dipoll
    terjadwal).
 2. Tambah method publik (mis. `fooTable($olt)`) memakai `walk()`/`get()` + helper decode.
 3. Bila vendor-spesifik, gerbang lewat `SmartOltSupport` (cek `isC600()` / capability). OLT non-ZTE
@@ -131,7 +131,7 @@ Lihat detail & contoh di [05 — Database & Model](05-database-model.md).
    (`app/Services/CData/*`, `app/Services/Hioso/*`) dan `CDataOltScanner`.
 4. Untuk polling terjadwal: tambahkan ke output Go poller (`main.go`) **dan** ke `PollOltJob`
    agar masuk `last_test_result`. Rebuild (sama dengan `install.sh`):
-   `CGO_ENABLED=0 go build -mod=mod -trimpath -ldflags='-s -w' -o bin/kv-snmp-poller ./cmd/kv-snmp-poller`.
+   `CGO_ENABLED=0 go build -mod=mod -trimpath -ldflags='-s -w' -o bin/nos-snmp-poller ./cmd/nos-snmp-poller`.
 5. Verifikasi ke OLT nyata (`snmpwalk` baca-saja dulu), catat di WORKLOG. OID yang belum terbukti →
    `null` + capability mati.
 

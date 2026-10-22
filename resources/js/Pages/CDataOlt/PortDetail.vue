@@ -53,7 +53,7 @@ const speedLabel = computed(() => {
     return info.value.duplex ? `${speed} · ${info.value.duplex}` : speed;
 });
 
-const adminPill = (v) => (String(v ?? '').toLowerCase() === 'enable' ? 'kv-pill-success' : 'kv-pill-muted');
+const adminPill = (v) => (String(v ?? '').toLowerCase() === 'enable' ? 'nos-pill-success' : 'nos-pill-muted');
 
 // ── DDM vs ambang OLT ─────────────────────────────────────────────────
 // −40 dBm = pembacaan kosong (tanpa cahaya), bukan redaman sungguhan.
@@ -149,11 +149,11 @@ const submitTag = async () => {
         <template #header>
             <div class="flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
                 <div class="flex items-center gap-3">
-                    <span class="kv-circle-cyan !h-10 !w-10 flex-shrink-0"><Cable class="h-5 w-5" /></span>
+                    <span class="nos-circle-cyan !h-10 !w-10 flex-shrink-0"><Cable class="h-5 w-5" /></span>
                     <div>
                         <h1 class="font-mono text-xl font-semibold text-slate-100">{{ name }}</h1>
                         <p class="mt-1 flex flex-wrap items-center gap-2 text-sm text-slate-400">
-                            <span :class="isPon ? 'kv-pill-info' : 'kv-pill-muted'">{{ kind.toUpperCase() }}</span>
+                            <span :class="isPon ? 'nos-pill-info' : 'nos-pill-muted'">{{ kind.toUpperCase() }}</span>
                             <span>{{ olt.name }}</span>
                             <span v-if="olt.model" class="font-mono text-xs">· {{ olt.model }}</span>
                             <span v-if="port_label">· {{ port_label }}</span>
@@ -196,7 +196,7 @@ const submitTag = async () => {
             <div class="w-full space-y-6 px-4 sm:px-6 lg:px-8">
                 <Deferred data="detail">
                     <template #fallback>
-                        <div class="kv-glass-panel flex items-center justify-center gap-3 px-6 py-16 text-sm text-slate-400">
+                        <div class="nos-glass-panel flex items-center justify-center gap-3 px-6 py-16 text-sm text-slate-400">
                             <RefreshCw class="h-4 w-4 animate-spin text-cyan-400" />
                             {{ $t('cdataport.loading') }}
                         </div>
@@ -215,7 +215,7 @@ const submitTag = async () => {
                         <template v-if="detail && detail.info">
                             <div class="grid gap-6 lg:grid-cols-2">
                                 <!-- Status port -->
-                                <div class="kv-glass-panel">
+                                <div class="nos-glass-panel">
                                     <div class="flex items-center gap-3 border-b border-white/10 px-4 py-4 sm:px-6">
                                         <Network class="h-5 w-5 text-cyan-400" />
                                         <h3 class="text-base font-semibold text-slate-100">{{ $t('cdataport.status_title') }}</h3>
@@ -227,7 +227,7 @@ const submitTag = async () => {
                                         </div>
                                         <div class="bg-canvas-3/40 px-4 py-3">
                                             <dt class="text-xs uppercase tracking-wide text-slate-500">{{ $t('cdataport.link') }}</dt>
-                                            <dd class="mt-1"><span :class="info.link_up ? 'kv-pill-success' : 'kv-pill-danger'">{{ dash(info.link_status) }}</span></dd>
+                                            <dd class="mt-1"><span :class="info.link_up ? 'nos-pill-success' : 'nos-pill-danger'">{{ dash(info.link_status) }}</span></dd>
                                         </div>
                                         <template v-if="isUplink">
                                             <div class="bg-canvas-3/40 px-4 py-3">
@@ -287,7 +287,7 @@ const submitTag = async () => {
                                 </div>
 
                                 <!-- Optik / SFP -->
-                                <div class="kv-glass-panel">
+                                <div class="nos-glass-panel">
                                     <div class="flex items-center gap-3 border-b border-white/10 px-4 py-4 sm:px-6">
                                         <Zap class="h-5 w-5 text-cyan-400" />
                                         <h3 class="text-base font-semibold text-slate-100">{{ $t('cdataport.optical_title') }}</h3>
@@ -339,7 +339,7 @@ const submitTag = async () => {
                             </div>
 
                             <!-- Trafik -->
-                            <div v-if="stats" class="kv-glass-panel">
+                            <div v-if="stats" class="nos-glass-panel">
                                 <div class="flex items-center gap-3 border-b border-white/10 px-4 py-4 sm:px-6">
                                     <Activity class="h-5 w-5 text-cyan-400" />
                                     <div>
@@ -390,27 +390,27 @@ const submitTag = async () => {
                             </div>
 
                             <!-- VLAN -->
-                            <div class="kv-glass-panel">
+                            <div class="nos-glass-panel">
                                 <div class="flex items-center justify-between gap-3 border-b border-white/10 px-4 py-4 sm:px-6">
                                     <div class="flex items-center gap-3">
                                         <Tag class="h-5 w-5 text-cyan-400" />
                                         <h3 class="text-base font-semibold text-slate-100">{{ $t('cdataport.vlan_title') }}</h3>
-                                        <span v-if="info.mode" class="kv-pill-muted">{{ info.mode }}</span>
+                                        <span v-if="info.mode" class="nos-pill-muted">{{ info.mode }}</span>
                                     </div>
-                                    <span v-if="info.tagged?.length" class="kv-pill-info">{{ $t('cdataport.vlan_count', { count: taggedCount }) }}</span>
+                                    <span v-if="info.tagged?.length" class="nos-pill-info">{{ $t('cdataport.vlan_count', { count: taggedCount }) }}</span>
                                 </div>
                                 <div class="space-y-4 p-4 sm:p-6">
                                     <div>
                                         <p class="mb-2 text-xs font-semibold uppercase tracking-wide text-slate-500">{{ $t('cdataport.tagged') }}</p>
                                         <div v-if="info.tagged?.length" class="flex flex-wrap gap-1.5">
-                                            <span v-for="v in info.tagged" :key="`t${v}`" class="font-mono" :class="isRange(v) ? 'kv-pill-muted' : 'kv-pill-info'">{{ formatVlan(v) }}</span>
+                                            <span v-for="v in info.tagged" :key="`t${v}`" class="font-mono" :class="isRange(v) ? 'nos-pill-muted' : 'nos-pill-info'">{{ formatVlan(v) }}</span>
                                         </div>
                                         <p v-else class="text-sm text-slate-500">{{ $t('cdataport.no_tagged') }}</p>
                                     </div>
                                     <div>
                                         <p class="mb-2 text-xs font-semibold uppercase tracking-wide text-slate-500">{{ $t('cdataport.untagged') }}</p>
                                         <div v-if="info.untagged?.length" class="flex flex-wrap gap-1.5">
-                                            <span v-for="v in info.untagged" :key="`u${v}`" class="kv-pill-muted font-mono">{{ formatVlan(v) }}</span>
+                                            <span v-for="v in info.untagged" :key="`u${v}`" class="nos-pill-muted font-mono">{{ formatVlan(v) }}</span>
                                         </div>
                                         <p v-else class="text-sm text-slate-500">—</p>
                                     </div>
@@ -437,7 +437,7 @@ const submitTag = async () => {
                             </div>
 
                             <!-- ONU (GPON) -->
-                            <div v-if="isPon && onu_summary" class="kv-glass-panel">
+                            <div v-if="isPon && onu_summary" class="nos-glass-panel">
                                 <div class="flex flex-col gap-3 border-b border-white/10 px-4 py-4 sm:flex-row sm:items-center sm:justify-between sm:px-6">
                                     <div class="flex items-center gap-3">
                                         <Users class="h-5 w-5 text-cyan-400" />
@@ -463,7 +463,7 @@ const submitTag = async () => {
                             </div>
 
                             <!-- Semua atribut -->
-                            <details class="kv-glass-panel group">
+                            <details class="nos-glass-panel group">
                                 <summary class="flex cursor-pointer list-none items-center gap-3 rounded-lg px-4 py-4 focus-visible:ring-2 focus-visible:ring-cyan-400/60 sm:px-6">
                                     <ListTree class="h-5 w-5 text-cyan-400" />
                                     <div>

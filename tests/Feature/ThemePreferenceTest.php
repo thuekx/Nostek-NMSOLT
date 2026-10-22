@@ -14,7 +14,7 @@ use Tests\TestCase;
  * Preferensi tema antarmuka (gelap / terang / ikut sistem).
  *
  * Disimpan di dua tempat dengan alasan berbeda: kolom `users.theme` supaya
- * pilihan ikut berpindah perangkat, dan cookie `kv_theme` supaya render
+ * pilihan ikut berpindah perangkat, dan cookie `nos_theme` supaya render
  * pertama server sudah bertema benar — localStorage tidak ikut dalam
  * permintaan dokumen, jadi tanpa cookie pasti ada kedipan. Cookie bersifat
  * host-only.

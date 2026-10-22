@@ -36,8 +36,8 @@
 
         <!-- Display timezone (per-deployment) for human-facing time labels; storage stays UTC -->
         <script nonce="{{ \Illuminate\Support\Facades\Vite::cspNonce() }}">
-            window.KV_DISPLAY_TZ = @json(\App\Support\DisplayTime::timezone());
-            window.KV_DISPLAY_TZ_LABEL = @json(\App\Support\DisplayTime::label());
+            window.NOS_DISPLAY_TZ = @json(\App\Support\DisplayTime::timezone());
+            window.NOS_DISPLAY_TZ_LABEL = @json(\App\Support\DisplayTime::label());
         </script>
 
         <!-- Scripts -->

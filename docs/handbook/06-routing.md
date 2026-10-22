@@ -22,7 +22,7 @@ throttle 120/mnt per user, controller `app/Http/Controllers/Api/V1/*`). Daftar e
   yang lolos). Tanpa `SetLocale` → pesan API selalu bahasa Indonesia.
 - Alias: `role` → `EnsureUserRole` (`role:admin,operator`, 403 bila tak cocok).
 - CSRF dikecualikan: `telegram/webhook` dan `telegram/webhook/*`.
-- Cookie tema `kv_theme` dikecualikan dari enkripsi cookie (dibaca juga oleh JavaScript; isinya
+- Cookie tema `nos_theme` dikecualikan dari enkripsi cookie (dibaca juga oleh JavaScript; isinya
   divalidasi `App\Support\Theme`).
 - Proxy tepercaya dibaca dari `config/trustedproxy.php` (`TRUSTED_PROXIES`, bawaan `127.0.0.1,::1`).
   Di belakang Cloudflare "Flexible" / load balancer di host lain, isi variabel ini — kalau tidak URL

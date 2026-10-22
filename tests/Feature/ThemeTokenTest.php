@@ -9,14 +9,14 @@ use Tests\TestCase;
  * Penjaga kontrak dua tema.
  *
  * tailwind.config.js membangun seluruh palet dari daftar nama di
- * tailwind.tokens.mjs menjadi `rgb(var(--kv-nama) / <alpha-value>)`.
+ * tailwind.tokens.mjs menjadi `rgb(var(--nos-nama) / <alpha-value>)`.
  * Nilainya sendiri hidup di resources/css/app.css, satu blok per tema.
  *
  * Kalau sebuah nama dirujuk config tapi TIDAK dideklarasikan di app.css,
- * nilai `rgb(var(--kv-nama) / 1)` menjadi invalid: browser mengabaikan
+ * nilai `rgb(var(--nos-nama) / 1)` menjadi invalid: browser mengabaikan
  * propertinya dan elemen itu jadi transparan — tanpa error build, tanpa
  * error konsol. Kelas yang "hilang" seperti ini pernah lolos berbulan-bulan
- * (lihat UI_DESIGN_SYSTEM.md §4 soal kv-btn-cyan). Test ini yang menangkapnya.
+ * (lihat UI_DESIGN_SYSTEM.md §4 soal nos-btn-cyan). Test ini yang menangkapnya.
  */
 class ThemeTokenTest extends TestCase
 {
@@ -62,7 +62,7 @@ class ThemeTokenTest extends TestCase
         // seluruh daftar dan test lulus/gagal karena alasan yang salah.
         $declared = [];
         foreach ($blocks as $block) {
-            preg_match_all('/--kv-([a-z0-9-]+)\s*:/', $block[2], $vars);
+            preg_match_all('/--nos-([a-z0-9-]+)\s*:/', $block[2], $vars);
             $declared[$block[1]] = array_merge($declared[$block[1]] ?? [], $vars[1]);
         }
 
@@ -80,7 +80,7 @@ class ThemeTokenTest extends TestCase
 
             $this->assertEmpty($missing, sprintf(
                 "Tema [%s] tidak mendeklarasikan %d token: %s.\n".
-                'Tambahkan --kv-<nama> di blok [data-theme="%s"] pada resources/css/app.css.',
+                'Tambahkan --nos-<nama> di blok [data-theme="%s"] pada resources/css/app.css.',
                 $theme,
                 count($missing),
                 implode(', ', array_slice($missing, 0, 15)),
@@ -118,13 +118,13 @@ class ThemeTokenTest extends TestCase
         preg_match_all('/\[data-theme="([a-z]+)"\]\s*\{(.*?)\n\}/s', $css, $blocks, PREG_SET_ORDER);
 
         foreach ($blocks as [$_b, $theme, $body]) {
-            preg_match_all('/--kv-([a-z0-9-]+)\s*:\s*([^;]+);/', $body, $vars, PREG_SET_ORDER);
+            preg_match_all('/--nos-([a-z0-9-]+)\s*:\s*([^;]+);/', $body, $vars, PREG_SET_ORDER);
 
             foreach ($vars as [$_full, $name, $value]) {
                 $this->assertMatchesRegularExpression(
                     '/^\d{1,3} \d{1,3} \d{1,3}$/',
                     trim($value),
-                    "Token --kv-{$name} di tema [{$theme}] bernilai '".trim($value)."'. ".
+                    "Token --nos-{$name} di tema [{$theme}] bernilai '".trim($value)."'. ".
                     'Formatnya wajib channel RGB tanpa pembungkus (mis. `15 23 42`) — '.
                     'heks atau rgb() membuat modifier opasitas `/70` berhenti bekerja.'
                 );

@@ -78,23 +78,23 @@ const bindTarget = ref(null);
             <div class="w-full space-y-6 px-4 sm:px-6 lg:px-8">
 
                 <div class="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-                    <div class="kv-stat">
+                    <div class="nos-stat">
                         <p class="text-xs font-medium uppercase tracking-wider text-slate-500">{{ $t('unconfigured.stat_data') }}</p>
                         <p class="mt-3 text-2xl font-bold" :class="snapshot.ok ? 'text-emerald-400' : 'text-slate-400'">
                             {{ snapshot.ok ? $t('common.available') : $t('common.empty') }}
                         </p>
                     </div>
-                    <div class="kv-stat">
+                    <div class="nos-stat">
                         <p class="text-xs font-medium uppercase tracking-wider text-slate-500">{{ $t('unconfigured.new_onu') }}</p>
                         <p class="mt-3 text-2xl font-bold text-white">{{ snapshot.count }}</p>
                     </div>
-                    <div class="kv-stat">
+                    <div class="nos-stat">
                         <p class="text-xs font-medium uppercase tracking-wider text-slate-500">{{ $t('common.last_refresh') }}</p>
                         <p class="mt-3 text-sm font-semibold text-white">{{ formatDate(snapshot.refreshed_at) }}</p>
                     </div>
                 </div>
 
-                <div class="kv-surface overflow-hidden rounded-lg border border-white/10 bg-slate-900/40 shadow-lg shadow-black/30 backdrop-blur-xl">
+                <div class="nos-surface overflow-hidden rounded-lg border border-white/10 bg-slate-900/40 shadow-lg shadow-black/30 backdrop-blur-xl">
                     <div class="flex items-center gap-3 border-b border-white/10 px-4 py-4 sm:px-6">
                         <div class="flex h-9 w-9 flex-shrink-0 items-center justify-center rounded-lg bg-sky-500/15 ring-1 ring-cyan-500/30">
                             <Wifi class="h-5 w-5 text-cyan-400" />
@@ -107,12 +107,12 @@ const bindTarget = ref(null);
                     </div>
 
                     <template v-else>
-                        <div class="kv-mobile-list">
-                            <article v-for="onu in snapshot.onus" :key="onu.serial_number" class="kv-mobile-card">
-                                <div class="kv-mobile-card-header">
+                        <div class="nos-mobile-list">
+                            <article v-for="onu in snapshot.onus" :key="onu.serial_number" class="nos-mobile-card">
+                                <div class="nos-mobile-card-header">
                                     <div class="min-w-0">
-                                        <h4 class="kv-mobile-card-title font-mono">{{ onu.serial_number }}</h4>
-                                        <p class="kv-mobile-card-subtitle">
+                                        <h4 class="nos-mobile-card-title font-mono">{{ onu.serial_number }}</h4>
+                                        <p class="nos-mobile-card-subtitle">
                                             <span v-if="onu.slot && onu.port">Slot {{ onu.slot }} Port {{ onu.port }}</span>
                                             <span v-else>-</span>
                                             <span v-if="onu.model"> · {{ onu.model }}</span>
@@ -142,7 +142,7 @@ const bindTarget = ref(null);
                             </article>
                         </div>
 
-                        <div class="kv-table-desktop">
+                        <div class="nos-table-desktop">
                         <table class="min-w-[720px] w-full text-xs">
                             <thead>
                                 <tr class="border-b border-white/10 bg-canvas-3/40">

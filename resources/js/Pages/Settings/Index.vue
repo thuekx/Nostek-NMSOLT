@@ -422,7 +422,7 @@ const copyText = async (text, key) => {
                     </form>
 
                     <!-- Informasi sistem / tech stack -->
-                    <div class="kv-surface overflow-hidden rounded-lg border border-white/10 bg-slate-900/40 backdrop-blur-xl shadow-lg shadow-black/30">
+                    <div class="nos-surface overflow-hidden rounded-lg border border-white/10 bg-slate-900/40 backdrop-blur-xl shadow-lg shadow-black/30">
                         <div class="flex items-center gap-3 border-b border-white/10 px-5 py-4 sm:px-6">
                             <div class="flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-lg bg-violet-500/20 ring-1 ring-violet-500/30">
                                 <Info class="h-5 w-5 text-violet-300" />
@@ -471,7 +471,7 @@ const copyText = async (text, key) => {
                     </div>
 
                     <!-- Unduh aplikasi Android (APK) -->
-                    <div class="kv-surface overflow-hidden rounded-lg border border-white/10 bg-slate-900/40 backdrop-blur-xl shadow-lg shadow-black/30">
+                    <div class="nos-surface overflow-hidden rounded-lg border border-white/10 bg-slate-900/40 backdrop-blur-xl shadow-lg shadow-black/30">
                         <div class="flex items-center gap-3 border-b border-white/10 px-5 py-4 sm:px-6">
                             <div class="flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-lg bg-cyan-500/20 ring-1 ring-cyan-500/30">
                                 <Smartphone class="h-5 w-5 text-cyan-300" />
@@ -1027,7 +1027,7 @@ const copyText = async (text, key) => {
                     </form>
 
                     <!-- Perangkat login mobile semua user (token Sanctum) + cabut paksa -->
-                    <div class="kv-surface overflow-hidden rounded-lg border border-white/10 bg-slate-900/40 backdrop-blur-xl shadow-lg shadow-black/30">
+                    <div class="nos-surface overflow-hidden rounded-lg border border-white/10 bg-slate-900/40 backdrop-blur-xl shadow-lg shadow-black/30">
                         <div class="flex items-center gap-3 border-b border-white/10 px-5 py-4 sm:px-6">
                             <div class="flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-lg bg-cyan-500/20 ring-1 ring-cyan-500/30">
                                 <Smartphone class="h-5 w-5 text-cyan-300" />
@@ -1072,7 +1072,7 @@ const copyText = async (text, key) => {
                     </div>
 
                     <!-- Registrasi push FCM per perangkat -->
-                    <div class="kv-surface overflow-hidden rounded-lg border border-white/10 bg-slate-900/40 backdrop-blur-xl shadow-lg shadow-black/30">
+                    <div class="nos-surface overflow-hidden rounded-lg border border-white/10 bg-slate-900/40 backdrop-blur-xl shadow-lg shadow-black/30">
                         <div class="flex items-center gap-3 border-b border-white/10 px-5 py-4 sm:px-6">
                             <div class="flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-lg bg-sky-500/20 ring-1 ring-sky-500/30">
                                 <Bell class="h-5 w-5 text-sky-300" />
@@ -1129,7 +1129,7 @@ const copyText = async (text, key) => {
                     </div>
 
                     <!-- Akses API + URL -->
-                    <div class="kv-surface overflow-hidden rounded-lg border border-white/10 bg-slate-900/40 backdrop-blur-xl shadow-lg shadow-black/30">
+                    <div class="nos-surface overflow-hidden rounded-lg border border-white/10 bg-slate-900/40 backdrop-blur-xl shadow-lg shadow-black/30">
                         <div class="flex items-center gap-3 border-b border-white/10 px-5 py-4 sm:px-6">
                             <div class="flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-lg bg-cyan-500/20 ring-1 ring-cyan-500/30">
                                 <KeyRound class="h-5 w-5 text-cyan-300" />
@@ -1184,7 +1184,7 @@ const copyText = async (text, key) => {
                     </div>
 
                     <!-- Buat token + daftar token -->
-                    <div class="kv-surface overflow-hidden rounded-lg border border-white/10 bg-slate-900/40 backdrop-blur-xl shadow-lg shadow-black/30">
+                    <div class="nos-surface overflow-hidden rounded-lg border border-white/10 bg-slate-900/40 backdrop-blur-xl shadow-lg shadow-black/30">
                         <div class="flex items-center gap-3 border-b border-white/10 px-5 py-4 sm:px-6">
                             <div class="flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-lg bg-violet-500/20 ring-1 ring-violet-500/30">
                                 <KeyRound class="h-5 w-5 text-violet-300" />

@@ -120,7 +120,7 @@ onBeforeUnmount(() => observer?.disconnect());
         <div class="min-h-[60vh] pt-5 pb-16 sm:pt-8">
             <div class="w-full px-4 sm:px-6 lg:px-8">
                 <!-- Hero -->
-                <div class="kv-surface relative mb-7 overflow-hidden rounded-2xl border border-white/10 bg-slate-900/40 shadow-lg shadow-black/30 backdrop-blur-xl">
+                <div class="nos-surface relative mb-7 overflow-hidden rounded-2xl border border-white/10 bg-slate-900/40 shadow-lg shadow-black/30 backdrop-blur-xl">
                     <div class="pointer-events-none absolute -right-20 -top-24 h-72 w-72 rounded-full bg-cyan-500/20 blur-3xl"></div>
                     <div class="pointer-events-none absolute -bottom-24 left-10 h-56 w-56 rounded-full bg-violet-500/15 blur-3xl"></div>
                     <div class="relative p-6 sm:p-8">
@@ -150,7 +150,7 @@ onBeforeUnmount(() => observer?.disconnect());
                 <div class="grid gap-6 lg:grid-cols-[268px_minmax(0,1fr)]">
                     <!-- Daftar isi (sticky di dalam area gulir konten; header desktop kini di luar area gulir) -->
                     <aside class="lg:sticky lg:top-3 lg:self-start">
-                        <div class="kv-surface rounded-2xl border border-white/10 bg-slate-900/40 p-3 shadow-lg shadow-black/30 backdrop-blur-xl">
+                        <div class="nos-surface rounded-2xl border border-white/10 bg-slate-900/40 p-3 shadow-lg shadow-black/30 backdrop-blur-xl">
                             <div class="flex items-center justify-between px-2 pb-2 pt-1">
                                 <p class="text-xs font-semibold uppercase tracking-wider text-slate-500">{{ $t('panduan.toc') }}</p>
                                 <span class="rounded-full bg-white/5 px-2 py-0.5 text-[10px] font-medium text-slate-400">{{ activeIndex + 1 }}/{{ sections.length }}</span>
@@ -178,7 +178,7 @@ onBeforeUnmount(() => observer?.disconnect());
                             v-for="(sec, idx) in sections"
                             :id="`sec-${sec.id}`"
                             :key="sec.id"
-                            class="kv-spotlight kv-ring group relative scroll-mt-24 overflow-hidden rounded-2xl border border-white/10 bg-slate-900/40 shadow-lg shadow-black/30 backdrop-blur-xl transition-all duration-200 hover:border-white/20"
+                            class="nos-spotlight nos-ring group relative scroll-mt-24 overflow-hidden rounded-2xl border border-white/10 bg-slate-900/40 shadow-lg shadow-black/30 backdrop-blur-xl transition-all duration-200 hover:border-white/20"
                         >
                             <!-- Aksen atas per-bagian -->
                             <div class="h-1 bg-gradient-to-r to-transparent" :class="accentOf(sec).bar"></div>
@@ -236,8 +236,8 @@ onBeforeUnmount(() => observer?.disconnect());
                         </section>
 
                         <!-- Penutup -->
-                        <div class="kv-surface flex items-center gap-3 rounded-2xl border border-white/10 bg-slate-900/40 px-5 py-4 text-sm text-slate-400 shadow-lg shadow-black/30 backdrop-blur-xl">
-                            <div class="kv-icon-tile-sm"><ScrollText class="h-4 w-4" /></div>
+                        <div class="nos-surface flex items-center gap-3 rounded-2xl border border-white/10 bg-slate-900/40 px-5 py-4 text-sm text-slate-400 shadow-lg shadow-black/30 backdrop-blur-xl">
+                            <div class="nos-icon-tile-sm"><ScrollText class="h-4 w-4" /></div>
                             <p>{{ $t('panduan.footer_before') }} <span class="font-mono text-xs text-slate-300">docs/handbook/</span>{{ $t('panduan.footer_after') }}</p>
                         </div>
                     </div>

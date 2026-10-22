@@ -51,7 +51,7 @@ class GoSnmpPoller
         $process = new Process(
             $command,
             base_path(),
-            ['KV_SNMP_COMMUNITY' => $olt->snmp_read_community],
+            ['NOS_SNMP_COMMUNITY' => $olt->snmp_read_community],
             null,
             (float) config('services.snmp_poller.process_timeout', 300),
         );
@@ -78,7 +78,7 @@ class GoSnmpPoller
 
     private function binaryPath(): string
     {
-        $path = (string) config('services.snmp_poller.binary', base_path('bin/kv-snmp-poller'));
+        $path = (string) config('services.snmp_poller.binary', base_path('bin/nos-snmp-poller'));
 
         return str_starts_with($path, '/')
             ? $path

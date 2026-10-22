@@ -65,9 +65,9 @@ const formattedUpdated = computed(() =>
 </script>
 
 <template>
-    <div class="kv-glass-panel flex h-full flex-col">
-        <div class="kv-glass-header">
-            <span class="kv-circle-emerald">
+    <div class="nos-glass-panel flex h-full flex-col">
+        <div class="nos-glass-header">
+            <span class="nos-circle-emerald">
                 <CircleDot class="h-5 w-5" />
             </span>
             <h3 class="text-base font-semibold text-white">{{ t('dashboard.onu_status') }}</h3>

@@ -109,7 +109,7 @@ app/
 ├── Services/                Logika bisnis (lihat 08/09/10)
 │   ├── Snmp/
 │   │   ├── OltSnmpClient.php           SNMP read/set ZTE (PHP ext-snmp), C300/C320 + C600
-│   │   └── GoSnmpPoller.php            Shell-out ke bin/kv-snmp-poller
+│   │   └── GoSnmpPoller.php            Shell-out ke bin/nos-snmp-poller
 │   ├── SmartOltSnmpServiceResolver.php Pilih driver SNMP non-ZTE (C-Data EPON/GPON, HiOSO)
 │   ├── ZteCliProvisioningExecutor.php  Sesi telnet ZTE, auto --More--, mask password, saveConfig
 │   ├── ZteProvisioningScriptBuilder.php   Script register ONU C300/C320 (mode Sederhana)
@@ -171,12 +171,12 @@ app/
 ## `cmd/` & `bin/` — Go SNMP poller & skrip build
 
 ```
-cmd/kv-snmp-poller/main.go   Sumber poller Go (gosnmp; C300/C320 + C600). Build → bin/kv-snmp-poller
-cmd/kv-snmp-poller/main_test.go
-bin/kv-snmp-poller           Binary hasil build, di-gitignore (dipanggil GoSnmpPoller via Process)
+cmd/nos-snmp-poller/main.go   Sumber poller Go (gosnmp; C300/C320 + C600). Build → bin/nos-snmp-poller
+cmd/nos-snmp-poller/main_test.go
+bin/nos-snmp-poller           Binary hasil build, di-gitignore (dipanggil GoSnmpPoller via Process)
 bin/build-apk.sh             Build APK Android (API_BASE_URL)
 ```
-Build (sama dengan `install.sh`): `CGO_ENABLED=0 go build -mod=mod -trimpath -ldflags='-s -w' -o bin/kv-snmp-poller ./cmd/kv-snmp-poller` — `-mod=mod` wajib karena root repo
+Build (sama dengan `install.sh`): `CGO_ENABLED=0 go build -mod=mod -trimpath -ldflags='-s -w' -o bin/nos-snmp-poller ./cmd/nos-snmp-poller` — `-mod=mod` wajib karena root repo
 punya folder `vendor/` milik PHP (tanpanya Go mencoba vendor mode).
 
 ## `config/`
@@ -219,7 +219,7 @@ odp, acs, common`; `lang/id` juga memuat `auth, validation, pagination, password
 
 ```
 resources/
-├── css/app.css                Token tema per [data-theme] + kelas kv-*
+├── css/app.css                Token tema per [data-theme] + kelas nos-*
 ├── views/app.blade.php        Root Inertia (@routes Ziggy + @vite, ber-nonce CSP)
 ├── views/reports/pdf.blade.php Template laporan PDF (dompdf)
 └── js/

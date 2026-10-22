@@ -156,7 +156,7 @@ const errorText = computed(() =>
             <div v-else class="mt-4 space-y-4">
                 <div v-if="networks.length > 1">
                     <InputLabel for="wlan_index" :value="$t('acswifi.which_ssid')" />
-                    <select id="wlan_index" v-model="wlanIndex" class="kv-filter-control mt-1 block w-full">
+                    <select id="wlan_index" v-model="wlanIndex" class="nos-filter-control mt-1 block w-full">
                         <option v-for="net in networks" :key="net.index" :value="Number(net.index)">
                             SSID {{ net.index }} — {{ net.ssid || '—' }}
                         </option>

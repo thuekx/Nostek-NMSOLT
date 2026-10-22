@@ -137,9 +137,9 @@ func main() {
 	flag.Parse()
 
 	startedAt := time.Now()
-	community := os.Getenv("KV_SNMP_COMMUNITY")
+	community := os.Getenv("NOS_SNMP_COMMUNITY")
 	if *host == "" || community == "" {
-		writeError(startedAt, "host and KV_SNMP_COMMUNITY are required")
+		writeError(startedAt, "host and NOS_SNMP_COMMUNITY are required")
 		os.Exit(2)
 	}
 

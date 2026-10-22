@@ -41,7 +41,7 @@ describe("ConnectedDevicesModal", () => {
                 active_count: 1,
                 unknown_count: 1,
                 total_count: 3,
-                wifi_networks: [{ ssid: "KUSUMANET", channel: 6 }],
+                wifi_networks: [{ ssid: "NOSTEKNET", channel: 6 }],
             },
         });
     });

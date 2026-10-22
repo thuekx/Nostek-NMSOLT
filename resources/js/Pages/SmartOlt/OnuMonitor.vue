@@ -246,7 +246,7 @@ const phaseDotClass = (onu) => {
                 <!-- Filter card -->
                 <FilterCard :title="$t('onumonitor.filter_title')" :subtitle="$t('onumonitor.filter_subtitle')" :icon="Search">
                     <template #actions>
-                        <button v-if="hasFilter" type="button" class="kv-filter-reset" @click="clearFilters">
+                        <button v-if="hasFilter" type="button" class="nos-filter-reset" @click="clearFilters">
                             <X class="h-4 w-4" />
                             {{ $t('common.reset') }}
                         </button>
@@ -259,47 +259,47 @@ const phaseDotClass = (onu) => {
                                 v-model="search"
                                 type="text"
                                 :placeholder="$t('onumonitor.search_placeholder')"
-                                class="kv-filter-control !pl-9 !pr-9"
+                                class="nos-filter-control !pl-9 !pr-9"
                             />
                             <button v-if="search" type="button" class="absolute right-2.5 top-1/2 -translate-y-1/2 text-slate-500 hover:text-white" :title="$t('common.clear')" @click="search = ''">
                                 <X class="h-4 w-4" />
                             </button>
                         </div>
-                        <select v-model="oltFilter" class="kv-filter-control w-full sm:w-auto" :class="hasOlt ? '' : '!border-cyan-500/50 !bg-cyan-500/10'" @change="onOltChange">
+                        <select v-model="oltFilter" class="nos-filter-control w-full sm:w-auto" :class="hasOlt ? '' : '!border-cyan-500/50 !bg-cyan-500/10'" @change="onOltChange">
                             <option value="" disabled>{{ $t('onumonitor.select_olt_option') }}</option>
                             <option v-for="olt in olts" :key="olt.id" :value="olt.id">{{ olt.name }}</option>
                         </select>
-                        <select v-model="portFilter" :disabled="!hasOlt" class="kv-filter-control w-full sm:w-auto">
+                        <select v-model="portFilter" :disabled="!hasOlt" class="nos-filter-control w-full sm:w-auto">
                             <option value="all">{{ $t('onumonitor.all_port') }}</option>
                             <option v-for="opt in portOptions" :key="`${opt.slot}/${opt.port}`" :value="`${opt.slot}/${opt.port}`">
                                 Port {{ opt.slot }}/{{ opt.port }}
                             </option>
                         </select>
-                        <select v-model="statusFilter" :disabled="!hasOlt" class="kv-filter-control w-full sm:w-auto">
+                        <select v-model="statusFilter" :disabled="!hasOlt" class="nos-filter-control w-full sm:w-auto">
                             <option value="all">{{ $t('onumonitor.all_status') }}</option>
                             <option value="online">Online</option>
                             <option value="los">LOS</option>
                             <option value="dying_gasp">Dying Gasp</option>
                             <option value="offline">Offline</option>
                         </select>
-                        <select v-model="adminFilter" :disabled="!hasOlt" class="kv-filter-control w-full sm:w-auto">
+                        <select v-model="adminFilter" :disabled="!hasOlt" class="nos-filter-control w-full sm:w-auto">
                             <option value="all">{{ $t('onumonitor.all_admin') }}</option>
                             <option value="active">Active</option>
                             <option value="disabled">Disabled</option>
                         </select>
-                        <select v-model="rxFilter" :disabled="!hasOlt" :title="$t('onumonitor.rx_filter_title')" class="kv-filter-control w-full sm:w-auto">
+                        <select v-model="rxFilter" :disabled="!hasOlt" :title="$t('onumonitor.rx_filter_title')" class="nos-filter-control w-full sm:w-auto">
                             <option value="all">{{ $t('onumonitor.rx_all') }}</option>
                             <option value="good">{{ $t('onumonitor.rx_good') }}</option>
                             <option value="warning">{{ $t('onumonitor.rx_warning') }}</option>
                             <option value="critical">{{ $t('onumonitor.rx_critical') }}</option>
                             <option value="none">{{ $t('onumonitor.rx_none') }}</option>
                         </select>
-                        <select v-model="odpFilter" :disabled="!hasOlt" :title="$t('onumonitor.odp_filter_title')" class="kv-filter-control w-full sm:w-auto">
+                        <select v-model="odpFilter" :disabled="!hasOlt" :title="$t('onumonitor.odp_filter_title')" class="nos-filter-control w-full sm:w-auto">
                             <option value="all">{{ $t('onumonitor.odp_all') }}</option>
                             <option value="none">{{ $t('onumonitor.odp_none') }}</option>
                             <option v-for="odp in odpOptions" :key="odp.id" :value="odp.id">{{ odp.name }}</option>
                         </select>
-                        <select v-model="acsFilter" :title="$t('onumonitor.acs_filter_title')" class="kv-filter-control w-full sm:w-auto">
+                        <select v-model="acsFilter" :title="$t('onumonitor.acs_filter_title')" class="nos-filter-control w-full sm:w-auto">
                             <option value="all">{{ $t('onumonitor.acs_all') }}</option>
                             <option value="linked">{{ $t('onumonitor.acs_linked') }}</option>
                             <option value="unlinked">{{ $t('onumonitor.acs_unlinked') }}</option>
@@ -308,7 +308,7 @@ const phaseDotClass = (onu) => {
                 </FilterCard>
 
                 <!-- Prompt: pick an OLT first -->
-                <div v-if="!hasOlt" class="kv-surface rounded-lg border border-white/10 bg-slate-900/40 px-6 py-16 text-center shadow-lg shadow-black/30 backdrop-blur-xl">
+                <div v-if="!hasOlt" class="nos-surface rounded-lg border border-white/10 bg-slate-900/40 px-6 py-16 text-center shadow-lg shadow-black/30 backdrop-blur-xl">
                     <div class="mx-auto mb-4 flex h-14 w-14 items-center justify-center rounded-full bg-sky-500/15 ring-1 ring-cyan-500/30">
                         <Radar class="h-7 w-7 text-cyan-400" />
                     </div>
@@ -319,29 +319,29 @@ const phaseDotClass = (onu) => {
                 <template v-else>
                 <!-- Stat cards -->
                 <div class="grid gap-4 sm:grid-cols-2 md:grid-cols-4">
-                    <div class="kv-stat">
+                    <div class="nos-stat">
                         <p class="text-xs font-medium uppercase tracking-wider text-slate-500">{{ $t('onumonitor.stat_total') }}</p>
                         <p class="mt-3 text-2xl font-bold text-white">{{ stats.total }}</p>
                     </div>
-                    <div class="kv-stat">
+                    <div class="nos-stat">
                         <p class="text-xs font-medium uppercase tracking-wider text-slate-500">{{ $t('onumonitor.stat_online') }}</p>
                         <div class="mt-3 flex items-end gap-2">
                             <p class="text-2xl font-bold text-emerald-400">{{ stats.online }}</p>
                             <p class="mb-0.5 text-sm text-slate-400">/ {{ stats.total }}</p>
                         </div>
                     </div>
-                    <div class="kv-stat">
+                    <div class="nos-stat">
                         <p class="text-xs font-medium uppercase tracking-wider text-slate-500">{{ $t('onumonitor.stat_problem') }}</p>
                         <p class="mt-3 text-2xl font-bold text-amber-300">{{ stats.problem }}</p>
                     </div>
-                    <div class="kv-stat">
+                    <div class="nos-stat">
                         <p class="text-xs font-medium uppercase tracking-wider text-slate-500">{{ $t('onumonitor.stat_offline') }}</p>
                         <p class="mt-3 text-2xl font-bold text-slate-300">{{ stats.offline }}</p>
                     </div>
                 </div>
 
                 <!-- ONU table card -->
-                <div class="kv-table-card">
+                <div class="nos-table-card">
                     <div class="flex flex-col gap-3 border-b border-white/10 px-4 py-4 sm:flex-row sm:items-center sm:justify-between sm:px-6">
                         <div class="flex items-center gap-3">
                             <div class="flex h-9 w-9 flex-shrink-0 items-center justify-center rounded-lg bg-sky-500/15 ring-1 ring-cyan-500/30">
@@ -386,41 +386,41 @@ const phaseDotClass = (onu) => {
 
                         <template v-else>
                             <!-- Mobile cards -->
-                            <div class="kv-mobile-list">
+                            <div class="nos-mobile-list">
                                 <article
                                     v-for="onu in pagedOnus"
                                     :key="`${onu.olt_id}-${onu.slot}-${onu.port}-${onu.onu_id}`"
-                                    class="kv-mobile-card"
+                                    class="nos-mobile-card"
                                 >
-                                    <div class="kv-mobile-card-header">
+                                    <div class="nos-mobile-card-header">
                                         <div class="min-w-0">
-                                            <h4 class="kv-mobile-card-title" :title="onu.interface">{{ onuPrimaryLabel(onu) }}</h4>
-                                            <p class="kv-mobile-card-subtitle">{{ onu.olt_name }} · {{ onuSecondaryLabel(onu) }}</p>
+                                            <h4 class="nos-mobile-card-title" :title="onu.interface">{{ onuPrimaryLabel(onu) }}</h4>
+                                            <p class="nos-mobile-card-subtitle">{{ onu.olt_name }} · {{ onuSecondaryLabel(onu) }}</p>
                                         </div>
                                         <span class="inline-flex rounded-full px-2.5 py-0.5 text-xs font-semibold" :class="rxBadgeClass(onu.rx_power_dbm)">
                                             {{ onu.rx_power_label || '—' }}
                                         </span>
                                     </div>
 
-                                    <div class="kv-mobile-fields">
-                                        <div class="kv-mobile-field">
-                                            <span class="kv-mobile-label">{{ $t('onumonitor.serial_mac') }}</span>
-                                            <span class="kv-mobile-value font-mono text-xs">{{ onu.serial_number || onu.mac || '—' }}</span>
+                                    <div class="nos-mobile-fields">
+                                        <div class="nos-mobile-field">
+                                            <span class="nos-mobile-label">{{ $t('onumonitor.serial_mac') }}</span>
+                                            <span class="nos-mobile-value font-mono text-xs">{{ onu.serial_number || onu.mac || '—' }}</span>
                                         </div>
-                                        <div class="kv-mobile-field">
-                                            <span class="kv-mobile-label">{{ $t('portonus.col_acs') }}</span>
+                                        <div class="nos-mobile-field">
+                                            <span class="nos-mobile-label">{{ $t('portonus.col_acs') }}</span>
                                             <OnuAcsBadge :acs="onu.acs" />
                                         </div>
-                                        <div class="kv-mobile-field">
-                                            <span class="kv-mobile-label">{{ $t('portonus.col_type') }}</span>
-                                            <span class="kv-mobile-value">{{ onu.type_name || '—' }}</span>
+                                        <div class="nos-mobile-field">
+                                            <span class="nos-mobile-label">{{ $t('portonus.col_type') }}</span>
+                                            <span class="nos-mobile-value">{{ onu.type_name || '—' }}</span>
                                         </div>
-                                        <div class="kv-mobile-field">
-                                            <span class="kv-mobile-label">{{ $t('portonus.col_phase') }}</span>
-                                            <span class="kv-mobile-value" :class="phaseClass(onu)" :title="onu.phase_state || ''">{{ phaseStateLabel(onu.phase_state) }}</span>
+                                        <div class="nos-mobile-field">
+                                            <span class="nos-mobile-label">{{ $t('portonus.col_phase') }}</span>
+                                            <span class="nos-mobile-value" :class="phaseClass(onu)" :title="onu.phase_state || ''">{{ phaseStateLabel(onu.phase_state) }}</span>
                                         </div>
-                                        <div class="kv-mobile-field">
-                                            <span class="kv-mobile-label">{{ $t('portonus.col_admin') }}</span>
+                                        <div class="nos-mobile-field">
+                                            <span class="nos-mobile-label">{{ $t('portonus.col_admin') }}</span>
                                             <span
                                                 class="inline-flex rounded-full px-2 py-0.5 text-xs font-medium ring-1"
                                                 :class="onu.admin_state === 'active'
@@ -430,13 +430,13 @@ const phaseDotClass = (onu) => {
                                                 {{ onu.admin_state }}
                                             </span>
                                         </div>
-                                        <div class="kv-mobile-field">
-                                            <span class="kv-mobile-label">{{ $t('portonus.col_last_down') }}</span>
-                                            <span class="kv-mobile-value" :title="onu.last_down_cause || ''">{{ lastDownCauseLabel(onu.last_down_cause) }}</span>
+                                        <div class="nos-mobile-field">
+                                            <span class="nos-mobile-label">{{ $t('portonus.col_last_down') }}</span>
+                                            <span class="nos-mobile-value" :title="onu.last_down_cause || ''">{{ lastDownCauseLabel(onu.last_down_cause) }}</span>
                                         </div>
-                                        <div class="kv-mobile-field">
-                                            <span class="kv-mobile-label">{{ $t('portonus.col_odp') }}</span>
-                                            <span class="kv-mobile-value">{{ onu.odp_name || '—' }}</span>
+                                        <div class="nos-mobile-field">
+                                            <span class="nos-mobile-label">{{ $t('portonus.col_odp') }}</span>
+                                            <span class="nos-mobile-value">{{ onu.odp_name || '—' }}</span>
                                         </div>
                                     </div>
 
@@ -452,7 +452,7 @@ const phaseDotClass = (onu) => {
                             </div>
 
                             <!-- Desktop table -->
-                            <div class="kv-table-desktop">
+                            <div class="nos-table-desktop">
                                 <table class="min-w-[820px] w-full tabular-nums text-xs">
                                     <thead>
                                         <tr class="border-b border-white/10 bg-canvas-3/40">

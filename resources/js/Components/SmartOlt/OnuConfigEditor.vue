@@ -153,24 +153,24 @@ const fieldClass = 'mt-1 block w-full rounded-md border-white/10 bg-canvas-3/40 
         <section class="overflow-hidden rounded-lg border border-white/10 bg-slate-900/40 shadow-lg shadow-black/30 backdrop-blur-xl">
             <header class="flex items-center justify-between border-b border-white/10 px-4 py-3 sm:px-6">
                 <h3 class="flex items-center gap-2 text-sm font-semibold uppercase tracking-wide text-slate-200"><Cpu class="h-4 w-4 text-cyan-400" /> T-CONT</h3>
-                <button type="button" class="kv-add" @click="addTcont"><Plus class="h-3.5 w-3.5" /> {{ $t('configonu.cfg_add') }}</button>
+                <button type="button" class="nos-add" @click="addTcont"><Plus class="h-3.5 w-3.5" /> {{ $t('configonu.cfg_add') }}</button>
             </header>
             <div class="overflow-x-auto px-3 py-3 sm:px-4">
                 <div class="space-y-3 md:min-w-[600px] md:space-y-1.5">
-                    <div v-if="isWide" class="kv-thead" :style="{ gridTemplateColumns: cols.tcont }">
+                    <div v-if="isWide" class="nos-thead" :style="{ gridTemplateColumns: cols.tcont }">
                         <span>ID</span><span>Name</span><span>Profile</span><span>Gap</span><span></span>
                     </div>
-                    <div v-for="(row, i) in cfg.tconts" :key="`tc-${i}`" :class="isWide ? 'kv-trow' : 'kv-rowcard'" :style="isWide ? { gridTemplateColumns: cols.tcont } : null">
-                        <div class="kv-cell"><span v-if="!isWide" class="kv-flabel">ID</span><TextInput v-model.number="row.id" type="number" :class="fieldClass" /></div>
-                        <div class="kv-cell"><span v-if="!isWide" class="kv-flabel">Name</span><TextInput v-model="row.name" :class="fieldClass" /></div>
-                        <div class="kv-cell"><span v-if="!isWide" class="kv-flabel">Profile</span>
+                    <div v-for="(row, i) in cfg.tconts" :key="`tc-${i}`" :class="isWide ? 'nos-trow' : 'nos-rowcard'" :style="isWide ? { gridTemplateColumns: cols.tcont } : null">
+                        <div class="nos-cell"><span v-if="!isWide" class="nos-flabel">ID</span><TextInput v-model.number="row.id" type="number" :class="fieldClass" /></div>
+                        <div class="nos-cell"><span v-if="!isWide" class="nos-flabel">Name</span><TextInput v-model="row.name" :class="fieldClass" /></div>
+                        <div class="nos-cell"><span v-if="!isWide" class="nos-flabel">Profile</span>
                             <select v-model="row.profile" :class="fieldClass">
                                 <option v-for="p in tcontProfiles" :key="p.id" :value="p.name">{{ p.name }}</option>
                             </select>
                         </div>
-                        <div class="kv-cell"><span v-if="!isWide" class="kv-flabel">Gap</span><TextInput v-model="row.gap" :class="fieldClass" /></div>
-                        <div class="kv-cell kv-action-cell">
-                            <button type="button" :class="isWide ? 'kv-del' : 'kv-del-mobile'" @click="removeRow(cfg.tconts, i)"><Trash2 class="h-4 w-4" /><span v-if="!isWide">{{ $t('configonu.cfg_del_row') }}</span></button>
+                        <div class="nos-cell"><span v-if="!isWide" class="nos-flabel">Gap</span><TextInput v-model="row.gap" :class="fieldClass" /></div>
+                        <div class="nos-cell nos-action-cell">
+                            <button type="button" :class="isWide ? 'nos-del' : 'nos-del-mobile'" @click="removeRow(cfg.tconts, i)"><Trash2 class="h-4 w-4" /><span v-if="!isWide">{{ $t('configonu.cfg_del_row') }}</span></button>
                         </div>
                     </div>
                     <p v-if="!cfg.tconts.length" class="py-1 text-xs text-slate-500">{{ $t('configonu.cfg_no_tcont') }}</p>
@@ -182,21 +182,21 @@ const fieldClass = 'mt-1 block w-full rounded-md border-white/10 bg-canvas-3/40 
         <section class="overflow-hidden rounded-lg border border-white/10 bg-slate-900/40 shadow-lg shadow-black/30 backdrop-blur-xl">
             <header class="flex items-center justify-between border-b border-white/10 px-4 py-3 sm:px-6">
                 <h3 class="flex items-center gap-2 text-sm font-semibold uppercase tracking-wide text-slate-200"><Network class="h-4 w-4 text-cyan-400" /> GEM Port</h3>
-                <button type="button" class="kv-add" @click="addGemport"><Plus class="h-3.5 w-3.5" /> {{ $t('configonu.cfg_add') }}</button>
+                <button type="button" class="nos-add" @click="addGemport"><Plus class="h-3.5 w-3.5" /> {{ $t('configonu.cfg_add') }}</button>
             </header>
             <div class="overflow-x-auto px-3 py-3 sm:px-4">
                 <div class="space-y-3 md:min-w-[700px] md:space-y-1.5">
-                    <div v-if="isWide" class="kv-thead" :style="{ gridTemplateColumns: cols.gemport }">
+                    <div v-if="isWide" class="nos-thead" :style="{ gridTemplateColumns: cols.gemport }">
                         <span>ID</span><span>Name</span><span>T-CONT</span><span>Upstream Limit</span><span>Downstream Limit</span><span></span>
                     </div>
-                    <div v-for="(row, i) in cfg.gemports" :key="`gp-${i}`" :class="isWide ? 'kv-trow' : 'kv-rowcard'" :style="isWide ? { gridTemplateColumns: cols.gemport } : null">
-                        <div class="kv-cell"><span v-if="!isWide" class="kv-flabel">ID</span><TextInput v-model.number="row.id" type="number" :class="fieldClass" /></div>
-                        <div class="kv-cell"><span v-if="!isWide" class="kv-flabel">Name</span><TextInput v-model="row.name" :class="fieldClass" /></div>
-                        <div class="kv-cell"><span v-if="!isWide" class="kv-flabel">T-CONT</span><TextInput v-model.number="row.tcont" type="number" :class="fieldClass" /></div>
-                        <div class="kv-cell"><span v-if="!isWide" class="kv-flabel">Upstream Limit</span><TextInput v-model="row.traffic_up" :class="fieldClass" placeholder="profile" /></div>
-                        <div class="kv-cell"><span v-if="!isWide" class="kv-flabel">Downstream Limit</span><TextInput v-model="row.traffic_down" :class="fieldClass" placeholder="profile" /></div>
-                        <div class="kv-cell kv-action-cell">
-                            <button type="button" :class="isWide ? 'kv-del' : 'kv-del-mobile'" @click="removeRow(cfg.gemports, i)"><Trash2 class="h-4 w-4" /><span v-if="!isWide">{{ $t('configonu.cfg_del_row') }}</span></button>
+                    <div v-for="(row, i) in cfg.gemports" :key="`gp-${i}`" :class="isWide ? 'nos-trow' : 'nos-rowcard'" :style="isWide ? { gridTemplateColumns: cols.gemport } : null">
+                        <div class="nos-cell"><span v-if="!isWide" class="nos-flabel">ID</span><TextInput v-model.number="row.id" type="number" :class="fieldClass" /></div>
+                        <div class="nos-cell"><span v-if="!isWide" class="nos-flabel">Name</span><TextInput v-model="row.name" :class="fieldClass" /></div>
+                        <div class="nos-cell"><span v-if="!isWide" class="nos-flabel">T-CONT</span><TextInput v-model.number="row.tcont" type="number" :class="fieldClass" /></div>
+                        <div class="nos-cell"><span v-if="!isWide" class="nos-flabel">Upstream Limit</span><TextInput v-model="row.traffic_up" :class="fieldClass" placeholder="profile" /></div>
+                        <div class="nos-cell"><span v-if="!isWide" class="nos-flabel">Downstream Limit</span><TextInput v-model="row.traffic_down" :class="fieldClass" placeholder="profile" /></div>
+                        <div class="nos-cell nos-action-cell">
+                            <button type="button" :class="isWide ? 'nos-del' : 'nos-del-mobile'" @click="removeRow(cfg.gemports, i)"><Trash2 class="h-4 w-4" /><span v-if="!isWide">{{ $t('configonu.cfg_del_row') }}</span></button>
                         </div>
                     </div>
                     <p v-if="!cfg.gemports.length" class="py-1 text-xs text-slate-500">{{ $t('configonu.cfg_no_gemport') }}</p>
@@ -208,20 +208,20 @@ const fieldClass = 'mt-1 block w-full rounded-md border-white/10 bg-canvas-3/40 
         <section class="overflow-hidden rounded-lg border border-white/10 bg-slate-900/40 shadow-lg shadow-black/30 backdrop-blur-xl">
             <header class="flex items-center justify-between border-b border-white/10 px-4 py-3 sm:px-6">
                 <h3 class="flex items-center gap-2 text-sm font-semibold uppercase tracking-wide text-slate-200"><ListChecks class="h-4 w-4 text-cyan-400" /> Service-port</h3>
-                <button type="button" class="kv-add" @click="addServicePort"><Plus class="h-3.5 w-3.5" /> {{ $t('configonu.cfg_add') }}</button>
+                <button type="button" class="nos-add" @click="addServicePort"><Plus class="h-3.5 w-3.5" /> {{ $t('configonu.cfg_add') }}</button>
             </header>
             <div class="overflow-x-auto px-3 py-3 sm:px-4">
                 <div class="space-y-3 md:min-w-[560px] md:space-y-1.5">
-                    <div v-if="isWide" class="kv-thead" :style="{ gridTemplateColumns: cols.servicePort }">
+                    <div v-if="isWide" class="nos-thead" :style="{ gridTemplateColumns: cols.servicePort }">
                         <span>ID</span><span>VPort</span><span>User VLAN</span><span>VLAN</span><span></span>
                     </div>
-                    <div v-for="(row, i) in cfg.service_ports" :key="`sp-${i}`" :class="isWide ? 'kv-trow' : 'kv-rowcard'" :style="isWide ? { gridTemplateColumns: cols.servicePort } : null">
-                        <div class="kv-cell"><span v-if="!isWide" class="kv-flabel">ID</span><TextInput v-model.number="row.id" type="number" :class="fieldClass" /></div>
-                        <div class="kv-cell"><span v-if="!isWide" class="kv-flabel">VPort</span><TextInput v-model.number="row.vport" type="number" :class="fieldClass" /></div>
-                        <div class="kv-cell"><span v-if="!isWide" class="kv-flabel">User VLAN</span><TextInput v-model.number="row.user_vlan" type="number" :class="fieldClass" /></div>
-                        <div class="kv-cell"><span v-if="!isWide" class="kv-flabel">VLAN</span><TextInput v-model.number="row.vlan" type="number" :class="fieldClass" /></div>
-                        <div class="kv-cell kv-action-cell">
-                            <button type="button" :class="isWide ? 'kv-del' : 'kv-del-mobile'" @click="removeRow(cfg.service_ports, i)"><Trash2 class="h-4 w-4" /><span v-if="!isWide">{{ $t('configonu.cfg_del_row') }}</span></button>
+                    <div v-for="(row, i) in cfg.service_ports" :key="`sp-${i}`" :class="isWide ? 'nos-trow' : 'nos-rowcard'" :style="isWide ? { gridTemplateColumns: cols.servicePort } : null">
+                        <div class="nos-cell"><span v-if="!isWide" class="nos-flabel">ID</span><TextInput v-model.number="row.id" type="number" :class="fieldClass" /></div>
+                        <div class="nos-cell"><span v-if="!isWide" class="nos-flabel">VPort</span><TextInput v-model.number="row.vport" type="number" :class="fieldClass" /></div>
+                        <div class="nos-cell"><span v-if="!isWide" class="nos-flabel">User VLAN</span><TextInput v-model.number="row.user_vlan" type="number" :class="fieldClass" /></div>
+                        <div class="nos-cell"><span v-if="!isWide" class="nos-flabel">VLAN</span><TextInput v-model.number="row.vlan" type="number" :class="fieldClass" /></div>
+                        <div class="nos-cell nos-action-cell">
+                            <button type="button" :class="isWide ? 'nos-del' : 'nos-del-mobile'" @click="removeRow(cfg.service_ports, i)"><Trash2 class="h-4 w-4" /><span v-if="!isWide">{{ $t('configonu.cfg_del_row') }}</span></button>
                         </div>
                     </div>
                     <p v-if="!cfg.service_ports.length" class="py-1 text-xs text-slate-500">{{ $t('configonu.cfg_no_serviceport') }}</p>
@@ -233,26 +233,26 @@ const fieldClass = 'mt-1 block w-full rounded-md border-white/10 bg-canvas-3/40 
         <section class="overflow-hidden rounded-lg border border-white/10 bg-slate-900/40 shadow-lg shadow-black/30 backdrop-blur-xl">
             <header class="flex items-center justify-between border-b border-white/10 px-4 py-3 sm:px-6">
                 <h3 class="flex items-center gap-2 text-sm font-semibold uppercase tracking-wide text-slate-200"><Settings class="h-4 w-4 text-cyan-400" /> PON-ONU-MNG / Service</h3>
-                <button type="button" class="kv-add" @click="addService"><Plus class="h-3.5 w-3.5" /> {{ $t('configonu.cfg_add') }}</button>
+                <button type="button" class="nos-add" @click="addService"><Plus class="h-3.5 w-3.5" /> {{ $t('configonu.cfg_add') }}</button>
             </header>
             <div class="overflow-x-auto px-3 py-3 sm:px-4">
                 <div class="space-y-3 md:min-w-[600px] md:space-y-1.5">
-                    <div v-if="isWide" class="kv-thead" :style="{ gridTemplateColumns: cols.service }">
+                    <div v-if="isWide" class="nos-thead" :style="{ gridTemplateColumns: cols.service }">
                         <span>Name</span><span>Mode</span><span>GEM</span><span>COS</span><span>VLAN</span><span></span>
                     </div>
-                    <div v-for="(row, i) in cfg.services" :key="`sv-${i}`" :class="isWide ? 'kv-trow' : 'kv-rowcard'" :style="isWide ? { gridTemplateColumns: cols.service } : null">
-                        <div class="kv-cell"><span v-if="!isWide" class="kv-flabel">Name</span><TextInput v-model="row.name" :class="fieldClass" /></div>
-                        <div class="kv-cell"><span v-if="!isWide" class="kv-flabel">Mode</span>
+                    <div v-for="(row, i) in cfg.services" :key="`sv-${i}`" :class="isWide ? 'nos-trow' : 'nos-rowcard'" :style="isWide ? { gridTemplateColumns: cols.service } : null">
+                        <div class="nos-cell"><span v-if="!isWide" class="nos-flabel">Name</span><TextInput v-model="row.name" :class="fieldClass" /></div>
+                        <div class="nos-cell"><span v-if="!isWide" class="nos-flabel">Mode</span>
                             <select v-model="row.mode" :class="fieldClass">
                                 <option value="vlanpri">VLAN+Priority</option>
                                 <option value="transparent">Transparent</option>
                             </select>
                         </div>
-                        <div class="kv-cell"><span v-if="!isWide" class="kv-flabel">GEM</span><TextInput v-model.number="row.gem" type="number" :class="fieldClass" /></div>
-                        <div class="kv-cell"><span v-if="!isWide" class="kv-flabel">COS</span><TextInput v-model.number="row.cos" type="number" :class="fieldClass" :disabled="row.mode === 'transparent'" /></div>
-                        <div class="kv-cell"><span v-if="!isWide" class="kv-flabel">VLAN</span><TextInput v-model.number="row.vlan" type="number" :class="fieldClass" :disabled="row.mode === 'transparent'" /></div>
-                        <div class="kv-cell kv-action-cell">
-                            <button type="button" :class="isWide ? 'kv-del' : 'kv-del-mobile'" @click="removeRow(cfg.services, i)"><Trash2 class="h-4 w-4" /><span v-if="!isWide">{{ $t('configonu.cfg_del_row') }}</span></button>
+                        <div class="nos-cell"><span v-if="!isWide" class="nos-flabel">GEM</span><TextInput v-model.number="row.gem" type="number" :class="fieldClass" /></div>
+                        <div class="nos-cell"><span v-if="!isWide" class="nos-flabel">COS</span><TextInput v-model.number="row.cos" type="number" :class="fieldClass" :disabled="row.mode === 'transparent'" /></div>
+                        <div class="nos-cell"><span v-if="!isWide" class="nos-flabel">VLAN</span><TextInput v-model.number="row.vlan" type="number" :class="fieldClass" :disabled="row.mode === 'transparent'" /></div>
+                        <div class="nos-cell nos-action-cell">
+                            <button type="button" :class="isWide ? 'nos-del' : 'nos-del-mobile'" @click="removeRow(cfg.services, i)"><Trash2 class="h-4 w-4" /><span v-if="!isWide">{{ $t('configonu.cfg_del_row') }}</span></button>
                         </div>
                     </div>
                     <p v-if="!cfg.services.length" class="py-1 text-xs text-slate-500">{{ $t('configonu.cfg_no_service') }}</p>
@@ -264,23 +264,23 @@ const fieldClass = 'mt-1 block w-full rounded-md border-white/10 bg-canvas-3/40 
         <section class="overflow-hidden rounded-lg border border-white/10 bg-slate-900/40 shadow-lg shadow-black/30 backdrop-blur-xl">
             <header class="flex items-center justify-between border-b border-white/10 px-4 py-3 sm:px-6">
                 <h3 class="flex items-center gap-2 text-sm font-semibold uppercase tracking-wide text-slate-200"><Globe class="h-4 w-4 text-cyan-400" /> UNI VLAN</h3>
-                <button type="button" class="kv-add" @click="addVlanPort"><Plus class="h-3.5 w-3.5" /> {{ $t('configonu.cfg_add') }}</button>
+                <button type="button" class="nos-add" @click="addVlanPort"><Plus class="h-3.5 w-3.5" /> {{ $t('configonu.cfg_add') }}</button>
             </header>
             <div class="overflow-x-auto px-3 py-3 sm:px-4">
                 <div class="space-y-3 md:min-w-[680px] md:space-y-1.5">
-                    <div v-if="isWide" class="kv-thead" :style="{ gridTemplateColumns: cols.uniVlan }">
+                    <div v-if="isWide" class="nos-thead" :style="{ gridTemplateColumns: cols.uniVlan }">
                         <span>Port Type</span><span>Port</span><span>Mode</span><span>Def VLAN</span><span>Priority</span><span></span>
                     </div>
-                    <div v-for="(row, i) in cfg.vlan_ports" :key="`uv-${i}`" :class="isWide ? 'kv-trow' : 'kv-rowcard'" :style="isWide ? { gridTemplateColumns: cols.uniVlan } : null">
-                        <div class="kv-cell"><span v-if="!isWide" class="kv-flabel">Port Type</span>
+                    <div v-for="(row, i) in cfg.vlan_ports" :key="`uv-${i}`" :class="isWide ? 'nos-trow' : 'nos-rowcard'" :style="isWide ? { gridTemplateColumns: cols.uniVlan } : null">
+                        <div class="nos-cell"><span v-if="!isWide" class="nos-flabel">Port Type</span>
                             <select v-model="row.port_type" :class="fieldClass">
                                 <option value="eth">Ethernet</option>
                                 <option value="wifi">WiFi</option>
                                 <option value="veip">VEIP</option>
                             </select>
                         </div>
-                        <div class="kv-cell"><span v-if="!isWide" class="kv-flabel">Port</span><TextInput v-model.number="row.port" type="number" :class="fieldClass" /></div>
-                        <div class="kv-cell"><span v-if="!isWide" class="kv-flabel">Mode</span>
+                        <div class="nos-cell"><span v-if="!isWide" class="nos-flabel">Port</span><TextInput v-model.number="row.port" type="number" :class="fieldClass" /></div>
+                        <div class="nos-cell"><span v-if="!isWide" class="nos-flabel">Mode</span>
                             <select v-model="row.mode" :class="fieldClass">
                                 <option value="tag">tag</option>
                                 <option value="hybrid">hybrid</option>
@@ -289,10 +289,10 @@ const fieldClass = 'mt-1 block w-full rounded-md border-white/10 bg-canvas-3/40 
                                 <option value="na">na (hapus)</option>
                             </select>
                         </div>
-                        <div class="kv-cell"><span v-if="!isWide" class="kv-flabel">Def VLAN</span><TextInput v-model.number="row.def_vlan" type="number" :class="fieldClass" :disabled="['trunk','transparent','na'].includes(row.mode)" /></div>
-                        <div class="kv-cell"><span v-if="!isWide" class="kv-flabel">Priority</span><TextInput v-model.number="row.priority" type="number" :class="fieldClass" :disabled="['trunk','transparent','na'].includes(row.mode)" /></div>
-                        <div class="kv-cell kv-action-cell">
-                            <button type="button" :class="isWide ? 'kv-del' : 'kv-del-mobile'" @click="removeRow(cfg.vlan_ports, i)"><Trash2 class="h-4 w-4" /><span v-if="!isWide">{{ $t('configonu.cfg_del_row') }}</span></button>
+                        <div class="nos-cell"><span v-if="!isWide" class="nos-flabel">Def VLAN</span><TextInput v-model.number="row.def_vlan" type="number" :class="fieldClass" :disabled="['trunk','transparent','na'].includes(row.mode)" /></div>
+                        <div class="nos-cell"><span v-if="!isWide" class="nos-flabel">Priority</span><TextInput v-model.number="row.priority" type="number" :class="fieldClass" :disabled="['trunk','transparent','na'].includes(row.mode)" /></div>
+                        <div class="nos-cell nos-action-cell">
+                            <button type="button" :class="isWide ? 'nos-del' : 'nos-del-mobile'" @click="removeRow(cfg.vlan_ports, i)"><Trash2 class="h-4 w-4" /><span v-if="!isWide">{{ $t('configonu.cfg_del_row') }}</span></button>
                         </div>
                     </div>
                     <p v-if="!cfg.vlan_ports.length" class="py-1 text-xs text-slate-500">{{ $t('configonu.cfg_no_univlan') }}</p>
@@ -304,7 +304,7 @@ const fieldClass = 'mt-1 block w-full rounded-md border-white/10 bg-canvas-3/40 
         <section class="overflow-hidden rounded-lg border border-white/10 bg-slate-900/40 shadow-lg shadow-black/30 backdrop-blur-xl">
             <header class="flex items-center justify-between border-b border-white/10 px-4 py-3 sm:px-6">
                 <h3 class="flex items-center gap-2 text-sm font-semibold uppercase tracking-wide text-slate-200"><Network class="h-4 w-4 text-cyan-400" /> WAN Service Binding</h3>
-                <button type="button" class="kv-add" @click="addWanService"><Plus class="h-3.5 w-3.5" /> {{ $t('configonu.cfg_add') }}</button>
+                <button type="button" class="nos-add" @click="addWanService"><Plus class="h-3.5 w-3.5" /> {{ $t('configonu.cfg_add') }}</button>
             </header>
             <div class="space-y-4 p-4 sm:p-6">
                 <p v-if="!cfg.wan_services.length" class="rounded-lg border border-dashed border-white/10 bg-canvas-3/30 px-4 py-3 text-sm text-slate-500">
@@ -319,7 +319,7 @@ const fieldClass = 'mt-1 block w-full rounded-md border-white/10 bg-canvas-3/40 
                         <span class="inline-flex items-center gap-2 rounded-full bg-sky-500/15 px-2.5 py-0.5 text-xs font-semibold text-cyan-300 ring-1 ring-cyan-500/30">
                             WAN {{ w.id }}
                         </span>
-                        <button type="button" class="kv-del" :title="$t('configonu.cfg_del_wan')" @click="removeRow(cfg.wan_services, i)"><Trash2 class="h-4 w-4" /></button>
+                        <button type="button" class="nos-del" :title="$t('configonu.cfg_del_wan')" @click="removeRow(cfg.wan_services, i)"><Trash2 class="h-4 w-4" /></button>
                     </div>
 
                     <!-- Service Type (multi) -->
@@ -375,7 +375,7 @@ const fieldClass = 'mt-1 block w-full rounded-md border-white/10 bg-canvas-3/40 
                 <h3 class="flex items-center gap-2 text-sm font-semibold uppercase tracking-wide text-slate-200">
                     <Globe class="h-4 w-4 text-cyan-400" /> WAN
                 </h3>
-                <button type="button" class="kv-add" @click="addWanIp"><Plus class="h-3.5 w-3.5" /> {{ $t('configonu.cfg_add_wanip') }}</button>
+                <button type="button" class="nos-add" @click="addWanIp"><Plus class="h-3.5 w-3.5" /> {{ $t('configonu.cfg_add_wanip') }}</button>
             </header>
             <div class="space-y-4 p-4 sm:p-6">
                 <p v-if="!cfg.wan_ips.length" class="rounded-lg border border-dashed border-white/10 bg-canvas-3/30 px-4 py-3 text-sm text-slate-500">
@@ -390,7 +390,7 @@ const fieldClass = 'mt-1 block w-full rounded-md border-white/10 bg-canvas-3/40 
                         <span class="inline-flex items-center gap-2 rounded-full bg-sky-500/15 px-2.5 py-0.5 text-xs font-semibold text-cyan-300 ring-1 ring-cyan-500/30">
                             WAN-IP {{ w.id }}
                         </span>
-                        <button type="button" class="kv-del" :title="$t('configonu.cfg_del_wanip')" @click="removeRow(cfg.wan_ips, i)"><Trash2 class="h-4 w-4" /></button>
+                        <button type="button" class="nos-del" :title="$t('configonu.cfg_del_wanip')" @click="removeRow(cfg.wan_ips, i)"><Trash2 class="h-4 w-4" /></button>
                     </div>
 
                     <!-- Mode -->
@@ -554,21 +554,21 @@ const fieldClass = 'mt-1 block w-full rounded-md border-white/10 bg-canvas-3/40 
 </template>
 
 <style scoped>
-.kv-add {
+.nos-add {
     display: inline-flex;
     align-items: center;
     gap: 0.375rem;
     border-radius: 0.5rem;
-    border: 1px solid rgb(var(--kv-white) / 0.1);
-    background: rgb(var(--kv-slate-900) / 0.4);
+    border: 1px solid rgb(var(--nos-white) / 0.1);
+    background: rgb(var(--nos-slate-900) / 0.4);
     padding: 0.375rem 0.75rem;
     font-size: 0.75rem;
     font-weight: 600;
-    color: rgb(var(--kv-slate-200));
+    color: rgb(var(--nos-slate-200));
     transition: all 0.15s;
 }
-.kv-add:hover { border-color: rgb(6 182 212 / 0.4); color: rgb(var(--kv-white)); }
-.kv-del {
+.nos-add:hover { border-color: rgb(6 182 212 / 0.4); color: rgb(var(--nos-white)); }
+.nos-del {
     display: inline-flex;
     align-items: center;
     justify-content: center;
@@ -576,26 +576,26 @@ const fieldClass = 'mt-1 block w-full rounded-md border-white/10 bg-canvas-3/40 
     border: 1px solid rgb(239 68 68 / 0.3);
     background: rgb(239 68 68 / 0.1);
     padding: 0.5rem;
-    color: rgb(var(--kv-red-300));
+    color: rgb(var(--nos-red-300));
     transition: all 0.15s;
 }
-.kv-del:hover { background: rgb(239 68 68 / 0.2); }
+.nos-del:hover { background: rgb(239 68 68 / 0.2); }
 
-.kv-thead {
+.nos-thead {
     display: grid;
     align-items: center;
     gap: 0.5rem;
     border-radius: 0.375rem;
-    background: rgb(var(--kv-canvas-3) / 0.4);
-    border: 1px solid rgb(var(--kv-white) / 0.08);
+    background: rgb(var(--nos-canvas-3) / 0.4);
+    border: 1px solid rgb(var(--nos-white) / 0.08);
     padding: 0.5rem 0.625rem;
     font-size: 11px;
     font-weight: 600;
     text-transform: uppercase;
     letter-spacing: 0.05em;
-    color: rgb(var(--kv-slate-500));
+    color: rgb(var(--nos-slate-500));
 }
-.kv-trow {
+.nos-trow {
     display: grid;
     align-items: center;
     gap: 0.5rem;
@@ -603,39 +603,39 @@ const fieldClass = 'mt-1 block w-full rounded-md border-white/10 bg-canvas-3/40 
 }
 
 /* Grid cells (desktop) must be allowed to shrink so inputs don't overflow. */
-.kv-cell {
+.nos-cell {
     min-width: 0;
 }
-.kv-action-cell {
+.nos-action-cell {
     display: flex;
     align-items: center;
     justify-content: center;
 }
 
 /* === Mobile: each repeating row becomes a labeled card === */
-.kv-rowcard {
+.nos-rowcard {
     display: grid;
     grid-template-columns: repeat(2, minmax(0, 1fr));
     gap: 0.5rem 0.75rem;
     border-radius: 0.625rem;
-    border: 1px solid rgb(var(--kv-white) / 0.08);
-    background: rgb(var(--kv-canvas-3) / 0.4);
+    border: 1px solid rgb(var(--nos-white) / 0.08);
+    background: rgb(var(--nos-canvas-3) / 0.4);
     padding: 0.75rem;
 }
-.kv-rowcard .kv-action-cell {
+.nos-rowcard .nos-action-cell {
     grid-column: 1 / -1;
     margin-top: 0.125rem;
 }
-.kv-flabel {
+.nos-flabel {
     display: block;
     margin-bottom: 0;
     font-size: 11px;
     font-weight: 600;
     text-transform: uppercase;
     letter-spacing: 0.05em;
-    color: rgb(var(--kv-slate-500));
+    color: rgb(var(--nos-slate-500));
 }
-.kv-del-mobile {
+.nos-del-mobile {
     display: inline-flex;
     width: 100%;
     align-items: center;
@@ -647,8 +647,8 @@ const fieldClass = 'mt-1 block w-full rounded-md border-white/10 bg-canvas-3/40 
     padding: 0.5rem 0.75rem;
     font-size: 0.8125rem;
     font-weight: 600;
-    color: rgb(var(--kv-red-300));
+    color: rgb(var(--nos-red-300));
     transition: all 0.15s;
 }
-.kv-del-mobile:hover { background: rgb(239 68 68 / 0.2); }
+.nos-del-mobile:hover { background: rgb(239 68 68 / 0.2); }
 </style>

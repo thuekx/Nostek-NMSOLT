@@ -14,10 +14,10 @@ const iconMap = {
 };
 
 const accentMap = {
-    pending: 'kv-circle-cyan',
-    processing: 'kv-circle-purple',
-    success: 'kv-circle-emerald',
-    failed: 'kv-circle-red',
+    pending: 'nos-circle-cyan',
+    processing: 'nos-circle-purple',
+    success: 'nos-circle-emerald',
+    failed: 'nos-circle-red',
 };
 
 const countColorMap = {
@@ -29,10 +29,10 @@ const countColorMap = {
 </script>
 
 <template>
-    <div class="kv-glass-panel flex h-full flex-col">
+    <div class="nos-glass-panel flex h-full flex-col">
         <div class="flex items-center justify-between border-b border-white/5 px-5 py-4">
             <div class="flex items-center gap-3">
-                <span class="kv-circle-purple">
+                <span class="nos-circle-purple">
                     <Cog class="h-5 w-5" />
                 </span>
                 <h3 class="text-base font-semibold text-white">{{ $t('dashboard.provisioning_jobs') }}</h3>

@@ -276,7 +276,7 @@ const submit = () => {
                     v-model="search"
                     type="text"
                     :placeholder="$t('map.search_placeholder')"
-                    class="kv-input w-full pl-9"
+                    class="nos-input w-full pl-9"
                 />
                 <div
                     v-if="searchResults.length"
@@ -302,7 +302,7 @@ const submit = () => {
             <div class="grid grid-cols-1 gap-4 sm:grid-cols-3">
                 <div>
                     <InputLabel value="OLT" />
-                    <select v-model="form.snmp_olt_id" class="kv-input mt-1 w-full" @change="onOltChange">
+                    <select v-model="form.snmp_olt_id" class="nos-input mt-1 w-full" @change="onOltChange">
                         <option value="">{{ $t('map.pick_olt') }}</option>
                         <option v-for="olt in olts" :key="olt.id" :value="olt.id">{{ olt.name }}</option>
                     </select>
@@ -310,14 +310,14 @@ const submit = () => {
                 </div>
                 <div>
                     <InputLabel value="Port" />
-                    <select v-model="form.port" class="kv-input mt-1 w-full" :disabled="!form.snmp_olt_id" @change="onPortChange">
+                    <select v-model="form.port" class="nos-input mt-1 w-full" :disabled="!form.snmp_olt_id" @change="onPortChange">
                         <option value="">{{ $t('map.pick_port') }}</option>
                         <option v-for="p in portOptions" :key="`${p.slot}/${p.port}`" :value="`${p.slot}/${p.port}`">{{ p.slot }}/{{ p.port }}</option>
                     </select>
                 </div>
                 <div>
                     <InputLabel value="ONU" />
-                    <select v-model="form.onu_id" class="kv-input mt-1 w-full" :disabled="!form.snmp_olt_id">
+                    <select v-model="form.onu_id" class="nos-input mt-1 w-full" :disabled="!form.snmp_olt_id">
                         <option value="">{{ $t('map.pick_onu') }}</option>
                         <option v-for="onu in onuOptions" :key="onu.onu_id" :value="onu.onu_id">
                             #{{ onu.onu_id }} · {{ onu.customer_name || onu.name || onu.serial_number || onu.interface }}
@@ -367,7 +367,7 @@ const submit = () => {
                 </div>
                 <div class="sm:col-span-2">
                     <InputLabel :value="$t('map.notes_label')" />
-                    <textarea v-model="form.notes" rows="2" class="kv-input mt-1 w-full"></textarea>
+                    <textarea v-model="form.notes" rows="2" class="nos-input mt-1 w-full"></textarea>
                 </div>
             </div>
             </template>
@@ -377,7 +377,7 @@ const submit = () => {
                 <div class="grid grid-cols-1 gap-4 sm:grid-cols-2">
                     <div>
                         <InputLabel value="OLT" />
-                        <select v-model="odpForm.snmp_olt_id" class="kv-input mt-1 w-full" @change="onOdpOltChange">
+                        <select v-model="odpForm.snmp_olt_id" class="nos-input mt-1 w-full" @change="onOdpOltChange">
                             <option value="">{{ $t('map.pick_olt') }}</option>
                             <option v-for="olt in olts" :key="olt.id" :value="olt.id">{{ olt.name }}</option>
                         </select>
@@ -385,7 +385,7 @@ const submit = () => {
                     </div>
                     <div>
                         <InputLabel :value="$t('map.odp_port_label')" />
-                        <select v-model="odpForm.port" class="kv-input mt-1 w-full" :disabled="!odpForm.snmp_olt_id">
+                        <select v-model="odpForm.port" class="nos-input mt-1 w-full" :disabled="!odpForm.snmp_olt_id">
                             <option value="">{{ $t('map.pick_port') }}</option>
                             <option v-for="p in odpPortOptions" :key="`${p.slot}/${p.port}`" :value="`${p.slot}/${p.port}`">{{ p.slot }}/{{ p.port }}</option>
                         </select>
@@ -416,7 +416,7 @@ const submit = () => {
 
                 <div class="mt-4">
                     <InputLabel :value="$t('map.notes_label')" />
-                    <textarea v-model="odpForm.notes" rows="2" class="kv-input mt-1 w-full"></textarea>
+                    <textarea v-model="odpForm.notes" rows="2" class="nos-input mt-1 w-full"></textarea>
                 </div>
             </template>
 

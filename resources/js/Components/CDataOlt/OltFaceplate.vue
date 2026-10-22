@@ -492,13 +492,13 @@ const legend = computed(() => [
     align-items: center;
     gap: 0.5rem;
     font-size: 0.75rem;
-    color: rgb(var(--kv-slate-300));
+    color: rgb(var(--nos-slate-300));
 }
 .fp-legend-note {
     margin-top: 0.25rem;
     font-size: 0.75rem;
     line-height: 1.35;
-    color: rgb(var(--kv-slate-500));
+    color: rgb(var(--nos-slate-500));
 }
 .fp-legend-swatch {
     width: 16px;

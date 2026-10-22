@@ -16,14 +16,14 @@ const props = defineProps({
 });
 
 const circleClass = computed(() => ({
-    sky: 'kv-circle-sky',
-    cyan: 'kv-circle-cyan',
-    emerald: 'kv-circle-emerald',
-    purple: 'kv-circle-purple',
-    red: 'kv-circle-red',
-    amber: 'kv-circle-amber',
-    slate: 'kv-circle-slate',
-}[props.accent] ?? 'kv-circle-sky'));
+    sky: 'nos-circle-sky',
+    cyan: 'nos-circle-cyan',
+    emerald: 'nos-circle-emerald',
+    purple: 'nos-circle-purple',
+    red: 'nos-circle-red',
+    amber: 'nos-circle-amber',
+    slate: 'nos-circle-slate',
+}[props.accent] ?? 'nos-circle-sky'));
 
 // Dibaca dari token, jadi ikut tema: cyan-400 & slate-500 menggelap di tema
 // terang (stop 500 lainnya dipatok sama di kedua tema).
@@ -76,7 +76,7 @@ const sparkData = computed(() => {
 </script>
 
 <template>
-    <div class="kv-glass-card kv-glass-hover relative overflow-hidden">
+    <div class="nos-glass-card nos-glass-hover relative overflow-hidden">
         <!-- Sparkline floats top-right, isolated from text flow -->
         <div class="pointer-events-none absolute right-4 top-4 hidden h-16 w-36 sm:block lg:w-40">
             <ChartCanvas

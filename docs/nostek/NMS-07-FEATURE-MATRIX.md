@@ -1,6 +1,8 @@
 # NMS-07 source audit and feature matrix
 
-Audit base: `62b414f04ac4b5e4f024669e431be29f4d0845d1` (PR #19).
+Original audit base: `62b414f04ac4b5e4f024669e431be29f4d0845d1` (PR #19).
+Alignment: main `b0cbf36ac6f59552a3ef4f3a01f187997d221f86` (PR #22); identity cleanup preserved.
+CI: original search head passed run `39715103922`; aligned-head checks must pass separately.
 Scope: source inspection and synthetic CI only; no host/device/network operations.
 State: **IN_PROGRESS**, not whole-product verification.
 

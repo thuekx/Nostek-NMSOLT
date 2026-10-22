@@ -29,8 +29,8 @@
 set -euo pipefail
 cd "$(dirname "${BASH_SOURCE[0]}")/.."
 
-export APP_CONFIG_CACHE=/nonexistent/kv-test-config.php
-export APP_ROUTES_CACHE=/nonexistent/kv-test-routes.php
+export APP_CONFIG_CACHE=/nonexistent/nos-test-config.php
+export APP_ROUTES_CACHE=/nonexistent/nos-test-routes.php
 
 # --- Pengaman 1: path pengalihan memang tidak boleh ada -----------------------
 for p in "$APP_CONFIG_CACHE" "$APP_ROUTES_CACHE"; do

@@ -33,7 +33,7 @@ Handbook ini ditujukan untuk developer/maintainer agar mudah **menambah fitur**,
 | 12 | [Frontend](12-frontend.md) | Vue 3 + Inertia, layout, komponen, tema gelap/terang, i18n ID/EN, build Vite |
 | 13 | [Troubleshooting & Maintenance](13-troubleshooting-maintenance.md) | Gejala → penyebab → solusi |
 | 14 | [Panduan Menambah Fitur](14-panduan-tambah-fitur.md) | Resep langkah demi langkah |
-| 15 | [UI & Tema Dashboard](15-ui-tema-dashboard.md) | Design token, kelas `kv-*`, aturan halaman/komponen baru |
+| 15 | [UI & Tema Dashboard](15-ui-tema-dashboard.md) | Design token, kelas `nos-*`, aturan halaman/komponen baru |
 | 16 | [Peta ONU & ODP](16-peta-onu.md) | Peta Leaflet pin ONU/ODP lintas-OLT, tile Google keyless, warna/foto ODP, tambah pin & aksi |
 | 17 | [C-Data GPON: SNMP walk & inventory](17-cdata-gpon-snmp-walk.md) | Peta OID NSCRTV (FD1608S & FD1601S/FD1602S), inventory ONU via SNMP, CLI enrich, faceplate |
 | 18 | [Docker Appliance](18-docker-appliance.md) | Kemas seluruh stack jadi container, install lengkap di 1 PC (seperti NetNumen), bagikan ke banyak lokasi |

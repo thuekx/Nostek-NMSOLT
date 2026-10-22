@@ -79,11 +79,11 @@ const googleLayer = (lyrs) =>
 
 const buildIcon = (pin, selected) => {
     const color = pin.online ? ONLINE_COLOR : OFFLINE_COLOR;
-    const cls = ['kv-pin'];
-    if (selected) cls.push('kv-pin--selected');
-    if (!pin.online) cls.push('kv-pin--offline');
+    const cls = ['nos-pin'];
+    if (selected) cls.push('nos-pin--selected');
+    if (!pin.online) cls.push('nos-pin--offline');
     // Pin terbuka (locked=false) ditandai supaya jelas mana yang bisa digeser.
-    if (pin.locked === false) cls.push('kv-pin--unlocked');
+    if (pin.locked === false) cls.push('nos-pin--unlocked');
     return L.divIcon({
         className: '',
         html: `<div class="${cls.join(' ')}">
@@ -104,9 +104,9 @@ const buildIcon = (pin, selected) => {
 const buildOdpIcon = (odp, selected) => {
     const count = (odp.onus ?? []).length;
     const color = odpColor(odp);
-    const cls = ['kv-odp-pin'];
-    if (selected) cls.push('kv-odp-pin--selected');
-    if (odp.locked === false) cls.push('kv-pin--unlocked');
+    const cls = ['nos-odp-pin'];
+    if (selected) cls.push('nos-odp-pin--selected');
+    if (odp.locked === false) cls.push('nos-pin--unlocked');
     return L.divIcon({
         className: '',
         html: `<div class="${cls.join(' ')}">
@@ -115,7 +115,7 @@ const buildOdpIcon = (odp, selected) => {
                       fill="${color}" stroke="#ffffff" stroke-width="1.5" stroke-linejoin="round" />
                 <circle cx="12" cy="10" r="3" fill="#ffffff" />
             </svg>
-            ${count ? `<span class="kv-odp-pin__badge" style="background:${color};color:${textOn(color)}">${count}</span>` : ''}
+            ${count ? `<span class="nos-odp-pin__badge" style="background:${color};color:${textOn(color)}">${count}</span>` : ''}
         </div>`,
         iconSize: [26, 26],
         iconAnchor: [13, 24],
@@ -148,7 +148,7 @@ const flowOdpId = () => {
 // `odp.onus` cuma cadangan bila pin-nya tak ada di prop.
 // Semua garis diam digabung jadi DUA polyline multi-ruas (online/offline) di kanvas — ribuan
 // objek SVG beranimasi dulu memaksa browser menggambar ulang tiap frame. Garis ODP yang
-// sedang dipilih tetap SVG beranimasi (kelas `kv-flow`) di lapisan tersendiri.
+// sedang dipilih tetap SVG beranimasi (kelas `nos-flow`) di lapisan tersendiri.
 const renderLines = () => {
     if (!lineLayer) return;
     lineLayer.clearLayers();
@@ -171,7 +171,7 @@ const renderLines = () => {
             if (!end) continue;
             const color = onu.online ? ONLINE_COLOR : OFFLINE_COLOR;
             if (odp.id === flowId) {
-                L.polyline([start, end], { color, weight: 2.5, opacity: 0.95, className: 'kv-flow', interactive: false })
+                L.polyline([start, end], { color, weight: 2.5, opacity: 0.95, className: 'nos-flow', interactive: false })
                     .addTo(flowLayer);
             } else {
                 (onu.online ? online : offline).push([start, end]);
@@ -443,8 +443,8 @@ const renderDraft = () => {
     if (props.draft && props.draft.lat != null && props.draft.lng != null) {
         draftMarker = L.marker([props.draft.lat, props.draft.lng], {
             icon: L.divIcon({
-                className: 'kv-onu-pin',
-                html: '<span class="kv-onu-pin__draft"></span>',
+                className: 'nos-onu-pin',
+                html: '<span class="nos-onu-pin__draft"></span>',
                 iconSize: [26, 26],
                 iconAnchor: [13, 13],
             }),
@@ -498,14 +498,14 @@ onMounted(() => {
 
     // Legenda status ONU (hijau/merah) + pin ODP kuning.
     const legendHtml = () => `
-            <div class="kv-map-legend__title">${t('map.legend_title')}</div>
+            <div class="nos-map-legend__title">${t('map.legend_title')}</div>
             <div><span style="background:${ONLINE_COLOR}"></span> ${t('map.legend_online')}</div>
             <div><span style="background:${OFFLINE_COLOR}"></span> ${t('map.legend_offline')}</div>
-            <div><span class="kv-map-legend__odp" style="background:${ODP_COLOR}"></span> ${t('map.legend_odp')}</div>`;
+            <div><span class="nos-map-legend__odp" style="background:${ODP_COLOR}"></span> ${t('map.legend_odp')}</div>`;
     let legendDiv = null;
     const legend = L.control({ position: 'bottomright' });
     legend.onAdd = () => {
-        legendDiv = L.DomUtil.create('div', 'kv-map-legend');
+        legendDiv = L.DomUtil.create('div', 'nos-map-legend');
         legendDiv.innerHTML = legendHtml();
         return legendDiv;
     };
@@ -600,43 +600,43 @@ defineExpose({
 </script>
 
 <template>
-    <div ref="mapEl" class="kv-onu-map"></div>
+    <div ref="mapEl" class="nos-onu-map"></div>
 </template>
 
 <style>
-.kv-onu-map {
+.nos-onu-map {
     height: 100%;
     width: 100%;
     border-radius: 0.75rem;
-    background: rgb(var(--kv-slate-900));
+    background: rgb(var(--nos-slate-900));
 }
 
 /* Pin ONU — bentuk pin peta (teardrop) berwarna sesuai level RX. */
-.kv-pin {
+.nos-pin {
     position: relative;
     width: 26px;
     height: 26px;
 }
 
-.kv-pin svg {
+.nos-pin svg {
     display: block;
     filter: drop-shadow(0 1px 2px rgba(0, 0, 0, 0.5));
     transform-origin: 50% 92%;
     transition: transform 0.15s ease;
 }
 
-.kv-pin--selected svg {
+.nos-pin--selected svg {
     transform: scale(1.18);
     filter: drop-shadow(0 0 5px rgba(56, 189, 248, 0.9)) drop-shadow(0 1px 2px rgba(0, 0, 0, 0.5));
 }
 
 /* Pin terbuka (bisa digeser) — cincin cyan putus-putus + kursor pindah. Dipakai
    pin ONU maupun pin ODP. */
-.kv-pin--unlocked {
+.nos-pin--unlocked {
     cursor: move;
 }
 
-.kv-pin--unlocked::before {
+.nos-pin--unlocked::before {
     content: '';
     position: absolute;
     left: 50%;
@@ -647,17 +647,17 @@ defineExpose({
     margin-top: -13px;
     border-radius: 9999px;
     border: 2px dashed rgba(34, 211, 238, 0.9);
-    animation: kv-pin-spin 6s linear infinite;
+    animation: nos-pin-spin 6s linear infinite;
 }
 
-@keyframes kv-pin-spin {
+@keyframes nos-pin-spin {
     to {
         transform: rotate(360deg);
     }
 }
 
 /* Cincin pulsa merah di kepala pin untuk ONU offline. */
-.kv-pin--offline::after {
+.nos-pin--offline::after {
     content: '';
     position: absolute;
     left: 50%;
@@ -671,11 +671,11 @@ defineExpose({
     z-index: -1;
     /* transform + opacity saja → dikerjakan compositor, tanpa repaint tiap frame
        (animasi box-shadow lama memaksa repaint untuk setiap pin offline). */
-    animation: kv-pin-ripple 1.8s ease-out infinite;
+    animation: nos-pin-ripple 1.8s ease-out infinite;
     will-change: transform, opacity;
 }
 
-@keyframes kv-pin-ripple {
+@keyframes nos-pin-ripple {
     0% {
         transform: scale(1);
         opacity: 0.8;
@@ -687,7 +687,7 @@ defineExpose({
     }
 }
 
-@keyframes kv-pin-pulse {
+@keyframes nos-pin-pulse {
     0% {
         box-shadow: 0 0 0 0 rgba(239, 68, 68, 0.6);
     }
@@ -701,25 +701,25 @@ defineExpose({
 
 /* Pin ODP — teardrop (sama bentuk dgn pin ONU) + badge jumlah ONU terhubung. Warna isi
    pin & badge disuntik inline dari `odps.color`, jadi aksen di sini dijaga netral. */
-.kv-odp-pin {
+.nos-odp-pin {
     position: relative;
     width: 26px;
     height: 26px;
 }
 
-.kv-odp-pin svg {
+.nos-odp-pin svg {
     display: block;
     filter: drop-shadow(0 1px 2px rgba(0, 0, 0, 0.55));
     transform-origin: 50% 92%;
     transition: transform 0.15s ease;
 }
 
-.kv-odp-pin--selected svg {
+.nos-odp-pin--selected svg {
     transform: scale(1.18);
     filter: drop-shadow(0 0 5px rgba(255, 255, 255, 0.9)) drop-shadow(0 1px 2px rgba(0, 0, 0, 0.5));
 }
 
-.kv-odp-pin__badge {
+.nos-odp-pin__badge {
     position: absolute;
     top: -5px;
     right: -3px;
@@ -738,46 +738,46 @@ defineExpose({
 }
 
 /* Garis kabel ODP→ONU dengan aliran animasi (arah pergerakan dash). */
-.kv-flow {
+.nos-flow {
     stroke-dasharray: 7 7;
-    animation: kv-flow-dash 0.9s linear infinite;
+    animation: nos-flow-dash 0.9s linear infinite;
 }
 
-@keyframes kv-flow-dash {
+@keyframes nos-flow-dash {
     to {
         stroke-dashoffset: -14;
     }
 }
 
 /* Marker draft saat menempatkan pin baru. */
-.kv-onu-pin__draft {
+.nos-onu-pin__draft {
     display: block;
     width: 22px;
     height: 22px;
     border-radius: 9999px;
     background: rgba(56, 189, 248, 0.35);
     border: 2px dashed #38bdf8;
-    animation: kv-pin-pulse 1.4s ease-out infinite;
+    animation: nos-pin-pulse 1.4s ease-out infinite;
 }
 
-.kv-map-legend {
-    background: rgb(var(--kv-slate-900) / 0.92);
-    border: 1px solid rgb(var(--kv-slate-400) / 0.25);
+.nos-map-legend {
+    background: rgb(var(--nos-slate-900) / 0.92);
+    border: 1px solid rgb(var(--nos-slate-400) / 0.25);
     border-radius: 0.5rem;
     padding: 0.5rem 0.65rem;
     font-size: 11px;
-    color: rgb(var(--kv-slate-300));
+    color: rgb(var(--nos-slate-300));
     line-height: 1.6;
     backdrop-filter: blur(6px);
 }
 
-.kv-map-legend__title {
+.nos-map-legend__title {
     font-weight: 600;
-    color: rgb(var(--kv-slate-100));
+    color: rgb(var(--nos-slate-100));
     margin-bottom: 2px;
 }
 
-.kv-map-legend span {
+.nos-map-legend span {
     display: inline-block;
     width: 10px;
     height: 10px;
@@ -787,7 +787,7 @@ defineExpose({
 }
 
 /* Penanda ODP di legend = kotak (samakan dgn bentuk pin ODP). */
-.kv-map-legend__odp {
+.nos-map-legend__odp {
     border-radius: 2px !important;
 }
 
@@ -795,30 +795,30 @@ defineExpose({
    heks lama; di tema terang jadi kartu putih bertinta gelap). */
 .leaflet-control-layers,
 .leaflet-bar {
-    background: rgb(var(--kv-slate-900) / 0.92) !important;
-    color: rgb(var(--kv-slate-200)) !important;
-    border: 1px solid rgb(var(--kv-slate-400) / 0.25) !important;
+    background: rgb(var(--nos-slate-900) / 0.92) !important;
+    color: rgb(var(--nos-slate-200)) !important;
+    border: 1px solid rgb(var(--nos-slate-400) / 0.25) !important;
 }
 
 .leaflet-control-layers-expanded {
-    color: rgb(var(--kv-slate-200)) !important;
+    color: rgb(var(--nos-slate-200)) !important;
 }
 
 .leaflet-bar a {
-    background: rgb(var(--kv-slate-900) / 0.92) !important;
-    color: rgb(var(--kv-slate-200)) !important;
+    background: rgb(var(--nos-slate-900) / 0.92) !important;
+    color: rgb(var(--nos-slate-200)) !important;
 }
 
 .leaflet-bar a:hover {
-    background: rgb(var(--kv-slate-800) / 0.95) !important;
+    background: rgb(var(--nos-slate-800) / 0.95) !important;
 }
 
 .leaflet-control-attribution {
-    background: rgb(var(--kv-slate-900) / 0.7) !important;
-    color: rgb(var(--kv-slate-400)) !important;
+    background: rgb(var(--nos-slate-900) / 0.7) !important;
+    color: rgb(var(--nos-slate-400)) !important;
 }
 
 .leaflet-control-attribution a {
-    color: rgb(var(--kv-sky-300)) !important;
+    color: rgb(var(--nos-sky-300)) !important;
 }
 </style>

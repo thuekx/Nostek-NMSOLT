@@ -32,7 +32,7 @@ class Locale
      * {@see Store::invalidate()} saat logout, sehingga
      * pilihan bahasa user tetap terbawa ke halaman Welcome/Login setelahnya.
      */
-    public const COOKIE = 'kv_locale';
+    public const COOKIE = 'nos_locale';
 
     /**
      * @return array<int, string>

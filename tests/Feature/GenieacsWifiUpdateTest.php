@@ -68,7 +68,7 @@ class GenieacsWifiUpdateTest extends TestCase
             '_id' => 'dev-wifi',
             '_deviceId' => ['_SerialNumber' => 'CDTCAF0012E6'],
             'InternetGatewayDevice' => ['LANDevice' => ['1' => ['WLANConfiguration' => ['1' => [
-                'SSID' => ['_value' => 'KUSUMANET-LAMA'],
+                'SSID' => ['_value' => 'NOSTEKNET-LAMA'],
                 'BeaconType' => ['_value' => '11i'],
                 'Enable' => ['_value' => true],
                 'PreSharedKey' => ['1' => ['KeyPassphrase' => ['_value' => '']]],
@@ -94,7 +94,7 @@ class GenieacsWifiUpdateTest extends TestCase
 
         $this->actingAs(User::factory()->admin()->create())
             ->postJson(route('genieacs.onu.wifi', ['olt' => $olt->id, 'slot' => 1, 'port' => 1, 'onuId' => 1]), [
-                'ssid' => 'KUSUMANET-BARU',
+                'ssid' => 'NOSTEKNET-BARU',
                 'password' => 'rahasia12345',
                 'wlan_index' => 1,
             ])
@@ -109,7 +109,7 @@ class GenieacsWifiUpdateTest extends TestCase
             $body = json_encode($request->data());
 
             // SSID baru dikirim, DAN passphrase ditulis ke jalur vendor C-Data.
-            return str_contains($body, 'KUSUMANET-BARU')
+            return str_contains($body, 'NOSTEKNET-BARU')
                 && str_contains($body, 'X_CMS_KeyPassphrase');
         });
     }
@@ -123,7 +123,7 @@ class GenieacsWifiUpdateTest extends TestCase
 
         $this->actingAs(User::factory()->admin()->create())
             ->postJson(route('genieacs.onu.wifi', ['olt' => $olt->id, 'slot' => 1, 'port' => 1, 'onuId' => 1]), [
-                'ssid' => 'KUSUMANET-BARU',
+                'ssid' => 'NOSTEKNET-BARU',
                 'password' => 'rahasia12345',
                 'wlan_index' => 1,
             ])->assertOk();
@@ -131,7 +131,7 @@ class GenieacsWifiUpdateTest extends TestCase
         $audit = \App\Models\AuditLog::query()->latest('id')->first();
 
         $this->assertSame('genieacs.wifi.updated', $audit->event);
-        $this->assertStringContainsString('KUSUMANET-BARU', (string) $audit->description);
+        $this->assertStringContainsString('NOSTEKNET-BARU', (string) $audit->description);
         $this->assertStringNotContainsString('rahasia12345', json_encode($audit->toArray()));
     }
 
@@ -143,7 +143,7 @@ class GenieacsWifiUpdateTest extends TestCase
 
         $this->actingAs(User::factory()->admin()->create())
             ->postJson(route('genieacs.onu.wifi', ['olt' => $olt->id, 'slot' => 1, 'port' => 1, 'onuId' => 1]), [
-                'ssid' => 'KUSUMANET',
+                'ssid' => 'NOSTEKNET',
                 'password' => 'pendek',
                 'wlan_index' => 1,
             ])
@@ -160,7 +160,7 @@ class GenieacsWifiUpdateTest extends TestCase
 
         $this->actingAs(User::factory()->admin()->create())
             ->postJson(route('genieacs.onu.wifi', ['olt' => $olt->id, 'slot' => 1, 'port' => 1, 'onuId' => 1]), [
-                'ssid' => 'KUSUMANET',
+                'ssid' => 'NOSTEKNET',
                 'password' => 'rahasia12345',
                 'wlan_index' => 1,
             ])

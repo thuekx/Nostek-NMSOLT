@@ -115,7 +115,7 @@ const maxWidthClass = computed(() => {
             >
                 <div
                     v-show="show"
-                    class="kv-popover relative max-h-[90vh] transform overflow-y-auto rounded-2xl border border-white/10 bg-slate-900 text-slate-100 shadow-2xl shadow-black/60 transition-all sm:w-full"
+                    class="nos-popover relative max-h-[90vh] transform overflow-y-auto rounded-2xl border border-white/10 bg-slate-900 text-slate-100 shadow-2xl shadow-black/60 transition-all sm:w-full"
                     :class="maxWidthClass"
                 >
                     <slot v-if="showSlot" />

@@ -180,8 +180,8 @@ set_env() {
   line="${key}=$(env_quote "$2")"
   if grep -qE "^${key}=" "$file"; then
     tmp="$(mktemp "${file}.XXXXXX")"
-    KV_ENV_LINE="$line" awk -v key="$key" \
-      'index($0, key "=") == 1 { print ENVIRON["KV_ENV_LINE"]; next } { print }' "$file" > "$tmp"
+    NOS_ENV_LINE="$line" awk -v key="$key" \
+      'index($0, key "=") == 1 { print ENVIRON["NOS_ENV_LINE"]; next } { print }' "$file" > "$tmp"
     cat "$tmp" > "$file"
     rm -f "$tmp"
   else
@@ -437,7 +437,7 @@ set_env QUEUE_CONNECTION redis
 set_env CACHE_STORE redis
 set_env REDIS_HOST 127.0.0.1
 set_env SNMP_POLLER_DRIVER go
-set_env SNMP_POLLER_BINARY bin/kv-snmp-poller
+set_env SNMP_POLLER_BINARY bin/nos-snmp-poller
 set_env TELNET_PROXY_HOST 127.0.0.1
 set_env TELNET_PROXY_PORT 6002
 set_env TELNET_PROXY_WS_URL /telnet-ws
@@ -452,16 +452,16 @@ step "$(t "Build Go SNMP poller (statis)" "Building the Go SNMP poller (static)"
 # CGO_ENABLED=0 -> binary self-contained (tak tergantung glibc), aman dipindah antar
 # server. -mod=mod karena repo punya folder vendor/ (PHP) di root. -trimpath + -s -w
 # memperkecil & menstabilkan build.
-(cd "$PROJECT_DIR" && CGO_ENABLED=0 go build -mod=mod -trimpath -ldflags='-s -w' -o bin/kv-snmp-poller ./cmd/kv-snmp-poller)
-chmod +x "$PROJECT_DIR/bin/kv-snmp-poller"
+(cd "$PROJECT_DIR" && CGO_ENABLED=0 go build -mod=mod -trimpath -ldflags='-s -w' -o bin/nos-snmp-poller ./cmd/nos-snmp-poller)
+chmod +x "$PROJECT_DIR/bin/nos-snmp-poller"
 
 # Smoke test: pastikan binary benar-benar jalan & emit JSON. Kalau tidak, PollOltJob
 # akan diam-diam fallback ke PHP -> ketahuan sekarang, bukan pas produksi.
-if KV_SNMP_COMMUNITY=public "$PROJECT_DIR/bin/kv-snmp-poller" --host 127.0.0.1 --timeout 1s --retries 0 2>/dev/null | grep -q '"ok"'; then
-  ok "$(t "bin/kv-snmp-poller terbangun & berfungsi (emit JSON)" "bin/kv-snmp-poller built and working (emits JSON)")"
+if NOS_SNMP_COMMUNITY=public "$PROJECT_DIR/bin/nos-snmp-poller" --host 127.0.0.1 --timeout 1s --retries 0 2>/dev/null | grep -q '"ok"'; then
+  ok "$(t "bin/nos-snmp-poller terbangun & berfungsi (emit JSON)" "bin/nos-snmp-poller built and working (emits JSON)")"
 else
-  warn "$(t "bin/kv-snmp-poller terbangun TAPI tidak emit JSON — poll akan fallback ke PHP. Cek: file bin/kv-snmp-poller; jalankan manual untuk lihat error." \
-            "bin/kv-snmp-poller was built BUT does not emit JSON — polling will fall back to PHP. Check: file bin/kv-snmp-poller; run it manually to see the error.")"
+  warn "$(t "bin/nos-snmp-poller terbangun TAPI tidak emit JSON — poll akan fallback ke PHP. Cek: file bin/nos-snmp-poller; jalankan manual untuk lihat error." \
+            "bin/nos-snmp-poller was built BUT does not emit JSON — polling will fall back to PHP. Check: file bin/nos-snmp-poller; run it manually to see the error.")"
 fi
 
 # ---------------------------------------------------------------------------

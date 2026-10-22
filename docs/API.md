@@ -68,12 +68,12 @@ Tempel potongan ini di halaman mana pun — ia menampilkan ringkasan status dan
 menyegarkan tiap 60 detik:
 
 ```html
-<div id="kv-status">Memuat status jaringan…</div>
+<div id="nos-status">Memuat status jaringan…</div>
 
 <script>
 (async function () {
   const BASE = "https://nms.example.com/api/v1";
-  const el = document.getElementById("kv-status");
+  const el = document.getElementById("nos-status");
   async function render() {
     try {
       const r = await fetch(`${BASE}/public/status`);

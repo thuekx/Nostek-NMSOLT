@@ -20,9 +20,9 @@ import { usePage } from '@inertiajs/vue3';
 
 export const THEMES = ['dark', 'light', 'system'];
 
-const COOKIE = 'kv_theme';
+const COOKIE = 'nos_theme';
 const COOKIE_MAX_AGE = 60 * 60 * 24 * 365;
-const STORAGE_KEY = 'kv-nms-theme';
+const STORAGE_KEY = 'nos-nms-theme';
 
 const hasDom = typeof document !== 'undefined';
 
@@ -221,11 +221,11 @@ export function chartTheme() {
 
     return {
         mode,
-        text: themeHex('--kv-slate-100', '#f1f5f9'),
-        label: themeHex('--kv-slate-400', '#94a3b8'),
-        muted: themeHex('--kv-slate-500', '#64748b'),
-        grid: themeHexA('--kv-slate-700', 0.5, '#33415580'),
-        border: themeHex('--kv-slate-700', '#334155'),
+        text: themeHex('--nos-slate-100', '#f1f5f9'),
+        label: themeHex('--nos-slate-400', '#94a3b8'),
+        muted: themeHex('--nos-slate-500', '#64748b'),
+        grid: themeHexA('--nos-slate-700', 0.5, '#33415580'),
+        border: themeHex('--nos-slate-700', '#334155'),
         tooltip: mode === 'light' ? 'light' : 'dark',
     };
 }
@@ -235,5 +235,5 @@ export function tokenHex(name, fallback) {
     // Sentuh theme.value supaya pemanggil di dalam computed() ikut reaktif.
     void theme.value;
 
-    return themeHex(`--kv-${name}`, fallback);
+    return themeHex(`--nos-${name}`, fallback);
 }

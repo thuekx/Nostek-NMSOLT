@@ -94,10 +94,10 @@ const failureRate = computed(() => total.value > 0 ? Math.round((totalFailed.val
 </script>
 
 <template>
-    <div class="kv-glass-panel flex h-full flex-col">
+    <div class="nos-glass-panel flex h-full flex-col">
         <div class="flex flex-col gap-3 border-b border-white/5 px-5 py-4 sm:flex-row sm:items-center sm:justify-between sm:px-6">
             <div class="flex items-center gap-3">
-                <span class="kv-circle-cyan">
+                <span class="nos-circle-cyan">
                     <TrendingUp class="h-5 w-5" />
                 </span>
                 <h3 class="text-base font-semibold text-white">{{ t('dashboard.polling_trend_title') }}</h3>

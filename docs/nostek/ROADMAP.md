@@ -68,14 +68,10 @@ Non-destructive parallel work is allowed (documentation, API design, unit tests,
 
 On every session start: retrieve this file, status YAML and HANDOFF; validate GitHub main and open PR/CI; update the evidence before changing statuses. When a task passes, move to the next unblocked safe task in the same session. When work is blocked, work on independent safe tasks, not unrelated production systems. Never modify Maung-Wo-Inv/maung-crm or Nostek runtime without scoped approval/review. Do not fabricate tests or handoffs.
 
-## 22 October source checkpoint recheck
+## Search-audit alignment checkpoint
 
-PR #1 is merged; NMS-01 is already VERIFIED, as are NMS-02–06. PR #19 is merged
-as `62b414f`; its head passed run `39652098876` with the same tree as main.
-There is no separate CI run for main's merge SHA. Resume NMS-07, not NMS-01.
-
-The [feature matrix](NMS-07-FEATURE-MATRIX.md) and source inventory now record
-partial NMS-07 audit work, search defects and regression cases. These do not
-complete the phase: full UI/write-gate visibility, measured performance and
-unified ACS lifecycle packaging remain. NMS-08–12 stay dependency/approval gated.
-The search-audit PR requires exact-head CI and explicit merge approval.
+PR #20 is aligned with main `b0cbf36ac6f59552a3ef4f3a01f187997d221f86` (PR #22).
+PR #21 identity cleanup remains complete. Search fixes and synthetic tests are
+retained; NMS-07 is incomplete. Historical search run `39715103922` passed only
+head `02949e5`; require exact-head CI and review of the combined branch before
+owner merge approval. See HANDOFF and the feature matrix for remaining work.

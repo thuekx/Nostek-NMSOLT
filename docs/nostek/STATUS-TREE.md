@@ -17,9 +17,10 @@ Nostek-NMSOLT — STANDALONE NETWORK PLATFORM / API PROVIDER
 |   +-- SNMP, PON/ONU inventory, optical detail and UI evidence passed
 |
 +-- NMS-07 [IN PROGRESS] NMSOLT product stabilization
-|   +-- source inventory: 49 Vue files, 5 jobs, 10 commands; feature matrix added
-|   +-- search batching/MAC navigation/input validation patch; exact-head CI tracked on PR #20
-|   +-- remaining UI journeys, measured performance and ACS lifecycle packaging
+|   +-- canonical identity: Nostek-NMSOLT; short name: Nostek-NMS
+|   +-- PASS: PR #21 / run 39770297399 / merge f43baa3; nos-* identity enforced
+|   +-- PR #20 OPEN: search fixes/tests aligned with PR #22 main; exact-head CI required
+|   +-- audit functions, screens, read paths and performance
 |   +-- repair misleading/broken behavior and add regression evidence
 +-- NMS-08 [BLOCKED] API v1 read-only + OpenAPI
 |   +-- stable IDs, freshness, pagination, scopes, redaction, rate limits
@@ -45,7 +46,7 @@ Nostek-NMSOLT — STANDALONE NETWORK PLATFORM / API PROVIDER
 ## Durable evidence
 
 - Verified runtime chain: PRs [#1](https://github.com/thuekx/Nostek-NMSOLT/pull/1) through
-  [#18](https://github.com/thuekx/Nostek-NMSOLT/pull/18), with phase-specific references in
+  [#21](https://github.com/thuekx/Nostek-NMSOLT/pull/21), with phase-specific references in
   [HANDOFF.md](HANDOFF.md).
 - Readiness details: [NMS-04](NMS-04-STAGING-READINESS.md),
   [NMS-05](NMS-05-GENIEACS-LAB-MATRIX.md),
@@ -56,6 +57,5 @@ Nostek-NMSOLT — STANDALONE NETWORK PLATFORM / API PROVIDER
 NMS-00 through NMS-06 satisfy their definitions of done. NMS-07 is active for
 safe source-level work; NMS-08 through NMS-12 remain dependency- or approval-gated.
 
-Latest baseline recheck: PR #1 and #19 merged; main `62b414f`. Existing CI
-run `39652098876` passed PR #19 head with the same tree as main; no separate
-main-SHA CI run. See the NMS-07 feature matrix for partial work and open gates.
+PR #20 is pending review/owner merge approval. Historical search CI run 39715103922
+verifies only head 02949e5, not the main-aligned branch. See HANDOFF for evidence.

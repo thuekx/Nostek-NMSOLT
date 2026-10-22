@@ -18,7 +18,7 @@
              ▼
  nostek-nmsolt-scheduler  (schedule:work)  ── olts:poll tiap menit, backup 02:30, RX agg/prune …
  nostek-nmsolt-worker     (queue:work redis --tries=1)
-   PollOltJob ─┬─ ZTE     : bin/kv-snmp-poller (Go) ─gagal→ OltSnmpClient (PHP)
+   PollOltJob ─┬─ ZTE     : bin/nos-snmp-poller (Go) ─gagal→ OltSnmpClient (PHP)
                └─ non-ZTE : CDataOltScanner (C-Data EPON/GPON, HiOSO) via SmartOltSnmpServiceResolver
             → last_test_result (JSON) + onu_rx_samples → AlarmEvaluator
             → TelegramNotifier (langsung) + SendFcmAlarmNotifications (job) → push FCM
@@ -92,7 +92,7 @@ Unconfigured discovery **tidak** ikut polling terjadwal — hanya diperbarui saa
 `app/Jobs/PollOltJob.php` (`tries=1`, `timeout=600`, `WithoutOverlapping($oltId)`), memilih jalur
 berdasarkan `SmartOltSupport::driverKey()`:
 
-- **ZTE (C300/C320/C600)** — pakai **Go poller** (`GoSnmpPoller` → `bin/kv-snmp-poller`) bila
+- **ZTE (C300/C320/C600)** — pakai **Go poller** (`GoSnmpPoller` → `bin/nos-snmp-poller`) bila
   `SNMP_POLLER_DRIVER=go` + binary ada (produksi: `go`; default config `php`). Bila Go gagal →
   `go_poller_error` diisi dan **fallback** ke `OltSnmpClient::snapshot()` + `registeredOnus()`.
   Go memetakan tabel ONU C600 (subtree `.1082`) secara native; bila hasil ONU C600 kosong, fallback
@@ -233,7 +233,7 @@ admin di `/users` atau lewat `php artisan user:create`. Percobaan login dibatasi
 - Alias: `role` → `EnsureUserRole` (`->middleware('role:admin,operator')`).
 - CSRF dikecualikan untuk `telegram/webhook` dan `telegram/webhook/*` (bot partner) — gerbangnya
   header secret token.
-- Cookie tema `kv_theme` sengaja tidak dienkripsi (ditulis juga oleh JS).
+- Cookie tema `nos_theme` sengaja tidak dienkripsi (ditulis juga oleh JS).
 - Proxy tepercaya dari `config/trustedproxy.php` (`TRUSTED_PROXIES`, bawaan `127.0.0.1,::1`).
   Di belakang Cloudflare "Flexible" / load balancer di host lain, isi alamatnya — kalau tidak,
   URL jadi `http://` dan form berakhir 419.

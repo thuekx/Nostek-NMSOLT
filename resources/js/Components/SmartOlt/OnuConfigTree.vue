@@ -331,10 +331,10 @@ onUnmounted(() => { clearTimeout(previewTimer); clearTimeout(flashTimer); });
 <template>
     <div class="space-y-5">
         <!-- Identitas ONU -->
-        <section class="kv-surface rounded-xl border border-white/10 bg-slate-900/60 p-4 shadow-lg shadow-black/30 sm:p-5">
+        <section class="nos-surface rounded-xl border border-white/10 bg-slate-900/60 p-4 shadow-lg shadow-black/30 sm:p-5">
             <div class="flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
                 <div class="flex min-w-0 items-start gap-3">
-                    <div class="kv-icon-tile h-11 w-11"><Router class="h-5 w-5" /></div>
+                    <div class="nos-icon-tile h-11 w-11"><Router class="h-5 w-5" /></div>
                     <div class="min-w-0">
                         <h3 class="truncate text-base font-semibold text-slate-100">{{ baseline?.name || $t('onucfg.unnamed') }}</h3>
                         <p class="mt-0.5 flex flex-wrap gap-x-3 gap-y-1 font-mono text-xs text-slate-400">
@@ -343,15 +343,15 @@ onUnmounted(() => { clearTimeout(previewTimer); clearTimeout(flashTimer); });
                             <span v-if="primaryVlan">VLAN {{ primaryVlan }}</span>
                         </p>
                         <div class="mt-2 flex flex-wrap items-center gap-2">
-                            <span v-if="baseline?.onu_profile" class="kv-pill kv-pill-warning inline-flex items-center gap-1">
+                            <span v-if="baseline?.onu_profile" class="nos-pill nos-pill-warning inline-flex items-center gap-1">
                                 <Lock class="h-3 w-3" /> {{ $t('onucfg.pill_profile', { profile: baseline.onu_profile }) }}
                             </span>
-                            <span v-else class="kv-pill kv-pill-success">{{ $t('onucfg.pill_manual') }}</span>
-                            <span v-if="busy" class="kv-pill kv-pill-info inline-flex items-center gap-1">
+                            <span v-else class="nos-pill nos-pill-success">{{ $t('onucfg.pill_manual') }}</span>
+                            <span v-if="busy" class="nos-pill nos-pill-info inline-flex items-center gap-1">
                                 <RefreshCw class="h-3 w-3 animate-spin" /> {{ $t('onucfg.pill_sending') }}
                             </span>
-                            <span v-else class="kv-pill kv-pill-muted">{{ $t('onucfg.pill_read_at', { time: timeLabel(readAt) }) }}</span>
-                            <span v-if="!canWrite" class="kv-pill kv-pill-info">{{ $t('onucfg.pill_readonly') }}</span>
+                            <span v-else class="nos-pill nos-pill-muted">{{ $t('onucfg.pill_read_at', { time: timeLabel(readAt) }) }}</span>
+                            <span v-if="!canWrite" class="nos-pill nos-pill-info">{{ $t('onucfg.pill_readonly') }}</span>
                         </div>
                     </div>
                 </div>
@@ -399,13 +399,13 @@ onUnmounted(() => { clearTimeout(previewTimer); clearTimeout(flashTimer); });
 
         <div class="grid grid-cols-[minmax(0,1fr)] gap-5 lg:grid-cols-[minmax(0,288px)_minmax(0,1fr)]">
             <!-- Pohon bagian (layar lebar) -->
-            <nav class="kv-surface hidden self-start rounded-xl border border-white/10 bg-slate-900/60 p-3 shadow-lg shadow-black/30 lg:sticky lg:top-4 lg:block" :aria-label="$t('onucfg.tree_label')">
+            <nav class="nos-surface hidden self-start rounded-xl border border-white/10 bg-slate-900/60 p-3 shadow-lg shadow-black/30 lg:sticky lg:top-4 lg:block" :aria-label="$t('onucfg.tree_label')">
                 <div class="relative mb-2">
                     <Search class="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-slate-500" />
                     <input
                         v-model="navQuery"
                         type="search"
-                        class="kv-input block min-h-10 w-full pl-9 text-sm"
+                        class="nos-input block min-h-10 w-full pl-9 text-sm"
                         :placeholder="$t('onucfg.nav_search')"
                         :aria-label="$t('onucfg.nav_search')"
                     />
@@ -443,7 +443,7 @@ onUnmounted(() => { clearTimeout(previewTimer); clearTimeout(flashTimer); });
 
             <!-- Panel bagian aktif -->
             <div class="min-w-0 space-y-5">
-                <section class="kv-table-card relative">
+                <section class="nos-table-card relative">
                     <!-- bilah progres saat mengirim -->
                     <div v-if="busy" class="absolute inset-x-0 top-0 h-0.5 overflow-hidden rounded-t-lg bg-cyan-500/10">
                         <div class="h-full w-1/3 animate-pulse bg-cyan-400"></div>
@@ -451,7 +451,7 @@ onUnmounted(() => { clearTimeout(previewTimer); clearTimeout(flashTimer); });
 
                     <header class="flex flex-col gap-3 border-b border-white/10 px-4 py-4 sm:flex-row sm:items-center sm:justify-between sm:px-6">
                         <div class="flex min-w-0 items-start gap-3">
-                            <div class="kv-icon-tile"><component :is="icons[active.icon] ?? Settings" class="h-4 w-4" /></div>
+                            <div class="nos-icon-tile"><component :is="icons[active.icon] ?? Settings" class="h-4 w-4" /></div>
                             <div class="min-w-0">
                                 <h3 class="text-base font-semibold text-slate-100">{{ tr(active.label) }}</h3>
                                 <p class="mt-0.5 text-sm text-slate-400">{{ $t(active.desc) }}</p>
@@ -492,37 +492,37 @@ onUnmounted(() => { clearTimeout(previewTimer); clearTimeout(flashTimer); });
 
                         <template v-else>
                             <!-- HP: kartu -->
-                            <div class="kv-mobile-list">
+                            <div class="nos-mobile-list">
                                 <article
                                     v-for="(row, index) in rows"
                                     :key="`m-${index}`"
-                                    class="kv-mobile-card transition-colors duration-700"
+                                    class="nos-mobile-card transition-colors duration-700"
                                     :class="isFlashed(row) ? 'bg-emerald-500/10' : ''"
                                 >
-                                    <div class="kv-mobile-card-header">
+                                    <div class="nos-mobile-card-header">
                                         <div class="min-w-0">
-                                            <h4 class="kv-mobile-card-title flex items-center gap-1.5 font-mono">
+                                            <h4 class="nos-mobile-card-title flex items-center gap-1.5 font-mono">
                                                 <Lock v-if="locked(row)" class="h-3.5 w-3.5 text-amber-300" />
                                                 {{ cell(active.columns[0], row) }}
                                             </h4>
-                                            <p class="kv-mobile-card-subtitle">{{ active.columns[0].label }}</p>
+                                            <p class="nos-mobile-card-subtitle">{{ active.columns[0].label }}</p>
                                         </div>
                                         <div v-if="canWrite && !locked(row)" class="flex gap-2">
                                             <IconButton variant="primary" :title="$t('onucfg.action_edit')" :disabled="busy" @click="openEdit(index)"><Pencil class="h-4 w-4" /></IconButton>
                                             <IconButton variant="danger" :title="$t('onucfg.action_delete')" :disabled="busy" @click="removeRow(index)"><Trash2 class="h-4 w-4" /></IconButton>
                                         </div>
                                     </div>
-                                    <div class="kv-mobile-fields">
-                                        <div v-for="column in active.columns.slice(1)" :key="column.key" class="kv-mobile-field">
-                                            <span class="kv-mobile-label">{{ column.label }}</span>
-                                            <span class="kv-mobile-value font-mono text-xs">{{ cell(column, row) }}</span>
+                                    <div class="nos-mobile-fields">
+                                        <div v-for="column in active.columns.slice(1)" :key="column.key" class="nos-mobile-field">
+                                            <span class="nos-mobile-label">{{ column.label }}</span>
+                                            <span class="nos-mobile-value font-mono text-xs">{{ cell(column, row) }}</span>
                                         </div>
                                     </div>
                                 </article>
                             </div>
 
                             <!-- Layar lebar: tabel -->
-                            <div class="kv-table-desktop">
+                            <div class="nos-table-desktop">
                                 <table class="w-full min-w-[560px] text-xs tabular-nums">
                                     <thead>
                                         <tr class="border-b border-white/10 bg-canvas-3/40 text-left text-xs font-semibold uppercase tracking-wide text-slate-500">
@@ -541,7 +541,7 @@ onUnmounted(() => { clearTimeout(previewTimer); clearTimeout(flashTimer); });
                                             <td v-for="column in active.columns" :key="column.key" class="px-4 py-3 font-mono text-slate-200 first:pl-6">{{ cell(column, row) }}</td>
                                             <td class="px-4 py-2 pr-6">
                                                 <div class="flex items-center justify-end gap-2">
-                                                    <span v-if="locked(row)" class="kv-pill kv-pill-warning inline-flex items-center gap-1" :title="$t('onucfg.locked_row', { profile: baseline.onu_profile })">
+                                                    <span v-if="locked(row)" class="nos-pill nos-pill-warning inline-flex items-center gap-1" :title="$t('onucfg.locked_row', { profile: baseline.onu_profile })">
                                                         <Lock class="h-3 w-3" /> {{ $t('onucfg.locked_short') }}
                                                     </span>
                                                     <template v-else-if="canWrite">
@@ -563,7 +563,7 @@ onUnmounted(() => { clearTimeout(previewTimer); clearTimeout(flashTimer); });
                         <div v-for="field in active.fields" :key="field.key" class="rounded-lg border border-white/10 bg-canvas-3/40 px-4 py-3">
                             <dt class="text-xs text-slate-500">{{ tr(field.label) }}</dt>
                             <dd class="mt-1 break-all font-mono text-sm text-slate-100">
-                                <span v-if="field.type === 'bool'" class="kv-pill" :class="baseline?.[field.key] ? 'kv-pill-success' : 'kv-pill-muted'">{{ baseline?.[field.key] ? 'on' : 'off' }}</span>
+                                <span v-if="field.type === 'bool'" class="nos-pill" :class="baseline?.[field.key] ? 'nos-pill-success' : 'nos-pill-muted'">{{ baseline?.[field.key] ? 'on' : 'off' }}</span>
                                 <template v-else-if="field.type === 'password'">{{ baseline?.[field.key] || baseline?.[`${field.key}_set`] ? '••••••••' : '—' }}</template>
                                 <template v-else>{{ baseline?.[field.key] ?? '—' }}</template>
                             </dd>
@@ -580,7 +580,7 @@ onUnmounted(() => { clearTimeout(previewTimer); clearTimeout(flashTimer); });
                                     <p class="text-amber-100/80">{{ $t('onucfg.profile_explain') }}</p>
                                 </div>
                             </div>
-                            <pre data-theme="dark" class="kv-terminal overflow-x-auto rounded-lg bg-slate-950/70 px-4 py-3 font-mono text-xs leading-relaxed text-amber-200">{{ (baseline.profile_lines ?? []).join('\n') }}</pre>
+                            <pre data-theme="dark" class="nos-terminal overflow-x-auto rounded-lg bg-slate-950/70 px-4 py-3 font-mono text-xs leading-relaxed text-amber-200">{{ (baseline.profile_lines ?? []).join('\n') }}</pre>
                             <div class="rounded-lg border border-white/10 bg-canvas-3/40 px-4 py-3">
                                 <p class="text-slate-300">{{ $t('onucfg.unbind_explain', { onuId }) }}</p>
                                 <DangerButton v-if="canWrite" class="mt-3" type="button" :disabled="busy" @click="unbindProfile">
@@ -602,13 +602,13 @@ onUnmounted(() => { clearTimeout(previewTimer); clearTimeout(flashTimer); });
 
                     <!-- ===== Baca saja ===== -->
                     <div v-else class="p-4 sm:p-6">
-                        <pre v-if="(baseline?.extra_mgmt ?? []).length" data-theme="dark" class="kv-terminal overflow-x-auto rounded-lg bg-slate-950/70 px-4 py-3 font-mono text-xs text-slate-300">{{ baseline.extra_mgmt.join('\n') }}</pre>
+                        <pre v-if="(baseline?.extra_mgmt ?? []).length" data-theme="dark" class="nos-terminal overflow-x-auto rounded-lg bg-slate-950/70 px-4 py-3 font-mono text-xs text-slate-300">{{ baseline.extra_mgmt.join('\n') }}</pre>
                         <p v-else class="py-6 text-center text-sm text-slate-500">{{ $t('onucfg.empty') }}</p>
                     </div>
                 </section>
 
                 <!-- Aktivitas sesi ini -->
-                <section v-if="log.length" class="kv-table-card">
+                <section v-if="log.length" class="nos-table-card">
                     <header class="flex items-center justify-between border-b border-white/10 px-4 py-3 sm:px-6">
                         <h3 class="flex items-center gap-2 text-base font-semibold text-slate-100">
                             <Terminal class="h-4 w-4 text-cyan-400" /> {{ $t('onucfg.log_title') }}
@@ -618,24 +618,24 @@ onUnmounted(() => { clearTimeout(previewTimer); clearTimeout(flashTimer); });
                     <ol class="divide-y divide-white/5">
                         <li v-for="(entry, i) in log" :key="i" class="px-4 py-3 sm:px-6">
                             <div class="flex flex-wrap items-center gap-2 text-sm">
-                                <span class="kv-pill" :class="entry.ok ? 'kv-pill-success' : 'kv-pill-danger'">{{ entry.ok ? 'OK' : $t('onucfg.log_failed') }}</span>
+                                <span class="nos-pill" :class="entry.ok ? 'nos-pill-success' : 'nos-pill-danger'">{{ entry.ok ? 'OK' : $t('onucfg.log_failed') }}</span>
                                 <span class="min-w-0 flex-1 truncate font-medium text-slate-200">{{ entry.label }}</span>
                                 <span class="text-xs tabular-nums text-slate-500">{{ timeLabel(entry.at) }}</span>
                             </div>
                             <p v-if="entry.message" class="mt-1.5 text-xs text-rose-300">{{ entry.message }}</p>
                             <details v-if="entry.script" class="mt-2">
                                 <summary class="cursor-pointer text-xs text-slate-400 hover:text-slate-200">{{ $t('onucfg.log_show_cli') }}</summary>
-                                <pre data-theme="dark" class="kv-terminal mt-2 overflow-x-auto rounded-lg bg-slate-950/70 px-3 py-2 font-mono text-xs text-cyan-200/90">{{ entry.script }}</pre>
+                                <pre data-theme="dark" class="nos-terminal mt-2 overflow-x-auto rounded-lg bg-slate-950/70 px-3 py-2 font-mono text-xs text-cyan-200/90">{{ entry.script }}</pre>
                             </details>
                         </li>
                     </ol>
                 </section>
 
-                <details class="kv-table-card">
+                <details class="nos-table-card">
                     <summary class="flex cursor-pointer items-center gap-2 px-4 py-3 text-sm font-semibold text-slate-300 hover:text-slate-100 sm:px-6">
                         <Terminal class="h-4 w-4 text-cyan-400" /> {{ $t('onucfg.raw_title') }}
                     </summary>
-                    <pre data-theme="dark" class="kv-terminal overflow-x-auto whitespace-pre-wrap break-words rounded-b-lg border-t border-white/10 bg-slate-950/70 px-4 py-3 font-mono text-xs leading-relaxed text-emerald-300/90">{{ rawText || '—' }}</pre>
+                    <pre data-theme="dark" class="nos-terminal overflow-x-auto whitespace-pre-wrap break-words rounded-b-lg border-t border-white/10 bg-slate-950/70 px-4 py-3 font-mono text-xs leading-relaxed text-emerald-300/90">{{ rawText || '—' }}</pre>
                 </details>
             </div>
         </div>
@@ -645,7 +645,7 @@ onUnmounted(() => { clearTimeout(previewTimer); clearTimeout(flashTimer); });
     <Modal :show="dialog.open" max-width="2xl" :closeable="!busy" @close="closeDialog">
         <form id="onucfg-dialog" class="flex max-h-[90vh] flex-col" @submit.prevent="submitDialog">
             <header class="flex items-start gap-3 border-b border-white/10 px-6 py-4">
-                <div class="kv-icon-tile"><component :is="dialog.mode === 'add' ? Plus : Pencil" class="h-4 w-4" /></div>
+                <div class="nos-icon-tile"><component :is="dialog.mode === 'add' ? Plus : Pencil" class="h-4 w-4" /></div>
                 <div class="min-w-0 flex-1">
                     <h2 class="text-base font-semibold text-slate-100">
                         {{ dialog.mode === 'add' ? $t('onucfg.dialog_add', { section: tr(active.label) }) : $t('onucfg.dialog_edit', { section: tr(active.label) }) }}
@@ -671,7 +671,7 @@ onUnmounted(() => { clearTimeout(previewTimer); clearTimeout(flashTimer); });
                                 v-if="field.type === 'select'"
                                 :id="`onucfg-${field.key}`"
                                 v-model="dialog.row[field.key]"
-                                class="kv-input mt-1 block min-h-11 w-full"
+                                class="nos-input mt-1 block min-h-11 w-full"
                                 :disabled="(field.immutable && dialog.mode === 'edit') || busy"
                             >
                                 <option v-for="option in optionsFor(field)" :key="option" :value="option">{{ option === '' ? '—' : option }}</option>
@@ -709,13 +709,13 @@ onUnmounted(() => { clearTimeout(previewTimer); clearTimeout(flashTimer); });
                         <p class="flex items-center gap-2 text-xs font-semibold text-slate-400">
                             <Terminal class="h-3.5 w-3.5" /> {{ $t('onucfg.preview_title') }}
                             <RefreshCw v-if="preview.loading" class="h-3.5 w-3.5 animate-spin" />
-                            <span v-else-if="preview.script" class="kv-pill kv-pill-info whitespace-nowrap">{{ $t('onucfg.preview_count', { n: previewLines }) }}</span>
+                            <span v-else-if="preview.script" class="nos-pill nos-pill-info whitespace-nowrap">{{ $t('onucfg.preview_count', { n: previewLines }) }}</span>
                         </p>
                         <IconButton v-if="preview.script" :title="copied ? $t('onucfg.copied') : $t('onucfg.copy')" @click="copyPreview">
                             <Check v-if="copied" class="h-4 w-4" /><Copy v-else class="h-4 w-4" />
                         </IconButton>
                     </div>
-                    <pre data-theme="dark" class="kv-terminal max-h-48 overflow-auto bg-slate-950/70 px-3 py-2 font-mono text-xs leading-relaxed text-cyan-200/90">{{ preview.script || $t('onucfg.preview_empty') }}</pre>
+                    <pre data-theme="dark" class="nos-terminal max-h-48 overflow-auto bg-slate-950/70 px-3 py-2 font-mono text-xs leading-relaxed text-cyan-200/90">{{ preview.script || $t('onucfg.preview_empty') }}</pre>
                 </div>
 
                 <p v-if="preview.conflicts.length" class="flex items-start gap-2 rounded-lg border border-amber-500/30 bg-amber-500/10 px-3 py-2 text-xs text-amber-200">
@@ -754,7 +754,7 @@ onUnmounted(() => { clearTimeout(previewTimer); clearTimeout(flashTimer); });
                 v-for="item in toasts"
                 :key="item.id"
                 :role="item.type === 'error' ? 'alert' : 'status'"
-                class="kv-toast pointer-events-auto flex w-full max-w-md items-start gap-3 rounded-xl border px-4 py-3 text-sm shadow-lg shadow-black/40 sm:w-auto sm:min-w-[18rem]"
+                class="nos-toast pointer-events-auto flex w-full max-w-md items-start gap-3 rounded-xl border px-4 py-3 text-sm shadow-lg shadow-black/40 sm:w-auto sm:min-w-[18rem]"
                 :class="item.type === 'error' ? 'border-rose-500/30 bg-rose-950/90 text-rose-200' : 'border-emerald-500/30 bg-emerald-950/90 text-emerald-200'"
             >
                 <CheckCircle2 v-if="item.type === 'success'" class="mt-0.5 h-5 w-5 shrink-0 text-emerald-400" />

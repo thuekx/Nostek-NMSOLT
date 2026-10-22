@@ -122,13 +122,13 @@ const rxClass = (level) => {
                 <!-- Filter bar -->
                 <FilterCard :title="$t('reports.filter_title')" :icon="SlidersHorizontal">
                     <div class="flex flex-wrap items-center gap-2">
-                        <select id="type" v-model="state.type" class="kv-filter-control w-full sm:w-auto" :title="$t('reports.filter_type')">
+                        <select id="type" v-model="state.type" class="nos-filter-control w-full sm:w-auto" :title="$t('reports.filter_type')">
                             <option v-for="opt in typeOptions" :key="opt.value" :value="opt.value">{{ opt.label }}</option>
                         </select>
-                        <select v-if="state.type === 'alarm' || state.type === 'provisioning'" id="range" v-model="state.range" class="kv-filter-control w-full sm:w-auto" :title="$t('reports.filter_range')">
+                        <select v-if="state.type === 'alarm' || state.type === 'provisioning'" id="range" v-model="state.range" class="nos-filter-control w-full sm:w-auto" :title="$t('reports.filter_range')">
                             <option v-for="opt in rangeOptions" :key="opt.value" :value="opt.value">{{ opt.label }}</option>
                         </select>
-                        <select id="olt" v-model="state.olt_id" class="kv-filter-control w-full sm:w-auto" title="OLT">
+                        <select id="olt" v-model="state.olt_id" class="nos-filter-control w-full sm:w-auto" title="OLT">
                             <option value="">{{ $t('reports.all_olt') }}</option>
                             <option v-for="opt in oltOptions" :key="opt.value" :value="opt.value">{{ opt.label }}</option>
                         </select>
@@ -136,19 +136,19 @@ const rxClass = (level) => {
                             id="pon_port"
                             v-model="state.pon_port"
                             :disabled="!state.olt_id || ponPortOptions.length === 0"
-                            class="kv-filter-control w-full sm:w-auto"
+                            class="nos-filter-control w-full sm:w-auto"
                             title="PON port"
                         >
                             <option value="">{{ state.olt_id ? $t('reports.all_port') : $t('reports.pick_olt_first') }}</option>
                             <option v-for="opt in ponPortOptions" :key="opt.value" :value="opt.value">{{ opt.label }}</option>
                         </select>
-                        <select v-if="state.type === 'onu'" id="rx_status" v-model="state.rx_status" class="kv-filter-control w-full sm:w-auto" :title="$t('reports.rx_title')">
+                        <select v-if="state.type === 'onu'" id="rx_status" v-model="state.rx_status" class="nos-filter-control w-full sm:w-auto" :title="$t('reports.rx_title')">
                             <option value="">{{ $t('reports.all_rx') }}</option>
                             <option value="normal">Normal (&ge; -25 dBm)</option>
                             <option value="warning">Warning (&lt; -25 dBm)</option>
                             <option value="critical">Critical (&lt; -28 dBm)</option>
                         </select>
-                        <select v-if="(report.status_options?.length ?? 0) > 0" id="status" v-model="state.status" class="kv-filter-control w-full sm:w-auto" title="Status">
+                        <select v-if="(report.status_options?.length ?? 0) > 0" id="status" v-model="state.status" class="nos-filter-control w-full sm:w-auto" title="Status">
                             <option value="">{{ $t('reports.all_status') }}</option>
                             <option v-for="opt in report.status_options" :key="opt.value" :value="opt.value">{{ opt.label }}</option>
                         </select>
@@ -157,14 +157,14 @@ const rxClass = (level) => {
 
                 <!-- Summary -->
                 <div class="grid gap-3 sm:grid-cols-3">
-                    <div v-for="item in report.summary" :key="item.label" class="kv-stat px-4 py-3">
+                    <div v-for="item in report.summary" :key="item.label" class="nos-stat px-4 py-3">
                         <div class="text-xs text-slate-500">{{ item.label }}</div>
                         <div class="mt-1 text-2xl font-semibold text-white">{{ item.value }}</div>
                     </div>
                 </div>
 
                 <!-- Table -->
-                <div class="kv-table-card">
+                <div class="nos-table-card">
                     <div class="flex items-center gap-3 border-b border-white/10 px-4 py-4 sm:px-6">
                         <div class="flex h-9 w-9 flex-shrink-0 items-center justify-center rounded-lg bg-sky-500/15 ring-1 ring-cyan-500/30">
                             <FileBarChart class="h-5 w-5 text-cyan-400" />
@@ -181,12 +181,12 @@ const rxClass = (level) => {
 
                     <template v-else>
                         <!-- Mobile cards -->
-                        <div class="kv-mobile-list">
-                            <article v-for="(row, idx) in pageItems" :key="idx" class="kv-mobile-card">
-                                <div class="kv-mobile-fields">
-                                    <div v-for="column in report.columns" :key="column.key" class="kv-mobile-field">
-                                        <span class="kv-mobile-label">{{ column.label }}</span>
-                                        <span class="kv-mobile-value">
+                        <div class="nos-mobile-list">
+                            <article v-for="(row, idx) in pageItems" :key="idx" class="nos-mobile-card">
+                                <div class="nos-mobile-fields">
+                                    <div v-for="column in report.columns" :key="column.key" class="nos-mobile-field">
+                                        <span class="nos-mobile-label">{{ column.label }}</span>
+                                        <span class="nos-mobile-value">
                                             <span v-if="isStatusColumn(column.key)" :class="['inline-flex items-center rounded-full border px-2 py-0.5 text-xs font-medium', statusClass(row[column.key])]">
                                                 {{ row[column.key] }}
                                             </span>
@@ -199,7 +199,7 @@ const rxClass = (level) => {
                         </div>
 
                         <!-- Desktop table -->
-                        <div class="kv-table-desktop">
+                        <div class="nos-table-desktop">
                             <table class="w-full min-w-[720px] text-xs">
                                 <thead>
                                     <tr class="border-b border-white/10 bg-canvas-3/40">

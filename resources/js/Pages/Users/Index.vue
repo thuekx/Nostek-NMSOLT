@@ -185,7 +185,7 @@ const deleteUser = async (user) => {
         <div class="min-h-[60vh] pt-5 pb-16 sm:pt-8">
             <div class="w-full px-4 sm:px-6 lg:px-8">
 
-                <div class="kv-surface overflow-hidden rounded-lg border border-white/10 bg-slate-900/40 shadow-lg shadow-black/30 backdrop-blur-xl">
+                <div class="nos-surface overflow-hidden rounded-lg border border-white/10 bg-slate-900/40 shadow-lg shadow-black/30 backdrop-blur-xl">
                     <div class="flex items-center gap-3 border-b border-white/10 px-4 py-4 sm:px-6">
                         <div class="flex h-9 w-9 flex-shrink-0 items-center justify-center rounded-lg bg-sky-500/15 ring-1 ring-cyan-500/30">
                             <Users class="h-5 w-5 text-cyan-400" />
@@ -215,19 +215,19 @@ const deleteUser = async (user) => {
                     </div>
 
                     <template v-else>
-                        <div class="kv-mobile-list">
-                            <article v-for="user in users" :key="user.id" class="kv-mobile-card">
-                                <div class="kv-mobile-card-header">
+                        <div class="nos-mobile-list">
+                            <article v-for="user in users" :key="user.id" class="nos-mobile-card">
+                                <div class="nos-mobile-card-header">
                                     <div class="flex min-w-0 items-center gap-3">
                                         <div class="flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-full bg-sky-500/15 text-sm font-semibold text-cyan-300 ring-1 ring-cyan-500/30">
                                             {{ user.name.charAt(0).toUpperCase() }}
                                         </div>
                                         <div class="min-w-0">
-                                            <h4 class="kv-mobile-card-title">
+                                            <h4 class="nos-mobile-card-title">
                                                 {{ user.name }}
                                                 <span v-if="user.id === $page.props.auth.user.id" class="text-cyan-400">{{ $t('users.you') }}</span>
                                             </h4>
-                                            <p class="kv-mobile-card-subtitle">{{ user.email }}</p>
+                                            <p class="nos-mobile-card-subtitle">{{ user.email }}</p>
                                         </div>
                                     </div>
                                     <div class="flex flex-shrink-0 gap-2">
@@ -244,10 +244,10 @@ const deleteUser = async (user) => {
                                         </IconButton>
                                     </div>
                                 </div>
-                                <div class="kv-mobile-fields">
-                                    <div class="kv-mobile-field">
-                                        <span class="kv-mobile-label">Role</span>
-                                        <span class="kv-mobile-value">
+                                <div class="nos-mobile-fields">
+                                    <div class="nos-mobile-field">
+                                        <span class="nos-mobile-label">Role</span>
+                                        <span class="nos-mobile-value">
                                             <span :class="['inline-flex items-center rounded-full border px-2 py-0.5 text-xs font-medium', roleBadgeClass(user.role)]">
                                                 {{ roleLabel(user.role) }}
                                             </span>
@@ -256,15 +256,15 @@ const deleteUser = async (user) => {
                                             </span>
                                         </span>
                                     </div>
-                                    <div class="kv-mobile-field">
-                                        <span class="kv-mobile-label">{{ $t('users.col_registered') }}</span>
-                                        <span class="kv-mobile-value">{{ formatDate(user.created_at) }}</span>
+                                    <div class="nos-mobile-field">
+                                        <span class="nos-mobile-label">{{ $t('users.col_registered') }}</span>
+                                        <span class="nos-mobile-value">{{ formatDate(user.created_at) }}</span>
                                     </div>
                                 </div>
                             </article>
                         </div>
 
-                        <div class="kv-table-desktop">
+                        <div class="nos-table-desktop">
                         <table class="min-w-[720px] w-full text-xs">
                             <thead>
                                 <tr class="border-b border-white/10 bg-canvas-3/40">

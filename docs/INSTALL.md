@@ -209,7 +209,7 @@ otomatis. Lihat [DOCKER.md §7](DOCKER.md).
 git pull
 composer install --no-dev --optimize-autoloader --no-interaction
 npm ci && npm run build
-CGO_ENABLED=0 go build -mod=mod -trimpath -ldflags='-s -w' -o bin/kv-snmp-poller ./cmd/kv-snmp-poller
+CGO_ENABLED=0 go build -mod=mod -trimpath -ldflags='-s -w' -o bin/nos-snmp-poller ./cmd/nos-snmp-poller
 php artisan migrate --force
 php artisan optimize:clear && php artisan optimize
 php artisan queue:restart

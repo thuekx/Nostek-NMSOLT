@@ -145,7 +145,7 @@ const fmt = (v) => formatDateTime(v);
         <template #header>
             <div class="flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
                 <div class="flex items-center gap-3">
-                    <span class="kv-circle-cyan !h-10 !w-10 flex-shrink-0"><Tags class="h-5 w-5" /></span>
+                    <span class="nos-circle-cyan !h-10 !w-10 flex-shrink-0"><Tags class="h-5 w-5" /></span>
                     <div>
                         <h1 class="text-xl font-semibold text-slate-100">{{ $t('cdatavlan.title', { name: olt.name }) }}</h1>
                         <p class="mt-1 text-sm text-slate-400">{{ $t('cdatavlan.subtitle', { ip: olt.ip }) }}</p>
@@ -175,7 +175,7 @@ const fmt = (v) => formatDateTime(v);
             <div class="w-full space-y-5 px-4 sm:px-6 lg:px-8">
                 <Deferred data="vlan_data">
                     <template #fallback>
-                        <div class="kv-glass-panel flex items-center justify-center gap-3 px-6 py-16 text-sm text-slate-400">
+                        <div class="nos-glass-panel flex items-center justify-center gap-3 px-6 py-16 text-sm text-slate-400">
                             <RefreshCw class="h-4 w-4 animate-spin text-cyan-400" />
                             {{ $t('cdatavlan.loading') }}
                         </div>
@@ -193,28 +193,28 @@ const fmt = (v) => formatDateTime(v);
 
                         <!-- Ringkasan -->
                         <div class="grid grid-cols-2 gap-4 lg:grid-cols-4">
-                            <div class="kv-stat">
+                            <div class="nos-stat">
                                 <p class="text-xs uppercase tracking-wider text-slate-500">{{ $t('cdatavlan.stat_total') }}</p>
                                 <p class="mt-1 text-2xl font-semibold tabular-nums text-slate-100">{{ stats.total }}</p>
                             </div>
-                            <div class="kv-stat">
+                            <div class="nos-stat">
                                 <p class="text-xs uppercase tracking-wider text-slate-500">{{ $t('cdatavlan.stat_uplink') }}</p>
                                 <p class="mt-1 text-2xl font-semibold tabular-nums text-emerald-300">{{ stats.uplink }}</p>
                             </div>
-                            <div class="kv-stat">
+                            <div class="nos-stat">
                                 <p class="text-xs uppercase tracking-wider text-slate-500">{{ $t('cdatavlan.stat_not_uplink') }}</p>
                                 <p class="mt-1 text-2xl font-semibold tabular-nums" :class="stats.notUplink > 0 ? 'text-amber-300' : 'text-slate-300'">{{ stats.notUplink }}</p>
                             </div>
-                            <div class="kv-stat">
+                            <div class="nos-stat">
                                 <p class="text-xs uppercase tracking-wider text-slate-500">{{ $t('cdatavlan.stat_l3') }}</p>
                                 <p class="mt-1 text-2xl font-semibold tabular-nums text-slate-100">{{ stats.l3 }}</p>
                             </div>
                         </div>
 
                         <!-- Tambah VLAN -->
-                        <div class="kv-glass-panel">
+                        <div class="nos-glass-panel">
                             <div class="flex items-center gap-3 border-b border-white/10 px-4 py-4 sm:px-6">
-                                <span class="kv-circle-emerald !h-10 !w-10 flex-shrink-0"><Plus class="h-5 w-5" /></span>
+                                <span class="nos-circle-emerald !h-10 !w-10 flex-shrink-0"><Plus class="h-5 w-5" /></span>
                                 <div>
                                     <h3 class="text-base font-semibold text-slate-100">{{ $t('cdatavlan.add_title') }}</h3>
                                     <p class="text-xs text-slate-400">{{ isEpon ? $t('cdatavlan.add_sub_epon') : $t('cdatavlan.add_sub') }}</p>
@@ -283,10 +283,10 @@ const fmt = (v) => formatDateTime(v);
                         </div>
 
                         <!-- Daftar VLAN -->
-                        <div class="kv-table-card">
+                        <div class="nos-table-card">
                             <div class="flex flex-col gap-3 border-b border-white/10 px-4 py-4 sm:px-6 lg:flex-row lg:items-center lg:justify-between">
                                 <div class="flex items-center gap-3">
-                                    <span class="kv-circle-sky !h-10 !w-10 flex-shrink-0"><Network class="h-5 w-5" /></span>
+                                    <span class="nos-circle-sky !h-10 !w-10 flex-shrink-0"><Network class="h-5 w-5" /></span>
                                     <div>
                                         <h3 class="text-base font-semibold text-slate-100">{{ $t('cdatavlan.list_title') }}</h3>
                                         <p class="text-xs text-slate-400">
@@ -298,9 +298,9 @@ const fmt = (v) => formatDateTime(v);
                                 <div class="flex flex-col gap-2 sm:flex-row sm:items-center">
                                     <div class="relative w-full sm:w-64">
                                         <Search class="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-slate-500" />
-                                        <input v-model="search" type="search" class="kv-filter-control w-full pl-9" :placeholder="$t('cdatavlan.search')" :aria-label="$t('cdatavlan.search')" />
+                                        <input v-model="search" type="search" class="nos-filter-control w-full pl-9" :placeholder="$t('cdatavlan.search')" :aria-label="$t('cdatavlan.search')" />
                                     </div>
-                                    <select v-model="statusFilter" class="kv-filter-control w-full sm:w-auto" :aria-label="$t('cdatavlan.col_status')">
+                                    <select v-model="statusFilter" class="nos-filter-control w-full sm:w-auto" :aria-label="$t('cdatavlan.col_status')">
                                         <option v-for="o in statusOptions" :key="o.value" :value="o.value">{{ o.label }}</option>
                                     </select>
                                 </div>
@@ -310,45 +310,45 @@ const fmt = (v) => formatDateTime(v);
 
                             <template v-else>
                                 <!-- HP -->
-                                <div class="kv-mobile-list">
-                                    <article v-for="v in filtered" :key="v.id" class="kv-mobile-card">
-                                        <div class="kv-mobile-card-header">
+                                <div class="nos-mobile-list">
+                                    <article v-for="v in filtered" :key="v.id" class="nos-mobile-card">
+                                        <div class="nos-mobile-card-header">
                                             <div class="min-w-0">
-                                                <h4 class="kv-mobile-card-title font-mono tabular-nums">VLAN {{ v.id }}</h4>
-                                                <p class="kv-mobile-card-subtitle">{{ v.description || '—' }} · {{ v.typeKey ? $t(v.typeKey) : v.type }}</p>
+                                                <h4 class="nos-mobile-card-title font-mono tabular-nums">VLAN {{ v.id }}</h4>
+                                                <p class="nos-mobile-card-subtitle">{{ v.description || '—' }} · {{ v.typeKey ? $t(v.typeKey) : v.type }}</p>
                                             </div>
-                                            <span v-if="v.isDefault" class="kv-pill-muted">{{ $t('cdatavlan.status_default') }}</span>
-                                            <span v-else-if="v.onUplink" class="kv-pill-success">{{ $t('cdatavlan.status_uplink') }}</span>
-                                            <span v-else class="kv-pill-warning">{{ $t('cdatavlan.status_not_uplink') }}</span>
+                                            <span v-if="v.isDefault" class="nos-pill-muted">{{ $t('cdatavlan.status_default') }}</span>
+                                            <span v-else-if="v.onUplink" class="nos-pill-success">{{ $t('cdatavlan.status_uplink') }}</span>
+                                            <span v-else class="nos-pill-warning">{{ $t('cdatavlan.status_not_uplink') }}</span>
                                         </div>
-                                        <div class="kv-mobile-field">
-                                            <span class="kv-mobile-label">{{ $t('cdatavlan.col_uplink') }}</span>
-                                            <span class="kv-mobile-value flex flex-wrap justify-end gap-1">
+                                        <div class="nos-mobile-field">
+                                            <span class="nos-mobile-label">{{ $t('cdatavlan.col_uplink') }}</span>
+                                            <span class="nos-mobile-value flex flex-wrap justify-end gap-1">
                                                 <template v-if="v.taggedUplinks.length">
                                                     <component
                                                         :is="canOpenPort ? Link : 'span'"
                                                         v-for="p in v.taggedUplinks"
                                                         :key="p.name"
                                                         :href="canOpenPort ? portHref(p) : undefined"
-                                                        class="kv-pill-info font-mono"
+                                                        class="nos-pill-info font-mono"
                                                     >{{ p.name }}</component>
                                                 </template>
                                                 <template v-else>—</template>
                                             </span>
                                         </div>
-                                        <div v-if="v.untaggedUplinks.length" class="kv-mobile-field">
-                                            <span class="kv-mobile-label">{{ $t('cdatavlan.col_untagged') }}</span>
-                                            <span class="kv-mobile-value font-mono text-xs">{{ v.untaggedUplinks.map((p) => p.name).join(', ') }}</span>
+                                        <div v-if="v.untaggedUplinks.length" class="nos-mobile-field">
+                                            <span class="nos-mobile-label">{{ $t('cdatavlan.col_untagged') }}</span>
+                                            <span class="nos-mobile-value font-mono text-xs">{{ v.untaggedUplinks.map((p) => p.name).join(', ') }}</span>
                                         </div>
-                                        <div class="kv-mobile-field">
-                                            <span class="kv-mobile-label">{{ $t('cdatavlan.col_pon') }}</span>
-                                            <span class="kv-mobile-value tabular-nums">{{ v.ponLabel ? `${ponLabel} ${v.ponLabel}` : '—' }}</span>
+                                        <div class="nos-mobile-field">
+                                            <span class="nos-mobile-label">{{ $t('cdatavlan.col_pon') }}</span>
+                                            <span class="nos-mobile-value tabular-nums">{{ v.ponLabel ? `${ponLabel} ${v.ponLabel}` : '—' }}</span>
                                         </div>
                                     </article>
                                 </div>
 
                                 <!-- Desktop -->
-                                <div class="kv-table-desktop">
+                                <div class="nos-table-desktop">
                                     <table class="w-full min-w-[860px] text-xs">
                                         <thead>
                                             <tr class="border-b border-white/10 bg-canvas-3/40">
@@ -366,7 +366,7 @@ const fmt = (v) => formatDateTime(v);
                                                 <td class="px-4 py-3 font-mono text-sm font-semibold tabular-nums text-slate-100">{{ v.id }}</td>
                                                 <td class="px-4 py-3 text-slate-200">{{ v.description || '—' }}</td>
                                                 <td class="px-4 py-3">
-                                                    <span :class="v.typeKey === 'cdatavlan.type_l3' ? 'kv-pill-info' : 'kv-pill-muted'">{{ v.typeKey ? $t(v.typeKey) : v.type || '—' }}</span>
+                                                    <span :class="v.typeKey === 'cdatavlan.type_l3' ? 'nos-pill-info' : 'nos-pill-muted'">{{ v.typeKey ? $t(v.typeKey) : v.type || '—' }}</span>
                                                 </td>
                                                 <td class="px-4 py-3">
                                                     <div v-if="v.taggedUplinks.length" class="flex flex-wrap gap-1">
@@ -376,7 +376,7 @@ const fmt = (v) => formatDateTime(v);
                                                             :key="p.name"
                                                             :href="canOpenPort ? portHref(p) : undefined"
                                                             :title="canOpenPort ? $t('cdatavlan.open_port', { port: p.name }) : undefined"
-                                                            class="kv-pill-info font-mono"
+                                                            class="nos-pill-info font-mono"
                                                         >{{ p.name }}</component>
                                                     </div>
                                                     <span v-else class="text-slate-500">—</span>
@@ -384,9 +384,9 @@ const fmt = (v) => formatDateTime(v);
                                                 <td class="px-4 py-3 font-mono text-slate-300">{{ v.untaggedUplinks.map((p) => p.name).join(', ') || '—' }}</td>
                                                 <td class="px-4 py-3 tabular-nums text-slate-300">{{ v.ponLabel ? `${ponLabel} ${v.ponLabel}` : '—' }}</td>
                                                 <td class="px-4 py-3">
-                                                    <span v-if="v.isDefault" class="kv-pill-muted">{{ $t('cdatavlan.status_default') }}</span>
-                                                    <span v-else-if="v.onUplink" class="kv-pill-success">{{ $t('cdatavlan.status_uplink') }}</span>
-                                                    <span v-else class="kv-pill-warning">{{ $t('cdatavlan.status_not_uplink') }}</span>
+                                                    <span v-if="v.isDefault" class="nos-pill-muted">{{ $t('cdatavlan.status_default') }}</span>
+                                                    <span v-else-if="v.onUplink" class="nos-pill-success">{{ $t('cdatavlan.status_uplink') }}</span>
+                                                    <span v-else class="nos-pill-warning">{{ $t('cdatavlan.status_not_uplink') }}</span>
                                                 </td>
                                             </tr>
                                         </tbody>

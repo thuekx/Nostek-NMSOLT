@@ -39,15 +39,29 @@ approval. Source-readiness PASS is not runtime verification.
   squash merge `c639f1277e7b37bcd5aee69d7ec58634758fa984`. Vue, Laravel,
   Go, Compose and both image builds passed. The Net-SNMP Timeticks `NaNd`
   rendering defect was fixed with regression coverage.
+- **PR #19:** exact head
+  `18b473545884ddf49d65847827e3473da3d02744`, successful
+  [run 39652098876](https://github.com/thuekx/Nostek-NMSOLT/actions/runs/39652098876),
+  squash merge `62b414f04ac4b5e4f024669e431be29f4d0845d1`. The provider-centric
+  roadmap and bundled-GenieACS product direction are canonical.
+
+- **PR #21:** exact head
+  `6bc53a374e5ed5fc2209fb88dbfe7c105131cb23`, successful
+  [run 39770297399](https://github.com/thuekx/Nostek-NMSOLT/actions/runs/39770297399),
+  squash merge `f43baa3fa0f4959b8513011e01e79a6db8509f51`. Go, Vue,
+  Laravel, Compose, both image builds and the fail-closed Nostek namespace
+  validator passed. The PR branch was deleted.
 
 Raw device identifiers, communities and screenshots containing customer/serial
 data remain outside the public repository.
 
 ## Active and gated phases
 
-- **NMS-07 IN PROGRESS:** audit and stabilize NMSOLT functions, UI, read paths
-  and performance; create a feature matrix and fix high-impact defects with
-  regression evidence.
+- **NMS-07 IN PROGRESS:** audit and stabilize Nostek-NMSOLT functions, UI,
+  packaging, read paths and performance. The active cleanup standardizes the
+  product name as **Nostek-NMSOLT**, short name **Nostek-NMS**, internal
+  `nos-*` namespace and `nos-snmp-poller`. The upstream MIT copyright notice
+  remains unchanged.
 - **NMS-08 BLOCKED on NMS-07:** API v1 read-only and OpenAPI.
 - **NMS-09 BLOCKED on NMS-08 and separate Maung scope:** `/nosteknmsolt`
   thin consumer.
@@ -57,35 +71,30 @@ data remain outside the public repository.
 
 See [NMS-07-12-GATED-READINESS.md](NMS-07-12-GATED-READINESS.md) for exact gates.
 
-## Current source audit (22 October 2026)
+## Search audit alignment (PR #20)
 
-GitHub recheck: PR #1 is merged (`63f4b77`), with successful exact-head run
-`39278668150` on `b20149c`; PR #19 is already merged as
-`62b414f`, so the former instruction to merge it is obsolete. No open PR was
-present at the initial recheck. Latest existing CI run `39652098876` passed all
-five jobs on PR #19 head `18b4735`; main has the identical tree
-`44c11c13e9988485bd106a77a6075efbc3b87383`, but no separate main-SHA run.
+PR #20 retains bounded snapshot loading, MAC-only navigation, query validation
+and synthetic regression coverage. Its original head `02949e56e41967956938dcb716c7003c91edc957`
+passed all five jobs in run `39715103922`. That evidence applies only to the
+original head, not to this alignment with main `b0cbf36ac6f59552a3ef4f3a01f187997d221f86` (PR #22).
+The earlier failed fixture run `39714702681` remains historical evidence.
 
-NMS-07 review branch: `work/nms-07-search-audit`, PR #20 (merge not authorized).
+Main's completed PR #21 identity cleanup and PR #22 Cloud checkpoint take
+precedence over the older PR #20 baseline. This branch merges that main without
+reverting the canonical Nostek-NMSOLT/Nostek-NMS, nos-* namespace or LICENSE.
+The feature matrix and source inventory retain their original audit baseline;
+new UI/package/performance work remains unverified.
 
-NMS-07 source patch: bounded lazy search snapshots, preserved MAC-only deep-link
-filter, validated search inputs and synthetic regression tests. See
-[NMS-07-FEATURE-MATRIX.md](NMS-07-FEATURE-MATRIX.md) and the source inventory JSON.
-Initial PR #20 CI run `39714702681` passed Compose, Go, 60 JS tests and both
-image builds but failed four new cases due to a missing required fixture field.
-The fixture is corrected; check latest-head CI on PR #20 before merging.
-
-Full NMS-07 remains IN_PROGRESS: UI journeys/write visibility, measured large-data
-performance and unified ACS lifecycle packaging remain open. NMS-08–12 statuses
-are unchanged; source tests do not satisfy their runtime/approval gates.
+Before merge: inspect the current PR head, require all five CI jobs on that
+exact head, review the combined diff and obtain owner merge approval. Never use
+the old green run as proof of the combined tree. No deployment or runtime/device
+validation is implied. NMS-07 remains IN_PROGRESS and NMS-08–12 remain BLOCKED.
 
 ## Exact next action
 
-Check the NMS-07 search-audit PR and exact-head CI. Resolve failures before
-requesting review/merge approval. Do not merge automatically. Continue remaining
-NMS-07 checklist work on the review branch while within authorized source scope.
-After NMS-07 is fully verified, proceed to NMS-08; keep NMS-09 Maung repository
-work, live operations and releases separately approval-gated.
+Identity cleanup is complete and merged. Continue NMS-07 with unified GenieACS packaging, unified health/backup/upgrade/rollback, and the functional/performance matrix. Do not modify the retained LICENSE attribution.
+
+For cross-device continuation, use [CLOUD-HANDOFF.md](CLOUD-HANDOFF.md). While PR #20 is open, read its current head as well as main; the search fixes are not yet merged.
 
 ## New-session prompt
 

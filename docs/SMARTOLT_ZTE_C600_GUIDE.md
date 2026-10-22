@@ -188,7 +188,7 @@ Kolom `.4` (nilai `0`/`2`/`65535`) **bukan** state: nilainya berkorelasi sempurn
 ## 5. Status pemetaan C600 (per 1 Okt 2026)
 
 Dulu bagian ini berjudul "Yang BELUM terpetakan" — sebagian besar kini sudah terbaca dari perangkat asli (Juli 2026)
-dan dipakai kode PHP (`OltSnmpClient`) **dan** poller Go (`cmd/kv-snmp-poller/main.go`):
+dan dipakai kode PHP (`OltSnmpClient`) **dan** poller Go (`cmd/nos-snmp-poller/main.go`):
 
 | Kebutuhan | Status | Sumber / dampak di aplikasi |
 |---|---|---|

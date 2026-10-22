@@ -94,30 +94,30 @@ const onlinePct = (port) => (port.onu_count ? Math.round(((port.online_onu_count
             <div class="w-full space-y-6 px-4 sm:px-6 lg:px-8">
                 <!-- Ringkasan -->
                 <div class="grid grid-cols-2 gap-4 lg:grid-cols-4">
-                    <div class="kv-stat">
+                    <div class="nos-stat">
                         <p class="text-xs font-medium uppercase tracking-wider text-slate-500">{{ $t('ponports.stat_ports', { label: ponLabel }) }}</p>
                         <p class="mt-3 text-2xl font-semibold tabular-nums text-white">{{ portsUp }}<span class="text-sm font-normal text-slate-500"> / {{ ports.length }} up</span></p>
                         <p v-if="ports.length - portsUp > 0" class="mt-1 text-xs font-medium text-rose-300">{{ $t('ponports.ports_down', { count: ports.length - portsUp }) }}</p>
                     </div>
-                    <div class="kv-stat">
+                    <div class="nos-stat">
                         <p class="text-xs font-medium uppercase tracking-wider text-slate-500">{{ $t('gponports.stat_onu_online') }}</p>
                         <p class="mt-3 text-2xl font-semibold tabular-nums text-emerald-300">{{ onuOnline }}<span class="text-sm font-normal text-slate-500"> / {{ onuTotal }}</span></p>
                     </div>
-                    <div class="kv-stat">
+                    <div class="nos-stat">
                         <p class="text-xs font-medium uppercase tracking-wider text-slate-500">{{ $t('common.offline') }}</p>
                         <p class="mt-3 text-2xl font-semibold tabular-nums" :class="onuTotal - onuOnline > 0 ? 'text-rose-300' : 'text-slate-300'">{{ onuTotal - onuOnline }}</p>
                     </div>
-                    <div class="kv-stat">
+                    <div class="nos-stat">
                         <p class="text-xs font-medium uppercase tracking-wider text-slate-500">{{ $t('common.last_refresh') }}</p>
                         <p class="mt-3 text-sm font-semibold text-white">{{ scanned_at ? formatDateTime(scanned_at) : '—' }}</p>
                     </div>
                 </div>
 
                 <!-- Grid port -->
-                <section class="kv-table-card">
+                <section class="nos-table-card">
                     <div class="flex flex-col gap-4 border-b border-white/10 px-4 py-4 sm:px-6 md:flex-row md:items-center md:justify-between">
                         <div class="flex items-center gap-3">
-                            <div class="kv-icon-tile"><Cable class="h-5 w-5" /></div>
+                            <div class="nos-icon-tile"><Cable class="h-5 w-5" /></div>
                             <div>
                                 <h3 class="text-base font-semibold text-white">{{ $t('ponports.title', { label: ponLabel }) }}</h3>
                                 <p class="text-xs text-slate-500">{{ $t('ponports.subtitle') }}</p>
@@ -128,7 +128,7 @@ const onlinePct = (port) => (port.onu_count ? Math.round(((port.online_onu_count
                             <input
                                 v-model="search"
                                 type="search"
-                                class="kv-filter-control w-full pl-9"
+                                class="nos-filter-control w-full pl-9"
                                 :placeholder="$t('ponports.search_placeholder')"
                                 :aria-label="$t('ponports.search_placeholder')"
                             />
@@ -152,7 +152,7 @@ const onlinePct = (port) => (port.onu_count ? Math.round(((port.online_onu_count
                                     <div class="font-mono text-sm font-semibold" :class="isDown(port) ? 'text-rose-200' : 'text-white'">{{ port.name }}</div>
                                     <div v-if="port.description" class="mt-0.5 truncate text-xs text-cyan-300" :title="port.description">{{ port.description }}</div>
                                 </div>
-                                <span class="kv-pill" :class="isDown(port) ? 'kv-pill-danger' : 'kv-pill-success'">{{ String(port.oper_status || 'unknown').toUpperCase() }}</span>
+                                <span class="nos-pill" :class="isDown(port) ? 'nos-pill-danger' : 'nos-pill-success'">{{ String(port.oper_status || 'unknown').toUpperCase() }}</span>
                             </div>
 
                             <div class="mt-4">

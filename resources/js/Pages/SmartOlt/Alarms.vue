@@ -206,7 +206,7 @@ const goFallback = () => {
         <template #header>
             <div class="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
                 <h2 class="text-lg font-semibold leading-tight sm:text-xl text-white">Alarms</h2>
-                <div class="kv-surface grid grid-cols-3 overflow-hidden rounded-lg border border-white/10 bg-slate-900/40 shadow-lg shadow-black/30 backdrop-blur-xl sm:inline-flex sm:w-auto">
+                <div class="nos-surface grid grid-cols-3 overflow-hidden rounded-lg border border-white/10 bg-slate-900/40 shadow-lg shadow-black/30 backdrop-blur-xl sm:inline-flex sm:w-auto">
                     <button
                         type="button"
                         class="min-h-11 px-4 py-2 text-sm font-medium"
@@ -259,37 +259,37 @@ const goFallback = () => {
                                 v-model="form.q"
                                 type="search"
                                 :placeholder="$t('alarms.search_placeholder')"
-                                class="kv-filter-control !pl-9"
+                                class="nos-filter-control !pl-9"
                             >
                         </div>
-                        <select v-model="form.severity" class="kv-filter-control w-full sm:w-auto">
+                        <select v-model="form.severity" class="nos-filter-control w-full sm:w-auto">
                             <option value="all">{{ $t('alarms.all_severity') }}</option>
                             <option v-for="severity in filterOptions.severities" :key="severity" :value="severity">{{ severity }}</option>
                         </select>
-                        <select v-model="form.olt_id" class="kv-filter-control w-full sm:w-auto">
+                        <select v-model="form.olt_id" class="nos-filter-control w-full sm:w-auto">
                             <option value="">{{ $t('alarms.all_olt') }}</option>
                             <option v-for="olt in filterOptions.olts" :key="olt.id" :value="olt.id">{{ olt.name }}</option>
                         </select>
-                        <select v-model="form.scope" class="kv-filter-control w-full sm:w-auto">
+                        <select v-model="form.scope" class="nos-filter-control w-full sm:w-auto">
                             <option value="all">{{ $t('alarms.all_scope') }}</option>
                             <option v-for="scope in filterOptions.scopes" :key="scope" :value="scope">{{ scopeOptionLabel(scope) }}</option>
                         </select>
-                        <select v-model="form.type" class="kv-filter-control w-full sm:w-auto">
+                        <select v-model="form.type" class="nos-filter-control w-full sm:w-auto">
                             <option value="all">{{ $t('alarms.all_type') }}</option>
                             <option v-for="type in filterOptions.types" :key="type" :value="type">{{ alarmTypeLabel(t, type) }}</option>
                         </select>
-                        <button type="button" class="kv-filter-reset w-full sm:w-auto" :disabled="!hasFilters" @click="resetFilters">
+                        <button type="button" class="nos-filter-reset w-full sm:w-auto" :disabled="!hasFilters" @click="resetFilters">
                             <RotateCcw class="h-4 w-4" />
                             {{ $t('common.reset') }}
                         </button>
-                        <button type="submit" class="kv-filter-apply w-full sm:w-auto">
+                        <button type="submit" class="nos-filter-apply w-full sm:w-auto">
                             <Search class="h-4 w-4" />
                             {{ $t('alarms.apply') }}
                         </button>
                     </form>
                 </FilterCard>
 
-                <div class="kv-surface overflow-hidden rounded-lg border border-white/10 bg-slate-900/40 shadow-lg shadow-black/30 backdrop-blur-xl">
+                <div class="nos-surface overflow-hidden rounded-lg border border-white/10 bg-slate-900/40 shadow-lg shadow-black/30 backdrop-blur-xl">
                     <div class="flex items-center gap-3 border-b border-white/10 px-4 py-4 sm:px-6">
                         <div class="flex h-9 w-9 flex-shrink-0 items-center justify-center rounded-lg bg-red-500/20 ring-1 ring-red-500/30">
                             <BellRing class="h-5 w-5 text-red-400" />
@@ -323,11 +323,11 @@ const goFallback = () => {
                     </div>
 
                     <template v-else>
-                        <div class="kv-mobile-list">
+                        <div class="nos-mobile-list">
                             <article
                                 v-for="alarm in rows"
                                 :key="alarm.id"
-                                class="kv-mobile-card relative"
+                                class="nos-mobile-card relative"
                                 :class="alarm.contextual_navigation ? 'cursor-pointer transition hover:bg-white/[0.03] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-cyan-500' : ''"
                                 :role="alarm.contextual_navigation ? 'button' : undefined"
                                 :tabindex="alarm.contextual_navigation ? 0 : undefined"
@@ -338,7 +338,7 @@ const goFallback = () => {
                                 @keydown.space="openAlarmFromKeyboard($event, alarm)"
                             >
                                 <Loader2 v-if="openingId === alarm.id" class="absolute right-4 top-4 h-5 w-5 animate-spin text-cyan-400" />
-                                <div class="kv-mobile-card-header">
+                                <div class="nos-mobile-card-header">
                                     <div class="min-w-0">
                                         <div class="flex flex-wrap items-center gap-2">
                                             <span class="inline-flex rounded-full px-2.5 py-1 text-xs font-medium uppercase" :class="severityClass(alarm.severity)">
@@ -348,43 +348,43 @@ const goFallback = () => {
                                                 {{ alarmStatusLabel(t, alarm.status) }}
                                             </span>
                                         </div>
-                                        <h4 class="mt-3 kv-mobile-card-title">{{ alarmTypeLabel(t, alarm.type) }}</h4>
-                                        <p class="kv-mobile-card-subtitle">{{ alarm.message }}</p>
+                                        <h4 class="mt-3 nos-mobile-card-title">{{ alarmTypeLabel(t, alarm.type) }}</h4>
+                                        <p class="nos-mobile-card-subtitle">{{ alarm.message }}</p>
                                     </div>
                                 </div>
-                                <div class="kv-mobile-fields">
-                                    <div class="kv-mobile-field">
-                                        <span class="kv-mobile-label">OLT</span>
+                                <div class="nos-mobile-fields">
+                                    <div class="nos-mobile-field">
+                                        <span class="nos-mobile-label">OLT</span>
                                         <Link
                                             :href="route('smartolt.detail', alarm.olt.id)"
-                                            class="kv-mobile-value font-medium text-cyan-400 hover:text-cyan-300"
+                                            class="nos-mobile-value font-medium text-cyan-400 hover:text-cyan-300"
                                             @click.stop
                                             @keydown.stop
                                         >
                                             {{ alarm.olt.name }}
                                         </Link>
                                     </div>
-                                    <div v-if="alarm.customer_name" class="kv-mobile-field">
-                                        <span class="kv-mobile-label">{{ $t('alarms.col_customer') }}</span>
-                                        <span class="kv-mobile-value">{{ alarm.customer_name }}</span>
+                                    <div v-if="alarm.customer_name" class="nos-mobile-field">
+                                        <span class="nos-mobile-label">{{ $t('alarms.col_customer') }}</span>
+                                        <span class="nos-mobile-value">{{ alarm.customer_name }}</span>
                                     </div>
-                                    <div class="kv-mobile-field">
-                                        <span class="kv-mobile-label">{{ $t('alarms.col_target') }}</span>
-                                        <span class="kv-mobile-value">{{ scopeLabel(alarm) }}</span>
+                                    <div class="nos-mobile-field">
+                                        <span class="nos-mobile-label">{{ $t('alarms.col_target') }}</span>
+                                        <span class="nos-mobile-value">{{ scopeLabel(alarm) }}</span>
                                     </div>
-                                    <div class="kv-mobile-field">
-                                        <span class="kv-mobile-label">{{ $t('alarms.col_last') }}</span>
-                                        <span class="kv-mobile-value">{{ formatDate(alarm.last_seen_at) }}</span>
+                                    <div class="nos-mobile-field">
+                                        <span class="nos-mobile-label">{{ $t('alarms.col_last') }}</span>
+                                        <span class="nos-mobile-value">{{ formatDate(alarm.last_seen_at) }}</span>
                                     </div>
-                                    <div class="kv-mobile-field">
-                                        <span class="kv-mobile-label">{{ $t('alarms.col_since') }}</span>
-                                        <span class="kv-mobile-value">{{ formatDate(alarm.first_seen_at) }}</span>
+                                    <div class="nos-mobile-field">
+                                        <span class="nos-mobile-label">{{ $t('alarms.col_since') }}</span>
+                                        <span class="nos-mobile-value">{{ formatDate(alarm.first_seen_at) }}</span>
                                     </div>
                                 </div>
                             </article>
                         </div>
 
-                        <div class="kv-table-desktop">
+                        <div class="nos-table-desktop">
                         <table class="min-w-[720px] w-full text-xs">
                             <thead>
                                 <tr class="border-b border-white/10 bg-canvas-3/40">

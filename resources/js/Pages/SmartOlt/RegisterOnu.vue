@@ -374,7 +374,7 @@ const submitC600 = async (execute) => {
                                     {{ copied ? $t('configonu.copied') : $t('registeronu.copy') }}
                                 </button>
                             </div>
-                            <pre data-theme="dark" class="kv-terminal max-h-[70vh] overflow-auto whitespace-pre-wrap break-words bg-slate-950/70 px-4 py-3 font-mono text-xs leading-relaxed text-emerald-300/90">{{ preview.script }}</pre>
+                            <pre data-theme="dark" class="nos-terminal max-h-[70vh] overflow-auto whitespace-pre-wrap break-words bg-slate-950/70 px-4 py-3 font-mono text-xs leading-relaxed text-emerald-300/90">{{ preview.script }}</pre>
                         </div>
                         <p class="mt-2 px-1 text-xs text-slate-500" v-html="$t('registeronu.preview_note')"></p>
                     </div>
@@ -384,7 +384,7 @@ const submitC600 = async (execute) => {
 
                     <!-- ============ Form C600 (Model B / SmartOLT TR069) ============ -->
                     <form v-if="isC600" class="space-y-5" @submit.prevent="submitC600(false)">
-                        <div class="kv-surface overflow-hidden rounded-lg border border-white/10 bg-slate-900/40 shadow-lg shadow-black/30 backdrop-blur-xl">
+                        <div class="nos-surface overflow-hidden rounded-lg border border-white/10 bg-slate-900/40 shadow-lg shadow-black/30 backdrop-blur-xl">
                             <div class="flex items-center gap-3 border-b border-white/10 px-4 py-4 sm:px-6">
                                 <div class="flex h-8 w-8 flex-shrink-0 items-center justify-center rounded-lg bg-sky-500/15 ring-1 ring-cyan-500/30">
                                     <User class="h-4 w-4 text-cyan-400" />
@@ -451,7 +451,7 @@ const submitC600 = async (execute) => {
                             </div>
                         </div>
 
-                        <div class="kv-surface overflow-hidden rounded-lg border border-white/10 bg-slate-900/40 shadow-lg shadow-black/30 backdrop-blur-xl">
+                        <div class="nos-surface overflow-hidden rounded-lg border border-white/10 bg-slate-900/40 shadow-lg shadow-black/30 backdrop-blur-xl">
                             <div class="flex items-center gap-3 border-b border-white/10 px-4 py-4 sm:px-6">
                                 <div class="flex h-8 w-8 flex-shrink-0 items-center justify-center rounded-lg bg-sky-500/15 ring-1 ring-cyan-500/30">
                                     <Globe class="h-4 w-4 text-cyan-400" />
@@ -497,7 +497,7 @@ const submitC600 = async (execute) => {
                             </div>
                         </div>
 
-                        <div class="kv-surface overflow-hidden rounded-lg border border-white/10 bg-slate-900/40 shadow-lg shadow-black/30 backdrop-blur-xl">
+                        <div class="nos-surface overflow-hidden rounded-lg border border-white/10 bg-slate-900/40 shadow-lg shadow-black/30 backdrop-blur-xl">
                             <div class="flex flex-col gap-3 border-b border-white/10 px-4 py-4 sm:flex-row sm:items-center sm:justify-between sm:px-6">
                                 <div class="flex items-center gap-3">
                                     <div class="flex h-8 w-8 flex-shrink-0 items-center justify-center rounded-lg bg-sky-500/15 ring-1 ring-cyan-500/30">
@@ -596,7 +596,7 @@ const submitC600 = async (execute) => {
                     </div>
 
                     <!-- Mode toggle: Sederhana vs Lanjutan -->
-                    <div class="kv-surface flex flex-col gap-3 rounded-lg border border-white/10 bg-slate-900/40 px-4 py-3 shadow-lg shadow-black/30 backdrop-blur-xl sm:flex-row sm:items-center sm:justify-between sm:px-6">
+                    <div class="nos-surface flex flex-col gap-3 rounded-lg border border-white/10 bg-slate-900/40 px-4 py-3 shadow-lg shadow-black/30 backdrop-blur-xl sm:flex-row sm:items-center sm:justify-between sm:px-6">
                         <div>
                             <h3 class="text-sm font-semibold text-white">{{ $t('registeronu.mode_title') }}</h3>
                             <p class="text-xs text-slate-500">{{ $t('registeronu.mode_hint') }}</p>
@@ -624,7 +624,7 @@ const submitC600 = async (execute) => {
                     <form v-if="mode === 'simple'" class="space-y-5" @submit.prevent="submit(canExecute)">
 
                     <!-- Section 1: Identitas ONU -->
-                    <div class="kv-surface overflow-hidden rounded-lg border border-white/10 bg-slate-900/40 shadow-lg shadow-black/30 backdrop-blur-xl">
+                    <div class="nos-surface overflow-hidden rounded-lg border border-white/10 bg-slate-900/40 shadow-lg shadow-black/30 backdrop-blur-xl">
                         <div class="flex items-center gap-3 border-b border-white/10 px-4 py-4 sm:px-6">
                             <div class="flex h-8 w-8 flex-shrink-0 items-center justify-center rounded-lg bg-sky-500/15 ring-1 ring-cyan-500/30">
                                 <User class="h-4 w-4 text-cyan-400" />
@@ -681,7 +681,7 @@ const submitC600 = async (execute) => {
                     </div>
 
                     <!-- Section 2: Konfigurasi GPON -->
-                    <div class="kv-surface overflow-hidden rounded-lg border border-white/10 bg-slate-900/40 shadow-lg shadow-black/30 backdrop-blur-xl">
+                    <div class="nos-surface overflow-hidden rounded-lg border border-white/10 bg-slate-900/40 shadow-lg shadow-black/30 backdrop-blur-xl">
                         <div class="flex items-center gap-3 border-b border-white/10 px-4 py-4 sm:px-6">
                             <div class="flex h-8 w-8 flex-shrink-0 items-center justify-center rounded-lg bg-sky-500/15 ring-1 ring-cyan-500/30">
                                 <Cpu class="h-4 w-4 text-cyan-400" />
@@ -771,7 +771,7 @@ const submitC600 = async (execute) => {
                     </div>
 
                     <!-- Section 3: WAN Mode -->
-                    <div class="kv-surface overflow-hidden rounded-lg border border-white/10 bg-slate-900/40 shadow-lg shadow-black/30 backdrop-blur-xl">
+                    <div class="nos-surface overflow-hidden rounded-lg border border-white/10 bg-slate-900/40 shadow-lg shadow-black/30 backdrop-blur-xl">
                         <div class="flex items-center gap-3 border-b border-white/10 px-4 py-4 sm:px-6">
                             <div class="flex h-8 w-8 flex-shrink-0 items-center justify-center rounded-lg bg-sky-500/15 ring-1 ring-cyan-500/30">
                                 <Globe class="h-4 w-4 text-cyan-400" />
@@ -855,7 +855,7 @@ const submitC600 = async (execute) => {
                     </div>
 
                     <!-- Section 4: Fitur Tambahan -->
-                    <div class="kv-surface overflow-hidden rounded-lg border border-white/10 bg-slate-900/40 shadow-lg shadow-black/30 backdrop-blur-xl">
+                    <div class="nos-surface overflow-hidden rounded-lg border border-white/10 bg-slate-900/40 shadow-lg shadow-black/30 backdrop-blur-xl">
                         <div class="flex items-center gap-3 border-b border-white/10 px-4 py-4 sm:px-6">
                             <div class="flex h-8 w-8 flex-shrink-0 items-center justify-center rounded-lg bg-sky-500/15 ring-1 ring-cyan-500/30">
                                 <Settings class="h-4 w-4 text-cyan-400" />
@@ -934,7 +934,7 @@ const submitC600 = async (execute) => {
                     <input v-model="form.oid_index" type="hidden" />
 
                     <!-- Submit bar -->
-                    <div class="kv-surface overflow-hidden rounded-lg border border-white/10 bg-slate-900/40 shadow-lg shadow-black/30 backdrop-blur-xl px-4 py-4 sm:px-6">
+                    <div class="nos-surface overflow-hidden rounded-lg border border-white/10 bg-slate-900/40 shadow-lg shadow-black/30 backdrop-blur-xl px-4 py-4 sm:px-6">
                         <p v-if="!canExecute" class="mb-3 rounded-lg border border-amber-500/30 bg-amber-500/10 px-3 py-2.5 text-xs text-amber-200">
                             {{ $t('registeronu.no_cli_note') }}
                         </p>
@@ -964,7 +964,7 @@ const submitC600 = async (execute) => {
                         </div>
 
                         <!-- Identitas ONU (header registrasi) -->
-                        <div class="kv-surface overflow-hidden rounded-lg border border-white/10 bg-slate-900/40 shadow-lg shadow-black/30 backdrop-blur-xl">
+                        <div class="nos-surface overflow-hidden rounded-lg border border-white/10 bg-slate-900/40 shadow-lg shadow-black/30 backdrop-blur-xl">
                             <div class="flex items-center gap-3 border-b border-white/10 px-4 py-4 sm:px-6">
                                 <div class="flex h-8 w-8 flex-shrink-0 items-center justify-center rounded-lg bg-sky-500/15 ring-1 ring-cyan-500/30">
                                     <User class="h-4 w-4 text-cyan-400" />
@@ -1022,7 +1022,7 @@ const submitC600 = async (execute) => {
                         <input v-model="advForm.oid_index" type="hidden" />
 
                         <!-- Submit bar (Lanjutan) -->
-                        <div class="kv-surface overflow-hidden rounded-lg border border-white/10 bg-slate-900/40 shadow-lg shadow-black/30 backdrop-blur-xl px-4 py-4 sm:px-6">
+                        <div class="nos-surface overflow-hidden rounded-lg border border-white/10 bg-slate-900/40 shadow-lg shadow-black/30 backdrop-blur-xl px-4 py-4 sm:px-6">
                             <p v-if="!canExecute" class="mb-3 rounded-lg border border-amber-500/30 bg-amber-500/10 px-3 py-2.5 text-xs text-amber-200">
                                 {{ $t('registeronu.no_cli_note') }}
                             </p>

@@ -1,7 +1,7 @@
 <script setup>
 /**
  * ListSkeleton — placeholder shimmer untuk daftar ONU saat scan/refresh (operasi
- * SNMP lambat). Meniru struktur responsif kv-mobile-list + kv-table-desktop.
+ * SNMP lambat). Meniru struktur responsif nos-mobile-list + nos-table-desktop.
  * `animate-pulse` dimatikan otomatis saat prefers-reduced-motion (lihat app.css).
  */
 defineProps({
@@ -16,8 +16,8 @@ const pick = (i, offset = 0) => widths[(i + offset) % widths.length];
 <template>
     <div class="animate-pulse" aria-hidden="true">
         <!-- Mobile cards -->
-        <div class="kv-mobile-list">
-            <div v-for="i in Math.min(rows, 4)" :key="`m-${i}`" class="kv-mobile-card">
+        <div class="nos-mobile-list">
+            <div v-for="i in Math.min(rows, 4)" :key="`m-${i}`" class="nos-mobile-card">
                 <div class="flex items-start justify-between gap-3">
                     <div class="min-w-0 flex-1 space-y-2">
                         <div class="h-3.5 rounded bg-white/10" :class="pick(i)"></div>

@@ -152,13 +152,13 @@ class GenieacsMobileApiTest extends TestCase
         Sanctum::actingAs(User::factory()->admin()->create());
 
         $this->postJson("/api/v1/olts/{$olt->id}/onus/1/1/1/acs-wifi", [
-            'ssid' => 'KUSUMANET-HP',
+            'ssid' => 'NOSTEKNET-HP',
             'password' => 'rahasia12345',
             'wlan_index' => 1,
         ])->assertOk()->assertJsonPath('ok', true);
 
         Http::assertSent(fn ($request) => str_contains($request->url(), '/tasks')
-            && str_contains(json_encode($request->data()), 'KUSUMANET-HP'));
+            && str_contains(json_encode($request->data()), 'NOSTEKNET-HP'));
 
         $audit = \App\Models\AuditLog::query()->latest('id')->first();
         $this->assertSame('genieacs.wifi.updated', $audit->event);

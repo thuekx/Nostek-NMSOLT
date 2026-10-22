@@ -47,11 +47,11 @@ const setOptimistic = (id, on) => {
 };
 
 const severityClass = (severity) => ({
-    critical: 'kv-pill-critical',
-    major: 'kv-pill-major',
-    minor: 'kv-pill-minor',
-    warning: 'kv-pill-warning',
-}[severity] ?? 'kv-pill-muted');
+    critical: 'nos-pill-critical',
+    major: 'nos-pill-major',
+    minor: 'nos-pill-minor',
+    warning: 'nos-pill-warning',
+}[severity] ?? 'nos-pill-muted');
 
 const formatRelative = (iso) => {
     if (!iso) return '';
@@ -200,7 +200,7 @@ onUnmounted(() => {
         >
             <div
                 v-if="open"
-                class="kv-popover absolute right-0 z-50 mt-2 w-96 max-w-[calc(100vw-2rem)] origin-top-right rounded-2xl border border-white/10 bg-slate-900/95 shadow-2xl shadow-black/60 backdrop-blur-xl"
+                class="nos-popover absolute right-0 z-50 mt-2 w-96 max-w-[calc(100vw-2rem)] origin-top-right rounded-2xl border border-white/10 bg-slate-900/95 shadow-2xl shadow-black/60 backdrop-blur-xl"
             >
                 <div class="flex items-center justify-between border-b border-white/10 px-4 py-3">
                     <h3 class="text-sm font-semibold text-white">{{ $t('shell.notifications_title') }}</h3>

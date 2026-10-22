@@ -29,7 +29,7 @@ Lisensi open-source MIT (lihat `LICENSE`). Autentikasi memakai login lokal **Lar
 | Queue | Redis; worker supervisor `queue:work` (paket **Laravel Horizon** terpasang, tidak dipakai sebagai worker produksi) |
 | API | **REST API v1** + **Laravel Sanctum** (Bearer token) — dipakai aplikasi Android |
 | Realtime | **Laravel Reverb** (WebSocket) — dipakai oleh proxy telnet (react/socket + ratchet) |
-| SNMP poller | **Go** (`bin/kv-snmp-poller`, sumber `cmd/kv-snmp-poller/main.go`, lib `gosnmp`) |
+| SNMP poller | **Go** (`bin/nos-snmp-poller`, sumber `cmd/nos-snmp-poller/main.go`, lib `gosnmp`) |
 | PDF report | `barryvdh/laravel-dompdf` |
 | Routing JS | `tightenco/ziggy` (route() di Vue) |
 | CLI ke OLT | **Telnet** (raw TCP via phpseclib hanya untuk util; SSH belum diwire) |
@@ -89,7 +89,7 @@ Jangan asumsikan fitur PRD ada di kode:
 | CLI | **Telnet saja**. `ZteCliProvisioningExecutor` (dan service CLI C-Data/HiOSO) menolak SSH. Telnet browser juga telnet-only. |
 | Data store | **Tidak ada** TimescaleDB atau tabel `onus`/`optical_metrics`. Riwayat RX memang disimpan (`onu_rx_samples` + ringkasan `onu_rx_hourly`). Fitur AI juga belum ada (masih visi PRD). |
 | Live state ONU | Disimpan sebagai **JSON di kolom `snmp_olts.last_test_result`** (bukan tabel ONU). |
-| Polling terjadwal | ZTE **pakai engine Go** (`bin/kv-snmp-poller`) via `PollOltJob` (fallback PHP); C-Data/HiOSO lewat `CDataOltScanner`. Aksi on-demand (refresh manual, provisioning, telnet, RX per-port) = **PHP sinkron** di controller/service, kecuali batch salin ONU & TR069 massal (job antrean). |
+| Polling terjadwal | ZTE **pakai engine Go** (`bin/nos-snmp-poller`) via `PollOltJob` (fallback PHP); C-Data/HiOSO lewat `CDataOltScanner`. Aksi on-demand (refresh manual, provisioning, telnet, RX per-port) = **PHP sinkron** di controller/service, kecuali batch salin ONU & TR069 massal (job antrean). |
 
 > Catatan: `SMARTOLT_ZTE_C300_C320_C600_GUIDE.md` Section 6/7 (parseOnuDetailInfo, parseRunningConfig,
 > ZteCliSessionService) adalah **blueprint dari proyek lain**, belum tentu 1:1 dengan kode di sini.

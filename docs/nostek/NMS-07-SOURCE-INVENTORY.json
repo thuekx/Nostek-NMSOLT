@@ -294,5 +294,7 @@
       "logout"
     ],
     "routes/channels.php": []
-  }
+  },
+  "alignment_main_commit": "b0cbf36ac6f59552a3ef4f3a01f187997d221f86",
+  "inventory_scope": "Original static inventory retained; paths checked during alignment, journeys not verified"
 }

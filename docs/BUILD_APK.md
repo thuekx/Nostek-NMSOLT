@@ -214,13 +214,13 @@ tandatangani dengan keystore rilis:
 
 ```bash
 # 1. Buat keystore (sekali) — simpan file & password baik-baik, JANGAN commit
-keytool -genkey -v -keystore ~/kv-release.jks -keyalg RSA -keysize 2048 -validity 10000 -alias kv
+keytool -genkey -v -keystore ~/nos-release.jks -keyalg RSA -keysize 2048 -validity 10000 -alias kv
 
 # 2. Buat mobile/android/key.properties (di-gitignore)
 ```
 Isi `mobile/android/key.properties`:
 ```properties
-storeFile=/abs/path/kv-release.jks
+storeFile=/abs/path/nos-release.jks
 storePassword=...
 keyAlias=kv
 keyPassword=...

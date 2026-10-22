@@ -57,7 +57,7 @@ const fmt = (v) => formatDateTime(v);
                 <div>
                     <h2 class="flex flex-wrap items-center gap-2 text-lg font-semibold leading-tight text-white sm:text-xl">
                         {{ olt.name }}
-                        <span class="kv-pill kv-pill-info">{{ olt.capabilities.vendor_family }}</span>
+                        <span class="nos-pill nos-pill-info">{{ olt.capabilities.vendor_family }}</span>
                     </h2>
                     <p class="mt-1 text-sm text-slate-500">{{ olt.ip }}:{{ olt.snmp_port }} · {{ olt.snmp_version }}</p>
                 </div>
@@ -94,19 +94,19 @@ const fmt = (v) => formatDateTime(v);
 
                 <!-- Ringkasan -->
                 <div class="grid grid-cols-2 gap-4 lg:grid-cols-4">
-                    <div class="kv-stat">
+                    <div class="nos-stat">
                         <p class="text-xs uppercase tracking-wider text-slate-500">{{ $t('portonus.stat_total_onu') }}</p>
                         <p class="mt-1 text-2xl font-bold tabular-nums text-white">{{ onuTotals.total.toLocaleString('id-ID') }}</p>
                     </div>
-                    <div class="kv-stat">
+                    <div class="nos-stat">
                         <p class="text-xs uppercase tracking-wider text-slate-500">{{ $t('common.online') }}</p>
                         <p class="mt-1 text-2xl font-bold tabular-nums text-emerald-300">{{ onuTotals.online.toLocaleString('id-ID') }}</p>
                     </div>
-                    <div class="kv-stat">
+                    <div class="nos-stat">
                         <p class="text-xs uppercase tracking-wider text-slate-500">{{ $t('common.offline') }}</p>
                         <p class="mt-1 text-2xl font-bold tabular-nums" :class="onuTotals.offline > 0 ? 'text-red-300' : 'text-slate-300'">{{ onuTotals.offline.toLocaleString('id-ID') }}</p>
                     </div>
-                    <div class="kv-stat">
+                    <div class="nos-stat">
                         <p class="text-xs uppercase tracking-wider text-slate-500">{{ $t('cdatadetail.port_pon_up', { label: olt.capabilities.pon_label }) }}</p>
                         <p class="mt-1 text-2xl font-bold tabular-nums text-white">{{ portsUp }}<span class="text-base text-slate-500"> / {{ ports.length }}</span></p>
                     </div>
@@ -114,9 +114,9 @@ const fmt = (v) => formatDateTime(v);
 
                 <!-- System info + gambar OLT (tata letak sama dengan ZTE) -->
                 <div class="grid gap-6 lg:grid-cols-2">
-                    <div class="kv-glass-panel">
+                    <div class="nos-glass-panel">
                         <div class="flex items-center gap-3 border-b border-white/10 px-4 py-4 sm:px-6">
-                            <span class="kv-circle-sky !h-10 !w-10"><Server class="h-5 w-5" /></span>
+                            <span class="nos-circle-sky !h-10 !w-10"><Server class="h-5 w-5" /></span>
                             <div>
                                 <h3 class="text-base font-semibold text-white">{{ $t('cdatadetail.system_info') }}</h3>
                                 <p class="text-xs text-slate-400">{{ olt.ip }}:{{ olt.snmp_port }} · {{ olt.snmp_version }}</p>
@@ -169,9 +169,9 @@ const fmt = (v) => formatDateTime(v);
                 </div>
 
                 <!-- Visualisasi chassis (panel depan) — posisi sama dengan halaman detail ZTE -->
-                <div v-if="panel" class="kv-glass-panel">
+                <div v-if="panel" class="nos-glass-panel">
                     <div class="flex items-center gap-3 border-b border-white/10 px-4 py-4 sm:px-6">
-                        <span class="kv-circle-cyan !h-10 !w-10"><LayoutPanelTop class="h-5 w-5" /></span>
+                        <span class="nos-circle-cyan !h-10 !w-10"><LayoutPanelTop class="h-5 w-5" /></span>
                         <div>
                             <h3 class="text-base font-semibold text-white">{{ $t('cdatadetail.panel_front') }}</h3>
                             <p class="text-xs text-slate-400">{{ $t('cdatadetail.panel_sub', { family: olt.capabilities.vendor_family }) }}</p>

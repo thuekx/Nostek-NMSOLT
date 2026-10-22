@@ -13,18 +13,18 @@ import { RAMPS, STOPS, SINGLES, SURFACES, CANVASES } from './tailwind.tokens.mjs
    sudah tersebar di ratusan berkas ikut berganti tema sendiri tanpa satu
    pun kelas perlu disentuh.
 
-   Bentuk `rgb(var(--kv-x) / <alpha-value>)` WAJIB dipertahankan: token
+   Bentuk `rgb(var(--nos-x) / <alpha-value>)` WAJIB dipertahankan: token
    `<alpha-value>` itulah yang membuat modifier opasitas (`/70`, `/[0.03]`)
    tetap bekerja. Variabelnya menyimpan channel RGB tanpa pembungkus,
-   mis. `--kv-slate-900: 15 23 42`.
+   mis. `--nos-slate-900: 15 23 42`.
 
    ⛔ Menambah ramp di sini TANPA mendeklarasikan variabelnya di app.css
-   membuat `rgb(var(--kv-...) / 1)` menjadi nilai invalid — propertinya
+   membuat `rgb(var(--nos-...) / 1)` menjadi nilai invalid — propertinya
    diabaikan diam-diam dan elemennya jadi transparan, tanpa error apa pun.
    Test `tests/Feature/ThemeTokenTest.php` menjaga hal itu tidak terjadi.
    ===================================================================== */
 
-const token = (name) => `rgb(var(--kv-${name}) / <alpha-value>)`;
+const token = (name) => `rgb(var(--nos-${name}) / <alpha-value>)`;
 
 const ramp = (name) =>
     Object.fromEntries(STOPS.map((stop) => [stop, token(`${name}-${stop}`)]));

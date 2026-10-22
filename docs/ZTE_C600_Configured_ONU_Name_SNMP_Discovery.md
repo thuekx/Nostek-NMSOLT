@@ -4,7 +4,7 @@ Confirmed SNMP objects for reading configured ONU names, descriptions, admin/pha
 serials from a ZTE TITAN C600. OIDs identified by capturing SmartOLT SNMP traffic + reproducing
 from an Ubuntu server, then re-verified live against a production C600 (ZXA10 C600 V1.2.2). Wired up in
 `app/Services/Snmp/OltSnmpClient.php` (`C600_ONU_NAME`, `C600_ONU_DESCRIPTION`, `C600_ONU_ADMIN_STATE`,
-`C600_ONU_PHASE_STATE`) and mirrored in the Go poller (`cmd/kv-snmp-poller/main.go`: `c600OnuName`, `c600OnuDesc`,
+`C600_ONU_PHASE_STATE`) and mirrored in the Go poller (`cmd/nos-snmp-poller/main.go`: `c600OnuName`, `c600OnuDesc`,
 `c600OnuAdmin`, `c600OnuPhase`).
 
 > **Status as of 1 Oct 2026:** all four columns are wired and **read-only**. Writing them (SNMP SET rename /

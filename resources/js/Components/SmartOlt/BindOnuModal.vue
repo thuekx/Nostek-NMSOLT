@@ -175,7 +175,7 @@ const submit = () => {
                                     <span class="block truncate text-sm font-semibold text-slate-100">{{ c.customer_name || c.interface }}</span>
                                     <span class="block truncate font-mono text-xs text-slate-400">{{ c.serial_number || '—' }} · {{ c.type_name || '—' }}</span>
                                 </span>
-                                <span class="shrink-0" :class="c.online ? 'kv-pill-success' : 'kv-pill-danger'">{{ statusLabel(c) }}</span>
+                                <span class="shrink-0" :class="c.online ? 'nos-pill-success' : 'nos-pill-danger'">{{ statusLabel(c) }}</span>
                             </label>
                         </li>
                     </ul>
@@ -217,7 +217,7 @@ const submit = () => {
 
                 <div class="mt-4">
                     <p class="text-xs font-semibold uppercase tracking-wide text-slate-500">{{ $t('bindonu.command') }}</p>
-                    <pre data-theme="dark" class="kv-terminal mt-1 overflow-x-auto rounded-md bg-slate-950/70 px-3 py-2 font-mono text-xs leading-relaxed text-emerald-300/90">{{ script }}</pre>
+                    <pre data-theme="dark" class="nos-terminal mt-1 overflow-x-auto rounded-md bg-slate-950/70 px-3 py-2 font-mono text-xs leading-relaxed text-emerald-300/90">{{ script }}</pre>
                 </div>
 
                 <label class="mt-4 flex items-start gap-2.5 text-sm text-slate-300">

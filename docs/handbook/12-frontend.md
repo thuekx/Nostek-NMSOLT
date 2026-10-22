@@ -140,14 +140,14 @@ Setiap Page bisa akses lewat `usePage().props`:
 
 ## Tema (gelap / terang / ikut sistem)
 
-- Seluruh warna = CSS custom property `--kv-*` per `[data-theme]` di `resources/css/app.css`; ganti
+- Seluruh warna = CSS custom property `--nos-*` per `[data-theme]` di `resources/css/app.css`; ganti
   tema = ganti atribut `data-theme` di `<html>`, tanpa tukar kelas/stylesheet.
-- Server memutuskan tema awal (`App\Support\Theme` dari `users.theme` / cookie `kv_theme` yang
+- Server memutuskan tema awal (`App\Support\Theme` dari `users.theme` / cookie `nos_theme` yang
   sengaja tidak dienkripsi). `lib/theme.js`: `useTheme()`, `setTheme()` menyimpan lewat
   `axios.patch(route('profile.theme'))` → 204 — **bukan** kunjungan Inertia (yang akan menghapus
   token API sekali-tampil di halaman Pengaturan).
 - Menulis kelas: ikuti `UI_DESIGN_SYSTEM.md` §3a (`text-onaccent`, `bg-canvas-3` bukan
-  `bg-slate-950`, `kv-terminal` dikunci gelap; chassis & faceplate ikut tema). Grafik (Chart.js)
+  `bg-slate-950`, `nos-terminal` dikunci gelap; chassis & faceplate ikut tema). Grafik (Chart.js)
   merakit opsinya dari `@/lib/chartOptions` di dalam `computed`, jadi ikut berganti tema tanpa dibuat ulang.
 
 ## i18n (ID/EN)
@@ -217,7 +217,7 @@ router.post(route('smartolt.foo', olt.id), form);
   izin**.
 - Modal: render terus dengan `:show`, jangan dibungkus `v-if` (lihat peringatan di atas).
 
-> 🎨 **Look & feel.** Untuk design token, kelas `kv-*`, palet, dan **aturan wajib** tampilan
+> 🎨 **Look & feel.** Untuk design token, kelas `nos-*`, palet, dan **aturan wajib** tampilan
 > (kartu kaca, tabel responsif, warna status, sidebar), ikuti
 > [15 — UI & Tema Dashboard](15-ui-tema-dashboard.md) dan [`UI_DESIGN_SYSTEM.md`](../../UI_DESIGN_SYSTEM.md).
 

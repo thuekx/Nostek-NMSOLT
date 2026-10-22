@@ -14,7 +14,7 @@ import { isLowPowerDevice, prefersReducedMotion } from '@/lib/perf';
 
 const props = defineProps({
     // id dasar — dibedakan otomatis per mount, jadi cukup deskriptif saja.
-    id: { type: String, default: 'kv-particles' },
+    id: { type: String, default: 'nos-particles' },
     // jumlah node — turunkan di area kecil untuk hemat resource.
     quantity: { type: Number, default: 64 },
     // warna garis penghubung & node.
@@ -121,7 +121,7 @@ onBeforeUnmount(() => {
         :id="uid"
         ref="el"
         class="pointer-events-none absolute inset-0 h-full w-full"
-        :class="{ 'kv-particles--inert': !interactive }"
+        :class="{ 'nos-particles--inert': !interactive }"
         aria-hidden="true"
     />
 </template>
@@ -132,7 +132,7 @@ onBeforeUnmount(() => {
  * `pointer-events-none` milik wrapper. Declaration !important dari stylesheet
  * mengalahkan inline non-important, jadi latar dekoratif ini tidak pernah
  * menelan klik elemen di bawahnya. */
-.kv-particles--inert :deep(canvas) {
+.nos-particles--inert :deep(canvas) {
     pointer-events: none !important;
 }
 </style>

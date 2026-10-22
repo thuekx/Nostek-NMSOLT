@@ -4,7 +4,7 @@ updated_at: "2026-10-22"
 source_of_truth:
   repo: https://github.com/thuekx/Nostek-NMSOLT
   default_branch: main
-  checkpoint_main_sha: 62b414f04ac4b5e4f024669e431be29f4d0845d1
+  checkpoint_main_sha: b0cbf36ac6f59552a3ef4f3a01f187997d221f86
   baseline_sha: 24332a2b4144cff03f04f64e4711ce7938d992ae
   nms06_completion:
     pr: https://github.com/thuekx/Nostek-NMSOLT/pull/18
@@ -38,27 +38,23 @@ status:
 deferred:
   mobile_flutter: "Excluded from initial commit; inherited mobile identity is not approved for distribution."
 latest_evidence:
-  checkpoint_recheck:
-    pr1: "MERGED as 63f4b77b002fa5ef9b1189d4a4c982c0246a1354"
-    pr1_ci: "39278668150 SUCCESS on b20149cad1aff4087108f7dc4cd1433da307495b"
-    pr19: "MERGED as 62b414f04ac4b5e4f024669e431be29f4d0845d1"
-    latest_existing_ci: "39652098876 SUCCESS on 18b473545884ddf49d65847827e3473da3d02744"
-    main_ci: "No main-SHA run; tree identical to tested PR19 head"
   NMS-06:
     status: VERIFIED
     sanitized_evidence: docs/nostek/NMS-06-ZTE-C320-RUNTIME-EVIDENCE-2026-10-22.md
     runtime: "ZTE C320 SNMP v2c RO and bounded read-only UI/CLI validation passed; PR #18 CI passed; no device mutation."
   NMS-07:
     status: IN_PROGRESS
+    objective: "Standardize Nostek-NMSOLT/Nostek-NMS identity and nos-* namespace, then stabilize packaging, functions, UI and performance with regression evidence."
+    safety: "Source and isolated staging only; no production, Caddy, Maung repository or device changes."
+    review_pr: https://github.com/thuekx/Nostek-NMSOLT/pull/20
+    review_branch: work/nms-07-search-audit
     audit: docs/nostek/NMS-07-FEATURE-MATRIX.md
     inventory: docs/nostek/NMS-07-SOURCE-INVENTORY.json
-    review_pr: https://github.com/thuekx/Nostek-NMSOLT/pull/20
-    branch: work/nms-07-search-audit
-    source_patch: "Bound search snapshots, preserve MAC navigation, validate search inputs; regression tests added."
-    remaining: "UI journeys/write visibility, measured performance, unified ACS lifecycle package, exact-head CI and review."
-    source_ci: "Latest-head CI tracked on PR #20; phase verification not claimed."
-    objective: "Stabilize NMSOLT functions, UI and performance; inventory routes/features, repair misleading or broken read paths, and add regression evidence."
-    safety: "Source and isolated staging only; no production, Caddy, Maung repository or device changes."
+    search_alignment: "Merged PR #22 main into PR #20; preserve identity cleanup and search fixes."
+    previous_search_ci: "39715103922 SUCCESS on 02949e56e41967956938dcb716c7003c91edc957 only."
+    aligned_ci: "PENDING: consult exact current PR head checks; old CI does not verify alignment."
+    merge_gate: "Exact-head CI, combined diff review and owner approval; no automatic merge."
+    identity_cleanup: "PR #21 head 6bc53a3 passed run 39770297399 and merged as f43baa3; canonical Nostek-NMSOLT/Nostek-NMS and nos-* namespace enforced."
   NMS-08:
     status: BLOCKED
     objective: "Versioned read-only API v1 and OpenAPI with stable IDs, freshness, pagination, auth scopes, redaction, rate limits and contract tests."
@@ -85,8 +81,8 @@ environment:
   genieacs_lab: ACTIVE_VERIFIED
   live_olt_write: PROHIBITED_WITHOUT_APPROVAL
 next_action:
-  id: NMS-07-PRODUCT-STABILIZATION
-  instruction: "Audit NMSOLT routes, screens, read APIs and performance; build a feature matrix and fix the highest-impact safe source issue with tests."
+  id: NMS-07-UNIFIED-GENIEACS-PACKAGE
+  instruction: "Build and test the unified full package for app/PostgreSQL/Redis plus private GenieACS/MongoDB, then continue the feature/performance matrix. Preserve LICENSE attribution and keep device writes disabled."
   owner: "executor"
   approval_required: false
 references:

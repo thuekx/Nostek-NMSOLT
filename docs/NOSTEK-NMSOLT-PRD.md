@@ -24,7 +24,7 @@ Product Name: Nostek-NMSOLT
 > | Alarm engine | ✅ OLT unreachable, port down/disabled, ODP down, LOS, dying gasp, ONU offline, redaman tinggi. **Tidak ada** alarm "ONU flapping" — yang ada debounce 2 poll anti-flap. "Uplink down" tidak dievaluasi terpisah. |
 > | Frontend Vue 3 + Inertia + Tailwind + ApexCharts | ✅ Sesuai, grafik kini Chart.js (ApexCharts 5 bukan lagi open source, diganti 2 Okt 2026); plus Leaflet untuk peta, xterm.js untuk terminal. |
 > | Backend Laravel 12 + Redis | ✅ Sesuai. **Horizon & Reverb** terpasang sebagai paket, tetapi worker produksi memakai `queue:work` (supervisor) dan tidak ada event broadcast realtime; Reverb hanya menyumbang dependensi `react/socket` untuk proxy telnet. |
-> | Polling engine GoLang + gosnmp | ✅ `bin/kv-snmp-poller` untuk polling terjadwal (jatuh balik ke PHP). SNMP hanya v1/v2c. |
+> | Polling engine GoLang + gosnmp | ✅ `bin/nos-snmp-poller` untuk polling terjadwal (jatuh balik ke PHP). SNMP hanya v1/v2c. |
 > | SSH/Telnet client | ⚠️ **Telnet saja** — SSH belum tersambung ke eksekutor mana pun. |
 > | Database PostgreSQL + Redis | ✅ Sesuai. |
 > | TimescaleDB | ❌ Tidak dipakai. Histori Rx di tabel biasa `onu_rx_samples` + ringkasan per jam `onu_rx_hourly`. |

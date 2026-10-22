@@ -37,7 +37,7 @@ export const SURFACES = ['surface-1', 'surface-2', 'surface-3', 'surface-hover']
 /** Kanvas halaman dan lapisan dekorasinya. */
 export const CANVASES = ['canvas', 'canvas-2', 'canvas-3'];
 
-/** Seluruh nama variabel `--kv-*` yang harus punya deklarasi di app.css. */
+/** Seluruh nama variabel `--nos-*` yang harus punya deklarasi di app.css. */
 export function tokenNames() {
     return [
         ...RAMPS.flatMap((ramp) => STOPS.map((stop) => `${ramp}-${stop}`)),

@@ -12,11 +12,11 @@ defineProps({
 const { t } = useI18n({ useScope: 'global' });
 
 const severityClass = (s) => ({
-    critical: 'kv-pill-critical',
-    major: 'kv-pill-major',
-    minor: 'kv-pill-minor',
-    warning: 'kv-pill-warning',
-}[s] ?? 'kv-pill-muted');
+    critical: 'nos-pill-critical',
+    major: 'nos-pill-major',
+    minor: 'nos-pill-minor',
+    warning: 'nos-pill-warning',
+}[s] ?? 'nos-pill-muted');
 
 const formatTime = (iso) => formatDateTime(iso);
 
@@ -24,10 +24,10 @@ const alarmType = (type) => alarmTypeLabel(t, type);
 </script>
 
 <template>
-    <div class="kv-glass-panel flex h-full flex-col">
+    <div class="nos-glass-panel flex h-full flex-col">
         <div class="flex items-center justify-between border-b border-white/5 px-5 py-4">
             <div class="flex items-center gap-3">
-                <span class="kv-circle-red">
+                <span class="nos-circle-red">
                     <BellRing class="h-5 w-5" />
                 </span>
                 <h3 class="text-base font-semibold text-white">{{ $t('dashboard.recent_alarms') }}</h3>
@@ -37,33 +37,33 @@ const alarmType = (type) => alarmTypeLabel(t, type);
             </Link>
         </div>
 
-        <div v-if="alarms.length > 0" class="kv-mobile-list">
-            <article v-for="alarm in alarms" :key="alarm.id" class="kv-mobile-card">
-                <div class="kv-mobile-card-header">
+        <div v-if="alarms.length > 0" class="nos-mobile-list">
+            <article v-for="alarm in alarms" :key="alarm.id" class="nos-mobile-card">
+                <div class="nos-mobile-card-header">
                     <div class="min-w-0">
-                        <h4 class="kv-mobile-card-title">{{ alarmType(alarm.type) }}</h4>
-                        <p class="kv-mobile-card-subtitle">{{ alarm.olt_name ?? $t('dashboard.unknown_device') }}</p>
+                        <h4 class="nos-mobile-card-title">{{ alarmType(alarm.type) }}</h4>
+                        <p class="nos-mobile-card-subtitle">{{ alarm.olt_name ?? $t('dashboard.unknown_device') }}</p>
                     </div>
                     <span :class="severityClass(alarm.severity)">{{ alarm.severity }}</span>
                 </div>
-                <div class="kv-mobile-fields">
-                    <div class="kv-mobile-field">
-                        <span class="kv-mobile-label">{{ $t('dashboard.col_time') }}</span>
-                        <span class="kv-mobile-value">{{ formatTime(alarm.last_seen_at) }}</span>
+                <div class="nos-mobile-fields">
+                    <div class="nos-mobile-field">
+                        <span class="nos-mobile-label">{{ $t('dashboard.col_time') }}</span>
+                        <span class="nos-mobile-value">{{ formatTime(alarm.last_seen_at) }}</span>
                     </div>
-                    <div class="kv-mobile-field">
-                        <span class="kv-mobile-label">{{ $t('dashboard.col_location') }}</span>
-                        <span class="kv-mobile-value">{{ alarm.location ?? '—' }}</span>
+                    <div class="nos-mobile-field">
+                        <span class="nos-mobile-label">{{ $t('dashboard.col_location') }}</span>
+                        <span class="nos-mobile-value">{{ alarm.location ?? '—' }}</span>
                     </div>
-                    <div class="kv-mobile-field">
-                        <span class="kv-mobile-label">{{ $t('dashboard.col_status') }}</span>
-                        <span class="kv-pill-danger">{{ $t('alarms.status_active') }}</span>
+                    <div class="nos-mobile-field">
+                        <span class="nos-mobile-label">{{ $t('dashboard.col_status') }}</span>
+                        <span class="nos-pill-danger">{{ $t('alarms.status_active') }}</span>
                     </div>
                 </div>
             </article>
         </div>
 
-        <div v-if="alarms.length > 0" class="kv-table-desktop">
+        <div v-if="alarms.length > 0" class="nos-table-desktop">
             <table class="w-full min-w-[640px] text-xs">
                 <thead>
                     <tr class="border-b border-white/5 text-left text-[11px] uppercase tracking-wider text-slate-500">
@@ -82,7 +82,7 @@ const alarmType = (type) => alarmTypeLabel(t, type);
                         <td class="px-2 py-3 text-slate-200">{{ alarmType(alarm.type) }}</td>
                         <td class="px-2 py-3 text-slate-300">{{ alarm.olt_name ?? '—' }}</td>
                         <td class="px-2 py-3 text-slate-400">{{ alarm.location ?? '—' }}</td>
-                        <td class="px-5 py-3"><span class="kv-pill-danger">{{ $t('alarms.status_active') }}</span></td>
+                        <td class="px-5 py-3"><span class="nos-pill-danger">{{ $t('alarms.status_active') }}</span></td>
                     </tr>
                 </tbody>
             </table>

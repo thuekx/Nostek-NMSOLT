@@ -111,11 +111,11 @@ const remove = async () => {
         <p v-else class="text-[10px] leading-snug text-slate-500">{{ $t('map.odp_photo_hint') }}</p>
 
         <div class="flex gap-2">
-            <button type="button" class="kv-photo-btn flex-1" :disabled="busy" @click="pick">
+            <button type="button" class="nos-photo-btn flex-1" :disabled="busy" @click="pick">
                 <component :is="odp.photo_url ? Upload : Camera" class="h-3.5 w-3.5" />
                 {{ odp.photo_url ? $t('map.odp_photo_replace') : $t('map.odp_photo_upload') }}
             </button>
-            <button v-if="odp.photo_url" type="button" :title="$t('map.odp_photo_delete_title')" :aria-label="$t('map.odp_photo_delete_title')" class="kv-photo-btn kv-photo-btn--danger" :disabled="busy" @click="remove">
+            <button v-if="odp.photo_url" type="button" :title="$t('map.odp_photo_delete_title')" :aria-label="$t('map.odp_photo_delete_title')" class="nos-photo-btn nos-photo-btn--danger" :disabled="busy" @click="remove">
                 <Trash2 class="h-3.5 w-3.5" />
             </button>
         </div>
@@ -140,38 +140,38 @@ const remove = async () => {
 </template>
 
 <style scoped>
-.kv-photo-btn {
+.nos-photo-btn {
     display: flex;
     align-items: center;
     justify-content: center;
     gap: 0.35rem;
     border-radius: 0.5rem;
-    border: 1px solid rgb(var(--kv-white) / 0.1);
-    background: rgb(var(--kv-white) / 0.04);
+    border: 1px solid rgb(var(--nos-white) / 0.1);
+    background: rgb(var(--nos-white) / 0.04);
     padding: 0.4rem 0.6rem;
     font-size: 0.75rem;
     font-weight: 500;
-    color: rgb(var(--kv-slate-300));
+    color: rgb(var(--nos-slate-300));
     transition: background-color 0.15s, color 0.15s;
 }
 
-.kv-photo-btn:hover:not(:disabled) {
-    background: rgb(var(--kv-white) / 0.08);
-    color: rgb(var(--kv-white));
+.nos-photo-btn:hover:not(:disabled) {
+    background: rgb(var(--nos-white) / 0.08);
+    color: rgb(var(--nos-white));
 }
 
-.kv-photo-btn:disabled {
+.nos-photo-btn:disabled {
     opacity: 0.5;
     cursor: not-allowed;
 }
 
-.kv-photo-btn--danger {
-    color: rgb(var(--kv-red-300));
-    border-color: rgb(var(--kv-red-400) / 0.25);
+.nos-photo-btn--danger {
+    color: rgb(var(--nos-red-300));
+    border-color: rgb(var(--nos-red-400) / 0.25);
 }
 
-.kv-photo-btn--danger:hover:not(:disabled) {
-    background: rgb(var(--kv-red-400) / 0.12);
-    color: rgb(var(--kv-red-200));
+.nos-photo-btn--danger:hover:not(:disabled) {
+    background: rgb(var(--nos-red-400) / 0.12);
+    color: rgb(var(--nos-red-200));
 }
 </style>

@@ -30,6 +30,7 @@ class GlobalSearchReadinessTest extends TestCase
     public function test_mac_only_match_keeps_the_web_navigation_filter(): void
     {
         $olt = $this->olt(1, [['onu_id' => 7, 'mac' => 'AA:BB:CC:DD:EE:FF', 'name' => '']]);
+        $olt->update(['vendor' => 'C-Data EPON']);
         $user = User::factory()->create();
         $response = $this->actingAs($user)->getJson('/dashboard/search?q=AA:BB');
         $response->assertOk()->assertJsonPath('results.0.type', 'onu');

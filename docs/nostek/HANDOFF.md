@@ -59,11 +59,14 @@ See [NMS-07-12-GATED-READINESS.md](NMS-07-12-GATED-READINESS.md) for exact gates
 
 ## Current source audit (22 October 2026)
 
-GitHub recheck: PR #1 is merged (`63f4b77`); PR #19 is already merged as
+GitHub recheck: PR #1 is merged (`63f4b77`), with successful exact-head run
+`39278668150` on `b20149c`; PR #19 is already merged as
 `62b414f`, so the former instruction to merge it is obsolete. No open PR was
 present at the initial recheck. Latest existing CI run `39652098876` passed all
 five jobs on PR #19 head `18b4735`; main has the identical tree
 `44c11c13e9988485bd106a77a6075efbc3b87383`, but no separate main-SHA run.
+
+NMS-07 review branch: `work/nms-07-search-audit`, PR #20 (merge not authorized).
 
 NMS-07 source patch: bounded lazy search snapshots, preserved MAC-only deep-link
 filter, validated search inputs and synthetic regression tests. See

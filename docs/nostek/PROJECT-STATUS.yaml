@@ -40,6 +40,7 @@ deferred:
 latest_evidence:
   checkpoint_recheck:
     pr1: "MERGED as 63f4b77b002fa5ef9b1189d4a4c982c0246a1354"
+    pr1_ci: "39278668150 SUCCESS on b20149cad1aff4087108f7dc4cd1433da307495b"
     pr19: "MERGED as 62b414f04ac4b5e4f024669e431be29f4d0845d1"
     latest_existing_ci: "39652098876 SUCCESS on 18b473545884ddf49d65847827e3473da3d02744"
     main_ci: "No main-SHA run; tree identical to tested PR19 head"
@@ -51,6 +52,8 @@ latest_evidence:
     status: IN_PROGRESS
     audit: docs/nostek/NMS-07-FEATURE-MATRIX.md
     inventory: docs/nostek/NMS-07-SOURCE-INVENTORY.json
+    review_pr: https://github.com/thuekx/Nostek-NMSOLT/pull/20
+    branch: work/nms-07-search-audit
     source_patch: "Bound search snapshots, preserve MAC navigation, validate search inputs; regression tests added."
     remaining: "UI journeys/write visibility, measured performance, unified ACS lifecycle package, exact-head CI and review."
     source_ci: "PENDING on review branch; no new verification claimed."

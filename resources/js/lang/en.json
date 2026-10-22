@@ -21,6 +21,8 @@
         "group_watch": "Monitoring"
     },
     "common": {
+        "stale": "Stale",
+        "polling_off": "Polling off",
         "clear_search": "Clear search",
         "profile": "Profile",
         "logout": "Log out",
@@ -187,6 +189,10 @@
         "status_warning": "Warning",
         "status_up": "Up",
         "status_down": "Down",
+        "status_stale": "Stale",
+        "status_unknown": "Unknown",
+        "status_paused": "Polling off",
+        "status_not_fresh": "Not current",
         "severity_critical": "Critical",
         "severity_major": "Major",
         "online_share": "{pct}% of all ONUs",

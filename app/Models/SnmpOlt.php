@@ -5,6 +5,7 @@ namespace App\Models;
 use App\Models\Concerns\Auditable;
 use App\Models\Scopes\DemoScope;
 use App\Models\Scopes\PartnerOltScope;
+use App\Support\Freshness;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -178,6 +179,16 @@ class SnmpOlt extends Model
         }
 
         return $this->last_rx_polled_at->lte(now()->subMinutes($this->rxPollIntervalMinutes()));
+    }
+
+    /**
+     * Freshness of the cached poll snapshot (NMS-07-D-2); see {@see Freshness}.
+     *
+     * @return array{state: string, at: ?string, age_seconds: ?int, threshold_seconds: int}
+     */
+    public function freshness(): array
+    {
+        return Freshness::of($this->last_polled_at, $this->pollIntervalMinutes(), (bool) ($this->polling_enabled ?? true));
     }
 
     public function pollIntervalMinutes(): int

@@ -49,7 +49,8 @@ this inventory does not claim that every user journey works.
 ## Completion checklist
 
 - [ ] Every named route and page journey exercised using isolated synthetic data.
-- [ ] All high-risk UI controls accurately reflect the installation write gate.
+- [ ] All high-risk UI controls accurately reflect the installation write gate. (NMS-07-D-1 source PASS: banner, guard, 56 locked controls, drift test.)
+- [ ] Stale, partial and permission states verified. (NMS-07-D-2a: stale OLT data never green on dashboard, OLT list, SmartOLT pages; D-2b open.)
 - [ ] Large ONU/alarm/search/polling latency, query and memory budgets measured.
 - [ ] Unified base/ACS installer, health, backup, upgrade and rollback verified. (Source + synthetic runtime PASS in NMS-07-A; real app image on a host still open.)
 - [x] Search PR #20: exact-head full CI passed and owner-approved merge completed. This does not verify whole-phase UI/performance/package criteria.

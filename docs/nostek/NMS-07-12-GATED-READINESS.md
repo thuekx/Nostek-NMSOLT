@@ -25,6 +25,10 @@ Control Center conditions (Nostek-AI baseline v1, 2026-10-22): OLT rows carry `o
 never from request parameters; a token bound to site A reading an OLT of site B by a
 valid id returns 403/404 (negative contract test); vendor/support access follows the
 Control Center support contract (ADR-14).
+Freshness (NMS-07-D-2a finding): the legacy API v1 `/summary` and `/public/status` count an
+OLT whose last poll is older than 3 poll intervals as online. The NMS-08 API must use
+`App\Support\Freshness` and return the state (FRESH / STALE / UNKNOWN / PAUSED), the
+observed-at time and the age; a stale OLT and its ONUs never count as online or offline.
 
 ## NMS-09 — Maung /nosteknmsolt thin consumer
 

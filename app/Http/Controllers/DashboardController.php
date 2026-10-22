@@ -18,7 +18,7 @@ class DashboardController extends Controller
             : '24h';
 
         return Inertia::render('Dashboard', [
-            'cards' => $this->stats->statCards(),
+            'cards' => $this->stats->statCards(freshOnly: true),
             'polling_trend' => $this->stats->pollingTrend($range),
             'olt_inventory' => $this->stats->oltInventoryList(),
             'olts' => $this->stats->oltStatuses(),

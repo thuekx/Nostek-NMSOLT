@@ -76,6 +76,10 @@ Branch `step/nms-07-a-unified-package`: core/with-acs/platform Compose, `scripts
 
 Branch `step/nms-07-b-data-growth`: retention command `history:prune`, duplicate RX index dropped, dedicated poll worker pool. See [NMS-07-DATA-GROWTH.md](NMS-07-DATA-GROWTH.md).
 
+## NMS-07-D-2a status honesty checkpoint
+
+Branch `step/nms-07-d2-stale-states`: stale (> 3× poll interval), unknown and paused OLT data is never shown green on the dashboard, OLT list, detail or port page. NMS-08 must add freshness to API v1 (summary/public status still count stale OLTs as online). See [NMS-07-UI-JOURNEY.md](NMS-07-UI-JOURNEY.md).
+
 ## NMS-07-D-1 write-gate visibility checkpoint
 
 Branch `step/nms-07-d-ui-journey`: read-only banner, request guard and locked controls driven by the server's gated-route table; drift test. See [NMS-07-UI-JOURNEY.md](NMS-07-UI-JOURNEY.md).

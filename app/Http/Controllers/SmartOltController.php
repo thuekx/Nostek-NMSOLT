@@ -39,6 +39,7 @@ use App\Services\ZteRemoteOnuService;
 use App\Services\ZteTr069BulkService;
 use App\Support\AuditLogger;
 use App\Support\CliOutputSanitizer;
+use App\Support\Freshness;
 use App\Support\SmartOltSupport;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
@@ -2624,6 +2625,7 @@ class SmartOltController extends Controller
             'last_tested_at' => $olt->last_tested_at?->toIso8601String(),
             'last_polled_at' => $olt->last_polled_at?->toIso8601String(),
             'last_rx_polled_at' => $olt->last_rx_polled_at?->toIso8601String(),
+            'freshness' => $olt->freshness(),
             'created_at' => $olt->created_at?->toIso8601String(),
             'updated_at' => $olt->updated_at?->toIso8601String(),
         ];
@@ -2698,6 +2700,7 @@ class SmartOltController extends Controller
             'ports' => $ports,
             'error' => data_get($snapshot, 'error'),
             'last_tested_at' => $olt->last_tested_at?->toIso8601String(),
+            'freshness' => $olt->freshness(),
         ];
     }
 
@@ -2726,6 +2729,8 @@ class SmartOltController extends Controller
             'latency_ms' => data_get($snapshot, 'latency_ms'),
             'error' => data_get($snapshot, 'error'),
             'refreshed_at' => data_get($snapshot, 'refreshed_at'),
+            // NMS-07-D-2: age of this port's data against the OLT poll interval.
+            'freshness' => Freshness::of(data_get($snapshot, 'refreshed_at'), $olt->pollIntervalMinutes(), (bool) $olt->polling_enabled),
         ];
     }
 

@@ -55,6 +55,15 @@ const formatDate = (value) => formatDateTime(value);
 
 const formatUptime = (timeticks) => formatSnmpUptime(timeticks);
 
+
+const oltState = computed(() => {
+    if (!props.snapshot?.ok) return { key: 'unknown', label: 'common.unknown', text: 'text-slate-400' };
+    const state = props.snapshot.freshness?.state ?? 'unknown';
+    if (state === 'fresh') return { key: 'fresh', label: 'common.online', text: 'text-emerald-400' };
+    if (state === 'stale') return { key: 'stale', label: 'common.stale', text: 'text-amber-300' };
+    if (state === 'paused') return { key: 'paused', label: 'common.polling_off', text: 'text-slate-400' };
+    return { key: 'unknown', label: 'common.unknown', text: 'text-slate-400' };
+});
 </script>
 
 <template>
@@ -117,9 +126,9 @@ const formatUptime = (timeticks) => formatSnmpUptime(timeticks);
                 <div class="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
                     <div class="nos-stat">
                         <p class="text-xs font-medium uppercase tracking-wider text-slate-500">{{ $t('common.status') }}</p>
-                        <p class="mt-3 text-2xl font-bold"
-                            :class="snapshot.ok ? 'text-emerald-400' : 'text-slate-400'">
-                            {{ snapshot.ok ? $t('common.online') : $t('common.unknown') }}
+                        <!-- NMS-07-D-2: green only while the snapshot is fresh -->
+                        <p class="mt-3 text-2xl font-bold" :class="oltState.text" :data-state="oltState.key">
+                            {{ $t(oltState.label) }}
                         </p>
                     </div>
                     <div class="nos-stat">

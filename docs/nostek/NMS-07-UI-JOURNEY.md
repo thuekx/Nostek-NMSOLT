@@ -61,17 +61,73 @@ Every Laravel run in the workspace reported about 680 warnings. The cause is
 the suite shows 813 passed and 0 warnings. This is not a product defect; the workspace
 note is recorded here.
 
-## Next (D-2, E2)
+## D-2a — status honesty for OLT state (stale is never green)
 
-1. **Stale, partial and unavailable states.** For each journey, check what the operator
+**Branch:** `step/nms-07-d2-stale-states` (on top of D-1).
+
+**Finding.** Every OLT status came from the last poll snapshot, with no notion of age. An
+OLT whose poller had stopped hours ago still showed:
+
+- "Up" on the dashboard;
+- "Online 2 / Offline 0" in the dashboard cards;
+- "OK" in green in the OLT list;
+- "Online" on the OLT detail page;
+- "Available" in green on the PON-port page;
+- its ONUs counted as online.
+
+**Rule.** `App\Support\Freshness` uses the same rule as the Control Center:
+
+| State | When |
+| --- | --- |
+| STALE | the snapshot is older than 3 × the OLT poll interval (15 min at 5 min) |
+| UNKNOWN | never polled |
+| PAUSED | polling off |
+| FRESH | otherwise |
+
+Only FRESH may be green.
+
+| Screen | Now |
+| --- | --- |
+| Dashboard OLT inventory | pill Up/Down only when fresh; otherwise Stale (amber) or Unknown/Polling off (grey); "Not current N" total |
+| Dashboard cards | OLT and ONU online/offline count fresh OLTs only; "Not current" shows the rest |
+| OLT list (4 layouts) | "OK" green only when fresh; "OK · Stale" amber, "OK · Polling off" / "OK · Unknown" grey |
+| OLT detail | Online (fresh), Stale, Polling off or Unknown |
+| PON-port ONU page | "Available" green only when the port data is fresh; relative age under the last refresh time |
+
+**Kept on purpose.** API v1 `/summary` and `/public/status` and the Telegram summary keep
+the legacy counts. Changing a consumer-visible contract silently is worse. NMS-08
+(versioned API with freshness metadata) gets this as a requirement:
+"stale OLTs must not count as online".
+
+**Evidence.**
+
+- `tests/Feature/FreshnessTest.php`, 4 tests:
+  - the boundary at exactly 3 intervals;
+  - unknown, paused and invalid dates;
+  - dashboard list and cards;
+  - the legacy counts kept for the API;
+  - freshness on the OLT list, detail, port and dashboard pages.
+- `tests/js/freshness.spec.js`: the status mapping, and the inventory list rendering a stale OLT as Stale.
+- The `DashboardTest` fixture gained `last_polled_at` (an OLT never polled is not "Up").
+- Real browser with two demo OLTs, polled 1 minute and 5 hours ago:
+  - dashboard pills Up and Stale;
+  - cards "Online 1 · Offline 0 · Not current 1";
+  - OLT list "OK" and "OK · Stale".
+- Laravel 817 passed, Vitest 71 passed, `vite build` passes.
+
+## Next (D-2b, E2)
+
+1. **Remaining stale, partial and unavailable states.** For each journey, check what the operator
    sees when the snapshot is old, a poll half failed, or ACS/SNMP is down:
-   - dashboard → OLT → PON → ONU detail;
+   - ONU monitor rows of a stale OLT;
+   - ONU detail;
    - ONU ↔ ACS;
    - alarms;
-   - map;
+   - map pins;
    - search.
 
-   Status honesty rule: stale or unknown is never shown green.
+   Status honesty rule: stale or unknown is never shown green. The C-Data and HiOSO pages
+   have their own status cards, to be checked the same way.
 2. **Permission states.** Check each role's view against `auth.can`: admin, operator,
    partner, demo. Partner isolation is already tested server-side; the check is that the
    UI hides or explains, rather than failing with a 403.

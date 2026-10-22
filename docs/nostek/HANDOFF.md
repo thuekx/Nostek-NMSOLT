@@ -45,6 +45,13 @@ approval. Source-readiness PASS is not runtime verification.
   squash merge `62b414f04ac4b5e4f024669e431be29f4d0845d1`. The provider-centric
   roadmap and bundled-GenieACS product direction are canonical.
 
+- **PR #21:** exact head
+  `6bc53a374e5ed5fc2209fb88dbfe7c105131cb23`, successful
+  [run 39770297399](https://github.com/thuekx/Nostek-NMSOLT/actions/runs/39770297399),
+  squash merge `f43baa3fa0f4959b8513011e01e79a6db8509f51`. Go, Vue,
+  Laravel, Compose, both image builds and the fail-closed Nostek namespace
+  validator passed. The PR branch was deleted.
+
 Raw device identifiers, communities and screenshots containing customer/serial
 data remain outside the public repository.
 
@@ -66,13 +73,9 @@ See [NMS-07-12-GATED-READINESS.md](NMS-07-12-GATED-READINESS.md) for exact gates
 
 ## Exact next action
 
-Complete the NMS-07 identity cleanup and exact-head CI, then continue unified
-GenieACS packaging and the functional/performance matrix. The rename must cover
-the Go source directory, executable, environment handoff, UI CSS/token namespace,
-tests and documentation. Do not modify the retained LICENSE attribution.
+Identity cleanup is complete and merged. Continue NMS-07 with unified GenieACS packaging, unified health/backup/upgrade/rollback, and the functional/performance matrix. Do not modify the retained LICENSE attribution.
 
-For cross-device continuation, use [CLOUD-HANDOFF.md](CLOUD-HANDOFF.md) after
-the active PR is merged.
+For cross-device continuation, use [CLOUD-HANDOFF.md](CLOUD-HANDOFF.md) from current main.
 
 ## New-session prompt
 

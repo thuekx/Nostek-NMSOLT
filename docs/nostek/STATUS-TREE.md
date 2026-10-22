@@ -18,7 +18,7 @@ Nostek-NMSOLT — STANDALONE NETWORK PLATFORM / API PROVIDER
 |
 +-- NMS-07 [IN PROGRESS] NMSOLT product stabilization
 |   +-- canonical identity: Nostek-NMSOLT; short name: Nostek-NMS
-|   +-- inherited namespace and poller identity are being standardized as nos-*
+|   +-- PASS: PR #21 / run 39770297399 / merge f43baa3; nos-* identity enforced
 |   +-- audit functions, screens, read paths and performance
 |   +-- repair misleading/broken behavior and add regression evidence
 +-- NMS-08 [BLOCKED] API v1 read-only + OpenAPI
@@ -45,7 +45,7 @@ Nostek-NMSOLT — STANDALONE NETWORK PLATFORM / API PROVIDER
 ## Durable evidence
 
 - Verified runtime chain: PRs [#1](https://github.com/thuekx/Nostek-NMSOLT/pull/1) through
-  [#18](https://github.com/thuekx/Nostek-NMSOLT/pull/18), with phase-specific references in
+  [#21](https://github.com/thuekx/Nostek-NMSOLT/pull/21), with phase-specific references in
   [HANDOFF.md](HANDOFF.md).
 - Readiness details: [NMS-04](NMS-04-STAGING-READINESS.md),
   [NMS-05](NMS-05-GENIEACS-LAB-MATRIX.md),

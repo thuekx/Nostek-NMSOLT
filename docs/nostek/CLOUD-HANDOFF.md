@@ -1,6 +1,6 @@
 # Nostek-NMSOLT — Codex Cloud handoff
 
-Use this handoff only after the active NMS-07 pull request is merged. A Cloud
+This handoff starts from the completed NMS-07 identity checkpoint on GitHub main. A Cloud
 task starts from GitHub; it cannot see unpushed files, the Maung VM, private
 management networks or credentials stored on the original PC.
 
@@ -15,8 +15,8 @@ management networks or credentials stored on the original PC.
 ## Canonical context
 
 - NMS-00 through NMS-06 are VERIFIED.
-- PR #19 merged the provider-centric roadmap as
-  `62b414f04ac4b5e4f024669e431be29f4d0845d1`.
+- PR #19 merged the provider-centric roadmap as `62b414f04ac4b5e4f024669e431be29f4d0845d1`.
+- PR #21 passed all five gates in run 39770297399 and merged the canonical identity/namespace as `f43baa3fa0f4959b8513011e01e79a6db8509f51`.
 - Nostek-NMSOLT is the standalone network platform and data/API provider.
 - Maung and Nostek-AI are consumers. A future Maung `/nosteknmsolt` page is a
   thin API/settings/quick-view surface, not a polling or database layer.
@@ -31,9 +31,8 @@ management networks or credentials stored on the original PC.
 
 NMS-07 is IN PROGRESS:
 
-1. finish and verify product identity cleanup:
-   `Nostek-NMSOLT`, short name `Nostek-NMS`, internal `nos-*` namespace and
-   `nos-snmp-poller`;
+1. preserve the completed identity standard: `Nostek-NMSOLT`, short name
+   `Nostek-NMS`, internal `nos-*` namespace and `nos-snmp-poller`;
 2. preserve the existing LICENSE attribution required by the inherited MIT code;
 3. unify the full installation path for app/PostgreSQL/Redis plus
    GenieACS/MongoDB with private internal services and explicitly bound CWMP;

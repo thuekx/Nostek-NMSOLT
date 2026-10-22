@@ -176,10 +176,18 @@ Branch `step/nms-07-e2-onu-monitor-scope` (on top of D-2c). The ONU monitor read
 only the selected OLT's ONUs (partial reload on change). One 3,400-ONU OLT: 158 ms, 1.9 MB.
 Details: [NMS-07-PERFORMANCE.md](NMS-07-PERFORMANCE.md).
 
+## NMS-07-E3 alarm page, alarm engine and RX charts (2026-10-22)
+
+Branch `step/nms-07-e3-alarm-rx-perf` (on top of E2). Harness `tests/perf/run-ops-bench.sh`.
+At 200,000 alarms the alarm page went from 263 to 74 ms (active) and 454 to 137 ms (all):
+the OLT snapshot was decoded twice per alarm row, and no index served status + newest
+first. RX charts take 10–31 ms for every range. Details:
+[NMS-07-PERFORMANCE.md](NMS-07-PERFORMANCE.md).
+
 ## Exact next action
 
-Refresh GitHub. Check the NMS-07-A, B, C/E, B2, D-1, D-2a, D-2b, D-2c and E2 PRs (exact-head CI, owner
-merge). Then continue the rest of E (alarm, optical, queue, poller on synthetic data). Do not
+Refresh GitHub. Check the NMS-07-A, B, C/E, B2, D-1, D-2a, D-2b, D-2c, E2 and E3 PRs (exact-head CI, owner
+merge). Then continue the rest of E (queue latency, Go poller throughput, on synthetic data). Do not
 modify the retained LICENSE attribution.
 
 For cross-device continuation, use the post-merge prompt in [CLOUD-HANDOFF.md](CLOUD-HANDOFF.md). PR #20 search fixes are already in main; do not recreate them.

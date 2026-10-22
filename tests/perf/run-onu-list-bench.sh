@@ -14,7 +14,7 @@ IMAGE="postgres:16-alpine@sha256:deb28ee471183cb0c303113dac9b2433c51eeeeb678def7
 TMP="$(mktemp -d)"
 chmod 700 "$TMP"
 
-cleanup() { docker rm -f "$NAME" >/dev/null 2>&1 || true; rm -rf "$TMP"; }
+cleanup() { docker rm -fv "$NAME" >/dev/null 2>&1 || true; rm -rf "$TMP"; }
 trap cleanup EXIT
 
 # Generated per run, kept in a 0600 file, never on a command line.
@@ -25,8 +25,12 @@ printf 'APP_KEY=base64:%s\nDB_CONNECTION=pgsql\nDB_HOST=127.0.0.1\nDB_PORT=%s\nD
   "$(head -c 32 /dev/urandom | base64)" "$PORT" "$PW" >"$TMP/app.env"
 
 docker run -d --name "$NAME" --env-file "$TMP/pg.env" -p "127.0.0.1:${PORT}:5432" "$IMAGE" >/dev/null
-for _ in $(seq 1 60); do
-  docker exec "$NAME" pg_isready -U postgres -d nms >/dev/null 2>&1 && break
+# The image starts a temporary server for initdb, then restarts: pg_isready alone can answer
+# during the first one (seen as "server closed the connection unexpectedly"). Wait for the
+# second "ready" line.
+for _ in $(seq 1 90); do
+  [ "$(docker logs "$NAME" 2>&1 | grep -c 'ready to accept connections')" -ge 2 ] &&
+    docker exec "$NAME" pg_isready -U postgres -d nms >/dev/null 2>&1 && break
   sleep 1
 done
 

@@ -2,9 +2,12 @@
 
 namespace Tests\Feature;
 
+use App\Models\OnuMapPin;
 use App\Models\SnmpOlt;
 use App\Models\User;
 use App\Services\Dashboard\DashboardStatsService;
+use App\Services\Map\OnuMapPayloadService;
+use App\Services\OnuInventoryService;
 use App\Support\Freshness;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
@@ -113,5 +116,73 @@ class FreshnessTest extends TestCase
         $this->actingAs($admin)->get(route('dashboard'))
             ->assertOk()
             ->assertInertia(fn ($page) => $page->where('olt_inventory.0.freshness.state', 'stale')->where('olt_inventory.0.up', 0));
+    }
+
+    public function test_onu_rows_and_map_pins_of_a_stale_olt_are_marked_stale(): void
+    {
+        $fresh = $this->olt(['last_polled_at' => now()->subMinutes(2)]);
+        $stale = $this->olt(['last_polled_at' => now()->subHours(2)]);
+        foreach ([$fresh, $stale] as $olt) {
+            OnuMapPin::create([
+                'snmp_olt_id' => $olt->id, 'slot' => 1, 'port' => 1, 'onu_id' => 1,
+                'latitude' => -6.7, 'longitude' => 111.0,
+            ]);
+        }
+        $admin = User::factory()->admin()->create();
+
+        $rows = collect(app(OnuInventoryService::class)->collect()['onus'])->keyBy('olt_id');
+        $this->assertFalse($rows[$fresh->id]['stale']);
+        $this->assertTrue($rows[$stale->id]['stale']);
+        $this->assertTrue($rows[$stale->id]['online'], 'the last known value is kept, only marked');
+
+        $this->actingAs($admin)->get(route('monitoring.onu'))
+            ->assertOk()
+            ->assertInertia(fn ($page) => $page
+                ->where('olts.0.freshness.state', 'fresh')
+                ->where('olts.1.freshness.state', 'stale')
+                ->where('onus.1.stale', true));
+
+        $this->actingAs($admin)->get(route('map.index'))
+            ->assertOk()
+            ->assertInertia(fn ($page) => $page->has('pins', 2, fn ($pin) => $pin
+                ->where('stale', fn ($v) => is_bool($v))
+                ->etc()));
+
+        $pins = collect(app(OnuMapPayloadService::class)->pins(SnmpOlt::query()->get()))->keyBy('snmp_olt_id');
+        $this->assertFalse($pins[$fresh->id]['stale']);
+        $this->assertTrue($pins[$stale->id]['stale']);
+    }
+
+    public function test_alarm_page_names_olts_whose_alarms_are_not_evaluated(): void
+    {
+        $this->olt(['name' => 'OLT-A', 'last_polled_at' => now()->subMinutes(2)]);
+        $this->olt(['name' => 'OLT-B', 'last_polled_at' => now()->subHours(5)]);
+        $this->olt(['name' => 'OLT-C', 'last_polled_at' => now(), 'polling_enabled' => false]);
+
+        $this->actingAs(User::factory()->admin()->create())->get(route('alarms.index'))
+            ->assertOk()
+            ->assertInertia(fn ($page) => $page
+                ->has('not_evaluated', 2)
+                ->where('not_evaluated.0.name', 'OLT-B')
+                ->where('not_evaluated.0.freshness.state', 'stale')
+                ->where('not_evaluated.1.name', 'OLT-C')
+                ->where('not_evaluated.1.freshness.state', 'paused'));
+    }
+
+    public function test_cdata_and_hioso_pages_carry_olt_freshness(): void
+    {
+        $admin = User::factory()->admin()->create();
+        foreach (['C-Data GPON 34592' => 'cdata-olt', 'HiOSO EPON' => 'hioso-olt'] as $vendor => $prefix) {
+            // A recent onu_scanned_at keeps the page from scanning; the poll itself is old.
+            $olt = $this->olt([
+                'vendor' => $vendor,
+                'last_polled_at' => now()->subHours(4),
+                'last_test_result' => ['ok' => true, 'onu_scanned_at' => now()->toIso8601String(), 'port_onus' => []],
+            ]);
+
+            $this->actingAs($admin)->get(route("{$prefix}.detail", $olt))
+                ->assertOk()
+                ->assertInertia(fn ($page) => $page->where('olt.freshness.state', 'stale'));
+        }
     }
 }

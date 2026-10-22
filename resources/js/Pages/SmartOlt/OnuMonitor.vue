@@ -5,9 +5,11 @@ import IconButton from '@/Components/IconButton.vue';
 import PrimaryButton from '@/Components/PrimaryButton.vue';
 import ClientPagination from '@/Components/Shell/ClientPagination.vue';
 import FilterCard from '@/Components/Shell/FilterCard.vue';
+import DataNotCurrent from '@/Components/Shell/DataNotCurrent.vue';
 import ListSkeleton from '@/Components/Shell/ListSkeleton.vue';
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
 import { formatDateTime } from '@/lib/datetime';
+import { isFresh } from '@/lib/freshness';
 import { lastDownCauseLabel, onuPrimaryLabel, onuSecondaryLabel, phaseStateLabel } from '@/lib/onu';
 import { usePagination } from '@/Composables/usePagination';
 import { rxBadgeClass, rxLevel } from '@/Composables/useRxLevel';
@@ -57,6 +59,11 @@ const canUseAcs = computed(() => Boolean(page.props.auth?.can?.manage_acs));
 const scanning = ref(false);
 
 const hasOlt = computed(() => oltFilter.value !== '');
+
+// NMS-07-D-2b: when the selected OLT is not fresh, every ONU status on this page is the
+// last known value. Nothing is shown green (or red) as if it were live.
+const selectedOlt = computed(() => (hasOlt.value ? props.olts.find((o) => o.id === oltFilter.value) ?? null : null));
+const oltFresh = computed(() => isFresh(selectedOlt.value?.freshness));
 
 onMounted(() => {
     const param = new URLSearchParams(window.location.search).get('olt_id');
@@ -200,6 +207,7 @@ const portOnuHref = (onu) => {
 const formatDate = (value) => formatDateTime(value);
 
 const phaseClass = (onu) => {
+    if (!oltFresh.value) return 'text-slate-400';
     if (onu.online) return 'text-emerald-400';
     if (onu.phase_state === 'LOS') return 'text-red-300';
     if (onu.phase_state === 'DyingGasp') return 'text-amber-300';
@@ -207,6 +215,7 @@ const phaseClass = (onu) => {
 };
 
 const phaseDotClass = (onu) => {
+    if (!oltFresh.value) return 'bg-slate-500';
     if (onu.online) return 'bg-emerald-500';
     if (onu.phase_state === 'LOS') return 'bg-red-500';
     if (onu.phase_state === 'DyingGasp') return 'bg-amber-500';
@@ -317,6 +326,8 @@ const phaseDotClass = (onu) => {
                 </div>
 
                 <template v-else>
+                <!-- NMS-07-D-2b: data of a non-fresh OLT is the last known state -->
+                <DataNotCurrent :freshness="selectedOlt?.freshness ?? null" />
                 <!-- Stat cards -->
                 <div class="grid gap-4 sm:grid-cols-2 md:grid-cols-4">
                     <div class="nos-stat">
@@ -326,7 +337,7 @@ const phaseDotClass = (onu) => {
                     <div class="nos-stat">
                         <p class="text-xs font-medium uppercase tracking-wider text-slate-500">{{ $t('onumonitor.stat_online') }}</p>
                         <div class="mt-3 flex items-end gap-2">
-                            <p class="text-2xl font-bold text-emerald-400">{{ stats.online }}</p>
+                            <p class="text-2xl font-bold" :class="oltFresh ? 'text-emerald-400' : 'text-slate-400'">{{ stats.online }}</p>
                             <p class="mb-0.5 text-sm text-slate-400">/ {{ stats.total }}</p>
                         </div>
                     </div>

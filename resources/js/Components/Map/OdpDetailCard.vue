@@ -30,7 +30,7 @@ const { confirmState, confirm, handleConfirm, handleCancel } = useConfirm();
 const busy = ref(false);
 
 const onus = computed(() => props.odp.onus ?? []);
-const onlineCount = computed(() => onus.value.filter((o) => o.online).length);
+const onlineCount = computed(() => onus.value.filter((o) => o.online && !o.stale).length);
 // Warna ODP mewarnai aksen kartu (titik judul, chip jumlah ONU, bingkai) supaya kartu
 // dan pin-nya di peta terbaca sebagai satu kesatuan.
 const color = computed(() => odpColor(props.odp));
@@ -146,7 +146,7 @@ const deleteOdp = async () => {
                     >{{ onu.name || onu.interface || `ONU #${onu.onu_id}` }}</span>
                     <span class="block truncate text-[10px] text-slate-500">{{ onu.serial_number || onu.interface || '—' }}</span>
                 </span>
-                <component :is="onu.online ? Wifi : WifiOff" class="mt-0.5 h-3.5 w-3.5 shrink-0" :class="onu.online ? 'text-emerald-400' : 'text-red-400'" />
+                <component :is="onu.online ? Wifi : WifiOff" class="mt-0.5 h-3.5 w-3.5 shrink-0" :class="onu.stale ? 'text-slate-400' : onu.online ? 'text-emerald-400' : 'text-red-400'" :data-state="onu.stale ? 'stale' : null" />
             </div>
         </div>
         <p v-else class="rounded-lg border border-dashed border-white/10 px-2 py-3 text-center text-[11px] text-slate-500">

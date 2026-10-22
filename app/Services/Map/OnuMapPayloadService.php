@@ -145,6 +145,7 @@ class OnuMapPayloadService
                 'name' => $onu['name'],
                 'customer_name' => $onu['customer_name'],
                 'online' => $onu['online'],
+                'stale' => $onu['stale'],
                 'rx_power_dbm' => $onu['rx_power_dbm'],
                 'rx_power_label' => $onu['rx_power_label'],
             ],
@@ -266,6 +267,8 @@ class OnuMapPayloadService
             'rx_power_dbm' => $live['rx_power_dbm'] ?? null,
             'rx_power_label' => $live['rx_power_label'] ?? null,
             'online' => (bool) ($live['online'] ?? false),
+            // NMS-07-D-2b: OLT data not fresh = last known state; the map greys the pin.
+            'stale' => (bool) ($live['stale'] ?? false),
             // Sebab ONU turun apa adanya dari snapshot (LOS / DyingGasp / OffLine +
             // last-down-cause) — dipakai kartu detail pin untuk membedakan fiber
             // putus dari listrik pelanggan padam. Warna marker tetap hijau/merah.

@@ -91,9 +91,10 @@ cmd/nos-snmp-poller, bin/nos-snmp-poller and required MIT LICENSE attribution.
 
 Continue NMS-07: check the A (unified package), B (data growth) and C/E (ONU read path,
 step/nms-07-c-perf-matrix), B2 (daily RX rollup, step/nms-07-b2-rx-daily) and D-1
-(write-gate visibility, step/nms-07-d-ui-journey) and D-2a (status honesty,
-step/nms-07-d2-stale-states) PRs first. Then D-2b UI journeys,
-stale/partial/unavailable/permission states, write-gate visibility, E2 server-side paging of
+(write-gate visibility, step/nms-07-d-ui-journey) D-2a (status honesty,
+step/nms-07-d2-stale-states) and D-2b (stale ONU/map/alarm states,
+step/nms-07-d2b-onu-states) PRs first. Then D-2c UI journeys,
+partial/unavailable/permission states, write-gate visibility, E2 server-side paging of
 the ONU monitor/API list, and the rest of E (alarm/optical/queue/poller/retention), measured
 with tests/perf/run-onu-list-bench.sh style harnesses. The onu_state table was measured
 and not adopted (NMS-07-PERFORMANCE.md); do not re-add it without new evidence.

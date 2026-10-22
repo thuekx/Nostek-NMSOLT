@@ -120,9 +120,9 @@ const deletePin = async () => {
 
         <!-- Status & RX -->
         <div class="flex flex-wrap items-center gap-1.5">
-            <span class="inline-flex items-center gap-1 rounded-full px-2 py-0.5 text-[11px] font-semibold" :class="pin.online ? 'bg-emerald-500/15 text-emerald-300 ring-1 ring-emerald-500/30' : 'bg-slate-800/60 text-slate-400 ring-1 ring-slate-500/30'">
+            <span class="inline-flex items-center gap-1 rounded-full px-2 py-0.5 text-[11px] font-semibold" :data-state="pin.stale ? 'stale' : null" :class="pin.stale ? 'bg-amber-500/10 text-amber-300 ring-1 ring-amber-500/30' : pin.online ? 'bg-emerald-500/15 text-emerald-300 ring-1 ring-emerald-500/30' : 'bg-slate-800/60 text-slate-400 ring-1 ring-slate-500/30'">
                 <component :is="pin.online ? Wifi : WifiOff" class="h-3 w-3" />
-                {{ pin.online ? $t('common.online') : $t('common.offline') }}
+                {{ pin.online ? $t('common.online') : $t('common.offline') }}<template v-if="pin.stale"> · {{ $t('common.stale') }}</template>
             </span>
             <span class="inline-flex rounded-full px-2 py-0.5 text-[11px] font-semibold" :class="rxBadgeClass(pin.rx_power_dbm)">
                 RX {{ pin.rx_power_label || '—' }}

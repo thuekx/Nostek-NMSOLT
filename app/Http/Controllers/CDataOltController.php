@@ -531,6 +531,8 @@ class CDataOltController extends Controller
             'name' => $olt->name,
             'vendor' => $olt->vendor,
             'ip' => $olt->ip,
+            // NMS-07-D-2b: cached data older than 3 poll intervals is never shown as live.
+            'freshness' => $olt->freshness(),
             'snmp_port' => $olt->snmp_port,
             'snmp_version' => $olt->snmp_version,
             'cli_transport' => $olt->cli_transport,

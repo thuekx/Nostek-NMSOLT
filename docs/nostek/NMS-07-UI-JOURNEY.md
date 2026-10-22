@@ -115,19 +115,39 @@ the legacy counts. Changing a consumer-visible contract silently is worse. NMS-0
   - OLT list "OK" and "OK · Stale".
 - Laravel 817 passed, Vitest 71 passed, `vite build` passes.
 
-## Next (D-2b, E2)
+## D-2b — ONU, map, alarm and vendor pages (stale is never green)
 
-1. **Remaining stale, partial and unavailable states.** For each journey, check what the operator
-   sees when the snapshot is old, a poll half failed, or ACS/SNMP is down:
-   - ONU monitor rows of a stale OLT;
-   - ONU detail;
-   - ONU ↔ ACS;
-   - alarms;
-   - map pins;
-   - search.
+**Branch:** `step/nms-07-d2b-onu-states` (on top of D-2a).
 
-   Status honesty rule: stale or unknown is never shown green. The C-Data and HiOSO pages
-   have their own status cards, to be checked the same way.
+| Journey | Before | After |
+| --- | --- | --- |
+| ONU monitor | rows of a stale OLT showed green "online" dots and a green online count | notice "data not current (state, last poll age)"; dots and the online count are neutral grey |
+| ONU rows (inventory, API v1 `/onus`, map options) | no freshness | each row carries `stale` (additive field; `online` keeps the last known value) |
+| Map | pins and ODP lines of a stale OLT green or red | grey pin and line, legend entry "not current", pin card "Online · Stale", online count excludes stale pins |
+| Alarms | an OLT that is not polled any more has no new alarms, so the page looked healthy | notice naming each OLT whose alarms are not evaluated (stale, unknown, polling off) with the age |
+| C-Data / HiOSO detail and port pages | green online counts and "Available" from any cache age | shared `DataNotCurrent` notice; status card shows the state; online count green only when fresh |
+| ONU detail | live CLI fetch on open; failure shows the error | already honest; no change |
+| Global search | shows no status | nothing to change |
+| ONU ↔ ACS badge | own rule (last inform age, `acs_stale`) | unchanged |
+
+Shared pieces: `resources/js/Components/Shell/DataNotCurrent.vue` (renders nothing when
+fresh), `OnuInventoryService` `stale` per row (memo per OLT), C-Data and HiOSO `olt.freshness`.
+
+### Evidence
+
+- `tests/Feature/FreshnessTest.php`: 3 new tests (ONU rows, ONU monitor props and map pins
+  of a stale OLT; alarm page names stale and paused OLTs; C-Data and HiOSO pages carry
+  freshness).
+- `tests/js/dataNotCurrent.spec.js` (5) and 2 new `PortOnuStats` cases.
+- Real browser, two demo OLTs polled now and 5 hours ago: the ONU monitor shows the notice
+  only for the stale OLT ("Stale, last poll 5 hours ago"), the online count is grey; the
+  alarm page lists "OLT-DEMO-PATI · Stale · 5 hours ago".
+- Laravel 820 passed, Vitest 78 passed, `vite build` passes.
+
+## Next (D-2c, E2)
+
+1. **Partial states.** A poll that half failed (some PON ports refreshed, others not): the
+   port page already shows its own age; the OLT pages should name ports older than the OLT.
 2. **Permission states.** Check each role's view against `auth.can`: admin, operator,
    partner, demo. Partner isolation is already tested server-side; the check is that the
    UI hides or explains, rather than failing with a 403.

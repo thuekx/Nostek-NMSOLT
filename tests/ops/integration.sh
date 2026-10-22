@@ -130,6 +130,32 @@ scenario_with_acs() {
     run acs-init-data 0 -- "${g[@]}" init-data
     run acs-preflight 0 -- "${g[@]}" preflight
     expect_line acs-preflight '^RESULT data_free=PASS'
+    expect_line acs-preflight '^RESULT image_genieacs-cwmp=PASS nmsolt-genieacs:1.2.16-local'
+
+    # start runs --no-build: a fresh host without the local GenieACS image is refused before
+    # compose up, preflight only warns. The image is untagged for this check and put back.
+    docker tag nmsolt-genieacs:1.2.16-local nmsolt-genieacs:opsit-keep
+    docker rmi -f nmsolt-genieacs:1.2.16-local >/dev/null
+    run acs-preflight-no-acs-image 0 -- "${g[@]}" preflight
+    expect_line acs-preflight-no-acs-image '^RESULT image_genieacs-cwmp=WARN nmsolt-genieacs:1.2.16-local not built yet'
+    run acs-start-no-acs-image 1 -- "${s[@]}" start --wait 30
+    expect_line acs-start-no-acs-image '^RESULT image_genieacs-cwmp=FAIL'
+    expect_line acs-start-no-acs-image '^RESULT start=FAIL missing local image; nothing started'
+    docker tag nmsolt-genieacs:opsit-keep nmsolt-genieacs:1.2.16-local
+    docker rmi nmsolt-genieacs:opsit-keep >/dev/null
+    # build (with-acs) builds the GenieACS image too; a docker shim records the compose builds
+    # (a real GenieACS build needs npm registry access).
+    local shim="${WORK}/docker-shim" calls="${WORK}/docker-shim.calls"
+    printf '#!/usr/bin/env bash\ncase " $* " in *" compose "*" build "*) printf "%%s\\n" "$*" >> "%s"; exit 0 ;; esac\nexec docker "$@"\n' "${calls}" > "${shim}"
+    chmod 755 "${shim}"
+    NMSOLT_DOCKER="${shim}" run acs-build 0 -- "${s[@]}" build --tag v1
+    expect_line acs-build '^RESULT build=PASS nmsolt-standin:v1'
+    expect_line acs-build '^RESULT build_acs=PASS'
+    if grep -q ' build app$' "${calls}" && grep -q ' build genieacs-cwmp$' "${calls}"; then
+        pass "build ran compose build for app and genieacs-cwmp"
+    else
+        fail "build did not run both compose builds: $(tr '\n' ';' < "${calls}")"
+    fi
 
     run acs-start 0 -- "${s[@]}" start --wait 240
     run acs-status 0 -- "${s[@]}" status

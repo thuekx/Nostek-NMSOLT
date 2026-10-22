@@ -78,7 +78,7 @@ Branch `step/nms-07-b-data-growth`: retention command `history:prune`, duplicate
 
 ## TRF-1 PON traffic graph checkpoint
 
-Feature track (owner request 2026-10-22, decision PON first, ONT later). Branch `step/trf-1-pon-traffic`: PON port octet counters in the Go poller, per-port rates with hourly/daily rollups, chart on the PON port page. Per-ONT traffic follows (GenieACS WAN counters first). See [TRF-1-PON-TRAFFIC.md](TRF-1-PON-TRAFFIC.md).
+Feature track (owner request 2026-10-22, decision PON first, ONT later). Merged as PR #35: PON port octet counters in the Go poller, per-port rates with hourly/daily rollups, chart on the PON port page. Per-ONT traffic follows (GenieACS WAN counters first). See [TRF-1-PON-TRAFFIC.md](TRF-1-PON-TRAFFIC.md).
 
 ## NMS-07-E4 poller checkpoint
 

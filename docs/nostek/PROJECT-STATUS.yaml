@@ -31,7 +31,7 @@ status:
   NMS-05: VERIFIED
   NMS-06: VERIFIED
   NMS-07: IN_PROGRESS
-  TRF-1: SOURCE_PASS_PENDING_PR
+  TRF-1: SOURCE_PASS_MERGED
   NMS-08: BLOCKED
   NMS-09: BLOCKED
   NMS-10: BLOCKED
@@ -41,7 +41,8 @@ deferred:
   mobile_flutter: "Excluded from initial commit; inherited mobile identity is not approved for distribution."
 latest_evidence:
   TRF-1:
-    status: SOURCE_PASS_PENDING_PR
+    status: SOURCE_PASS_MERGED
+    pr: "#35 merged 2026-10-22 (merge 488f1ed)"
     request: "Owner 2026-10-22: traffic graphs per PON port and per ONT; decision card: PON first, ONT later."
     doc: docs/nostek/TRF-1-PON-TRAFFIC.md
     evidence: "Go poller --include-traffic (GET ifHCIn/OutOctets per GPON port, batches of 20); per-port rates raw 8 d / hourly 100 d / daily 3 y; chart on the PON port page. Laravel 835 passed, vitest 87, Go tests pass. Bench 3,400 ONUs / 54 ports / 20 ms RTT: 2,747 -> 2,753 requests, 71.0 -> 71.6 s. Also fixed: 90d RX chart read the daily rollup."
@@ -105,8 +106,8 @@ environment:
   genieacs_lab: ACTIVE_VERIFIED
   live_olt_write: PROHIBITED_WITHOUT_APPROVAL
 next_action:
-  id: TRF-1-PON-TRAFFIC
-  instruction: "NMS-07 PRs #24-#34 are merged (2026-10-22). Check the TRF-1 PR (step/trf-1-pon-traffic, exact-head CI, owner merge), then per-ONT traffic through GenieACS (parseAcsTrafficMonitor exists, unused). BLOCKED on the owner: real-OLT check of ifHCIn/OutOctets on GPON ports and of max-repetitions 25, the ZTE ONU traffic OID walk. NMS-07 evidence that needs a host stays open: real app image, queue latency under real workers (NET-1). The onu_state table was measured and not adopted (NMS-07-PERFORMANCE.md); do not re-add it without new evidence. Preserve LICENSE attribution and keep device writes disabled."
+  id: TRF-2-ONT-TRAFFIC
+  instruction: "NMS-07 PRs #24-#34 and TRF-1 PR #35 are merged (2026-10-22). Check the NMS-07-A2 PR (step/nms-07-a2-acs-image-build: build makes the GenieACS image, start refuses a missing local image). Next: per-ONT traffic through GenieACS (parseAcsTrafficMonitor exists, unused). BLOCKED on the owner: real-OLT check of ifHCIn/OutOctets on GPON ports and of max-repetitions 25, the ZTE ONU traffic OID walk. NMS-07 evidence that needs a host stays open: real app image, queue latency under real workers (NET-1). The onu_state table was measured and not adopted (NMS-07-PERFORMANCE.md); do not re-add it without new evidence. Preserve LICENSE attribution and keep device writes disabled."
   owner: "executor"
   approval_required: false
 references:

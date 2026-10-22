@@ -45,12 +45,13 @@ Global options:
 
 Commands:
   config-check                      static checks: env keys, write gate, rendered topology
-  preflight                         config-check + Docker, data dir, free space, ports (read-only)
+  preflight                         config-check + Docker, local images, data dir, free space, ports (read-only)
   init-data                         create the data directories (--platform only)
-  start [--wait SEC]                start the stack (no build) and wait until every service is healthy
+  start [--wait SEC]                start the stack (no build; refuses when a locally built image is missing)
+                                    and wait until every service is healthy
   stop                              stop the stack (containers kept, data untouched)
   status                            per-service state and health, app /up, write gate, workers
-  build --tag TAG                   build the app image <NMSOLT_IMAGE_REPO>:TAG
+  build --tag TAG                   build the app image <NMSOLT_IMAGE_REPO>:TAG (with-acs: also the GenieACS image)
   backup --out DIR [--include-raw-rx]
                                     PostgreSQL dump, MongoDB dump (with-acs), app storage
   verify-backup --from DIR          check a backup's manifest checksums
@@ -145,6 +146,36 @@ expected_services() {
     else
         printf '%s\n' app db redis
     fi
+}
+
+# Images of services that carry a build section: they exist only after
+# "nmsolt-ops.sh build" (start/upgrade use --no-build). Prints "service image".
+built_images() {
+    compose config --format json 2>/dev/null | python3 -c '
+import json, sys
+for name, svc in sorted(json.load(sys.stdin).get("services", {}).items()):
+    if svc.get("build") and svc.get("image"):
+        print(name, svc["image"])
+'
+}
+
+# Fails (or warns) per locally built image that is missing; returns 1 when one is missing.
+check_images() { # check_images FAIL|WARN
+    local level="$1" missing=0 svc image list
+    if ! list="$(built_images)"; then
+        result images UNKNOWN "compose config could not be read"
+        return 1
+    fi
+    while read -r svc image; do
+        [ -n "${svc}" ] || continue
+        if "${DOCKER}" image inspect "${image}" >/dev/null 2>&1; then
+            result "image_${svc}" PASS "${image}"
+        else
+            result "image_${svc}" "${level}" "${image} not built yet; run: nmsolt-ops.sh build --tag TAG"
+            missing=1
+        fi
+    done <<< "${list}"
+    return "${missing}"
 }
 
 # --------------------------------------------------------------------------- checks
@@ -613,6 +644,7 @@ cmd_preflight() {
     check_env
     check_render
     check_docker
+    check_images WARN || true
     check_data_dir
     check_ports
 }
@@ -645,6 +677,10 @@ image_repo() {
 
 cmd_start() {
     local wait_s="$1"
+    if ! check_images FAIL; then
+        result start FAIL "missing local image; nothing started"
+        return 0
+    fi
     progress "1/2 start containers"
     if compose up -d --no-build >/dev/null; then
         result start PASS "containers started"
@@ -667,11 +703,23 @@ cmd_stop() {
 cmd_build() {
     local tag="$1"
     [[ "${tag}" =~ ^[A-Za-z0-9._-]{1,64}$ ]] || die "--tag must match [A-Za-z0-9._-]{1,64}"
-    progress "1/1 build app image tag ${tag}"
+    local steps=1
+    [ "${PROFILE}" = "with-acs" ] && steps=2
+    progress "1/${steps} build app image tag ${tag}"
     if IMAGE_TAG="${tag}" compose build app; then
         result build PASS "$(image_repo):${tag}"
     else
         result build FAIL "image build failed"
+        return 0
+    fi
+    [ "${steps}" -eq 2 ] || return 0
+    # The GenieACS image is local-only (pinned 1.2.16 source build) and shared by
+    # the four genieacs-* services; start runs --no-build, so build it here too.
+    progress "2/${steps} build GenieACS image"
+    if compose build genieacs-cwmp; then
+        result build_acs PASS "GenieACS image built"
+    else
+        result build_acs FAIL "GenieACS image build failed"
     fi
 }
 

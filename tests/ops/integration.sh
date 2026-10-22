@@ -139,7 +139,9 @@ scenario_with_acs() {
     expect_line acs-status '^RESULT process_worker=PASS'
 
     # Data lands on the bind mounts, not in Docker volumes.
-    if [ -n "$(ls -A "${data}/pg" 2>/dev/null)" ] && [ -n "$(ls -A "${data}/mongo" 2>/dev/null)" ]; then
+    # Database directories belong to container users (mode 0700): look through a container.
+    if docker run --rm --entrypoint sh -v "${data}:/w:ro" nmsolt-standin:v1 -c \
+        'test -n "$(ls -A /w/pg)" && test -n "$(ls -A /w/mongo)"'; then
         pass "acs data on bind mounts under ${data}"
     else
         fail "acs data dirs empty"

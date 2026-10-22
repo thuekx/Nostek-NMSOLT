@@ -11,6 +11,7 @@ use App\Services\Genieacs\GenieacsMapService;
 use App\Services\Genieacs\GenieacsOnuMatcher;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\Http;
+use Tests\Concerns\SequentialOltHost;
 use Tests\TestCase;
 
 /**
@@ -22,6 +23,7 @@ use Tests\TestCase;
  */
 class GenieacsOnuMatchTest extends TestCase
 {
+    use SequentialOltHost;
     use RefreshDatabase;
 
     private function matcher(): GenieacsOnuMatcher
@@ -37,7 +39,7 @@ class GenieacsOnuMatchTest extends TestCase
         return SnmpOlt::create([
             'name' => $name,
             'vendor' => 'ZTE C320',
-            'ip' => '10.0.0.'.random_int(2, 250),
+            'ip' => '10.0.0.'.$this->nextOltHost(),
             'snmp_port' => 161,
             'snmp_read_community' => 'public',
             'snmp_version' => 'v2c',

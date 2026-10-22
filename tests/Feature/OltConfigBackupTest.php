@@ -11,10 +11,12 @@ use App\Services\ZteCliProvisioningExecutor;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\Bus;
 use Mockery;
+use Tests\Concerns\SequentialOltHost;
 use Tests\TestCase;
 
 class OltConfigBackupTest extends TestCase
 {
+    use SequentialOltHost;
     use RefreshDatabase;
 
     private const CONFIG_A = "!<running-config>\ninterface gpon-olt_1/1/1\n onu 1 type ZTE-F660 sn ZTEGAAAA0001\n exit\n!<end>";
@@ -26,7 +28,7 @@ class OltConfigBackupTest extends TestCase
         return SnmpOlt::create(array_merge([
             'name' => 'PATI-ZTE-C320',
             'vendor' => 'ZTE C320',
-            'ip' => '10.40.0.'.random_int(2, 250),
+            'ip' => '10.40.0.'.$this->nextOltHost(),
             'snmp_port' => 161,
             'snmp_read_community' => 'public',
             'snmp_version' => 'v2c',

@@ -10,10 +10,12 @@ use App\Services\Snmp\OltSnmpClient;
 use App\Services\ZteCliProvisioningExecutor;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use RuntimeException;
+use Tests\Concerns\SequentialOltHost;
 use Tests\TestCase;
 
 class SmartOltHardwareInterfaceTest extends TestCase
 {
+    use SequentialOltHost;
     use RefreshDatabase;
 
     private function makeOlt(array $overrides = []): SnmpOlt
@@ -21,7 +23,7 @@ class SmartOltHardwareInterfaceTest extends TestCase
         return SnmpOlt::create(array_merge([
             'name' => 'thuekx-C300',
             'vendor' => 'ZTE C300',
-            'ip' => '10.30.0.'.random_int(2, 250),
+            'ip' => '10.30.0.'.$this->nextOltHost(),
             'snmp_port' => 161,
             'snmp_read_community' => 'public',
             'snmp_version' => 'v2c',

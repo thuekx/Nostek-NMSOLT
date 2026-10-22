@@ -71,14 +71,37 @@ the numbers so the question is not reopened without new evidence.
    `SmartOltController::onuMonitor` passes the whole `collect()` list to Inertia. That is
    2.4 MB at 4,500 ONUs and 27.6 MB at 51,000, built in 1.7 s with 266 MB of the 512 MB
    `memory_limit`. Around 100,000 ONUs the page would hit the memory limit. The fix is
-   server-side filtering and paging of the list. That changes the UI journey, so it belongs
-   to NMS-07-D (journey audit) and is planned there as NMS-07-E2. It is not a storage change.
+   server-side filtering and paging of the list. **Done for the page in NMS-07-E2 below.**
 2. **Global search without a match scans every snapshot.** It takes 650 ms at 51,000 ONUs.
    That is acceptable for an explicit search. If it moves to type-ahead at that scale, an
    indexed search table (serial/MAC/name with `pg_trgm`) is the evidence-backed use of a
    read model. Decide that with E2, not before.
 3. At the stated current size (about 4,500 ONUs on Maung staging, from code comments,
    [STATED]), every path stays below 160 ms.
+
+## NMS-07-E2 — ONU monitor scoped to one OLT (2026-10-22)
+
+**Branch:** `step/nms-07-e2-onu-monitor-scope` (on top of D-2c).
+
+The ONU monitor page already showed ONUs of one chosen OLT only, but the server sent every
+ONU of every OLT and the browser filtered them. Now:
+
+- without `olt_id` the page sends the OLT dropdown and no ONU (the page asks to pick an OLT);
+- with `olt_id` it reads only that OLT's snapshot and sends only its ONUs; changing the OLT
+  is an Inertia partial reload (`only: onus, refreshed_at, selected_olt_id`) and the URL
+  keeps the choice;
+- the dropdown query no longer loads any snapshot column;
+- an id the user cannot see (tenant scope) selects nothing.
+
+`/api/v1/onus` already pages its response (`per_page` at most 200), so its payload is
+bounded; it still reads every snapshot when no `olt_id` is given. Cursor paging and the
+contract belong to NMS-08.
+
+**Measured** (`run-onu-list-bench.sh 1 3400 5`, one large C300-sized OLT, throwaway
+PostgreSQL 16): list 158 ms, 42 MB peak, payload 1.9 MB. The page cost now follows the
+largest single OLT, not the whole installation: at 51,000 ONUs it was 1,735 ms, 266 MB and
+27.6 MB. Browser check (demo data): the first page load carries no ONU; switching OLT loads
+about 7 KB for 14 ONUs.
 
 ## Not measured yet (rest of NMS-07-E)
 

@@ -15,7 +15,7 @@ import { usePagination } from '@/Composables/usePagination';
 import { rxBadgeClass, rxLevel } from '@/Composables/useRxLevel';
 import { Head, router, usePage } from '@inertiajs/vue3';
 import { ExternalLink, Laptop, Radar, RefreshCw, Search, Wifi, X } from '@lucide/vue';
-import { computed, onMounted, ref } from 'vue';
+import { computed, ref } from 'vue';
 
 const props = defineProps({
     olts: {
@@ -27,8 +27,13 @@ const props = defineProps({
         default: () => [],
     },
     refreshed_at: {
-        type: Object,
+        type: [Object, Array],
         default: () => ({}),
+    },
+    // NMS-07-E2: the server sends only the ONUs of this OLT.
+    selected_olt_id: {
+        type: Number,
+        default: null,
     },
     odps: {
         type: Array,
@@ -40,7 +45,7 @@ const page = usePage();
 const flash = computed(() => page.props.flash ?? {});
 
 const search = ref('');
-const oltFilter = ref('');
+const oltFilter = ref(props.selected_olt_id ?? '');
 const portFilter = ref('all');
 const statusFilter = ref('all');
 const adminFilter = ref('all');
@@ -65,21 +70,29 @@ const hasOlt = computed(() => oltFilter.value !== '');
 const selectedOlt = computed(() => (hasOlt.value ? props.olts.find((o) => o.id === oltFilter.value) ?? null : null));
 const oltFresh = computed(() => isFresh(selectedOlt.value?.freshness));
 
-onMounted(() => {
-    const param = new URLSearchParams(window.location.search).get('olt_id');
-    if (param !== null) {
-        const id = Number(param);
-        if (props.olts.some((o) => o.id === id)) {
-            oltFilter.value = id;
-        }
-    }
-});
 
 // Reset port filter whenever the OLT selection changes, since port labels are OLT-specific.
 // ODP juga per-OLT, jadi ikut direset.
+const loadingOlt = ref(false);
 const onOltChange = () => {
     portFilter.value = 'all';
     odpFilter.value = 'all';
+    onuPage.value = 1;
+    // NMS-07-E2: fetch only this OLT's ONUs (partial reload; the URL keeps the choice).
+    loadingOlt.value = true;
+    router.get(
+        route('monitoring.onu'),
+        oltFilter.value === '' ? {} : { olt_id: oltFilter.value },
+        {
+            only: ['onus', 'refreshed_at', 'selected_olt_id'],
+            preserveState: true,
+            preserveScroll: true,
+            replace: true,
+            onFinish: () => {
+                loadingOlt.value = false;
+            },
+        },
+    );
 };
 
 const oltScopedOnus = computed(() =>
@@ -373,7 +386,7 @@ const phaseDotClass = (onu) => {
                     </div>
 
                     <!-- Skeleton saat scan SNMP penuh berjalan -->
-                    <ListSkeleton v-if="scanning" :rows="10" />
+                    <ListSkeleton v-if="scanning || loadingOlt" :rows="10" />
 
                     <!-- Empty state: OLT selected but no cached data yet -->
                     <div v-else-if="oltScopedOnus.length === 0" class="px-6 py-14 text-center">

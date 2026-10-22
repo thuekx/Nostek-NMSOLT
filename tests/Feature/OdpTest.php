@@ -570,7 +570,7 @@ class OdpTest extends TestCase
         ]);
 
         $this->actingAs(User::factory()->admin()->create())
-            ->get(route('monitoring.onu'))
+            ->get(route('monitoring.onu', ['olt_id' => $olt->id]))
             ->assertOk()
             ->assertInertia(fn ($page) => $page
                 ->has('odps', 1)

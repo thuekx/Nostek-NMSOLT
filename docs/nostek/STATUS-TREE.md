@@ -32,9 +32,9 @@ Nostek-NMSOLT — STANDALONE NETWORK PLATFORM / API PROVIDER
 |   +-- D [IN PROGRESS] D-1 write gate visible (banner, request guard, 56 locked controls,
 |   |       browser-checked; PR pending); D-2a stale never green (PR pending);
 |   |       D-2b ONU monitor/map/alarms/C-Data/HiOSO stale states (PR pending);
-|   |       D-2c partial RX + role sweep (PR pending); E2 paging next
-|   +-- E [IN PROGRESS] ONU list/search measured (4.5k/10k/51k); E2 server-side ONU list
-|           paging (with D); alarm/optical/queue/poller open
+|   |       D-2c partial RX + role sweep (PR pending)
+|   +-- E [IN PROGRESS] ONU list/search measured (4.5k/10k/51k); E2 ONU monitor scoped to
+|           one OLT (PR pending); alarm/optical/queue/poller open
 +-- NMS-08 [BLOCKED] API v1 read-only + OpenAPI
 |   +-- stable IDs, freshness, pagination, scopes, redaction, rate limits
 +-- NMS-09 [BLOCKED] Maung /nosteknmsolt thin consumer

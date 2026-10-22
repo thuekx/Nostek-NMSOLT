@@ -184,10 +184,19 @@ the OLT snapshot was decoded twice per alarm row, and no index served status + n
 first. RX charts take 10–31 ms for every range. Details:
 [NMS-07-PERFORMANCE.md](NMS-07-PERFORMANCE.md).
 
+## NMS-07-E4 Go poller and poll-queue capacity (2026-10-22)
+
+Branch `step/nms-07-e4-poller-bench` (on top of E3). Harness `tests/perf/run-poller-bench.sh`
+(synthetic C300 via snmpsim, delay proxy). 3,400 ONUs: poller CPU under 1 s; over 20 ms RTT a
+poll takes 74.5 s at max-repetitions 10 and 34.4 s at 25. Raising the default needs a
+read-only check on a real OLT by the owner (BLOCKED). Details:
+[NMS-07-PERFORMANCE.md](NMS-07-PERFORMANCE.md).
+
 ## Exact next action
 
-Refresh GitHub. Check the NMS-07-A, B, C/E, B2, D-1, D-2a, D-2b, D-2c, E2 and E3 PRs (exact-head CI, owner
-merge). Then continue the rest of E (queue latency, Go poller throughput, on synthetic data). Do not
+Refresh GitHub. Check the NMS-07-A, B, C/E, B2, D-1, D-2a, D-2b, D-2c, E2, E3 and E4 PRs (exact-head CI, owner
+merge). Source-side NMS-07 work is then done; what remains needs a host (real app image,
+queue latency under real workers) or the owner (max-repetitions check on a real OLT). Do not
 modify the retained LICENSE attribution.
 
 For cross-device continuation, use the post-merge prompt in [CLOUD-HANDOFF.md](CLOUD-HANDOFF.md). PR #20 search fixes are already in main; do not recreate them.

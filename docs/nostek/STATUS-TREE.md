@@ -35,7 +35,8 @@ Nostek-NMSOLT — STANDALONE NETWORK PLATFORM / API PROVIDER
 |   |       D-2c partial RX + role sweep (PR pending)
 |   +-- E [IN PROGRESS] ONU list/search measured (4.5k/10k/51k); E2 ONU monitor scoped to
 |           one OLT (PR pending); E3 alarm page 3x faster + RX charts measured
-|           (PR pending); queue latency + Go poller open
+|           (PR pending); E4 Go poller vs simulated C300 measured (PR pending);
+|           host-only: queue latency, real-OLT max-repetitions check
 +-- NMS-08 [BLOCKED] API v1 read-only + OpenAPI
 |   +-- stable IDs, freshness, pagination, scopes, redaction, rate limits
 +-- NMS-09 [BLOCKED] Maung /nosteknmsolt thin consumer

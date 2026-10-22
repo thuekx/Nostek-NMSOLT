@@ -146,10 +146,53 @@ to the initdb server; connecting then failed once with "server closed the connec
 unexpectedly"), and removes the container's volume on exit; the same fix is applied to
 `run-onu-list-bench.sh`.
 
+## NMS-07-E4 — Go poller against a simulated OLT, and poll-queue capacity (2026-10-22)
+
+**Branch:** `step/nms-07-e4-poller-bench` (on top of E3). Harness:
+`tests/perf/run-poller-bench.sh [onus] [repeats]` (`BENCH_MAXREP`, `BENCH_RTT_MS`):
+
+- `tests/perf/snmp/gen_c300_snmprec.py` writes a synthetic ZTE C300 agent (system group,
+  IF-MIB GPON ports, the ZTE ONU tables and the ONU RX table the poller reads);
+- snmpsim (`snmpsim-lextudio==1.1.1`, temp venv, runs as `nobody`) serves it on localhost;
+- `tests/perf/snmp/udp_delay_proxy.py` sits in front, adds a round-trip time and counts
+  requests;
+- the poller is built from `cmd/nos-snmp-poller` and run as the app runs it (`--include-rx`,
+  bulk walk). No real OLT is touched.
+
+Measured at 3,400 ONUs (54 PON ports), every run returned all 3,400 ONUs with RX:
+
+| max-repetitions | SNMP requests | poller CPU | wall, no added RTT | wall, 20 ms RTT |
+| --- | --- | --- | --- | --- |
+| 10 (current `.env` default, `SNMP_POLLER_MAX_REPETITIONS`) | 2,747 | 0.6 s | 13.4 s | 74.5 s |
+| 25 | 1,106 | 0.3–0.4 s | 8.6–10.5 s | 34.4 s |
+| 50 | 559 | 0.3 s | 8.3 s | not run |
+
+- The poller itself is cheap (under 1 s of CPU). The wall time without added RTT is mostly
+  the Python agent; a real OLT's own response time is [UNKNOWN] here.
+- Over a network the poll time is close to `agent time + requests x RTT` (20 ms: 68 s
+  predicted, 74.5 s measured at 10; 33 s predicted, 34.4 s measured at 25). The request
+  count, set by max-repetitions, is what matters on a WAN link.
+
+**[PROPOSED], needs the owner and a real OLT:** raising `SNMP_POLLER_MAX_REPETITIONS` from
+10 to 25 halves the poll time over a 20 ms link. Whether a ZTE C300/C320/C600 at the
+deployed firmware answers 25-row bulk requests reliably (response size, OLT CPU) is not
+known from synthetic data. Lesson in force: verify vendor behaviour at the exact deployed
+version. So the default stays 10; the check is one read-only poll per OLT model with
+`--max-repetitions 25`, run by the owner as part of the NET-1 host work. BLOCKED here.
+
+**Poll-queue capacity [INFERRED from the numbers above]:** the dedicated pool
+(`NMSOLT_POLL_WORKERS`, default 2) gives 600 worker-seconds per 5-minute interval. A
+3,400-ONU OLT over 20 ms takes about 75 s at max-repetitions 10 (34 s at 25), plus the PHP
+side of the poll (snapshot save, RX samples, alarm engine: the engine is 30–40 ms steady,
+0.5 s in a burst; E3). So two workers keep up with about 8 such OLTs at 10, about 17 at 25;
+small OLTs on a LAN cost a few seconds each. Beyond that, polls queue and data turns STALE,
+which the UI now shows (D-2). The measured queue latency under real workers is still open:
+it needs the app image running the pool, which is the host check of NMS-07-A.
+
 ## Not measured yet (rest of NMS-07-E)
 
 Not measured yet:
 
-- queue latency with the dedicated poll pool;
-- the Go poller's throughput against a simulated SNMP agent;
+- queue latency with the dedicated poll pool under real workers (capacity model above);
+- a real OLT's response time and its tolerance of larger bulk requests (owner, NET-1);
 - the disk saved by dropping the duplicate index (NMS-07-B).

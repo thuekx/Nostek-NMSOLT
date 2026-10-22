@@ -82,6 +82,37 @@ no IPv6 (`bind EAFNOSUPPORT :::7557`); fixed with explicit `0.0.0.0` interfaces.
 Remaining: the real app image under the tool (first runtime = Nostek-AI NET-1-2) and
 work packages 3–5. See [NMS-07-UNIFIED-PACKAGE.md](NMS-07-UNIFIED-PACKAGE.md).
 
+## NMS-07-C/E result (2026-10-22)
+
+Work package 4 (performance audit), first part, is on branch `step/nms-07-c-perf-matrix`.
+These were measured on synthetic data with a throwaway PostgreSQL:
+
+- large ONU lists;
+- global search;
+- snapshot decode.
+
+| ONUs | ONU list | payload | worst-case search |
+| --- | --- | --- | --- |
+| 4,500 | 154 ms | 2.4 MB | 98 ms |
+| 10,200 | 303 ms | 5.5 MB | 223 ms |
+| 51,000 | 1.7 s | 27.6 MB, 266 MB memory | 650 ms |
+
+The planned `onu_state` table was measured and not adopted. It was 25 % slower than the
+snapshot path.
+
+Finding: the ONU monitor page and the v1 ONU list send every ONU in one response. That is
+fine at the current size and the scale limit beyond about 50,000 ONUs. Server-side paging
+(E2) is planned together with the journey audit (work package 3).
+
+Not measured yet:
+
+- alarm lists;
+- optical history;
+- query counts;
+- queue and poller behaviour.
+
+See [NMS-07-PERFORMANCE.md](NMS-07-PERFORMANCE.md).
+
 ## Current conclusion
 
 NMS-07 remains **IN PROGRESS**. This audit establishes that the safest next

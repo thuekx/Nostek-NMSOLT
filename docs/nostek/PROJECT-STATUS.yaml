@@ -61,11 +61,12 @@ latest_evidence:
     work_packages:
       A_unified_package: "SOURCE_PASS_PENDING_PR: core/with-acs/platform Compose, MongoDB auth, no argv secrets, healthchecks, limits, digest pins, scripts/nostek/nmsolt-ops.sh, monitor/checks.json; workspace ops integration 58/58 (real PG/Redis/Mongo/GenieACS, stand-in app). Branch step/nms-07-a-unified-package."
       B_data_growth: "SOURCE_PASS_PENDING_PR: history:prune (polling 30 d, cleared alarms 180 d, audit 400 d, config backups 7 + monthly 12), duplicate onu_rx_hourly index dropped, poll queue + dedicated worker pool; branch step/nms-07-b-data-growth on top of A. Open: B2 daily RX rollup (3 years, owner Q5)."
-      C_onu_state_table: PENDING
+      C_onu_state_table: "MEASURED_NOT_ADOPTED: read model built + equivalence-tested, then dropped: 25 % slower than the snapshot path at 10k/51k ONUs (PostgreSQL), 10x disk, extra write per poll. See docs/nostek/NMS-07-PERFORMANCE.md. Branch step/nms-07-c-perf-matrix keeps the harness tests/perf/run-onu-list-bench.sh."
       D_ui_journey_and_write_gate_audit: PENDING
-      E_performance_matrix: PENDING
+      E_performance_matrix: "IN_PROGRESS: ONU list/search/decode measured at 4.5k/10.2k/51k ONUs (snapshot path 154/303/1735 ms; list payload 2.4/5.5/27.6 MB). Open: E2 server-side paging of the ONU monitor/API list (with D), alarm, optical, queue, poller."
     package_doc: docs/nostek/NMS-07-UNIFIED-PACKAGE.md
     data_growth_doc: docs/nostek/NMS-07-DATA-GROWTH.md
+    performance_doc: docs/nostek/NMS-07-PERFORMANCE.md
     search_merge_gate: "Owner approved PR #20; GitHub merge confirmed. Future PRs require their own applicable gates and approval."
     identity_cleanup: "PR #21 head 6bc53a3 passed run 39770297399 and merged as f43baa3; canonical Nostek-NMSOLT/Nostek-NMS and nos-* namespace enforced."
   NMS-08:
@@ -96,8 +97,8 @@ environment:
   genieacs_lab: ACTIVE_VERIFIED
   live_olt_write: PROHIBITED_WITHOUT_APPROVAL
 next_action:
-  id: NMS-07-C-ONU-STATE
-  instruction: "After the NMS-07-A and NMS-07-B PRs pass exact-head CI and the owner merges them, add the onu_state table (replacing the per-OLT JSON snapshot for cross-OLT lists) with measured before/after on synthetic data; then B2 daily RX rollup, D UI/write-gate audit, E performance matrix. Preserve LICENSE attribution and keep device writes disabled."
+  id: NMS-07-B2-RX-DAILY
+  instruction: "After the NMS-07-A, B and C/E PRs pass exact-head CI and the owner merges them, continue B2 (daily RX rollup kept 3 years, owner Q5 A), D UI journey/stale/partial/permission/write-gate audit including server-side paging of the ONU list (E2), then the rest of E (alarm, optical, queue, poller). The onu_state table was measured and not adopted (NMS-07-PERFORMANCE.md); do not re-add it without new evidence. Preserve LICENSE attribution and keep device writes disabled."
   owner: "executor"
   approval_required: false
 references:

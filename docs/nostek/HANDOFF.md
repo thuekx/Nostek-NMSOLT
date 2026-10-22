@@ -121,12 +121,21 @@ Branch `step/nms-07-b-data-growth` (on top of NMS-07-A): `history:prune` (daily 
 duplicate `onu_rx_hourly` index dropped, `PollOltJob` on queue `polling` with a dedicated
 worker pool. Details: [NMS-07-DATA-GROWTH.md](NMS-07-DATA-GROWTH.md).
 
+## NMS-07-C/E ONU read path (2026-10-22)
+
+Branch `step/nms-07-c-perf-matrix` (on top of NMS-07-B): performance harness
+`tests/perf/run-onu-list-bench.sh` (throwaway PostgreSQL, synthetic snapshots). The planned
+`onu_state` table was built, equivalence-tested and measured, then dropped: it was 25 %
+slower than the snapshot path. The real limit is the ONU monitor/API list sending every ONU
+in one response (27.6 MB, 1.7 s, 266 MB at 51,000 ONUs). Server-side paging (E2) goes with D.
+Details: [NMS-07-PERFORMANCE.md](NMS-07-PERFORMANCE.md).
+
 ## Exact next action
 
-Refresh GitHub. Check the NMS-07-A and NMS-07-B PRs (exact-head CI, owner merge). Then
-continue NMS-07-C (`onu_state` table), B2 (daily RX rollup), D (UI journey and
-write-gate audit), E (performance matrix on synthetic data). Do not modify the retained LICENSE
-attribution.
+Refresh GitHub. Check the NMS-07-A, B and C/E PRs (exact-head CI, owner merge). Then
+continue B2 (daily RX rollup), D (UI journey and write-gate audit, with E2 server-side ONU
+list paging), and the rest of E (alarm, optical, queue, poller on synthetic data). Do not
+modify the retained LICENSE attribution.
 
 For cross-device continuation, use the post-merge prompt in [CLOUD-HANDOFF.md](CLOUD-HANDOFF.md). PR #20 search fixes are already in main; do not recreate them.
 

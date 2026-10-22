@@ -442,7 +442,9 @@
         "acs_yes": "Linked",
         "acs_stale": "Gone quiet",
         "acs_no": "Not linked",
-        "preregister_hint": "Register an ONU that is not connected yet by its SN — its config activates once it is plugged in"
+        "preregister_hint": "Register an ONU that is not connected yet by its SN — its config activates once it is plugged in",
+        "rx_older": "RX values are older than the ONU status: last RX read {age}.",
+        "rx_never": "RX has not been read yet; the RX column is empty or out of date."
     },
     "tr069": {
         "enable_title": "Enable Bulk TR069",

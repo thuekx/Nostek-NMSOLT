@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import { mount } from '@vue/test-utils';
-import { isFresh, oltStatus, STATUS_PILL } from '@/lib/freshness';
+import { isFresh, oltStatus, rxLags, STATUS_PILL } from '@/lib/freshness';
 import OltInventoryList from '@/Components/Dashboard/OltInventoryList.vue';
 
 describe('freshness', () => {
@@ -29,5 +29,25 @@ describe('freshness', () => {
         expect(pills.map((p) => p.attributes('data-status'))).toEqual(['up', 'stale']);
         expect(pills[1].classes()).toContain('nos-pill-warning');
         expect(wrapper.text()).toContain('dashboard.status_not_fresh 1');
+    });
+});
+
+describe('rxLags (NMS-07-D-2c partial RX state)', () => {
+    const base = { ok: true, refreshed_at: '2026-10-22T12:00:00Z', onus: [{}], freshness: { threshold_seconds: 900 } };
+
+    it('is false when RX was read in the same poll or within the threshold', () => {
+        expect(rxLags({ ...base, rx_power: { ok: true, polled_at: '2026-10-22T12:00:00Z' } })).toBe(false);
+        expect(rxLags({ ...base, rx_power: { ok: false, polled_at: '2026-10-22T11:46:00Z' } })).toBe(false);
+    });
+
+    it('is true when RX lags the status by more than the threshold', () => {
+        expect(rxLags({ ...base, rx_power: { ok: false, error: 'timeout', polled_at: '2026-10-22T09:00:00Z' } })).toBe(true);
+    });
+
+    it('is true when RX was never read but failed, false for empty or unavailable snapshots', () => {
+        expect(rxLags({ ...base, rx_power: { ok: false, polled_at: null } })).toBe(true);
+        expect(rxLags({ ...base, onus: [] , rx_power: { ok: false } })).toBe(false);
+        expect(rxLags({ ...base, ok: false })).toBe(false);
+        expect(rxLags(null)).toBe(false);
     });
 });

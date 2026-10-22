@@ -41,7 +41,7 @@ Nostek-NMSOLT — STANDALONE NETWORK PLATFORM / API PROVIDER
 |           `start`/`preflight` check locally built images (finding from NET-1-2)
 +-- TRF-1 [SOURCE PASS, PR merged] PON port traffic graph: IF-MIB octet counters (Go poller),
 |   per-port rates raw 8 d / hourly 100 d / daily 3 y, chart on the PON port page;
-|   real-OLT counter check BLOCKED (owner); per-ONT traffic next (GenieACS first)
+|   real-OLT counters VERIFIED (192.168.254.2, owner read-only); per-ONT traffic next (GenieACS first)
 +-- NMS-08 [BLOCKED] API v1 read-only + OpenAPI
 |   +-- stable IDs, freshness, pagination, scopes, redaction, rate limits
 +-- NMS-09 [BLOCKED] Maung /nosteknmsolt thin consumer

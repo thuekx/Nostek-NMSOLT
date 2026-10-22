@@ -217,7 +217,7 @@ docker shim). NET-1-2 keeps its own `compose build genieacs-cwmp` workaround unt
 
 Refresh GitHub. Check the NMS-07-A2 PR (exact-head CI, owner merge). Next safe source work: per-ONT
 traffic through GenieACS (`parseAcsTrafficMonitor` exists, unused). Still BLOCKED on the owner:
-real-OLT check of the PON counters and of `max-repetitions` 25, the ZTE ONU traffic OID walk.
+real-OLT check of `max-repetitions` 25 (the PON counters are VERIFIED on OLT 192.168.254.2), the ZTE ONU traffic OID walk.
 NMS-07 evidence that needs a host stays open (real app image, queue latency under real
 workers). Do not modify the retained LICENSE attribution.
 

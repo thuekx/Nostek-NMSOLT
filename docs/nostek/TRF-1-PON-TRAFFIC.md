@@ -47,9 +47,11 @@ hour of slack; `OnuRxDailyTest` reproduces it.
 
 ## Open
 
-- [UNKNOWN] Real ZTE C300/C320/C600 answers to `ifHCIn/OutOctets` on GPON port ifIndexes. The page
-  says "no counters" when they are missing. A read-only check by the owner on a real OLT confirms it:
-  `snmpget -v2c -c <community> <olt> 1.3.6.1.2.1.31.1.1.1.6.<gpon ifIndex>`.
+- [VERIFIED 2026-10-22, owner read-only check from nostek-platform] the real ZTE OLT 192.168.254.2
+  answers `ifHCInOctets`/`ifHCOutOctets` as Counter64 on the first GPON port (ifName walk, ifIndex
+  285278465). Two reads about a minute apart: in +4,477,284 bytes, out +49,435,712 bytes (out =
+  downstream to the ONTs is the larger one, as expected). Other OLT models stay [UNKNOWN]; the page
+  says "no counters" when they are missing.
 - The PHP fallback poller (`SNMP_POLLER_DRIVER=php`) does not read the counters; the platform
   Compose runs the Go poller.
 - C-Data and HiOSO are polled through their scanners and get no PON traffic yet.

@@ -96,7 +96,7 @@ check). TRF-1 PON traffic graph (owner decision: PON first, ONT later) is merged
 docs/nostek/TRF-1-PON-TRAFFIC.md). NMS-07-A2 (build also makes the GenieACS image, start refuses
 a missing local image) is on step/nms-07-a2-acs-image-build; check its PR first. Next safe
 source work: per-ONT traffic through GenieACS (parseAcsTrafficMonitor exists, unused); the ZTE
-ONU traffic OID and the real-OLT counter check are BLOCKED on the owner. The onu_state table was measured
+ONU traffic OID is BLOCKED on the owner (PON counters VERIFIED on a real OLT). The onu_state table was measured
 and not adopted (NMS-07-PERFORMANCE.md); do not re-add it without new evidence.
 Use isolated synthetic tests and Compose rendering; do not run host installers/deployments.
 

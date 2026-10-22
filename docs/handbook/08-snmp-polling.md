@@ -3,7 +3,7 @@
 [← Indeks](README.md) · [← 07 Modul & Fitur](07-modul-fitur.md) · [09 CLI & Telnet →](09-cli-telnet.md)
 
 Untuk **ZTE** ada **dua jalur SNMP**: client PHP (`OltSnmpClient`, dipakai aksi on-demand +
-fallback) dan poller Go (`bin/kv-snmp-poller`, dipakai polling terjadwal). **C-Data & HiOSO** punya
+fallback) dan poller Go (`bin/nos-snmp-poller`, dipakai polling terjadwal). **C-Data & HiOSO** punya
 jalur driver sendiri (bagian E). Semuanya **read v1/v2c** (v3 → error). SNMP **set** hanya dipakai di
 sedikit tempat: ZTE C300/C320 enable/disable & set nama/deskripsi ONU (`OltSnmpClient::set()` via
 `ZteRemoteOnuService`, butuh write community) dan rename ONU HiOSO HA7302 (`HiosoSnmp::set()`).
@@ -75,7 +75,7 @@ Referensi yang terverifikasi: [`docs/SMARTOLT_ZTE_C600_GUIDE.md`](../SMARTOLT_ZT
 `docs/ZTE_C600_*.md`. **PDF C600 di `docs/*.pdf` tidak terverifikasi — jangan dipakai sebagai sumber
 OID.** OID vendor baru hanya masuk kode setelah dibaca dari perangkat asli.
 
-## B. Go SNMP poller (`cmd/kv-snmp-poller/main.go`)
+## B. Go SNMP poller (`cmd/nos-snmp-poller/main.go`)
 
 Binary CLI yang melakukan walk SNMP cepat (lib `gosnmp`, bulk walk) dan mencetak **JSON** ke stdout.
 Mengenali C300/C320 **dan C600** (subtree `.1082`, deteksi dari system info). Khusus ZTE — OLT
@@ -86,7 +86,7 @@ non-ZTE tidak pernah dikirim ke poller ini.
 --host --port (=161) --version (v1|v2c, =v2c) --include-rx
 --timeout (=10s) --retries (=2) --walk-mode (auto|bulk|walk, =bulk) --max-repetitions (=10)
 ```
-Community dibaca dari **env** `KV_SNMP_COMMUNITY` (tidak lewat argumen → tidak bocor ke proses list).
+Community dibaca dari **env** `NOS_SNMP_COMMUNITY` (tidak lewat argumen → tidak bocor ke proses list).
 
 ### Output JSON (ringkas)
 ```jsonc
@@ -98,7 +98,7 @@ Community dibaca dari **env** `KV_SNMP_COMMUNITY` (tidak lewat argumen → tidak
 
 ### Build
 ```bash
-CGO_ENABLED=0 go build -mod=mod -trimpath -ldflags='-s -w' -o bin/kv-snmp-poller ./cmd/kv-snmp-poller
+CGO_ENABLED=0 go build -mod=mod -trimpath -ldflags='-s -w' -o bin/nos-snmp-poller ./cmd/nos-snmp-poller
 ```
 Sama dengan `install.sh`: `-mod=mod` wajib karena root repo punya folder `vendor/` milik PHP
 (tanpanya Go mencoba vendor mode); `CGO_ENABLED=0` = binary statis. Setelah rebuild, `queue:restart`
@@ -107,7 +107,7 @@ tidak wajib (binary dipanggil per job), tapi uji satu poll.
 ### `GoSnmpPoller` (PHP bridge — `app/Services/Snmp/GoSnmpPoller.php`)
 - `enabled()` → true bila `services.snmp_poller.driver === 'go'` **dan** binary ada+executable.
 - `poll($olt,$includeRx)` → susun argumen dari config, jalankan via Symfony `Process` (timeout
-  `process_timeout`), set env `KV_SNMP_COMMUNITY`, decode JSON, lempar `RuntimeException` bila
+  `process_timeout`), set env `NOS_SNMP_COMMUNITY`, decode JSON, lempar `RuntimeException` bila
   gagal/JSON invalid/`ok!=true`. v3 → throw.
 - Config di `config/services.php` blok `snmp_poller` (env `SNMP_POLLER_*`).
 
@@ -216,7 +216,7 @@ per `"slot_port"` agar halaman per-port & ONU Monitoring cepat membacanya.
 - **Data tidak ter-refresh otomatis** → cek `schedule:work` & `queue:work` jalan; `polling_enabled`
   true; `last_polled_at` bergerak; lihat `polling_events`.
 - **`go_poller_error` terisi** → binary hilang/tak executable/timeout; sistem fallback ke PHP.
-  Cek `SNMP_POLLER_DRIVER`, path binary, dan `KV_SNMP_COMMUNITY` (community benar).
+  Cek `SNMP_POLLER_DRIVER`, path binary, dan `NOS_SNMP_COMMUNITY` (community benar).
 - **RX power kosong** → cek `rx_poll_interval`; sebagian firmware butuh CLI (lihat
   `ZteOnuRxPowerService` di [09](09-cli-telnet.md)).
 - **OLT C-Data/HiOSO tak ter-update** → `last_test_result.poller` harus `cdata`; lihat `error`

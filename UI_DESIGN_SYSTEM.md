@@ -110,10 +110,10 @@ const handleSendWa = (user) => {
 
 | Token Nama | Kelas Tailwind / Nilai | Penggunaan |
 | :--- | :--- | :--- |
-| **Canvas Background** | `kv-grid-stage` (`#0b1329`) | Latar belakang seluruh halaman |
-| **Grid Pattern** | `kv-grid-pattern` (32px x 32px) | Grid mesh neon semi-transparan |
-| **Top Light Beam** | `kv-top-light` & `kv-ambient-glow` | Efek spotlight ambient cyan di atas layar |
-| **Glass Panel** | `kv-glass-panel` | Wadah tabel, card statistik, dan form |
+| **Canvas Background** | `nos-grid-stage` (`#0b1329`) | Latar belakang seluruh halaman |
+| **Grid Pattern** | `nos-grid-pattern` (32px x 32px) | Grid mesh neon semi-transparan |
+| **Top Light Beam** | `nos-top-light` & `nos-ambient-glow` | Efek spotlight ambient cyan di atas layar |
+| **Glass Panel** | `nos-glass-panel` | Wadah tabel, card statistik, dan form |
 | **Aksen Utama** | `from-cyan-500 to-sky-500` | Tombol CTA primer, header branding, dan link aktif |
 | **Aksen Sukses / Lunas**| `emerald-400` / `bg-emerald-500/20` | Status Aktif, Lunas, Online, Rx Power Normal |
 | **Aksen Peringatan** | `amber-400` / `bg-amber-500/20` | Status Unpaid, Jatuh Tempo, Rx Power Waspada |
@@ -128,9 +128,9 @@ adalah bawaan; pengguna memilih Gelap / Terang / Ikuti Sistem.
 
 
 - `tailwind.tokens.mjs` (daftar nama) + `tailwind.config.js` memetakan seluruh ramp ke
-  `rgb(var(--kv-<ramp>-<stop>) / <alpha-value>)`; nilainya di `resources/css/app.css` pada blok
+  `rgb(var(--nos-<ramp>-<stop>) / <alpha-value>)`; nilainya di `resources/css/app.css` pada blok
   `[data-theme="dark"]` dan `[data-theme="light"]`. Dijaga `tests/Feature/ThemeTokenTest`.
-- Server: `App\Support\Theme` (kolom `users.theme` → cookie `kv_theme` → bawaan gelap),
+- Server: `App\Support\Theme` (kolom `users.theme` → cookie `nos_theme` → bawaan gelap),
   `<html data-theme>` dari `AppServiceProvider::bootTheme`, skrip `system` di `<head>` ber-nonce CSP.
   Cookie **per app** (host-only) dan tidak dienkripsi (`bootstrap/app.php`).
 - Klien: `@/lib/theme` (`useTheme`, `setTheme`, `chartTheme()`, `tokenHex()`, `themeHexA()`).
@@ -148,11 +148,11 @@ jadi menambahkannya **tidak menggeser tema gelap satu piksel pun**.
 
 | Kelas | Pasang di | Efek di tema terang |
 | :--- | :--- | :--- |
-| `kv-shell-sidebar` / `kv-shell-bar` | sidebar; header, footer, bar HP di `AuthenticatedLayout` | `surface-1` opak |
-| `kv-popover` | panel mengambang: notifikasi, menu pengguna, pemilih app/bahasa, palet pencarian | `surface-1` opak, tanpa blur, bayangan lembut |
-| `kv-toast` | kartu toast di `Shell/FlashMessages.vue` | kertas opak; warna tepi/ikon/teks tetap |
-| `kv-surface` | kartu kaca ad-hoc tingkat atas (`bg-slate-900/30–60` + blur + `shadow-lg`) yang bukan `kv-card`/`kv-panel` | kertas opak + bayangan tipis |
-| `kv-terminal` | blok keluaran CLI/skrip, bersama `data-theme="dark"` | tetap gelap, latar dibuat opak |
+| `nos-shell-sidebar` / `nos-shell-bar` | sidebar; header, footer, bar HP di `AuthenticatedLayout` | `surface-1` opak |
+| `nos-popover` | panel mengambang: notifikasi, menu pengguna, pemilih app/bahasa, palet pencarian | `surface-1` opak, tanpa blur, bayangan lembut |
+| `nos-toast` | kartu toast di `Shell/FlashMessages.vue` | kertas opak; warna tepi/ikon/teks tetap |
+| `nos-surface` | kartu kaca ad-hoc tingkat atas (`bg-slate-900/30–60` + blur + `shadow-lg`) yang bukan `nos-card`/`nos-panel` | kertas opak + bayangan tipis |
+| `nos-terminal` | blok keluaran CLI/skrip, bersama `data-theme="dark"` | tetap gelap, latar dibuat opak |
 | `bg-canvas-3/<α>` | permukaan cekung: header tabel, kotak kode ringan, panel samping | token, ikut tema (bukan `bg-slate-950`) |
 
 Helper JS (`@/lib/theme`): `useTheme`, `setTheme`, `cycleTheme`, `themeRgb`, `themeRgba`,
@@ -167,11 +167,11 @@ bukan `themeRgb`.
 | Teks di atas tombol/gradien aksen | `text-onaccent` | `text-white` (berbalik jadi tinta gelap) |
 | Permukaan cekung (header tabel, kotak kode ringan, panel samping) | `bg-canvas-3/<α>` | `bg-slate-950/<α>` — slate-950 **tetap gelap** di tema terang |
 | Scrim modal | `bg-black/60–70` atau `bg-slate-950/60+` | — |
-| Keluaran CLI/skrip OLT | `data-theme="dark"` + kelas `kv-terminal` | membiarkannya ikut tema (warna sintaks dirancang untuk latar gelap) |
+| Keluaran CLI/skrip OLT | `data-theme="dark"` + kelas `nos-terminal` | membiarkannya ikut tema (warna sintaks dirancang untuk latar gelap) |
 | Gambar perangkat fisik (rak `OltChassis`, faceplate `OltFaceplate`) | **ikut tema**: rak memakai kelas token biasa; faceplate memakai variabel `--fp-*` dengan set perak di `[data-theme='light'] .fp` | — |
 | Warna di JS — grafik (Chart.js) | `<ChartCanvas>` (`Components/Charts`) + potongan opsi `@/lib/chartOptions` (`lineChartOptions`, `axisX/Y`, `tooltip`, `areaFill`, `withAlpha`) dirakit di dalam `computed`; tema berganti → grafik di-update di tempat, tanpa `:key`. Gauge: `<ArcGauge>` (SVG) | heks literal untuk teks/grid/stop 300–400; impor statis `chart.js` |
-| Warna di JS — Leaflet | `tokenHex('cyan-400')`, `themeHexA('--kv-white', .05)` di dalam `computed` | heks literal untuk teks/grid/stop 300–400 |
-| `<style scoped>` | `rgb(var(--kv-slate-300))` dst.; varian terang dengan selektor `[data-theme="light"] .kelas` | `:global(...)` (Vue bisa menelan seluruh selektor) |
+| Warna di JS — Leaflet | `tokenHex('cyan-400')`, `themeHexA('--nos-white', .05)` di dalam `computed` | heks literal untuk teks/grid/stop 300–400 |
+| `<style scoped>` | `rgb(var(--nos-slate-300))` dst.; varian terang dengan selektor `[data-theme="light"] .kelas` | `:global(...)` (Vue bisa menelan seluruh selektor) |
 
 - Stop **500/600 setiap ramp aksen dipatok** sama di kedua tema; seri status grafik boleh heks 500.
 - `backdrop-filter` **dimatikan untuk semua elemen di tema terang** (aturan global di `app.css`).
@@ -180,7 +180,7 @@ bukan `themeRgb`.
 ## 3b. TAMPILAN BAKU KOMPONEN
 
 Ukuran dan varian di bawah diimplementasikan oleh komponen dasar (`PrimaryButton`,
-`SecondaryButton`, `DangerButton`, `IconButton`, `Modal`, `ConfirmModal`, kelas `kv-pill-*`).
+`SecondaryButton`, `DangerButton`, `IconButton`, `Modal`, `ConfirmModal`, kelas `nos-pill-*`).
 Ubah komponennya, jangan menulis ulang gaya per halaman.
 
 | Unsur | Spesifikasi |
@@ -192,18 +192,18 @@ Ubah komponennya, jangan menulis ulang gaya per halaman.
 | Tombol ikon (aksi baris) | 36 px di `sm:` ke atas, 44 px di HP; `rounded-lg`; isi tipis `bg-{c}-500/15 text-{c}-300 ring-1 ring-{c}-500/30`; varian default/primary/info/success/warning/danger; selalu `title` (otomatis jadi `aria-label`). |
 | Konfirmasi | varian **danger / warning / info**; lingkaran ikon berwarna varian; judul `text-base font-semibold`, pesan `text-sm text-slate-400`; Batal lalu tombol varian di kanan-bawah; Escape & klik scrim = batal. |
 | Modal | scrim `bg-slate-950/80`; panel `rounded-2xl` opak, `max-h-[90vh] overflow-y-auto`. |
-| Lencana status | `kv-pill` = `rounded-md px-2.5 py-0.5 text-xs font-semibold ring-1`; success emerald · warning amber · danger rose · info sky · muted slate. |
-| Tabel | sel `px-4 py-3`; di HP pola kartu `kv-mobile-list`, di layar lebar `kv-table-desktop`. |
+| Lencana status | `nos-pill` = `rounded-md px-2.5 py-0.5 text-xs font-semibold ring-1`; success emerald · warning amber · danger rose · info sky · muted slate. |
+| Tabel | sel `px-4 py-3`; di HP pola kartu `nos-mobile-list`, di layar lebar `nos-table-desktop`. |
 
 ---
 
 ## 4. FORM CONTROLS & FILTER BAR
 
-- Selalu gunakan kelas `kv-filter-control` untuk `<input>`, `<select>`, dan `<textarea>`.
+- Selalu gunakan kelas `nos-filter-control` untuk `<input>`, `<select>`, dan `<textarea>`.
 - Tombol Filter & Submit Form:
-  - Tombol Primer: `kv-filter-apply` atau `kv-btn-cyan`
-  - Tombol Batal / Reset: `kv-filter-reset`
-  - Tombol Destruktif: `kv-btn-danger` / `bg-rose-600`
+  - Tombol Primer: `nos-filter-apply` atau `nos-btn-cyan`
+  - Tombol Batal / Reset: `nos-filter-reset`
+  - Tombol Destruktif: `nos-btn-danger` / `bg-rose-600`
 - Tanggal dan Format Waktu:
   - Gunakan helper `@/utils/format`:
     - `formatDate(dateStr)` &rarr; `25 Agu 2026`

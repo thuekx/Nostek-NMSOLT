@@ -144,7 +144,7 @@ const submit = () => {
                     </div>
 
                     <div v-if="!meta.available" class="px-5 py-5">
-                        <div class="kv-alert-danger !mb-0">
+                        <div class="nos-alert-danger !mb-0">
                             <AlertTriangle class="h-5 w-5 flex-shrink-0" />
                             <span>{{ $t('dashboard.modal.not_implemented') }}</span>
                         </div>
@@ -160,7 +160,7 @@ const submit = () => {
                                     v-model="query"
                                     type="text"
                                     :placeholder="$t('dashboard.modal.search_placeholder')"
-                                    class="kv-input block w-full pl-9"
+                                    class="nos-input block w-full pl-9"
                                 />
                                 <Loader2 v-if="loading" class="absolute right-3 top-1/2 h-4 w-4 -translate-y-1/2 animate-spin text-cyan-400" />
                             </div>

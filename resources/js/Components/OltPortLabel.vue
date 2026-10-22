@@ -51,7 +51,7 @@ const save = () => {
             v-model="draft"
             type="text"
             maxlength="64"
-            class="kv-input w-full min-w-[9rem] max-w-[18rem] text-xs"
+            class="nos-input w-full min-w-[9rem] max-w-[18rem] text-xs"
             :placeholder="$t('portlabel.placeholder')"
             :disabled="busy"
             @keyup.enter="save"

@@ -124,9 +124,9 @@ const fmt = (v) => (v === null || v === undefined ? '—' : `${v.toFixed(2)} dBm
 </script>
 
 <template>
-    <div class="kv-glass-panel flex h-full flex-col">
-        <div class="kv-glass-header flex-wrap gap-y-2">
-            <span class="kv-circle-cyan">
+    <div class="nos-glass-panel flex h-full flex-col">
+        <div class="nos-glass-header flex-wrap gap-y-2">
+            <span class="nos-circle-cyan">
                 <TrendingDown class="h-5 w-5" />
             </span>
             <h3 class="text-base font-semibold text-white">Tren RX Power</h3>

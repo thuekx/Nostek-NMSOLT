@@ -100,14 +100,14 @@ describe('PortOnuStats', () => {
         const text = w.text();
 
         expect(text).toContain('portonus.stat_available');
-        expect(w.findAll('.kv-stat')[1].text()).toContain('3');
-        expect(w.findAll('.kv-stat')[2].text().replace(/\s+/g, '')).toContain('2/3');
+        expect(w.findAll('.nos-stat')[1].text()).toContain('3');
+        expect(w.findAll('.nos-stat')[2].text().replace(/\s+/g, '')).toContain('2/3');
     });
 
     it('snapshot kosong (port belum pernah dipindai) tampil Kosong dan nol', () => {
         const w = mountStats(null);
 
         expect(w.text()).toContain('portonus.stat_empty');
-        expect(w.findAll('.kv-stat')[2].text().replace(/\s+/g, '')).toContain('0/0');
+        expect(w.findAll('.nos-stat')[2].text().replace(/\s+/g, '')).toContain('0/0');
     });
 });

@@ -5,7 +5,7 @@
 > [docs/README.md](README.md). Yang sudah berubah sejak catatan ini:
 > - Daemon Supervisor kini **tiga**: `nostek-nmsolt-worker`, `nostek-nmsolt-scheduler`, dan
 >   `nostek-nmsolt-telnet-proxy` (terminal telnet di browser, di-proxy nginx `/telnet-ws`).
-> - Polling terjadwal memakai **Go SNMP poller** (`bin/kv-snmp-poller`, `SNMP_POLLER_DRIVER=go` — diisi
+> - Polling terjadwal memakai **Go SNMP poller** (`bin/nos-snmp-poller`, `SNMP_POLLER_DRIVER=go` — diisi
 >   otomatis oleh `install.sh`).
 > - Klien Redis produksi `REDIS_CLIENT=phpredis` (paket Predis masih terpasang, tidak dipakai).
 > - Test suite kini ratusan test (dulu 73), **wajib** dijalankan lewat `bash scripts/test.sh` — bukan `php artisan test`

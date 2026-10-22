@@ -42,7 +42,7 @@ ZTE diperiksa **paling dulu** (sebelum family non-ZTE) supaya needle `epon` mili
 C600 adalah platform Titan dengan **subtree SNMP modern `.1082` (zxAccessNode)**. Deteksinya terpisah dari `driverKey()`, memakai [`SmartOltSupport::isC600()`](../app/Support/SmartOltSupport.php) — substring `c600` pada `vendor` + `name` + `last_test_result.system.sys_descr`, **atau** `sysObjectID` mengandung `3902.1082.1001.600` (jalur kedua ini yang menyelamatkan C600 baru yang belum di-Test dan namanya tak mengandung "C600"). Jadi:
 
 - driver tetap `DRIVER_ZTE` (C600 berbagi seluruh jalur ZTE),
-- `isC600()` menyalakan cabang khusus C600 di dalam driver (OID `.1082`, ifIndex 4-komponen, nama/deskripsi & state ONU dari tabel terpisah — §4.3), dan dipakai juga oleh poller Go (`isC600()` di `cmd/kv-snmp-poller/main.go`, dari sysDescr/sysObjectID).
+- `isC600()` menyalakan cabang khusus C600 di dalam driver (OID `.1082`, ifIndex 4-komponen, nama/deskripsi & state ONU dari tabel terpisah — §4.3), dan dipakai juga oleh poller Go (`isC600()` di `cmd/nos-snmp-poller/main.go`, dari sysDescr/sysObjectID).
 
 > **Baca [`SMARTOLT_ZTE_C600_GUIDE.md`](SMARTOLT_ZTE_C600_GUIDE.md) untuk apa pun yang menyangkut C600.** Dokumen ini otoritatif untuk C300/C320; bagian C600-nya dulu berisi OID yang tak pernah diuji ke perangkat dan sudah dikoreksi.
 
@@ -74,7 +74,7 @@ Ringkas perbedaan interface (lihat [`gponOltInterface()`](../app/Support/SmartOl
 
 Implementasi SNMP read: [`app/Services/Snmp/OltSnmpClient.php`](../app/Services/Snmp/OltSnmpClient.php) — `systemInfo()`, `snapshot()` (system + boards + ports + ONU + Rx), `getRegisteredOnusByPort()`, `getPortRxMap()`, `getUnconfiguredOnus()`. SNMP write per-ONU: [`app/Services/ZteRemoteOnuService.php`](../app/Services/ZteRemoteOnuService.php) (`setActiveState`, `setInfo`).
 
-**Engine polling terjadwal = Go.** `bin/kv-snmp-poller` (source [`cmd/kv-snmp-poller/main.go`](../cmd/kv-snmp-poller/main.go)) di-shell-out lewat [`GoSnmpPoller`](../app/Services/Snmp/GoSnmpPoller.php) (Symfony Process → JSON). Aktif bila `SNMP_POLLER_DRIVER=go` (`config/services.php`) dan binary ada. [`PollOltJob`](../app/Jobs/PollOltJob.php) memakai poller Go dan **fallback ke `OltSnmpClient`** bila gagal. Refresh on-demand (tombol UI, per-port RX, provisioning) tetap PHP sinkron via `OltSnmpClient`/executor. Detail: [handbook/08-snmp-polling.md](handbook/08-snmp-polling.md).
+**Engine polling terjadwal = Go.** `bin/nos-snmp-poller` (source [`cmd/nos-snmp-poller/main.go`](../cmd/nos-snmp-poller/main.go)) di-shell-out lewat [`GoSnmpPoller`](../app/Services/Snmp/GoSnmpPoller.php) (Symfony Process → JSON). Aktif bila `SNMP_POLLER_DRIVER=go` (`config/services.php`) dan binary ada. [`PollOltJob`](../app/Jobs/PollOltJob.php) memakai poller Go dan **fallback ke `OltSnmpClient`** bila gagal. Refresh on-demand (tombol UI, per-port RX, provisioning) tetap PHP sinkron via `OltSnmpClient`/executor. Detail: [handbook/08-snmp-polling.md](handbook/08-snmp-polling.md).
 
 ### 2.2 CLI Telnet
 
@@ -661,8 +661,8 @@ vlan 2101`). NMS: parser `ZteOnuRunningConfigService` mengisi `onu_profile` + `p
 | File | Peran |
 |---|---|
 | [`app/Services/Snmp/OltSnmpClient.php`](../app/Services/Snmp/OltSnmpClient.php) | SNMP read + helper ifIndex/decode (C300/C320 **& C600**) |
-| [`app/Services/Snmp/GoSnmpPoller.php`](../app/Services/Snmp/GoSnmpPoller.php) | shell-out ke `bin/kv-snmp-poller` (polling terjadwal) |
-| [`cmd/kv-snmp-poller/main.go`](../cmd/kv-snmp-poller/main.go) | engine SNMP Go |
+| [`app/Services/Snmp/GoSnmpPoller.php`](../app/Services/Snmp/GoSnmpPoller.php) | shell-out ke `bin/nos-snmp-poller` (polling terjadwal) |
+| [`cmd/nos-snmp-poller/main.go`](../cmd/nos-snmp-poller/main.go) | engine SNMP Go |
 | [`app/Services/ZteCliProvisioningExecutor.php`](../app/Services/ZteCliProvisioningExecutor.php) | sesi telnet, pager, `saveConfig`, error patterns |
 | [`app/Services/ZteProvisioningScriptBuilder.php`](../app/Services/ZteProvisioningScriptBuilder.php) | builder script provisioning C300/C320 |
 | [`app/Services/ZteC600ProvisioningScriptBuilder.php`](../app/Services/ZteC600ProvisioningScriptBuilder.php) | builder provisioning C600 (Model B / SmartOLT TR069) |

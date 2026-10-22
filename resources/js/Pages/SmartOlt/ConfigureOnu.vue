@@ -129,13 +129,13 @@ const ifaceLabel = computed(() => props.interface);
 // Tampilan: 'tree' = editor per-bagian gaya NetNumen (OK langsung ke OLT), 'full' = editor lama
 // (ubah banyak sekaligus lalu Terapkan). Pilihan diingat per browser.
 const readMode = () => {
-    try { return localStorage.getItem('kv-onucfg-mode') === 'full' ? 'full' : 'tree'; } catch { return 'tree'; }
+    try { return localStorage.getItem('nos-onucfg-mode') === 'full' ? 'full' : 'tree'; } catch { return 'tree'; }
 };
 const mode = ref(readMode());
 const treeDirty = ref(false);
 const setMode = (next) => {
     mode.value = next;
-    try { localStorage.setItem('kv-onucfg-mode', next); } catch { /* storage diblokir */ }
+    try { localStorage.setItem('nos-onucfg-mode', next); } catch { /* storage diblokir */ }
     // Editor lengkap memakai prop halaman; segarkan bila editor per-bagian sudah mengubah OLT.
     if (next === 'full' && treeDirty.value) {
         treeDirty.value = false;
@@ -202,7 +202,7 @@ const errorList = computed(() => Object.values(form.errors ?? {}));
                     <div class="min-w-0 space-y-2">
                         <p class="font-semibold">{{ $t('configonu.profile_title', { profile: onuProfile }) }}</p>
                         <p class="text-amber-100/80">{{ $t('configonu.profile_body') }}</p>
-                        <pre v-if="profileLines.length" data-theme="dark" class="kv-terminal overflow-x-auto rounded-md bg-slate-950/70 px-3 py-2 font-mono text-xs text-amber-200">{{ profileLines.join('\n') }}</pre>
+                        <pre v-if="profileLines.length" data-theme="dark" class="nos-terminal overflow-x-auto rounded-md bg-slate-950/70 px-3 py-2 font-mono text-xs text-amber-200">{{ profileLines.join('\n') }}</pre>
                         <p class="text-xs text-amber-100/70">{{ $t('configonu.profile_howto', { onuId: onu_id, port: `1/${slot}/${port}` }) }}</p>
                     </div>
                 </div>
@@ -253,7 +253,7 @@ const errorList = computed(() => Object.values(form.errors ?? {}));
                 <div class="grid grid-cols-[minmax(0,1fr)] gap-5 xl:grid-cols-[minmax(0,420px)_1fr]">
                     <!-- LEFT: current config -->
                     <div class="space-y-5">
-                        <div class="kv-surface overflow-hidden rounded-lg border border-white/10 bg-slate-900/40 shadow-lg shadow-black/30 backdrop-blur-xl">
+                        <div class="nos-surface overflow-hidden rounded-lg border border-white/10 bg-slate-900/40 shadow-lg shadow-black/30 backdrop-blur-xl">
                             <div class="flex items-center justify-between border-b border-white/10 px-4 py-4 sm:px-6">
                                 <h3 class="flex items-center gap-2 text-sm font-semibold uppercase tracking-wide text-slate-200">
                                     <Eye class="h-4 w-4 text-cyan-400" /> Current Config
@@ -270,17 +270,17 @@ const errorList = computed(() => Object.values(form.errors ?? {}));
                             </dl>
                         </div>
 
-                        <div class="kv-surface overflow-hidden rounded-lg border border-white/10 bg-slate-900/40 shadow-lg shadow-black/30 backdrop-blur-xl">
+                        <div class="nos-surface overflow-hidden rounded-lg border border-white/10 bg-slate-900/40 shadow-lg shadow-black/30 backdrop-blur-xl">
                             <div class="flex items-center gap-2 border-b border-white/10 px-4 py-3 text-xs font-semibold uppercase tracking-wide text-slate-400 sm:px-6">
                                 <Terminal class="h-4 w-4" /> Raw running-config
                             </div>
-                            <pre data-theme="dark" class="kv-terminal overflow-x-auto whitespace-pre-wrap break-words bg-slate-950/70 px-4 py-3 font-mono text-xs leading-relaxed text-emerald-300/90">{{ raw || $t('configonu.empty_paren') }}</pre>
+                            <pre data-theme="dark" class="nos-terminal overflow-x-auto whitespace-pre-wrap break-words bg-slate-950/70 px-4 py-3 font-mono text-xs leading-relaxed text-emerald-300/90">{{ raw || $t('configonu.empty_paren') }}</pre>
                         </div>
                     </div>
 
                     <!-- RIGHT: editable form (OLT write-capable saja) -->
                     <OnuConfigEditor v-if="canWrite" :config="cfg" :profiles="profiles" :errors="form.errors" />
-                    <div v-else class="kv-surface flex items-start gap-3 self-start rounded-lg border border-white/10 bg-slate-900/40 p-6 text-sm text-slate-400 shadow-lg shadow-black/30 backdrop-blur-xl">
+                    <div v-else class="nos-surface flex items-start gap-3 self-start rounded-lg border border-white/10 bg-slate-900/40 p-6 text-sm text-slate-400 shadow-lg shadow-black/30 backdrop-blur-xl">
                         <Eye class="mt-0.5 h-5 w-5 flex-shrink-0 text-cyan-400" />
                         <p>{{ $t('configonu.readonly_editor_note') }}</p>
                     </div>
@@ -294,11 +294,11 @@ const errorList = computed(() => Object.values(form.errors ?? {}));
                                 <Terminal class="h-4 w-4 text-cyan-400" /> Generated Script (Delta Live)
                                 <RefreshCw v-if="preview.loading" class="h-3.5 w-3.5 animate-spin text-slate-500" />
                             </h3>
-                            <button type="button" class="kv-add" @click="copyScript">
+                            <button type="button" class="nos-add" @click="copyScript">
                                 <Check v-if="copied" class="h-3.5 w-3.5" /><Copy v-else class="h-3.5 w-3.5" /> {{ copied ? $t('configonu.copied') : 'Copy' }}
                             </button>
                         </header>
-                        <pre data-theme="dark" class="kv-terminal max-h-[360px] overflow-auto bg-slate-950/70 px-4 py-3 font-mono text-xs leading-relaxed text-cyan-200/90">{{ preview.script }}</pre>
+                        <pre data-theme="dark" class="nos-terminal max-h-[360px] overflow-auto bg-slate-950/70 px-4 py-3 font-mono text-xs leading-relaxed text-cyan-200/90">{{ preview.script }}</pre>
                     </section>
 
                     <section class="overflow-hidden rounded-lg border border-white/10 bg-slate-900/40 shadow-lg shadow-black/30 backdrop-blur-xl">
@@ -331,7 +331,7 @@ const errorList = computed(() => Object.values(form.errors ?? {}));
                 </template>
 
                 <!-- Action bar -->
-                <div class="kv-surface grid gap-2 rounded-lg border border-white/10 bg-slate-900/40 px-4 py-4 shadow-lg shadow-black/30 backdrop-blur-xl sm:flex sm:items-center sm:justify-end sm:gap-3 sm:px-6">
+                <div class="nos-surface grid gap-2 rounded-lg border border-white/10 bg-slate-900/40 px-4 py-4 shadow-lg shadow-black/30 backdrop-blur-xl sm:flex sm:items-center sm:justify-end sm:gap-3 sm:px-6">
                     <Link :href="route('smartolt.port-onus', [olt.id, slot, port])" class="block w-full sm:w-auto">
                         <SecondaryButton type="button" class="w-full sm:w-auto">{{ $t('common.cancel') }}</SecondaryButton>
                     </Link>
@@ -346,18 +346,18 @@ const errorList = computed(() => Object.values(form.errors ?? {}));
 </template>
 
 <style scoped>
-.kv-add {
+.nos-add {
     display: inline-flex;
     align-items: center;
     gap: 0.375rem;
     border-radius: 0.5rem;
-    border: 1px solid rgb(var(--kv-white) / 0.1);
-    background: rgb(var(--kv-slate-900) / 0.4);
+    border: 1px solid rgb(var(--nos-white) / 0.1);
+    background: rgb(var(--nos-slate-900) / 0.4);
     padding: 0.375rem 0.75rem;
     font-size: 0.75rem;
     font-weight: 600;
-    color: rgb(var(--kv-slate-200));
+    color: rgb(var(--nos-slate-200));
     transition: all 0.15s;
 }
-.kv-add:hover { border-color: rgb(6 182 212 / 0.4); color: rgb(var(--kv-white)); }
+.nos-add:hover { border-color: rgb(6 182 212 / 0.4); color: rgb(var(--nos-white)); }
 </style>

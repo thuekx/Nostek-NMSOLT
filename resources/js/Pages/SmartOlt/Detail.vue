@@ -115,24 +115,24 @@ const formatUptime = (timeticks) => formatSnmpUptime(timeticks);
             <div class="w-full space-y-6 px-4 sm:px-6 lg:px-8">
 
                 <div class="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
-                    <div class="kv-stat">
+                    <div class="nos-stat">
                         <p class="text-xs font-medium uppercase tracking-wider text-slate-500">{{ $t('common.status') }}</p>
                         <p class="mt-3 text-2xl font-bold"
                             :class="snapshot.ok ? 'text-emerald-400' : 'text-slate-400'">
                             {{ snapshot.ok ? $t('common.online') : $t('common.unknown') }}
                         </p>
                     </div>
-                    <div class="kv-stat">
+                    <div class="nos-stat">
                         <p class="text-xs font-medium uppercase tracking-wider text-slate-500">{{ $t('gponports.stat_gpon_port') }}</p>
                         <p class="mt-3 text-2xl font-bold text-white">{{ snapshot.ports.length }}</p>
                     </div>
-                    <div class="kv-stat">
+                    <div class="nos-stat">
                         <p class="text-xs font-medium uppercase tracking-wider text-slate-500">{{ $t('detail.total_onu') }}</p>
                         <p class="mt-3 text-2xl font-bold text-white">
                             {{ onuOnline }}<span class="text-sm font-normal text-slate-500">{{ $t('detail.onu_online_suffix', { total: onuTotal }) }}</span>
                         </p>
                     </div>
-                    <div class="kv-stat">
+                    <div class="nos-stat">
                         <p class="text-xs font-medium uppercase tracking-wider text-slate-500">{{ $t('common.last_refresh') }}</p>
                         <p class="mt-3 text-sm font-semibold text-white">{{ formatDate(snapshot.last_tested_at) }}</p>
                         <p class="mt-1 text-xs" :class="olt.polling_enabled ? 'text-emerald-400' : 'text-slate-400'">
@@ -142,7 +142,7 @@ const formatUptime = (timeticks) => formatSnmpUptime(timeticks);
                 </div>
 
                 <div class="grid gap-6 lg:grid-cols-2">
-                    <div class="kv-surface overflow-hidden rounded-lg border border-white/10 bg-slate-900/40 shadow-lg shadow-black/30 backdrop-blur-xl">
+                    <div class="nos-surface overflow-hidden rounded-lg border border-white/10 bg-slate-900/40 shadow-lg shadow-black/30 backdrop-blur-xl">
                         <div class="flex items-center gap-3 border-b border-white/10 px-4 py-4 sm:px-6">
                             <div class="flex h-9 w-9 flex-shrink-0 items-center justify-center rounded-lg bg-sky-500/15 ring-1 ring-cyan-500/30">
                                 <Server class="h-5 w-5 text-cyan-400" />

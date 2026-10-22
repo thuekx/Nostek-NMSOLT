@@ -65,7 +65,7 @@ Bagian di bawah menjelaskan langkah **manual** (untuk dev, atau bila ingin paham
 | Node.js | 22 / npm 10 | untuk build Vite |
 | PostgreSQL | 14+ | database `nostek_nmsolt` |
 | Redis | — | cache, session, queue |
-| Go | 1.18+ | hanya untuk build ulang `bin/kv-snmp-poller` |
+| Go | 1.18+ | hanya untuk build ulang `bin/nos-snmp-poller` |
 | Net-SNMP | — | `snmpget`/`snmpwalk` membantu debugging; PHP ext-snmp dipakai `OltSnmpClient` |
 | Supervisor | — | jalankan worker, scheduler, telnet proxy di prod |
 | Nginx + PHP-FPM | — | web server prod |
@@ -131,8 +131,8 @@ npm run build     # produksi → public/build (emptyOutDir:false: chunk lama dis
 ## Build Go SNMP poller
 
 ```bash
-CGO_ENABLED=0 go build -mod=mod -trimpath -ldflags='-s -w' -o bin/kv-snmp-poller ./cmd/kv-snmp-poller
-chmod +x bin/kv-snmp-poller
+CGO_ENABLED=0 go build -mod=mod -trimpath -ldflags='-s -w' -o bin/nos-snmp-poller ./cmd/nos-snmp-poller
+chmod +x bin/nos-snmp-poller
 ```
 `-mod=mod` wajib: root repo punya folder `vendor/` (milik Composer), dan tanpa flag itu Go (go.mod `go 1.18`)
 mencoba mode vendor lalu gagal "inconsistent vendoring". `CGO_ENABLED=0` = biner statis (sama dengan
@@ -153,7 +153,7 @@ BROADCAST_CONNECTION=reverb
 
 # SNMP poller (Go)
 SNMP_POLLER_DRIVER=go            # prod: go | dev: php
-SNMP_POLLER_BINARY=bin/kv-snmp-poller
+SNMP_POLLER_BINARY=bin/nos-snmp-poller
 SNMP_POLLER_REQUEST_TIMEOUT=10s
 SNMP_POLLER_PROCESS_TIMEOUT=300
 SNMP_POLLER_RETRIES=2
@@ -199,7 +199,7 @@ cd /var/www/NostekNMSOLT
 git pull
 composer install --no-dev --optimize-autoloader
 npm ci && npm run build
-CGO_ENABLED=0 go build -mod=mod -trimpath -ldflags='-s -w' -o bin/kv-snmp-poller ./cmd/kv-snmp-poller   # bila cmd/ berubah
+CGO_ENABLED=0 go build -mod=mod -trimpath -ldflags='-s -w' -o bin/nos-snmp-poller ./cmd/nos-snmp-poller   # bila cmd/ berubah
 php artisan migrate --force
 php artisan optimize:clear
 php artisan optimize                 # cache config + route + view

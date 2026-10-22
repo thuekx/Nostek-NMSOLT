@@ -17,6 +17,8 @@ Nostek-NMSOLT — STANDALONE NETWORK PLATFORM / API PROVIDER
 |   +-- SNMP, PON/ONU inventory, optical detail and UI evidence passed
 |
 +-- NMS-07 [IN PROGRESS] NMSOLT product stabilization
+|   +-- canonical identity: Nostek-NMSOLT; short name: Nostek-NMS
+|   +-- inherited namespace and poller identity are being standardized as nos-*
 |   +-- audit functions, screens, read paths and performance
 |   +-- repair misleading/broken behavior and add regression evidence
 +-- NMS-08 [BLOCKED] API v1 read-only + OpenAPI

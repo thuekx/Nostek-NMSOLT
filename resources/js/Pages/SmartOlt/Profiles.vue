@@ -233,12 +233,12 @@ const syncFromOlt = () => {
                     </div>
 
                     <!-- Table / mobile cards -->
-                    <div class="kv-mobile-list">
+                    <div class="nos-mobile-list">
                         <div v-if="rowsFor(type).length === 0" class="px-4 py-8 text-center text-sm text-slate-500">
                             {{ $t('profiles.empty') }}
                         </div>
 
-                        <article v-for="profile in rowsFor(type)" :key="profile.id" class="kv-mobile-card">
+                        <article v-for="profile in rowsFor(type)" :key="profile.id" class="nos-mobile-card">
                             <template v-if="editing[profile.id]">
                                 <div class="space-y-3">
                                     <div>
@@ -281,10 +281,10 @@ const syncFromOlt = () => {
                             </template>
 
                             <template v-else>
-                                <div class="kv-mobile-card-header">
+                                <div class="nos-mobile-card-header">
                                     <div class="min-w-0">
-                                        <h4 class="kv-mobile-card-title">{{ profile.name }}</h4>
-                                        <p class="kv-mobile-card-subtitle">{{ profile.source || 'manual' }}</p>
+                                        <h4 class="nos-mobile-card-title">{{ profile.name }}</h4>
+                                        <p class="nos-mobile-card-subtitle">{{ profile.source || 'manual' }}</p>
                                     </div>
                                     <span
                                         class="inline-flex rounded-full px-2.5 py-0.5 text-xs font-medium ring-1"
@@ -295,14 +295,14 @@ const syncFromOlt = () => {
                                         {{ profile.is_active ? $t('profiles.active') : $t('profiles.inactive') }}
                                     </span>
                                 </div>
-                                <div class="kv-mobile-fields">
-                                    <div v-if="type.key === 'vlan'" class="kv-mobile-field">
-                                        <span class="kv-mobile-label">VLAN</span>
-                                        <span class="kv-mobile-value">{{ profile.vlan }}</span>
+                                <div class="nos-mobile-fields">
+                                    <div v-if="type.key === 'vlan'" class="nos-mobile-field">
+                                        <span class="nos-mobile-label">VLAN</span>
+                                        <span class="nos-mobile-value">{{ profile.vlan }}</span>
                                     </div>
-                                    <div class="kv-mobile-field">
-                                        <span class="kv-mobile-label">Params</span>
-                                        <span class="kv-mobile-value">
+                                    <div class="nos-mobile-field">
+                                        <span class="nos-mobile-label">Params</span>
+                                        <span class="nos-mobile-value">
                                             <span v-if="type.key === 'tcont'">type {{ profile.params?.type ?? '-' }} · max {{ profile.params?.maximum ?? '-' }}</span>
                                             <span v-else-if="type.key === 'ip'">gateway {{ profile.params?.gateway ?? '-' }}</span>
                                             <span v-else>{{ profile.notes || '-' }}</span>
@@ -325,7 +325,7 @@ const syncFromOlt = () => {
                         </article>
                     </div>
 
-                    <div class="kv-table-desktop">
+                    <div class="nos-table-desktop">
                         <table class="min-w-[720px] w-full text-xs">
                             <thead>
                                 <tr class="border-b border-white/10 bg-canvas-3/40">

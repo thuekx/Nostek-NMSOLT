@@ -125,7 +125,7 @@ class GenieacsConnectedDevicesTest extends TestCase
         $doc = $this->deviceDoc();
         // Hanya MAC pertama yang sedang ter-asosiasi di radio WiFi.
         $doc[0]['InternetGatewayDevice']['LANDevice']['1']['WLANConfiguration'] = ['1' => [
-            'SSID' => ['_value' => 'KUSUMANET'],
+            'SSID' => ['_value' => 'NOSTEKNET'],
             'AssociatedDevice' => ['1' => [
                 'AssociatedDeviceMACAddress' => ['_value' => 'AA:BB:CC:DD:EE:01'],
             ]],

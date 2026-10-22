@@ -265,7 +265,7 @@ Event konstanta: created/updated/deleted/login/logout/login_failed/telnet_opened
 `name, email, email_verified_at, password(hashed), remember_token, role(enum UserRole:
 admin|operator|partner|demo, default operator), locale (id|en|null), theme (dark|light|system|null),
 last_notifications_read_at`. `role` cast ke `UserRole`. `theme` null = belum memilih → cookie
-`kv_theme` → gelap (lihat `App\Support\Theme`). Password diperiksa lokal (login Breeze & `POST
+`nos_theme` → gelap (lihat `App\Support\Theme`). Password diperiksa lokal (login Breeze & `POST
 /api/v1/auth/login`); akun dibuat admin lewat menu Users atau `php artisan user:create`.
 
 Method izin: `isAdmin/isOperator/isPartner/isDemo`, `isOltScoped`, `canManageOlt`,

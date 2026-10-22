@@ -85,7 +85,7 @@ FD1601S, FD1602S) & EPON (FD1304E), HiOSO HA7304/HA7302. V-Sol tidak didukung; H
   fitur. *Developer handbook index.*
 - [Nostek integration plan](nostek/INTEGRATION-PLAN.md) — ringkasan arsitektur & konvensi wajib (test lewat `scripts/test.sh`, config cache,
   i18n). *Architecture summary and mandatory conventions.*
-- [UI_DESIGN_SYSTEM.md](../UI_DESIGN_SYSTEM.md) — design system Dark-Glass Cyan, dua tema, kelas `kv-*`.
+- [UI_DESIGN_SYSTEM.md](../UI_DESIGN_SYSTEM.md) — design system Dark-Glass Cyan, dua tema, kelas `nos-*`.
   *UI design system and theme rules.*
 - [handbook/15-ui-tema-dashboard.md](handbook/15-ui-tema-dashboard.md) — aturan membuat halaman/komponen baru.
   *Rules for new pages and components.*

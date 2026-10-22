@@ -265,10 +265,10 @@ const formatDate = (value) => formatDateTime(value);
                 </div>
 
                 <!-- ============================ TAB: OLT ZTE ============================ -->
-                <div v-show="activeTab === 'zte'" class="kv-glass-panel">
+                <div v-show="activeTab === 'zte'" class="nos-glass-panel">
                     <!-- Card header -->
                     <div class="flex items-center gap-3 border-b border-white/10 px-4 py-4 sm:px-6">
-                        <span class="kv-circle-sky !h-10 !w-10">
+                        <span class="nos-circle-sky !h-10 !w-10">
                             <Cable class="h-5 w-5" />
                         </span>
                         <div>
@@ -296,46 +296,46 @@ const formatDate = (value) => formatDateTime(value);
 
                     <!-- Table / mobile cards -->
                     <template v-else>
-                        <div class="kv-mobile-list">
-                            <article v-for="olt in olts" :key="olt.id" class="kv-mobile-card">
-                                <div class="kv-mobile-card-header">
+                        <div class="nos-mobile-list">
+                            <article v-for="olt in olts" :key="olt.id" class="nos-mobile-card">
+                                <div class="nos-mobile-card-header">
                                     <div class="min-w-0">
-                                        <h4 class="kv-mobile-card-title">
+                                        <h4 class="nos-mobile-card-title">
                                             {{ olt.name }}
                                             <span v-if="olt.is_private" class="ml-1.5 inline-flex items-center rounded-full bg-fuchsia-500/15 px-2 py-0.5 text-[10px] font-medium text-fuchsia-200 ring-1 ring-fuchsia-400/30" :title="$t('common.private_hint')">{{ $t('common.private') }}</span>
                                         </h4>
-                                        <p class="kv-mobile-card-subtitle">{{ olt.vendor || $t('smartolt.vendor_empty') }}</p>
+                                        <p class="nos-mobile-card-subtitle">{{ olt.vendor || $t('smartolt.vendor_empty') }}</p>
                                     </div>
-                                    <span :class="olt.driver === 'zte' ? 'kv-pill-info' : 'kv-pill-muted'">
+                                    <span :class="olt.driver === 'zte' ? 'nos-pill-info' : 'nos-pill-muted'">
                                         {{ olt.capabilities.vendor_family }}
                                     </span>
                                 </div>
 
-                                <div class="kv-mobile-fields">
-                                    <div class="kv-mobile-field">
-                                        <span class="kv-mobile-label">{{ $t('smartolt.col_snmp') }}</span>
-                                        <span class="kv-mobile-value font-mono text-xs">{{ olt.ip }}:{{ olt.snmp_port }}</span>
+                                <div class="nos-mobile-fields">
+                                    <div class="nos-mobile-field">
+                                        <span class="nos-mobile-label">{{ $t('smartolt.col_snmp') }}</span>
+                                        <span class="nos-mobile-value font-mono text-xs">{{ olt.ip }}:{{ olt.snmp_port }}</span>
                                     </div>
-                                    <div class="kv-mobile-field">
-                                        <span class="kv-mobile-label">{{ $t('smartolt.col_version') }}</span>
-                                        <span class="kv-mobile-value uppercase tracking-widest">{{ olt.snmp_version }}</span>
+                                    <div class="nos-mobile-field">
+                                        <span class="nos-mobile-label">{{ $t('smartolt.col_version') }}</span>
+                                        <span class="nos-mobile-value uppercase tracking-widest">{{ olt.snmp_version }}</span>
                                     </div>
-                                    <div class="kv-mobile-field">
-                                        <span class="kv-mobile-label">{{ $t('smartolt.col_autopoll') }}</span>
-                                        <span class="kv-mobile-value" :class="olt.polling_enabled ? 'text-emerald-400' : 'text-slate-500'">
+                                    <div class="nos-mobile-field">
+                                        <span class="nos-mobile-label">{{ $t('smartolt.col_autopoll') }}</span>
+                                        <span class="nos-mobile-value" :class="olt.polling_enabled ? 'text-emerald-400' : 'text-slate-500'">
                                             {{ olt.polling_enabled ? $t('common.on') : $t('common.off') }}
                                         </span>
                                     </div>
-                                    <div class="kv-mobile-field">
-                                        <span class="kv-mobile-label">{{ $t('smartolt.col_alarm') }}</span>
-                                        <span class="kv-mobile-value" :class="olt.alarms_enabled ? 'text-emerald-400' : 'text-amber-400'">
+                                    <div class="nos-mobile-field">
+                                        <span class="nos-mobile-label">{{ $t('smartolt.col_alarm') }}</span>
+                                        <span class="nos-mobile-value" :class="olt.alarms_enabled ? 'text-emerald-400' : 'text-amber-400'">
                                             {{ olt.alarms_enabled ? $t('common.on') : $t('common.off') }}
                                         </span>
                                     </div>
-                                    <div class="kv-mobile-field">
-                                        <span class="kv-mobile-label">{{ $t('smartolt.col_test') }}</span>
+                                    <div class="nos-mobile-field">
+                                        <span class="nos-mobile-label">{{ $t('smartolt.col_test') }}</span>
                                         <span
-                                            class="kv-mobile-value font-semibold"
+                                            class="nos-mobile-value font-semibold"
                                             :class="olt.last_test_result?.ok
                                                 ? 'text-emerald-300'
                                                 : olt.last_test_result
@@ -345,9 +345,9 @@ const formatDate = (value) => formatDateTime(value);
                                             {{ olt.last_test_result?.ok ? $t('common.ok') : (olt.last_test_result ? $t('common.failed') : $t('common.not_tested')) }}
                                         </span>
                                     </div>
-                                    <div class="kv-mobile-field">
-                                        <span class="kv-mobile-label">{{ $t('smartolt.col_last') }}</span>
-                                        <span class="kv-mobile-value">{{ formatDate(olt.last_tested_at) }}</span>
+                                    <div class="nos-mobile-field">
+                                        <span class="nos-mobile-label">{{ $t('smartolt.col_last') }}</span>
+                                        <span class="nos-mobile-value">{{ formatDate(olt.last_tested_at) }}</span>
                                     </div>
                                 </div>
 
@@ -395,7 +395,7 @@ const formatDate = (value) => formatDateTime(value);
                             </article>
                         </div>
 
-                        <div class="kv-table-desktop">
+                        <div class="nos-table-desktop">
                         <table class="w-full min-w-[720px] text-xs">
                             <thead>
                                 <tr class="border-b border-white/10 bg-canvas-3/40">
@@ -426,7 +426,7 @@ const formatDate = (value) => formatDateTime(value);
                                     <td class="px-4 py-3">
                                         <div class="space-y-1.5">
                                             <span
-                                                :class="olt.driver === 'zte' ? 'kv-pill-info' : 'kv-pill-muted'"
+                                                :class="olt.driver === 'zte' ? 'nos-pill-info' : 'nos-pill-muted'"
                                             >
                                                 {{ olt.capabilities.vendor_family }}
                                             </span>
@@ -526,10 +526,10 @@ const formatDate = (value) => formatDateTime(value);
                 </div>
 
                 <!-- ==================== TAB: OLT C-Data / OLT HiOSO ===================== -->
-                <div v-show="isNonZteTab" class="kv-glass-panel">
+                <div v-show="isNonZteTab" class="nos-glass-panel">
                     <!-- Card header -->
                     <div class="flex items-center gap-3 border-b border-white/10 px-4 py-4 sm:px-6">
-                        <span class="kv-circle-sky !h-10 !w-10">
+                        <span class="nos-circle-sky !h-10 !w-10">
                             <component :is="nonZteIcon" class="h-5 w-5" />
                         </span>
                         <div>
@@ -557,35 +557,35 @@ const formatDate = (value) => formatDateTime(value);
 
                     <!-- Table / mobile cards -->
                     <template v-else>
-                        <div class="kv-mobile-list">
-                            <article v-for="olt in nonZteOlts" :key="olt.id" class="kv-mobile-card">
-                                <div class="kv-mobile-card-header">
+                        <div class="nos-mobile-list">
+                            <article v-for="olt in nonZteOlts" :key="olt.id" class="nos-mobile-card">
+                                <div class="nos-mobile-card-header">
                                     <div class="min-w-0">
-                                        <h4 class="kv-mobile-card-title">
+                                        <h4 class="nos-mobile-card-title">
                                             {{ olt.name }}
                                             <span v-if="olt.is_private" class="ml-1.5 inline-flex items-center rounded-full bg-fuchsia-500/15 px-2 py-0.5 text-[10px] font-medium text-fuchsia-200 ring-1 ring-fuchsia-400/30" :title="$t('common.private_hint')">{{ $t('common.private') }}</span>
                                         </h4>
-                                        <p class="kv-mobile-card-subtitle">{{ olt.vendor || $t('smartolt.family_empty') }}</p>
+                                        <p class="nos-mobile-card-subtitle">{{ olt.vendor || $t('smartolt.family_empty') }}</p>
                                     </div>
                                     <div class="flex flex-col items-end gap-1">
-                                        <span class="kv-pill-info">{{ olt.capabilities.vendor_family }}</span>
-                                        <span v-if="firmwareBadge(olt)" class="kv-pill-muted">{{ firmwareBadge(olt) }}</span>
+                                        <span class="nos-pill-info">{{ olt.capabilities.vendor_family }}</span>
+                                        <span v-if="firmwareBadge(olt)" class="nos-pill-muted">{{ firmwareBadge(olt) }}</span>
                                     </div>
                                 </div>
 
-                                <div class="kv-mobile-fields">
-                                    <div class="kv-mobile-field">
-                                        <span class="kv-mobile-label">{{ $t('smartolt.col_snmp') }}</span>
-                                        <span class="kv-mobile-value font-mono text-xs">{{ olt.ip }}:{{ olt.snmp_port }}</span>
+                                <div class="nos-mobile-fields">
+                                    <div class="nos-mobile-field">
+                                        <span class="nos-mobile-label">{{ $t('smartolt.col_snmp') }}</span>
+                                        <span class="nos-mobile-value font-mono text-xs">{{ olt.ip }}:{{ olt.snmp_port }}</span>
                                     </div>
-                                    <div class="kv-mobile-field">
-                                        <span class="kv-mobile-label">{{ $t('smartolt.col_version') }}</span>
-                                        <span class="kv-mobile-value uppercase tracking-widest">{{ olt.snmp_version }}</span>
+                                    <div class="nos-mobile-field">
+                                        <span class="nos-mobile-label">{{ $t('smartolt.col_version') }}</span>
+                                        <span class="nos-mobile-value uppercase tracking-widest">{{ olt.snmp_version }}</span>
                                     </div>
-                                    <div class="kv-mobile-field">
-                                        <span class="kv-mobile-label">{{ $t('smartolt.col_test') }}</span>
+                                    <div class="nos-mobile-field">
+                                        <span class="nos-mobile-label">{{ $t('smartolt.col_test') }}</span>
                                         <span
-                                            class="kv-mobile-value font-semibold"
+                                            class="nos-mobile-value font-semibold"
                                             :class="olt.last_test_result?.ok
                                                 ? 'text-emerald-300'
                                                 : olt.last_test_result
@@ -595,19 +595,19 @@ const formatDate = (value) => formatDateTime(value);
                                             {{ olt.last_test_result?.ok ? $t('common.ok') : (olt.last_test_result ? $t('common.failed') : $t('common.not_tested')) }}
                                         </span>
                                     </div>
-                                    <div class="kv-mobile-field">
-                                        <span class="kv-mobile-label">{{ $t('smartolt.col_last') }}</span>
-                                        <span class="kv-mobile-value">{{ formatDate(olt.last_tested_at) }}</span>
+                                    <div class="nos-mobile-field">
+                                        <span class="nos-mobile-label">{{ $t('smartolt.col_last') }}</span>
+                                        <span class="nos-mobile-value">{{ formatDate(olt.last_tested_at) }}</span>
                                     </div>
-                                    <div class="kv-mobile-field">
-                                        <span class="kv-mobile-label">{{ $t('smartolt.col_autopoll') }}</span>
-                                        <span class="kv-mobile-value" :class="olt.polling_enabled ? 'text-emerald-400' : 'text-slate-500'">
+                                    <div class="nos-mobile-field">
+                                        <span class="nos-mobile-label">{{ $t('smartolt.col_autopoll') }}</span>
+                                        <span class="nos-mobile-value" :class="olt.polling_enabled ? 'text-emerald-400' : 'text-slate-500'">
                                             {{ olt.polling_enabled ? `${$t('common.on')} · ${olt.poll_interval_minutes}m` : $t('common.off') }}
                                         </span>
                                     </div>
-                                    <div class="kv-mobile-field">
-                                        <span class="kv-mobile-label">{{ $t('smartolt.col_alarm') }}</span>
-                                        <span class="kv-mobile-value" :class="olt.alarms_enabled ? 'text-emerald-400' : 'text-amber-400'">
+                                    <div class="nos-mobile-field">
+                                        <span class="nos-mobile-label">{{ $t('smartolt.col_alarm') }}</span>
+                                        <span class="nos-mobile-value" :class="olt.alarms_enabled ? 'text-emerald-400' : 'text-amber-400'">
                                             {{ olt.alarms_enabled ? $t('common.on') : $t('common.off') }}
                                         </span>
                                     </div>
@@ -654,7 +654,7 @@ const formatDate = (value) => formatDateTime(value);
                             </article>
                         </div>
 
-                        <div class="kv-table-desktop">
+                        <div class="nos-table-desktop">
                         <table class="w-full min-w-[720px] text-xs">
                             <thead>
                                 <tr class="border-b border-white/10 bg-canvas-3/40">
@@ -685,8 +685,8 @@ const formatDate = (value) => formatDateTime(value);
                                     <td class="px-4 py-3">
                                         <div class="space-y-1.5">
                                             <div class="flex flex-wrap items-center gap-1.5">
-                                                <span class="kv-pill-info">{{ olt.capabilities.vendor_family }}</span>
-                                                <span v-if="firmwareBadge(olt)" class="kv-pill-muted">{{ firmwareBadge(olt) }}</span>
+                                                <span class="nos-pill-info">{{ olt.capabilities.vendor_family }}</span>
+                                                <span v-if="firmwareBadge(olt)" class="nos-pill-muted">{{ firmwareBadge(olt) }}</span>
                                             </div>
                                             <div
                                                 class="flex items-center gap-1.5 text-xs"

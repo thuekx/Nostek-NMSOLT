@@ -322,7 +322,7 @@ const refresh = () => router.reload({ preserveScroll: true });
                         </span>
                         <ChevronDown class="h-4 w-4 text-slate-400 transition-transform group-open:rotate-180" />
                     </summary>
-                    <pre data-theme="dark" class="kv-terminal max-h-[480px] overflow-auto border-t border-white/10 bg-slate-950/70 px-4 py-3 font-mono text-xs leading-relaxed text-emerald-300/90">{{ raw || $t('configonu.empty_paren') }}</pre>
+                    <pre data-theme="dark" class="nos-terminal max-h-[480px] overflow-auto border-t border-white/10 bg-slate-950/70 px-4 py-3 font-mono text-xs leading-relaxed text-emerald-300/90">{{ raw || $t('configonu.empty_paren') }}</pre>
                 </details>
             </div>
         </div>

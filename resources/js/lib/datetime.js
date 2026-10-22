@@ -5,8 +5,8 @@ import { i18n } from '@/i18n';
 // viewer's browser timezone. Storage stays UTC; only display is converted. The zone +
 // label are injected from backend config (window globals in app.blade.php) — e.g.
 // Asia/Jakarta "WIB" (default) or America/Santo_Domingo "AST".
-const DISPLAY_TZ = (typeof window !== 'undefined' && window.KV_DISPLAY_TZ) || 'Asia/Jakarta';
-const TZ_LABEL = (typeof window !== 'undefined' && window.KV_DISPLAY_TZ_LABEL) || 'WIB';
+const DISPLAY_TZ = (typeof window !== 'undefined' && window.NOS_DISPLAY_TZ) || 'Asia/Jakarta';
+const TZ_LABEL = (typeof window !== 'undefined' && window.NOS_DISPLAY_TZ_LABEL) || 'WIB';
 
 // Format angka/bulan mengikuti bahasa aktif (id "29 Mei, 16.42" · en "29 May, 16:42").
 // Dibaca dari ref locale vue-i18n → pemanggilan saat render ikut reaktif switch bahasa.

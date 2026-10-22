@@ -30,7 +30,7 @@ export function ensureParticlesEngine() {
 }
 
 /** Id unik per pemanggilan agar instance (DOM + registry) tidak pernah bentrok. */
-export function nextParticlesId(prefix = 'kv-particles') {
+export function nextParticlesId(prefix = 'nos-particles') {
     return `${prefix}-${++instanceSeq}`;
 }
 

@@ -288,7 +288,7 @@ const viewOnMap = (onu) => {
 
                 <PortOnuStats :snapshot="snapshot" />
 
-                <div class="kv-table-card">
+                <div class="nos-table-card">
                     <div class="flex items-center gap-3 border-b border-white/10 px-4 py-4 sm:px-6">
                         <div class="flex h-9 w-9 flex-shrink-0 items-center justify-center rounded-lg bg-sky-500/15 ring-1 ring-cyan-500/30">
                             <Router class="h-5 w-5 text-cyan-400" />
@@ -311,7 +311,7 @@ const viewOnMap = (onu) => {
                                 type="text"
                                 :placeholder="$t('cdataportonus.search_placeholder')"
                                 :aria-label="$t('cdataportonus.search_placeholder')"
-                                class="kv-filter-control !pl-9 !pr-9"
+                                class="nos-filter-control !pl-9 !pr-9"
                             />
                             <button
                                 v-if="search"
@@ -354,7 +354,7 @@ const viewOnMap = (onu) => {
                     </div>
 
                     <template v-else>
-                        <div class="kv-table-desktop">
+                        <div class="nos-table-desktop">
                             <table class="w-full min-w-[820px] text-xs">
                                 <thead>
                                     <tr class="border-b border-white/10 bg-canvas-3/40">
@@ -437,8 +437,8 @@ const viewOnMap = (onu) => {
                             </table>
                         </div>
 
-                        <div class="kv-mobile-list">
-                            <article v-for="o in filtered" :key="o.onu_key" class="kv-mobile-card" :class="{ 'ring-1 ring-cyan-500/50': isFocus(o) }">
+                        <div class="nos-mobile-list">
+                            <article v-for="o in filtered" :key="o.onu_key" class="nos-mobile-card" :class="{ 'ring-1 ring-cyan-500/50': isFocus(o) }">
                                 <div class="flex items-center justify-between">
                                     <span class="font-mono text-xs text-white">{{ o.interface }}</span>
                                     <span class="inline-flex items-center gap-1 text-xs font-semibold" :class="o.online ? 'text-emerald-300' : 'text-red-300'">

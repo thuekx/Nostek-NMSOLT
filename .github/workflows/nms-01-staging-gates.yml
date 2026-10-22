@@ -28,6 +28,9 @@ jobs:
         run: bash -n scripts/nostek/deploy-maung-staging.sh
       - name: Validate authorized NMS-05 GenieACS runner syntax
         run: bash -n scripts/nostek/deploy-maung-genieacs-lab.sh
+
+      - name: Enforce Nostek-NMSOLT identity and nos namespace
+        run: python3 scripts/nostek/validate-brand-namespace.py
       - name: Enforce NMS-05 Maung host identity guard
         shell: bash
         run: |

@@ -135,10 +135,10 @@ di-commit ikut hilang, dan gejalanya baru terlihat setelah build berikutnya.
 - **Penyebab**: binary hilang/tak executable, timeout, community salah, atau OLT tak balas.
 - **Solusi**:
   ```bash
-  ls -l bin/kv-snmp-poller          # ada & executable?
-  CGO_ENABLED=0 go build -mod=mod -trimpath -ldflags='-s -w' -o bin/kv-snmp-poller ./cmd/kv-snmp-poller && chmod +x bin/kv-snmp-poller
+  ls -l bin/nos-snmp-poller          # ada & executable?
+  CGO_ENABLED=0 go build -mod=mod -trimpath -ldflags='-s -w' -o bin/nos-snmp-poller ./cmd/nos-snmp-poller && chmod +x bin/nos-snmp-poller
   # tes manual:
-  KV_SNMP_COMMUNITY=public bin/kv-snmp-poller --host <ip> --version v2c --timeout 10s
+  NOS_SNMP_COMMUNITY=public bin/nos-snmp-poller --host <ip> --version v2c --timeout 10s
   ```
   Sistem otomatis **fallback ke PHP** (`OltSnmpClient`) bila Go gagal — fungsi tetap jalan, hanya
   lebih lambat. Cek `SNMP_POLLER_DRIVER=go` di `.env`.

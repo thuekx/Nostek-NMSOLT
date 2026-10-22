@@ -3,7 +3,7 @@ import { i18n } from '@/i18n';
 // Interpretasi kode "last down cause" (penyebab ONU terakhir turun) dari OLT ZTE
 // ke keterangan dwibahasa (lang/{id,en}.json namespace `onu.ldc_*`). Kode teknis
 // aslinya (mis. LOSi, DyingGasp) tetap ditampilkan sebagai tooltip. Sumber kode:
-// OltSnmpClient::decodeLastDownCause dan Go poller (cmd/kv-snmp-poller) —
+// OltSnmpClient::decodeLastDownCause dan Go poller (cmd/nos-snmp-poller) —
 // keduanya memakai taksonomi yang sama.
 const LAST_DOWN_CAUSE_KEYS = {
     Normal: 'onu.ldc_normal',

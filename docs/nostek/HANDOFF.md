@@ -39,15 +39,22 @@ approval. Source-readiness PASS is not runtime verification.
   squash merge `c639f1277e7b37bcd5aee69d7ec58634758fa984`. Vue, Laravel,
   Go, Compose and both image builds passed. The Net-SNMP Timeticks `NaNd`
   rendering defect was fixed with regression coverage.
+- **PR #19:** exact head
+  `18b473545884ddf49d65847827e3473da3d02744`, successful
+  [run 39652098876](https://github.com/thuekx/Nostek-NMSOLT/actions/runs/39652098876),
+  squash merge `62b414f04ac4b5e4f024669e431be29f4d0845d1`. The provider-centric
+  roadmap and bundled-GenieACS product direction are canonical.
 
 Raw device identifiers, communities and screenshots containing customer/serial
 data remain outside the public repository.
 
 ## Active and gated phases
 
-- **NMS-07 IN PROGRESS:** audit and stabilize NMSOLT functions, UI, read paths
-  and performance; create a feature matrix and fix high-impact defects with
-  regression evidence.
+- **NMS-07 IN PROGRESS:** audit and stabilize Nostek-NMSOLT functions, UI,
+  packaging, read paths and performance. The active cleanup standardizes the
+  product name as **Nostek-NMSOLT**, short name **Nostek-NMS**, internal
+  `nos-*` namespace and `nos-snmp-poller`. The upstream MIT copyright notice
+  remains unchanged.
 - **NMS-08 BLOCKED on NMS-07:** API v1 read-only and OpenAPI.
 - **NMS-09 BLOCKED on NMS-08 and separate Maung scope:** `/nosteknmsolt`
   thin consumer.
@@ -59,11 +66,13 @@ See [NMS-07-12-GATED-READINESS.md](NMS-07-12-GATED-READINESS.md) for exact gates
 
 ## Exact next action
 
-Review and merge the provider-centric roadmap PR after exact-head CI passes.
-Delete its merged branch. Then create a fresh NMS-07 branch, inventory application
-routes/screens/read APIs/jobs, record a tested feature matrix, and fix the
-highest-impact safe source defect. Continue automatically while work stays
-within source/isolated tests and needs no new authority.
+Complete the NMS-07 identity cleanup and exact-head CI, then continue unified
+GenieACS packaging and the functional/performance matrix. The rename must cover
+the Go source directory, executable, environment handoff, UI CSS/token namespace,
+tests and documentation. Do not modify the retained LICENSE attribution.
+
+For cross-device continuation, use [CLOUD-HANDOFF.md](CLOUD-HANDOFF.md) after
+the active PR is merged.
 
 ## New-session prompt
 

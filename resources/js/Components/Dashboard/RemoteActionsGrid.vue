@@ -4,19 +4,19 @@ import { CircleCheck, CircleMinus, FileText, Power, RotateCcw, UploadCloud } fro
 const emit = defineEmits(['select']);
 
 const actions = [
-    { key: 'reboot',  label: 'Reboot',   icon: RotateCcw,   accent: 'kv-circle-cyan' },
-    { key: 'reset',   label: 'Reset',    icon: Power,       accent: 'kv-circle-purple' },
-    { key: 'upgrade', label: 'Upgrade',  icon: UploadCloud, accent: 'kv-circle-emerald' },
-    { key: 'enable',  label: 'Enable',   icon: CircleCheck, accent: 'kv-circle-emerald' },
-    { key: 'disable', label: 'Disable',  icon: CircleMinus, accent: 'kv-circle-amber' },
-    { key: 'log',     label: 'Log',      icon: FileText,    accent: 'kv-circle-sky' },
+    { key: 'reboot',  label: 'Reboot',   icon: RotateCcw,   accent: 'nos-circle-cyan' },
+    { key: 'reset',   label: 'Reset',    icon: Power,       accent: 'nos-circle-purple' },
+    { key: 'upgrade', label: 'Upgrade',  icon: UploadCloud, accent: 'nos-circle-emerald' },
+    { key: 'enable',  label: 'Enable',   icon: CircleCheck, accent: 'nos-circle-emerald' },
+    { key: 'disable', label: 'Disable',  icon: CircleMinus, accent: 'nos-circle-amber' },
+    { key: 'log',     label: 'Log',      icon: FileText,    accent: 'nos-circle-sky' },
 ];
 </script>
 
 <template>
-    <div class="kv-glass-panel flex h-full flex-col">
-        <div class="kv-glass-header">
-            <span class="kv-circle-cyan">
+    <div class="nos-glass-panel flex h-full flex-col">
+        <div class="nos-glass-header">
+            <span class="nos-circle-cyan">
                 <Power class="h-5 w-5" />
             </span>
             <h3 class="text-base font-semibold text-white">{{ $t('dashboard.remote_actions') }}</h3>

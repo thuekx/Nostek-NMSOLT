@@ -142,34 +142,34 @@ const formatDate = (value) => (value ? formatDateTime(value) : '—');
                                 v-model="form.q"
                                 type="search"
                                 :placeholder="$t('auditlogs.search_placeholder')"
-                                class="kv-filter-control !pl-9"
+                                class="nos-filter-control !pl-9"
                             >
                         </div>
-                        <select v-model="form.event" class="kv-filter-control w-full sm:w-auto">
+                        <select v-model="form.event" class="nos-filter-control w-full sm:w-auto">
                             <option value="all">{{ $t('auditlogs.all_event') }}</option>
                             <option v-for="event in filterOptions.events" :key="event" :value="event">{{ eventMeta(event).label }}</option>
                         </select>
-                        <select v-model="form.user_id" class="kv-filter-control w-full sm:w-auto">
+                        <select v-model="form.user_id" class="nos-filter-control w-full sm:w-auto">
                             <option value="">{{ $t('auditlogs.all_user') }}</option>
                             <option v-for="user in filterOptions.users" :key="user.id" :value="user.id">{{ user.name }}</option>
                         </select>
                         <div class="flex w-full items-center gap-1.5 sm:w-auto">
-                            <input v-model="form.from" type="date" :title="$t('auditlogs.from_date')" class="kv-filter-control w-full sm:w-auto">
+                            <input v-model="form.from" type="date" :title="$t('auditlogs.from_date')" class="nos-filter-control w-full sm:w-auto">
                             <span class="text-slate-500">–</span>
-                            <input v-model="form.to" type="date" :title="$t('auditlogs.to_date')" class="kv-filter-control w-full sm:w-auto">
+                            <input v-model="form.to" type="date" :title="$t('auditlogs.to_date')" class="nos-filter-control w-full sm:w-auto">
                         </div>
-                        <button type="button" class="kv-filter-reset w-full sm:w-auto" :disabled="!hasFilters" @click="resetFilters">
+                        <button type="button" class="nos-filter-reset w-full sm:w-auto" :disabled="!hasFilters" @click="resetFilters">
                             <RotateCcw class="h-4 w-4" />
                             {{ $t('common.reset') }}
                         </button>
-                        <button type="submit" class="kv-filter-apply w-full sm:w-auto">
+                        <button type="submit" class="nos-filter-apply w-full sm:w-auto">
                             <Search class="h-4 w-4" />
                             {{ $t('auditlogs.apply') }}
                         </button>
                     </form>
                 </FilterCard>
 
-                <div class="kv-surface overflow-hidden rounded-lg border border-white/10 bg-slate-900/40 shadow-lg shadow-black/30 backdrop-blur-xl">
+                <div class="nos-surface overflow-hidden rounded-lg border border-white/10 bg-slate-900/40 shadow-lg shadow-black/30 backdrop-blur-xl">
                     <div class="flex items-center gap-3 border-b border-white/10 px-4 py-4 sm:px-6">
                         <div class="flex h-9 w-9 flex-shrink-0 items-center justify-center rounded-lg bg-cyan-500/20 ring-1 ring-cyan-500/30">
                             <ScrollText class="h-5 w-5 text-cyan-400" />
@@ -192,29 +192,29 @@ const formatDate = (value) => (value ? formatDateTime(value) : '—');
 
                     <template v-else>
                         <!-- Mobile -->
-                        <div class="kv-mobile-list">
-                            <article v-for="log in rows" :key="log.id" class="kv-mobile-card">
-                                <div class="kv-mobile-card-header">
+                        <div class="nos-mobile-list">
+                            <article v-for="log in rows" :key="log.id" class="nos-mobile-card">
+                                <div class="nos-mobile-card-header">
                                     <div class="min-w-0">
                                         <span class="inline-flex rounded-full px-2.5 py-1 text-xs font-medium" :class="eventMeta(log.event).class">
                                             {{ eventMeta(log.event).label }}
                                         </span>
-                                        <h4 class="mt-3 kv-mobile-card-title" :title="log.description || ''">{{ auditDescription(log) }}</h4>
-                                        <p class="kv-mobile-card-subtitle">{{ formatDate(log.created_at) }}</p>
+                                        <h4 class="mt-3 nos-mobile-card-title" :title="log.description || ''">{{ auditDescription(log) }}</h4>
+                                        <p class="nos-mobile-card-subtitle">{{ formatDate(log.created_at) }}</p>
                                     </div>
                                 </div>
-                                <div class="kv-mobile-fields">
-                                    <div class="kv-mobile-field">
-                                        <span class="kv-mobile-label">User</span>
-                                        <span class="kv-mobile-value">{{ log.user_name || $t('auditlogs.system') }}</span>
+                                <div class="nos-mobile-fields">
+                                    <div class="nos-mobile-field">
+                                        <span class="nos-mobile-label">User</span>
+                                        <span class="nos-mobile-value">{{ log.user_name || $t('auditlogs.system') }}</span>
                                     </div>
-                                    <div v-if="log.subject" class="kv-mobile-field">
-                                        <span class="kv-mobile-label">{{ $t('auditlogs.object') }}</span>
-                                        <span class="kv-mobile-value">{{ log.subject }}</span>
+                                    <div v-if="log.subject" class="nos-mobile-field">
+                                        <span class="nos-mobile-label">{{ $t('auditlogs.object') }}</span>
+                                        <span class="nos-mobile-value">{{ log.subject }}</span>
                                     </div>
-                                    <div class="kv-mobile-field">
-                                        <span class="kv-mobile-label">IP</span>
-                                        <span class="kv-mobile-value">{{ log.ip_address || '—' }}</span>
+                                    <div class="nos-mobile-field">
+                                        <span class="nos-mobile-label">IP</span>
+                                        <span class="nos-mobile-value">{{ log.ip_address || '—' }}</span>
                                     </div>
                                 </div>
                                 <button
@@ -241,7 +241,7 @@ const formatDate = (value) => (value ? formatDateTime(value) : '—');
                         </div>
 
                         <!-- Desktop -->
-                        <div class="kv-table-desktop">
+                        <div class="nos-table-desktop">
                             <table class="min-w-[820px] w-full text-xs">
                                 <thead>
                                     <tr class="border-b border-white/10 bg-canvas-3/40">

@@ -160,8 +160,8 @@ const deletePin = async () => {
             <div class="grid grid-cols-2 gap-2">
                 <button
                     type="button"
-                    class="kv-action-btn"
-                    :class="pin.locked === false ? 'kv-action-btn--active' : ''"
+                    class="nos-action-btn"
+                    :class="pin.locked === false ? 'nos-action-btn--active' : ''"
                     :disabled="busy"
                     @click="toggleLock"
                 >
@@ -171,7 +171,7 @@ const deletePin = async () => {
                 <button
                     v-if="caps.supports_onu_info_write"
                     type="button"
-                    class="kv-action-btn"
+                    class="nos-action-btn"
                     :disabled="busy"
                     @click="openRename"
                 >
@@ -180,7 +180,7 @@ const deletePin = async () => {
                 <button
                     v-if="caps.supports_reboot"
                     type="button"
-                    class="kv-action-btn"
+                    class="nos-action-btn"
                     :disabled="busy"
                     @click="rebootOnu"
                 >
@@ -189,18 +189,18 @@ const deletePin = async () => {
                 <Link
                     v-if="!pin.olt_cdata && caps.supports_cli_onu_detail"
                     :href="route('smartolt.onu.detail', [pin.snmp_olt_id, pin.slot, pin.port, pin.onu_id])"
-                    class="kv-action-btn"
+                    class="nos-action-btn"
                 >
                     <Info class="h-4 w-4" /> {{ $t('map.onu_detail') }}
                 </Link>
-                <Link :href="portOnuHref" class="kv-action-btn">
+                <Link :href="portOnuHref" class="nos-action-btn">
                     <ExternalLink class="h-4 w-4" /> {{ $t('common.port') }}
                 </Link>
-                <a :href="googleHref" target="_blank" rel="noopener" class="kv-action-btn">
+                <a :href="googleHref" target="_blank" rel="noopener" class="nos-action-btn">
                     <MapPin class="h-4 w-4" /> Maps
                 </a>
             </div>
-            <button type="button" class="kv-action-btn kv-action-btn--danger w-full" :disabled="busy" @click="deletePin">
+            <button type="button" class="nos-action-btn nos-action-btn--danger w-full" :disabled="busy" @click="deletePin">
                 <Trash2 class="h-4 w-4" /> {{ $t('map.delete_pin') }}
             </button>
         </div>
@@ -224,50 +224,50 @@ const deletePin = async () => {
 </template>
 
 <style scoped>
-.kv-action-btn {
+.nos-action-btn {
     display: flex;
     align-items: center;
     justify-content: center;
     gap: 0.35rem;
     border-radius: 0.5rem;
-    border: 1px solid rgb(var(--kv-white) / 0.1);
-    background: rgb(var(--kv-white) / 0.04);
+    border: 1px solid rgb(var(--nos-white) / 0.1);
+    background: rgb(var(--nos-white) / 0.04);
     padding: 0.4rem 0.6rem;
     font-size: 0.75rem;
     font-weight: 500;
-    color: rgb(var(--kv-slate-300));
+    color: rgb(var(--nos-slate-300));
     transition: background-color 0.15s, color 0.15s;
 }
 
-.kv-action-btn svg {
+.nos-action-btn svg {
     width: 0.875rem;
     height: 0.875rem;
 }
 
-.kv-action-btn:hover {
-    background: rgb(var(--kv-white) / 0.08);
-    color: rgb(var(--kv-white));
+.nos-action-btn:hover {
+    background: rgb(var(--nos-white) / 0.08);
+    color: rgb(var(--nos-white));
 }
 
 /* Tombol Lock saat pin sedang terbuka — senada cincin cyan pin di peta. */
-.kv-action-btn--active {
-    border-color: rgb(var(--kv-cyan-400) / 0.4);
-    background: rgb(var(--kv-cyan-400) / 0.12);
-    color: rgb(var(--kv-cyan-300));
+.nos-action-btn--active {
+    border-color: rgb(var(--nos-cyan-400) / 0.4);
+    background: rgb(var(--nos-cyan-400) / 0.12);
+    color: rgb(var(--nos-cyan-300));
 }
 
-.kv-action-btn:disabled {
+.nos-action-btn:disabled {
     opacity: 0.5;
     cursor: not-allowed;
 }
 
-.kv-action-btn--danger {
-    color: rgb(var(--kv-red-300));
-    border-color: rgb(var(--kv-red-400) / 0.25);
+.nos-action-btn--danger {
+    color: rgb(var(--nos-red-300));
+    border-color: rgb(var(--nos-red-400) / 0.25);
 }
 
-.kv-action-btn--danger:hover {
-    background: rgb(var(--kv-red-400) / 0.12);
-    color: rgb(var(--kv-red-200));
+.nos-action-btn--danger:hover {
+    background: rgb(var(--nos-red-400) / 0.12);
+    color: rgb(var(--nos-red-200));
 }
 </style>

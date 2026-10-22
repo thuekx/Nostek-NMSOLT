@@ -22,7 +22,7 @@ dari detail pin. Route: `map.index` (`/map`), nav **Peta ONU**.
 
 - Marker ONU = `L.divIcon` teardrop berwarna **status saja**: hijau `#10b981` (`ONLINE_COLOR`) =
   online, merah `#ef4444` (`OFFLINE_COLOR`) = offline/LOS/dying-gasp (offline diberi kelas
-  `kv-pin--offline` beranimasi pulsa). Info RX tetap tampil di kartu detail pin, tapi **tidak**
+  `nos-pin--offline` beranimasi pulsa). Info RX tetap tampil di kartu detail pin, tapi **tidak**
   menentukan warna pin. Legenda di pojok kanan-bawah: online, offline, dan ODP dengan warna bawaan
   amber (`DEFAULT_ODP_COLOR`) — ODP yang sudah diwarnai memakai warnanya sendiri. Legenda & kontrol
   layer dibuat ulang saat ganti bahasa (label Leaflet bukan reaktif Vue).
@@ -39,7 +39,7 @@ Kolom `locked` (boolean, **default true**) di `onu_map_pins` dan `odps` — migr
 - Tombol **Buka Kunci / Kunci** ada di `PinDetailCard.vue` & `OdpDetailCard.vue`, keduanya
   `PUT map.pins.update` / `map.odps.update` dengan `{ locked }`.
 - Saat `locked=false`, marker Leaflet dibuat `draggable` dan diberi cincin cyan putus-putus
-  (`.kv-pin--unlocked`). Event `drag` menggeser kartu detail agar tetap menempel; event `dragend`
+  (`.nos-pin--unlocked`). Event `drag` menggeser kartu detail agar tetap menempel; event `dragend`
   **langsung menyimpan** koordinat baru (`pin-moved`/`odp-moved` → PUT lat/lng) supaya posisi tak
   hilang bila halaman ter-refresh sebelum dikunci. Tombol Kunci hanya mengubah `locked` jadi true.
 - PUT yang berisi **hanya koordinat** sengaja tak memberi flash (kalau tidak, tiap geser
@@ -96,7 +96,7 @@ reload halaman. Marker yang sedang diseret (`draggingPinId`/`draggingOdpId`) tak
   ODP di atas ONU) — tetap bisa diklik. Pin/ODP yang **terpilih** atau sedang diseret selalu tetap
   marker DOM (`wantsDom()`), jadi pin yang dibuka kuncinya tetap bisa digeser di zoom jauh.
 - Garis ODP→ONU yang diam digabung jadi **dua polyline multi-ruas** (online/offline) di kanvas
-  (`lineRenderer`). Animasi aliran (`.kv-flow`, SVG) hanya untuk **ODP terpilih** atau ODP induk pin
+  (`lineRenderer`). Animasi aliran (`.nos-flow`, SVG) hanya untuk **ODP terpilih** atau ODP induk pin
   ONU yang terpilih (`flowOdpId()`).
 - Loop ribuan item memakai objek mentah (`toRaw(props.pins)`), bukan proxy reaktif Inertia; watcher
   pin/ODP tidak `deep`.

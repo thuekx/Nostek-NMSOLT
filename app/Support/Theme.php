@@ -35,7 +35,7 @@ class Theme
     /** Dipakai saat pengguna belum pernah memilih apa pun. */
     public const DEFAULT = self::DARK;
 
-    public const COOKIE = 'kv_theme';
+    public const COOKIE = 'nos_theme';
 
     /** Satu tahun; preferensi tampilan tidak perlu ditanyakan ulang tiap bulan. */
     public const COOKIE_MINUTES = 60 * 24 * 365;

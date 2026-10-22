@@ -176,7 +176,8 @@ so no code change was needed there; the test now keeps it that way. Mutation che
 - `RoleJourneyTest` 4 tests (243 assertions); `freshness.spec.js` +3 (`rxLags`).
 - Laravel 824 passed, Vitest 81 passed, `vite build` passes.
 
-## Next (E2)
+## Next
 
-1. **E2 — server-side ONU list paging.** The ONU monitor page and `/api/v1/onus` send every
-   ONU in one response: 27.6 MB at 51,000 ONUs (NMS-07-PERFORMANCE.md).
+E2 (ONU monitor scoped to one OLT) is done; see NMS-07-PERFORMANCE.md. Remaining NMS-07
+UI work: none known from this audit. Remaining NMS-07 evidence: the rest of E and a real
+app image on a host (owner-run package).

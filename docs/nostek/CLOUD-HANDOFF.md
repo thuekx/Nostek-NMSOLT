@@ -51,7 +51,7 @@ NMS-07 is IN PROGRESS:
    ops integration test (CI job `ops-integration`);
 4. NMS-07-B data growth (retention, duplicate RX index, poll worker pool; B2 daily RX
    rollup on step/nms-07-b2-rx-daily), C `onu_state` table measured and not adopted (NMS-07-PERFORMANCE.md),
-   D UI journey and write-gate audit with E2 server-side ONU list paging, rest of E;
+   D UI journey and write-gate audit (D-1, D-2a/b/c) and E2 ONU monitor scope in PRs; rest of E;
 5. runtime target is the Nostek-AI VM `nostek-platform`; host steps are Nostek-AI
    packages (track NET-1), never run from this repository;
 6. proceed to NMS-08 only when NMS-07 has complete evidence.
@@ -94,8 +94,8 @@ step/nms-07-c-perf-matrix), B2 (daily RX rollup, step/nms-07-b2-rx-daily) and D-
 (write-gate visibility, step/nms-07-d-ui-journey) D-2a (status honesty,
 step/nms-07-d2-stale-states) and D-2b (stale ONU/map/alarm states,
 step/nms-07-d2b-onu-states) and D-2c (partial RX + role sweep,
-step/nms-07-d2c-permission-states) PRs first. Then remaining UI journeys, write-gate visibility, E2 server-side paging of
-the ONU monitor/API list, and the rest of E (alarm/optical/queue/poller/retention), measured
+step/nms-07-d2c-permission-states) and E2 (ONU monitor scoped to one OLT,
+step/nms-07-e2-onu-monitor-scope) PRs first. Then the rest of E (alarm/optical/queue/poller/retention), measured
 with tests/perf/run-onu-list-bench.sh style harnesses. The onu_state table was measured
 and not adopted (NMS-07-PERFORMANCE.md); do not re-add it without new evidence.
 Use isolated synthetic tests and Compose rendering; do not run host installers/deployments.

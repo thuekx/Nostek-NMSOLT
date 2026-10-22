@@ -439,10 +439,18 @@ class SmartOltController extends Controller
         ]);
     }
 
-    public function onuMonitor(OnuInventoryService $inventory, OnuOdpService $odpService): Response
+    public function onuMonitor(Request $request, OnuInventoryService $inventory, OnuOdpService $odpService): Response
     {
-        $olts = SnmpOlt::query()->orderBy('name')->get();
-        $aggregated = $inventory->collect($olts);
+        // NMS-07-E2: the page lists ONUs of one OLT at a time, so only that OLT's snapshot is
+        // read and only its ONUs are sent (it sent every ONU of every OLT: 27.6 MB at 51,000
+        // ONUs). The dropdown needs no snapshots. An unknown or invisible id selects nothing.
+        $olts = SnmpOlt::query()
+            ->orderBy('name')
+            ->get(['id', 'name', 'ip', 'last_polled_at', 'poll_interval_minutes', 'polling_enabled']);
+        $selected = $olts->firstWhere('id', $request->integer('olt_id'));
+        $aggregated = $selected
+            ? $inventory->collect(SnmpOlt::query()->whereKey($selected->id)->get())
+            : ['onus' => [], 'refreshed_at' => []];
 
         return Inertia::render('SmartOlt/OnuMonitor', [
             'olts' => $olts->map(fn (SnmpOlt $olt) => [
@@ -452,6 +460,7 @@ class SmartOltController extends Controller
                 // NMS-07-D-2b: ONU status of a non-fresh OLT is the last known value, not live.
                 'freshness' => $olt->freshness(),
             ])->values(),
+            'selected_olt_id' => $selected?->id,
             'onus' => $aggregated['onus'],
             'refreshed_at' => $aggregated['refreshed_at'],
             // Opsi dropdown filter ODP (disaring per OLT terpilih di frontend).

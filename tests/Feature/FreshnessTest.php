@@ -135,12 +135,12 @@ class FreshnessTest extends TestCase
         $this->assertTrue($rows[$stale->id]['stale']);
         $this->assertTrue($rows[$stale->id]['online'], 'the last known value is kept, only marked');
 
-        $this->actingAs($admin)->get(route('monitoring.onu'))
+        $this->actingAs($admin)->get(route('monitoring.onu', ['olt_id' => $stale->id]))
             ->assertOk()
             ->assertInertia(fn ($page) => $page
                 ->where('olts.0.freshness.state', 'fresh')
                 ->where('olts.1.freshness.state', 'stale')
-                ->where('onus.1.stale', true));
+                ->where('onus.0.stale', true));
 
         $this->actingAs($admin)->get(route('map.index'))
             ->assertOk()

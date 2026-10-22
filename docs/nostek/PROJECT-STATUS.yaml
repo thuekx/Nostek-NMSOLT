@@ -46,7 +46,8 @@ latest_evidence:
     request: "Owner 2026-10-22: traffic graphs per PON port and per ONT; decision card: PON first, ONT later."
     doc: docs/nostek/TRF-1-PON-TRAFFIC.md
     evidence: "Go poller --include-traffic (GET ifHCIn/OutOctets per GPON port, batches of 20); per-port rates raw 8 d / hourly 100 d / daily 3 y; chart on the PON port page. Laravel 835 passed, vitest 87, Go tests pass. Bench 3,400 ONUs / 54 ports / 20 ms RTT: 2,747 -> 2,753 requests, 71.0 -> 71.6 s. Also fixed: 90d RX chart read the daily rollup."
-    blocked: "Real-OLT read-only check of the counters (owner); ZTE ONU traffic OID (owner walk)."
+    real_olt: "VERIFIED 2026-10-22: OLT 192.168.254.2 answers ifHCIn/OutOctets Counter64 on a GPON port, both rising (owner read-only snmpget)."
+    blocked: "ZTE ONU traffic OID (owner walk)."
   NMS-06:
     status: VERIFIED
     sanitized_evidence: docs/nostek/NMS-06-ZTE-C320-RUNTIME-EVIDENCE-2026-10-22.md
@@ -107,7 +108,7 @@ environment:
   live_olt_write: PROHIBITED_WITHOUT_APPROVAL
 next_action:
   id: TRF-2-ONT-TRAFFIC
-  instruction: "NMS-07 PRs #24-#34 and TRF-1 PR #35 are merged (2026-10-22). Check the NMS-07-A2 PR (step/nms-07-a2-acs-image-build: build makes the GenieACS image, start refuses a missing local image). Next: per-ONT traffic through GenieACS (parseAcsTrafficMonitor exists, unused). BLOCKED on the owner: real-OLT check of ifHCIn/OutOctets on GPON ports and of max-repetitions 25, the ZTE ONU traffic OID walk. NMS-07 evidence that needs a host stays open: real app image, queue latency under real workers (NET-1). The onu_state table was measured and not adopted (NMS-07-PERFORMANCE.md); do not re-add it without new evidence. Preserve LICENSE attribution and keep device writes disabled."
+  instruction: "NMS-07 PRs #24-#34 and TRF-1 PR #35 are merged (2026-10-22). NMS-07-A2 PR #36 is merged (build makes the GenieACS image, start refuses a missing local image). Next: per-ONT traffic through GenieACS after the owner's read-only capture on the Maung VM, where the live GenieACS runs until NET-1-3 (parseAcsTrafficMonitor exists, unused). PON counters VERIFIED on a real OLT (192.168.254.2). BLOCKED on the owner: real-OLT check of max-repetitions 25, the ZTE ONU traffic OID walk. NMS-07 evidence that needs a host stays open: real app image, queue latency under real workers (NET-1). The onu_state table was measured and not adopted (NMS-07-PERFORMANCE.md); do not re-add it without new evidence. Preserve LICENSE attribution and keep device writes disabled."
   owner: "executor"
   approval_required: false
 references:

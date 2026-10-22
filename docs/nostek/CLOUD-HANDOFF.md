@@ -52,8 +52,8 @@ NMS-07 is IN PROGRESS:
 4. NMS-07-B data growth (retention, duplicate RX index, poll worker pool; B2 daily RX
    rollup on step/nms-07-b2-rx-daily), C `onu_state` table measured and not adopted (NMS-07-PERFORMANCE.md),
    D UI journey and write-gate audit (D-1, D-2a/b/c), E2/E3/E4: all merged (#24-#34);
-   TRF-1 PON traffic graph merged (PR #35); NMS-07-A2 GenieACS image build on
-   step/nms-07-a2-acs-image-build;
+   TRF-1 PON traffic graph merged (PR #35); NMS-07-A2 GenieACS image build merged
+   (PR #36);
 5. runtime target is the Nostek-AI VM `nostek-platform`; host steps are Nostek-AI
    packages (track NET-1), never run from this repository;
 6. proceed to NMS-08 only when NMS-07 has complete evidence.
@@ -94,9 +94,10 @@ The NMS-07 PRs #24-#34 (A, B, C/E, B2, D-1, D-2a/b/c, E2, E3, E4) are merged. NM
 evidence remains (real app image, queue latency under real workers, real-OLT max-repetitions
 check). TRF-1 PON traffic graph (owner decision: PON first, ONT later) is merged (PR #35,
 docs/nostek/TRF-1-PON-TRAFFIC.md). NMS-07-A2 (build also makes the GenieACS image, start refuses
-a missing local image) is on step/nms-07-a2-acs-image-build; check its PR first. Next safe
+a missing local image) is merged (PR #36). TRF-2 waits for the owner's read-only GenieACS capture
+on the Maung VM (live ACS until NET-1-3). Next safe
 source work: per-ONT traffic through GenieACS (parseAcsTrafficMonitor exists, unused); the ZTE
-ONU traffic OID and the real-OLT counter check are BLOCKED on the owner. The onu_state table was measured
+ONU traffic OID is BLOCKED on the owner (PON counters VERIFIED on a real OLT). The onu_state table was measured
 and not adopted (NMS-07-PERFORMANCE.md); do not re-add it without new evidence.
 Use isolated synthetic tests and Compose rendering; do not run host installers/deployments.
 

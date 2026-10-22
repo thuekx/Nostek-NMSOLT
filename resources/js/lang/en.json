@@ -770,7 +770,8 @@
         "sev_opt_warning": "Warning (all alarms)",
         "sev_opt_minor": "Minor and above",
         "sev_opt_major": "Major and above",
-        "sev_opt_critical": "Critical only"
+        "sev_opt_critical": "Critical only",
+        "not_evaluated_title": "Alarms are not being evaluated for these OLTs (their data is not current). No alarm here does not mean healthy:"
     },
     "profiles": {
         "sync_from_olt": "Sync From OLT",
@@ -830,7 +831,8 @@
         "acs_filter_title": "Filter by ACS status",
         "acs_all": "All ACS",
         "acs_linked": "Linked to ACS",
-        "acs_unlinked": "Not on ACS"
+        "acs_unlinked": "Not on ACS",
+        "data_not_current": "Data for this OLT is not current ({state}, last poll {age}). The ONU status below is the last known value, not live."
     },
     "onudetail": {
         "title": "ONU Detail",
@@ -1235,7 +1237,8 @@
         "rename_placeholder": "ONU name / description",
         "rename_hint": "Written directly to the OLT ({target}).",
         "delete_title": "Delete pin",
-        "delete_msg": "Remove this ONU pin from the map? The ONU on the OLT is not affected."
+        "delete_msg": "Remove this ONU pin from the map? The ONU on the OLT is not affected.",
+        "legend_stale": "Not current (OLT data stale)"
     },
     "odp": {
         "title": "ODP",

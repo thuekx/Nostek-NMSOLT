@@ -10,6 +10,9 @@ const { t, locale } = useI18n({ useScope: 'global' });
 // Warna status ONU disederhanakan: hanya hijau (online) / merah (offline/LOS/dying-gasp).
 const ONLINE_COLOR = '#10b981'; // emerald-500
 const OFFLINE_COLOR = '#ef4444'; // red-500
+// NMS-07-D-2b: ONU of an OLT whose data is not fresh = last known state, never green or red.
+const STALE_COLOR = '#94a3b8'; // slate-400
+const statusColor = (onu) => (onu.stale ? STALE_COLOR : onu.online ? ONLINE_COLOR : OFFLINE_COLOR);
 // Warna pin ODP kini per-ODP (kolom `odps.color`, biasanya seragam per PON port);
 // konstanta ini hanya nilai bawaan/legenda bila ODP belum diwarnai.
 const ODP_COLOR = DEFAULT_ODP_COLOR;
@@ -78,7 +81,7 @@ const googleLayer = (lyrs) =>
     });
 
 const buildIcon = (pin, selected) => {
-    const color = pin.online ? ONLINE_COLOR : OFFLINE_COLOR;
+    const color = statusColor(pin);
     const cls = ['nos-pin'];
     if (selected) cls.push('nos-pin--selected');
     if (!pin.online) cls.push('nos-pin--offline');
@@ -162,6 +165,7 @@ const renderLines = () => {
     const flowId = flowOdpId();
     const online = [];
     const offline = [];
+    const stale = [];
 
     for (const odp of rawOdps()) {
         if (!hasCoords(odp)) continue;
@@ -169,12 +173,12 @@ const renderLines = () => {
         for (const onu of odp.onus ?? []) {
             const end = pinCoords.get(onuKey(onu)) ?? (hasCoords(onu) ? [onu.latitude, onu.longitude] : null);
             if (!end) continue;
-            const color = onu.online ? ONLINE_COLOR : OFFLINE_COLOR;
+            const color = statusColor(onu);
             if (odp.id === flowId) {
                 L.polyline([start, end], { color, weight: 2.5, opacity: 0.95, className: 'nos-flow', interactive: false })
                     .addTo(flowLayer);
             } else {
-                (onu.online ? online : offline).push([start, end]);
+                (onu.stale ? stale : onu.online ? online : offline).push([start, end]);
             }
         }
     }
@@ -185,6 +189,7 @@ const renderLines = () => {
             .addTo(lineLayer);
     staticLine(online, ONLINE_COLOR);
     staticLine(offline, OFFLINE_COLOR);
+    staticLine(stale, STALE_COLOR);
 };
 
 // Sinkronkan posisi/tampilan/draggable marker yang sudah ada dengan data terbaru.
@@ -324,7 +329,7 @@ const renderPins = () => {
 
         const unlocked = pin.locked === false;
         const title = pin.customer_name || pin.interface || `ONU #${pin.onu_id}`;
-        const sig = `${selected}|${unlocked}|${pin.online}|${title}`;
+        const sig = `${selected}|${unlocked}|${pin.online}|${pin.stale}|${title}`;
         const entry = markers.get(pin.id);
 
         if (entry) {
@@ -384,7 +389,7 @@ const renderDots = () => {
             radius: 4.5,
             color: '#ffffff',
             weight: 1,
-            fillColor: pin.online ? ONLINE_COLOR : OFFLINE_COLOR,
+            fillColor: statusColor(pin),
             fillOpacity: 1,
             // Seperti marker DOM: klik titik tak ikut memicu klik peta (mode tambah pin).
             bubblingMouseEvents: false,
@@ -501,6 +506,7 @@ onMounted(() => {
             <div class="nos-map-legend__title">${t('map.legend_title')}</div>
             <div><span style="background:${ONLINE_COLOR}"></span> ${t('map.legend_online')}</div>
             <div><span style="background:${OFFLINE_COLOR}"></span> ${t('map.legend_offline')}</div>
+            <div><span style="background:${STALE_COLOR}"></span> ${t('map.legend_stale')}</div>
             <div><span class="nos-map-legend__odp" style="background:${ODP_COLOR}"></span> ${t('map.legend_odp')}</div>`;
     let legendDiv = null;
     const legend = L.control({ position: 'bottomright' });

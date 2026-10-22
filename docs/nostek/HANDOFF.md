@@ -156,10 +156,17 @@ PAUSED when polling is off. Only FRESH is green on the dashboard (pills and card
 list, the OLT detail and the PON-port page. API v1 and Telegram keep the legacy counts
 until NMS-08. Details: [NMS-07-UI-JOURNEY.md](NMS-07-UI-JOURNEY.md).
 
+## NMS-07-D-2b stale ONU, map, alarm and vendor pages (2026-10-22)
+
+Branch `step/nms-07-d2b-onu-states` (on top of D-2a). ONU rows carry `stale`; the ONU
+monitor, map, C-Data and HiOSO pages grey out the last known state of a non-fresh OLT and
+say so; the alarm page names OLTs whose alarms are not being evaluated. Details:
+[NMS-07-UI-JOURNEY.md](NMS-07-UI-JOURNEY.md).
+
 ## Exact next action
 
-Refresh GitHub. Check the NMS-07-A, B, C/E, B2, D-1 and D-2a PRs (exact-head CI, owner
-merge). Then continue D-2b (UI journey and write-gate audit, with E2 server-side ONU
+Refresh GitHub. Check the NMS-07-A, B, C/E, B2, D-1, D-2a and D-2b PRs (exact-head CI, owner
+merge). Then continue D-2c (partial and permission states, with E2 server-side ONU
 list paging), and the rest of E (alarm, optical, queue, poller on synthetic data). Do not
 modify the retained LICENSE attribution.
 

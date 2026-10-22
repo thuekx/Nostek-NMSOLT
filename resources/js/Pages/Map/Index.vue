@@ -159,7 +159,8 @@ const closeOdpDetail = () => {
     odpCardPos.value = null;
 };
 
-const onlineCount = computed(() => props.pins.filter((p) => p.online).length);
+// NMS-07-D-2b: pins of a non-fresh OLT are not counted as online.
+const onlineCount = computed(() => props.pins.filter((p) => p.online && !p.stale).length);
 
 // Daftar ONU (prop optional di server, ±4.500 baris) tidak ikut saat peta dibuka — baru
 // diambil begitu pengguna masuk mode tambah pin, supaya halaman peta ringan.

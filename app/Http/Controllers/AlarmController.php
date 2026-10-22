@@ -6,6 +6,7 @@ use App\Models\AlarmEvent;
 use App\Models\SmartOltOnuRegistration;
 use App\Models\SnmpOlt;
 use App\Services\Alarm\AlarmNotificationService;
+use App\Support\Freshness;
 use App\Support\SmartOltSupport;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
@@ -98,6 +99,14 @@ class AlarmController extends Controller
 
         return Inertia::render('SmartOlt/Alarms', [
             'alarms' => $alarms,
+            // NMS-07-D-2b: alarms are evaluated after each poll. For an OLT whose data is not
+            // fresh, "no alarm" says nothing about its health, so the page names those OLTs.
+            'not_evaluated' => SnmpOlt::query()
+                ->orderBy('name')
+                ->get(['id', 'name', 'last_polled_at', 'poll_interval_minutes', 'polling_enabled'])
+                ->map(fn (SnmpOlt $olt) => ['id' => $olt->id, 'name' => $olt->name, 'freshness' => $olt->freshness()])
+                ->reject(fn (array $row) => $row['freshness']['state'] === Freshness::FRESH)
+                ->values(),
             'summary' => [
                 'critical' => (int) ($summary['critical'] ?? 0),
                 'major' => (int) ($summary['major'] ?? 0),

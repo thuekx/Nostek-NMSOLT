@@ -4,6 +4,7 @@ import ConfirmModal from '@/Components/ConfirmModal.vue';
 import IconButton from '@/Components/IconButton.vue';
 import OltPortLabel from '@/Components/OltPortLabel.vue';
 import PortOnuStats from '@/Components/CDataOlt/PortOnuStats.vue';
+import DataNotCurrent from '@/Components/Shell/DataNotCurrent.vue';
 import PortSwitcher from '@/Components/CDataOlt/PortSwitcher.vue';
 import ConnectedDevicesModal from '@/Components/Genieacs/ConnectedDevicesModal.vue';
 import WifiSettingsModal from '@/Components/Genieacs/WifiSettingsModal.vue';
@@ -275,7 +276,8 @@ const viewOnMap = (onu) => {
         <div class="min-h-[60vh] pt-5 pb-16 sm:pt-8">
             <div class="w-full space-y-5 px-4 sm:px-6 lg:px-8">
 
-                <PortOnuStats :snapshot="snapshot" />
+                <DataNotCurrent :freshness="olt.freshness ?? null" />
+                <PortOnuStats :snapshot="snapshot" :freshness="olt.freshness ?? null" />
 
                 <div class="nos-table-card">
                     <div class="flex items-center gap-3 border-b border-white/10 px-4 py-4 sm:px-6">

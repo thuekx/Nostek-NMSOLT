@@ -292,6 +292,7 @@ class OnuOdpService
                 'interface' => $live['interface'] ?? null,
                 'name' => $live['customer_name'] ?? null,
                 'online' => (bool) ($live['online'] ?? false),
+                'stale' => (bool) ($live['stale'] ?? false),
                 // Sebab ONU turun (LOS / DyingGasp / Nonaktif) ikut, supaya daftar
                 // ONU di dalam ODP tak berhenti di kata "offline" — datanya sudah
                 // ada di hasil findOne(), jadi tak menambah query/dekode.

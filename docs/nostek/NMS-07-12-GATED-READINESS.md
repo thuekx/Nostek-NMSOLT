@@ -29,6 +29,8 @@ Freshness (NMS-07-D-2a finding): the legacy API v1 `/summary` and `/public/statu
 OLT whose last poll is older than 3 poll intervals as online. The NMS-08 API must use
 `App\Support\Freshness` and return the state (FRESH / STALE / UNKNOWN / PAUSED), the
 observed-at time and the age; a stale OLT and its ONUs never count as online or offline.
+Since NMS-07-D-2b, `/api/v1/onus` rows already carry an additive `stale` flag; NMS-08 replaces it
+with the full freshness object.
 
 ## NMS-09 — Maung /nosteknmsolt thin consumer
 

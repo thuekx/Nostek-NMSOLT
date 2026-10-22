@@ -108,6 +108,13 @@ API v1 `/summary` and `/public/status` still count by the last reachable flag. T
 on purpose (contract unchanged) and is now an NMS-08 requirement. Next: D-2b. See
 [NMS-07-UI-JOURNEY.md](NMS-07-UI-JOURNEY.md).
 
+## NMS-07-D-2b result (2026-10-22)
+
+On `step/nms-07-d2b-onu-states`: the ONU monitor, map, alarm page and C-Data/HiOSO pages
+no longer show the last known state of a stale OLT as live. The alarm page names OLTs whose
+alarms are not being evaluated. Next: D-2c partial and permission states. See
+[NMS-07-UI-JOURNEY.md](NMS-07-UI-JOURNEY.md).
+
 ## NMS-07-C/E result (2026-10-22)
 
 Work package 4 (performance audit), first part, is on branch `step/nms-07-c-perf-matrix`.

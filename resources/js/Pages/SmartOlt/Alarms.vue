@@ -2,7 +2,7 @@
 import Pagination from '@/Components/Pagination.vue';
 import FilterCard from '@/Components/Shell/FilterCard.vue';
 import { alarmStatusLabel, alarmTypeLabel } from '@/lib/alarm';
-import { formatDateTime } from '@/lib/datetime';
+import { formatDateTime, formatRelative } from '@/lib/datetime';
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
 import { Head, Link, router } from '@inertiajs/vue3';
 import { useI18n } from 'vue-i18n';
@@ -27,6 +27,11 @@ const props = defineProps({
     filterOptions: {
         type: Object,
         required: true,
+    },
+    // NMS-07-D-2b: OLTs whose data is not fresh; their alarms are not being re-evaluated.
+    not_evaluated: {
+        type: Array,
+        default: () => [],
     },
 });
 
@@ -237,6 +242,18 @@ const goFallback = () => {
 
         <div class="min-h-[60vh] pt-5 pb-16 sm:pt-8">
             <div class="w-full space-y-6 px-4 sm:px-6 lg:px-8">
+                <div
+                    v-if="not_evaluated.length"
+                    data-testid="alarms-not-evaluated"
+                    class="rounded-lg border border-amber-400/30 bg-amber-500/10 px-4 py-3 text-sm text-amber-200"
+                >
+                    <p class="font-semibold">{{ $t('alarms.not_evaluated_title') }}</p>
+                    <ul class="mt-1 space-y-0.5">
+                        <li v-for="olt in not_evaluated" :key="olt.id" :data-state="olt.freshness.state">
+                            {{ olt.name }} · {{ $t(`dashboard.status_${olt.freshness.state}`) }}<template v-if="olt.freshness.at"> · {{ formatRelative(olt.freshness.at) }}</template>
+                        </li>
+                    </ul>
+                </div>
                 <div class="grid grid-cols-2 gap-4 sm:grid-cols-4">
                     <button
                         v-for="card in cards"

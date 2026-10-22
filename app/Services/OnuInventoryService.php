@@ -5,6 +5,7 @@ namespace App\Services;
 use App\Models\OnuOdpLink;
 use App\Models\SnmpOlt;
 use App\Services\Genieacs\GenieacsMapService;
+use App\Support\Freshness;
 use App\Support\SmartOltSupport;
 use Illuminate\Support\Collection;
 
@@ -32,6 +33,14 @@ class OnuInventoryService
      * @var array<int, string>
      */
     private array $routePrefixes = [];
+
+    /**
+     * NMS-07-D-2b: true when the OLT's last poll is not FRESH (stale, never polled or
+     * polling off). Its ONU rows are then the last known state, never live; memo per OLT.
+     *
+     * @var array<int, bool>
+     */
+    private array $staleOlts = [];
 
     /**
      * Kumpulkan seluruh ONU dari semua OLT (atau koleksi OLT yang diberikan).
@@ -239,6 +248,7 @@ class OnuInventoryService
             'admin_state' => $onu['admin_state'] ?? 'unknown',
             'phase_state' => $onu['phase_state'] ?? 'Unknown',
             'online' => (bool) ($onu['online'] ?? false),
+            'stale' => $this->staleOlts[$olt->id] ??= $olt->freshness()['state'] !== Freshness::FRESH,
             'last_down_cause' => $onu['last_down_cause'] ?? null,
             'rx_power_dbm' => $onu['rx_power_dbm'] ?? null,
             'rx_power_label' => $onu['rx_power_label'] ?? null,

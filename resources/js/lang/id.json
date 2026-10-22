@@ -770,7 +770,8 @@
         "sev_opt_warning": "Warning (semua alarm)",
         "sev_opt_minor": "Minor ke atas",
         "sev_opt_major": "Major ke atas",
-        "sev_opt_critical": "Hanya Critical"
+        "sev_opt_critical": "Hanya Critical",
+        "not_evaluated_title": "Alarm tidak sedang dievaluasi untuk OLT berikut (datanya tidak terkini). Tidak ada alarm bukan berarti sehat:"
     },
     "profiles": {
         "sync_from_olt": "Sync Dari OLT",
@@ -830,7 +831,8 @@
         "acs_filter_title": "Saring menurut status ACS",
         "acs_all": "Semua ACS",
         "acs_linked": "Sudah ter-ACS",
-        "acs_unlinked": "Belum ter-ACS"
+        "acs_unlinked": "Belum ter-ACS",
+        "data_not_current": "Data OLT ini tidak terkini ({state}, poll terakhir {age}). Status ONU di bawah adalah nilai terakhir yang diketahui, bukan live."
     },
     "onudetail": {
         "title": "Detail ONU",
@@ -1235,7 +1237,8 @@
         "rename_placeholder": "Nama / deskripsi ONU",
         "rename_hint": "Ditulis langsung ke OLT ({target}).",
         "delete_title": "Hapus pin",
-        "delete_msg": "Hapus pin ONU ini dari peta? ONU di OLT tidak terpengaruh."
+        "delete_msg": "Hapus pin ONU ini dari peta? ONU di OLT tidak terpengaruh.",
+        "legend_stale": "Tidak terkini (data OLT basi)"
     },
     "odp": {
         "title": "ODP",

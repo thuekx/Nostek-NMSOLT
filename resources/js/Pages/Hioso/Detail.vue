@@ -1,5 +1,7 @@
 <script setup>
 import OltImage from '@/Components/OltImage.vue';
+import DataNotCurrent from '@/Components/Shell/DataNotCurrent.vue';
+import { isFresh } from '@/lib/freshness';
 import PrimaryButton from '@/Components/PrimaryButton.vue';
 import SecondaryButton from '@/Components/SecondaryButton.vue';
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
@@ -92,6 +94,8 @@ const fmt = (v) => formatDateTime(v);
         <div class="min-h-[60vh] pt-5 pb-16 sm:pt-8">
             <div class="w-full space-y-5 px-4 sm:px-6 lg:px-8">
 
+                <DataNotCurrent :freshness="olt.freshness ?? null" />
+
                 <!-- Ringkasan -->
                 <div class="grid grid-cols-2 gap-4 lg:grid-cols-4">
                     <div class="nos-stat">
@@ -100,7 +104,7 @@ const fmt = (v) => formatDateTime(v);
                     </div>
                     <div class="nos-stat">
                         <p class="text-xs uppercase tracking-wider text-slate-500">{{ $t('common.online') }}</p>
-                        <p class="mt-1 text-2xl font-bold tabular-nums text-emerald-300">{{ onuTotals.online.toLocaleString('id-ID') }}</p>
+                        <p class="mt-1 text-2xl font-bold tabular-nums" :class="isFresh(olt.freshness) ? 'text-emerald-300' : 'text-slate-400'">{{ onuTotals.online.toLocaleString('id-ID') }}</p>
                     </div>
                     <div class="nos-stat">
                         <p class="text-xs uppercase tracking-wider text-slate-500">{{ $t('common.offline') }}</p>

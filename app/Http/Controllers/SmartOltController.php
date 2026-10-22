@@ -449,6 +449,8 @@ class SmartOltController extends Controller
                 'id' => $olt->id,
                 'name' => $olt->name,
                 'ip' => $olt->ip,
+                // NMS-07-D-2b: ONU status of a non-fresh OLT is the last known value, not live.
+                'freshness' => $olt->freshness(),
             ])->values(),
             'onus' => $aggregated['onus'],
             'refreshed_at' => $aggregated['refreshed_at'],

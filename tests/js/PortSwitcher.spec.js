@@ -87,8 +87,8 @@ describe('PortSwitcher', () => {
 });
 
 describe('PortOnuStats', () => {
-    const mountStats = (snapshot) =>
-        mount(PortOnuStats, { props: { snapshot }, global: { mocks: { $t: (k) => k } } });
+    const mountStats = (snapshot, freshness = { state: 'fresh' }) =>
+        mount(PortOnuStats, { props: { snapshot, freshness }, global: { mocks: { $t: (k) => k } } });
 
     it('menghitung online dari daftar ONU dan total dari count snapshot', () => {
         const w = mountStats({
@@ -102,6 +102,22 @@ describe('PortOnuStats', () => {
         expect(text).toContain('portonus.stat_available');
         expect(w.findAll('.nos-stat')[1].text()).toContain('3');
         expect(w.findAll('.nos-stat')[2].text().replace(/\s+/g, '')).toContain('2/3');
+    });
+
+    it('NMS-07-D-2b: data OLT basi tidak hijau dan menyebut statusnya', () => {
+        const w = mountStats({ ok: true, count: 1, onus: [{ online: true }] }, { state: 'stale' });
+        const status = w.find('[data-state]');
+
+        expect(status.attributes('data-state')).toBe('stale');
+        expect(status.text()).toContain('dashboard.status_stale');
+        expect(status.classes()).not.toContain('text-emerald-400');
+        expect(w.findAll('.nos-stat')[2].find('p.text-2xl').classes()).not.toContain('text-emerald-400');
+    });
+
+    it('tanpa metadata freshness dianggap unknown, bukan hijau', () => {
+        const w = mountStats({ ok: true, count: 1, onus: [{ online: true }] }, null);
+
+        expect(w.find('[data-state]').attributes('data-state')).toBe('unknown');
     });
 
     it('snapshot kosong (port belum pernah dipindai) tampil Kosong dan nol', () => {

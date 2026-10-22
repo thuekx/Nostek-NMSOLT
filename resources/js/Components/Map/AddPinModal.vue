@@ -293,7 +293,7 @@ const submit = () => {
                             <span class="block truncate font-medium text-white">{{ onu.interface }} · {{ onu.customer_name || onu.name || '—' }}</span>
                             <span class="block truncate text-xs text-slate-500">{{ onu.olt_name }} · {{ onu.serial_number || '—' }}</span>
                         </span>
-                        <component :is="onu.online ? Wifi : WifiOff" class="h-4 w-4 shrink-0" :class="onu.online ? 'text-emerald-400' : 'text-slate-500'" />
+                        <component :is="onu.online ? Wifi : WifiOff" class="h-4 w-4 shrink-0" :class="onu.online && !onu.stale ? 'text-emerald-400' : 'text-slate-500'" />
                     </button>
                 </div>
             </div>

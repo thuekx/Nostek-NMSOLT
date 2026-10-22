@@ -51,8 +51,20 @@ class AggregateOnuRxCommand extends Command
         $hours = 0;
         $rows = 0;
 
-        for ($hour = $start->copy(); $hour < $end && $hours < $maxHours; $hour->addHour(), $hours++) {
+        $hour = $start->copy();
+        while ($hour < $end && $hours < $maxHours) {
             $rows += $this->aggregateHour($hour);
+            $hours++;
+
+            // Lompati jam tanpa sampel (poller mati, migrasi host): jalur terjadwal melanjutkan
+            // dari jam terakhir yang punya ringkasan, jadi celah lebih dari --max-hours dulu
+            // membuatnya berputar di jam kosong yang sama selamanya — dan prune sampel mentah
+            // ikut berhenti (NMS-07-B2).
+            $nextSample = OnuRxSample::query()->where('polled_at', '>=', $hour->copy()->addHour())->min('polled_at');
+            if ($nextSample === null) {
+                break;
+            }
+            $hour = max($hour->copy()->addHour(), Carbon::parse($nextSample)->startOfHour());
         }
 
         $this->info("Meringkas {$hours} jam → {$rows} baris di onu_rx_hourly (mulai {$start->toDateTimeString()}).");

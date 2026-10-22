@@ -19,7 +19,7 @@
 | `alarm_events` | 180 days after clearing | only `status = cleared`; active and pending alarms are never removed |
 | `audit_logs` | 400 days | security evidence, kept longest |
 | `olt_config_backups` | newest 7 per OLT + first successful backup of each of the last 12 months | failed captures never count as the monthly copy |
-| optical RX | unchanged (`optical:prune-rx`: raw 3 days, hourly 45 days) | owner decision NMS-AI-Q5 sets hourly to 400 days on nostek-platform through `SNMP_POLLER_RX_HOURLY_RETENTION_DAYS=400` in that install's `.env`; a daily rollup for 3 years is still open (NMS-07-B2) |
+| optical RX | `optical:prune-rx`: raw 3 days, hourly 45 days (default), daily 1095 days | owner decision NMS-AI-Q5 sets hourly to 400 days on nostek-platform through `SNMP_POLLER_RX_HOURLY_RETENTION_DAYS=400` in that install's `.env`; the daily rollup is NMS-07-B2 below |
 
 `history:prune --dry-run` prints what would be removed. Deletes run in chunks of 5000 ids
 (no long table lock), bypass the demo/partner global scopes (retention applies to every
@@ -39,3 +39,63 @@ row), and a retention value below 1 day refuses without deleting anything.
 
 Not measured here: real queue latency under load and the disk saved by dropping the duplicate index (needs the
 performance matrix, NMS-07-E).
+
+## NMS-07-B2 — daily RX rollup (owner NMS-AI-Q5 A: hourly 400 days, daily 3 years)
+
+**Branch:** `step/nms-07-b2-rx-daily` (on top of NMS-07-C/E).
+
+| Piece | What |
+| --- | --- |
+| `onu_rx_daily` | one row per ONU per day: min of the hourly minimums, max of the hourly maximums, average weighted by sample count, total samples; unique key = upsert key = chart lookup |
+| `optical:aggregate-rx-daily` | daily 00:25 (after the 00:05 hourly run); skips today; re-processes the last summarised day; at most 31 days per run (`--days`, `--max-days` for backfill) |
+| `optical:prune-rx` | keeps every hourly row that is not yet rolled up into a daily row, then prunes daily rows older than `SNMP_POLLER_RX_DAILY_RETENTION_DAYS` (default 1095) |
+| chart ranges | ONU detail gains 90 days (hourly), 1 year and 3 years (daily); axis labels show month + year when ticks are a month or more apart |
+
+**Defect found and fixed (existing code):** `optical:aggregate-rx` resumed from the last
+hour that had a summary and processed at most 48 hours per run. After a polling gap longer
+than 48 hours, it went round the same empty hours for ever. Examples of such a gap: the
+poller down, or the NET-1-3 migration window. The raw-sample prune then refuses to run
+(`hourlyLagsBehind`), so `onu_rx_samples` grows without bound.
+
+Both aggregation commands now jump to the next hour or day that has data. A test fails
+without the fix and passes with it:
+`OnuRxDailyTest::test_hourly_aggregation_jumps_a_polling_gap_longer_than_its_batch`.
+
+### Measured (workspace, throwaway PostgreSQL 16, synthetic)
+
+The test data was 10,000 ONUs × 7 days × 24 hourly rows, 1.68 M rows.
+
+- `optical:aggregate-rx-daily --days=8` wrote 70,000 daily rows in 11.2 s, including the
+  Laravel bootstrap. That is about 1.5 s per day of data, so the nightly run (one day)
+  takes about 2 s.
+- Size including indexes: hourly 274 MB per 1.68 M rows, daily 11 MB per 70,000 rows.
+  Both come to about 160 bytes per row.
+
+### Disk consequence of NMS-AI-Q5 A [INFERRED from the measured row size]
+
+| ONUs | hourly, 400 days | daily, 3 years |
+| --- | --- | --- |
+| 5,000 | about 48 M rows, about 7.8 GB | about 5.5 M rows, about 0.9 GB |
+| 10,000 | about 96 M rows, about 15.6 GB | about 11 M rows, about 1.8 GB |
+
+The 400-day hourly table is the largest table in the database by far. It also sets the
+size of the nightly `pg_dump` and of restic. NET-1-1 (disk size on nostek-platform) and
+NET-1-2 (backup) should size `/srv` and the dump schedule against this.
+
+The owner could keep fewer hourly days, since the daily rollup now covers the long range.
+For example, 90 days of hourly is about 1.8 GB at 5,000 ONUs. Q5 is the owner's decision:
+this note only gives the measured cost.
+
+### Evidence
+
+- `tests/Feature/OnuRxDailyTest.php`, 7 tests:
+  - the weighted average;
+  - idempotency;
+  - skipping a gap;
+  - the batch limit;
+  - the hourly prune guard and daily retention;
+  - long ranges served from the daily table;
+  - the ranges accepted by the ONU detail page;
+  - the schedule at `25 0 * * *`.
+- Full Laravel suite (SQLite): 808 tests, 0 failed.
+- Vitest: 60 tests passed, including the new year-label case.

@@ -51,6 +51,10 @@ class OnuRxSample extends Model
      */
     public static function seriesFor(int $oltId, int $slot, int $port, int $onuId, Carbon $since): Collection
     {
+        if (static::needsDaily($since)) {
+            return OnuRxDaily::seriesFor($oltId, $slot, $port, $onuId, $since);
+        }
+
         if (static::needsHourly($since)) {
             return OnuRxHourly::seriesFor($oltId, $slot, $port, $onuId, $since);
         }
@@ -67,6 +71,15 @@ class OnuRxSample extends Model
                 'polled_at' => $sample->polled_at->toIso8601String(),
                 'rx_power_dbm' => (float) $sample->rx_power_dbm,
             ]);
+    }
+
+    /**
+     * Benar bila rentang lebih dari 90 hari (NMS-07-B2): satu titik per jam di rentang itu
+     * ribuan titik tanpa informasi tambahan, dan ringkasan jam bisa sudah dipangkas.
+     */
+    protected static function needsDaily(Carbon $since): bool
+    {
+        return Schema::hasTable('onu_rx_daily') && $since < now()->subDays(90);
     }
 
     /**

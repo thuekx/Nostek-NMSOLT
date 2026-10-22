@@ -130,10 +130,19 @@ slower than the snapshot path. The real limit is the ONU monitor/API list sendin
 in one response (27.6 MB, 1.7 s, 266 MB at 51,000 ONUs). Server-side paging (E2) goes with D.
 Details: [NMS-07-PERFORMANCE.md](NMS-07-PERFORMANCE.md).
 
+## NMS-07-B2 daily RX rollup (2026-10-22)
+
+Branch `step/nms-07-b2-rx-daily` (on top of C/E): `onu_rx_daily` + `optical:aggregate-rx-daily`
+(00:25), the hourly prune keeps rows not yet rolled up, and the ONU detail chart gains 90d/1y/3y.
+It also fixes an existing defect: hourly aggregation stalled for ever after a polling gap
+over 48 hours, which also stopped the raw-sample prune. Disk note for NET-1: 400 days of
+hourly at 5,000 ONUs is about 7.8 GB [INFERRED from the measured 160 B/row]. Details:
+[NMS-07-DATA-GROWTH.md](NMS-07-DATA-GROWTH.md#nms-07-b2--daily-rx-rollup-owner-nms-ai-q5-a-hourly-400-days-daily-3-years).
+
 ## Exact next action
 
-Refresh GitHub. Check the NMS-07-A, B and C/E PRs (exact-head CI, owner merge). Then
-continue B2 (daily RX rollup), D (UI journey and write-gate audit, with E2 server-side ONU
+Refresh GitHub. Check the NMS-07-A, B, C/E and B2 PRs (exact-head CI, owner merge). Then
+continue D (UI journey and write-gate audit, with E2 server-side ONU
 list paging), and the rest of E (alarm, optical, queue, poller on synthetic data). Do not
 modify the retained LICENSE attribution.
 

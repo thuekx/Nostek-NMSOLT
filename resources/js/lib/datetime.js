@@ -78,10 +78,13 @@ export function formatTimeOfDay(value) {
 
 // Label sumbu waktu grafik, tanpa akhiran zona supaya sumbu ringkas:
 // "14.00" (jam) atau "2 Okt" (date: true) — keduanya di zona tampilan.
-export function formatAxisTime(value, { date = false } = {}) {
+export function formatAxisTime(value, { date = false, year = false } = {}) {
     const d = toDate(value);
     if (!d) return '';
-    const opts = date
+    // year: ticks a month or more apart (RX 1y/3y ranges) need the year to stay unambiguous.
+    const opts = year
+        ? { month: 'short', year: '2-digit' }
+        : date
         ? { day: 'numeric', month: 'short' }
         : { hour: '2-digit', minute: '2-digit', hour12: false };
     return new Intl.DateTimeFormat(activeLocale(), { ...opts, timeZone: DISPLAY_TZ }).format(d);

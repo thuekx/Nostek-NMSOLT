@@ -11,7 +11,7 @@
 | Web UI | Authenticated dashboard, alarms, reports, users, settings, OLT/PON/ONU/ODP and vendor pages are routed in `routes/web.php`. | Present; journey testing pending |
 | REST API | `/api/v1` already exposes summary, search, OLT, ONU, alarm, ODP, map and GenieACS detail endpoints. | Present; consumer-hardening belongs to NMS-08 |
 | GenieACS application integration | Services/controllers already query NBI, match ONU↔ACS devices, expose connected-device detail and contain gated Wi-Fi write paths. | Present; live writes remain disabled |
-| Data growth controls | Raw RX samples default to 3 days and hourly aggregates to 45 days, with aggregation/prune commands. | Present; scale measurements pending |
+| Data growth controls | Raw RX samples default to 3 days and hourly aggregates to 45 days (400 on nostek-platform), daily 3 years, with aggregation/prune commands. | Present; B2 adds a daily rollup kept 3 years and fixes the aggregation stall after a polling gap; row size measured (~160 B), see NMS-07-DATA-GROWTH.md |
 | Base package | `docker-compose.yml` contains app, PostgreSQL and Redis. | Healthy staging evidence exists |
 | ACS package | `compose.acs.yaml` contains MongoDB plus CWMP/NBI/FS/UI and connects the app to the private ACS network. | Validated lab overlay; not yet a unified product install flow |
 

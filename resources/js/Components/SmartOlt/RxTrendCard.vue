@@ -18,6 +18,9 @@ const RANGES = [
     { key: '24h', labelKey: 'shell.rx_range_24h' },
     { key: '7d', labelKey: 'shell.rx_range_7d' },
     { key: '30d', labelKey: 'shell.rx_range_30d' },
+    { key: '90d', labelKey: 'shell.rx_range_90d' },
+    { key: '1y', labelKey: 'shell.rx_range_1y' },
+    { key: '3y', labelKey: 'shell.rx_range_3y' },
 ];
 
 const points = computed(() =>
@@ -90,7 +93,7 @@ const chartOptions = computed(() => {
         },
         scales: {
             x: {
-                ...axisX({ ...tick, callback: (v) => formatAxisTime(v, { date: step >= TIME_STEP_DAY }) }),
+                ...axisX({ ...tick, callback: (v) => formatAxisTime(v, { date: step >= TIME_STEP_DAY, year: step >= 28 * TIME_STEP_DAY }) }),
                 type: 'linear',
                 min: xMin,
                 max: xMax,

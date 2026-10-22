@@ -31,6 +31,7 @@ status:
   NMS-05: VERIFIED
   NMS-06: VERIFIED
   NMS-07: IN_PROGRESS
+  TRF-1: SOURCE_PASS_PENDING_PR
   NMS-08: BLOCKED
   NMS-09: BLOCKED
   NMS-10: BLOCKED
@@ -39,6 +40,12 @@ status:
 deferred:
   mobile_flutter: "Excluded from initial commit; inherited mobile identity is not approved for distribution."
 latest_evidence:
+  TRF-1:
+    status: SOURCE_PASS_PENDING_PR
+    request: "Owner 2026-10-22: traffic graphs per PON port and per ONT; decision card: PON first, ONT later."
+    doc: docs/nostek/TRF-1-PON-TRAFFIC.md
+    evidence: "Go poller --include-traffic (GET ifHCIn/OutOctets per GPON port, batches of 20); per-port rates raw 8 d / hourly 100 d / daily 3 y; chart on the PON port page. Laravel 835 passed, vitest 87, Go tests pass. Bench 3,400 ONUs / 54 ports / 20 ms RTT: 2,747 -> 2,753 requests, 71.0 -> 71.6 s. Also fixed: 90d RX chart read the daily rollup."
+    blocked: "Real-OLT read-only check of the counters (owner); ZTE ONU traffic OID (owner walk)."
   NMS-06:
     status: VERIFIED
     sanitized_evidence: docs/nostek/NMS-06-ZTE-C320-RUNTIME-EVIDENCE-2026-10-22.md
@@ -59,11 +66,11 @@ latest_evidence:
     merge_tree_evidence: "Squash merge has the same tree as tested head; no separate merge-SHA workflow run claimed."
     execution_state: "RESUMED 2026-10-22 by owner prompt: safe source work only (synthetic tests, Compose rendering, no hosts)."
     work_packages:
-      A_unified_package: "SOURCE_PASS_PENDING_PR: core/with-acs/platform Compose, MongoDB auth, no argv secrets, healthchecks, limits, digest pins, scripts/nostek/nmsolt-ops.sh, monitor/checks.json; workspace ops integration 58/58 (real PG/Redis/Mongo/GenieACS, stand-in app). Branch step/nms-07-a-unified-package."
-      B_data_growth: "SOURCE_PASS_PENDING_PR: history:prune (polling 30 d, cleared alarms 180 d, audit 400 d, config backups 7 + monthly 12), duplicate onu_rx_hourly index dropped, poll queue + dedicated worker pool; branch step/nms-07-b-data-growth on top of A. B2 daily RX rollup: SOURCE_PASS_PENDING_PR on step/nms-07-b2-rx-daily (onu_rx_daily, optical:aggregate-rx-daily 00:25, prune guard, 90d/1y/3y chart ranges; fixed hourly aggregation stall after a >48 h polling gap; measured ~160 B/row: hourly 400 d at 5k ONUs ~7.8 GB [INFERRED])."
+      A_unified_package: "SOURCE_PASS_MERGED: core/with-acs/platform Compose, MongoDB auth, no argv secrets, healthchecks, limits, digest pins, scripts/nostek/nmsolt-ops.sh, monitor/checks.json; workspace ops integration 58/58 (real PG/Redis/Mongo/GenieACS, stand-in app). Branch step/nms-07-a-unified-package."
+      B_data_growth: "SOURCE_PASS_MERGED: history:prune (polling 30 d, cleared alarms 180 d, audit 400 d, config backups 7 + monthly 12), duplicate onu_rx_hourly index dropped, poll queue + dedicated worker pool; branch step/nms-07-b-data-growth on top of A. B2 daily RX rollup: SOURCE_PASS_MERGED on step/nms-07-b2-rx-daily (onu_rx_daily, optical:aggregate-rx-daily 00:25, prune guard, 90d/1y/3y chart ranges; fixed hourly aggregation stall after a >48 h polling gap; measured ~160 B/row: hourly 400 d at 5k ONUs ~7.8 GB [INFERRED])."
       C_onu_state_table: "MEASURED_NOT_ADOPTED: read model built + equivalence-tested, then dropped: 25 % slower than the snapshot path at 10k/51k ONUs (PostgreSQL), 10x disk, extra write per poll. See docs/nostek/NMS-07-PERFORMANCE.md. Branch step/nms-07-c-perf-matrix keeps the harness tests/perf/run-onu-list-bench.sh."
-      D_ui_journey_and_write_gate_audit: "IN_PROGRESS: D-1 write-gate visibility SOURCE_PASS_PENDING_PR on step/nms-07-d-ui-journey (shared device_writes prop from the route table, read-only banner, request guard, v-device-write on 56 controls, drift test; real-browser check PASS). D-2a status honesty (stale > 3x poll interval never green: dashboard, OLT list, detail, port page) SOURCE_PASS_PENDING_PR on step/nms-07-d2-stale-states; API v1/Telegram keep legacy counts until NMS-08. D-2b stale ONU states (ONU monitor, map, alarms not-evaluated notice, C-Data/HiOSO pages; rows carry stale) SOURCE_PASS_PENDING_PR on step/nms-07-d2b-onu-states. D-2c partial RX state + role sweep (RoleJourneyTest: no 5xx, no sidebar link into a refused page) SOURCE_PASS_PENDING_PR on step/nms-07-d2c-permission-states. Next: E2 ONU list paging. See docs/nostek/NMS-07-UI-JOURNEY.md."
-      E_performance_matrix: "IN_PROGRESS: ONU list/search/decode measured at 4.5k/10.2k/51k ONUs (snapshot path 154/303/1735 ms; list payload 2.4/5.5/27.6 MB). E2 ONU monitor scoped to the selected OLT SOURCE_PASS_PENDING_PR on step/nms-07-e2-onu-monitor-scope (one 3,400-ONU OLT: 158 ms, 1.9 MB; was 27.6 MB at 51k). E3 alarm page 263->74 ms / 454->137 ms at 200k alarms (snapshot decoded once per OLT, status+last_seen_at indexes), alarm engine steady 32-42 ms / burst 340 LOS 0.5 s, RX charts 10-31 ms all ranges: SOURCE_PASS_PENDING_PR on step/nms-07-e3-alarm-rx-perf. E4 Go poller vs simulated C300 (3,400 ONUs): poller CPU <1 s; 2,747 requests at max-repetitions 10 vs 1,106 at 25; 20 ms RTT poll 74.5 s vs 34.4 s; capacity model 2 workers ~8 such OLTs per 5 min at 10 [INFERRED]: SOURCE_PASS_PENDING_PR on step/nms-07-e4-poller-bench. BLOCKED on owner/real OLT: max-repetitions 25 check; queue latency under real workers needs the host app image."
+      D_ui_journey_and_write_gate_audit: "IN_PROGRESS: D-1 write-gate visibility SOURCE_PASS_MERGED on step/nms-07-d-ui-journey (shared device_writes prop from the route table, read-only banner, request guard, v-device-write on 56 controls, drift test; real-browser check PASS). D-2a status honesty (stale > 3x poll interval never green: dashboard, OLT list, detail, port page) SOURCE_PASS_MERGED on step/nms-07-d2-stale-states; API v1/Telegram keep legacy counts until NMS-08. D-2b stale ONU states (ONU monitor, map, alarms not-evaluated notice, C-Data/HiOSO pages; rows carry stale) SOURCE_PASS_MERGED on step/nms-07-d2b-onu-states. D-2c partial RX state + role sweep (RoleJourneyTest: no 5xx, no sidebar link into a refused page) SOURCE_PASS_MERGED on step/nms-07-d2c-permission-states. Next: E2 ONU list paging. See docs/nostek/NMS-07-UI-JOURNEY.md."
+      E_performance_matrix: "IN_PROGRESS: ONU list/search/decode measured at 4.5k/10.2k/51k ONUs (snapshot path 154/303/1735 ms; list payload 2.4/5.5/27.6 MB). E2 ONU monitor scoped to the selected OLT SOURCE_PASS_MERGED on step/nms-07-e2-onu-monitor-scope (one 3,400-ONU OLT: 158 ms, 1.9 MB; was 27.6 MB at 51k). E3 alarm page 263->74 ms / 454->137 ms at 200k alarms (snapshot decoded once per OLT, status+last_seen_at indexes), alarm engine steady 32-42 ms / burst 340 LOS 0.5 s, RX charts 10-31 ms all ranges: SOURCE_PASS_MERGED on step/nms-07-e3-alarm-rx-perf. E4 Go poller vs simulated C300 (3,400 ONUs): poller CPU <1 s; 2,747 requests at max-repetitions 10 vs 1,106 at 25; 20 ms RTT poll 74.5 s vs 34.4 s; capacity model 2 workers ~8 such OLTs per 5 min at 10 [INFERRED]: SOURCE_PASS_MERGED on step/nms-07-e4-poller-bench. BLOCKED on owner/real OLT: max-repetitions 25 check; queue latency under real workers needs the host app image."
     package_doc: docs/nostek/NMS-07-UNIFIED-PACKAGE.md
     data_growth_doc: docs/nostek/NMS-07-DATA-GROWTH.md
     performance_doc: docs/nostek/NMS-07-PERFORMANCE.md
@@ -98,8 +105,8 @@ environment:
   genieacs_lab: ACTIVE_VERIFIED
   live_olt_write: PROHIBITED_WITHOUT_APPROVAL
 next_action:
-  id: NMS-07-D-UI-JOURNEY
-  instruction: "After the NMS-07-A, B, C/E, B2, D-1, D-2a, D-2b, D-2c, E2, E3 and E4 PRs pass exact-head CI and the owner merges them, close NMS-07 evidence that needs a host: real app image, queue latency under real workers, max-repetitions check on a real OLT (owner, NET-1). The onu_state table was measured and not adopted (NMS-07-PERFORMANCE.md); do not re-add it without new evidence. Preserve LICENSE attribution and keep device writes disabled."
+  id: TRF-1-PON-TRAFFIC
+  instruction: "NMS-07 PRs #24-#34 are merged (2026-10-22). Check the TRF-1 PR (step/trf-1-pon-traffic, exact-head CI, owner merge), then per-ONT traffic through GenieACS (parseAcsTrafficMonitor exists, unused). BLOCKED on the owner: real-OLT check of ifHCIn/OutOctets on GPON ports and of max-repetitions 25, the ZTE ONU traffic OID walk. NMS-07 evidence that needs a host stays open: real app image, queue latency under real workers (NET-1). The onu_state table was measured and not adopted (NMS-07-PERFORMANCE.md); do not re-add it without new evidence. Preserve LICENSE attribution and keep device writes disabled."
   owner: "executor"
   approval_required: false
 references:

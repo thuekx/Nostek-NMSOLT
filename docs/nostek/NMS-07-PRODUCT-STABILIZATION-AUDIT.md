@@ -177,3 +177,14 @@ PR #20 search fixes are now merged as `1a38c6b`; all five CI jobs passed on
 exact head `fc5ce840` in run `39773898154`. Identity cleanup remains complete.
 NMS-07 is still IN_PROGRESS; implementation after that merge was paused by owner (resumed 2026-10-22).
 Implementation resumed 2026-10-22; NMS-07-A above does not validate a host runtime.
+
+## Merge checkpoint and TRF-1 (2026-10-22)
+
+The owner merged PRs #24 to #34 (A, B, C/E, B2, D-1, D-2a/b/c, E2, E3, E4). The source-side
+NMS-07 work is in main. NMS-07 stays IN PROGRESS: the host evidence (real app image, queue
+latency under real workers) and the owner's real-OLT `max-repetitions` check are still open.
+
+Found while building TRF-1 (PON traffic graph, [TRF-1-PON-TRAFFIC.md](TRF-1-PON-TRAFFIC.md)):
+the 90-day RX chart was served from the daily rollup instead of the hourly one, because
+`$since` was computed a moment before the range check. It is fixed in the TRF-1 PR with a
+regression test.

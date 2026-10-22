@@ -20,23 +20,26 @@ Nostek-NMSOLT — STANDALONE NETWORK PLATFORM / API PROVIDER
 |   +-- canonical identity: Nostek-NMSOLT; short name: Nostek-NMS
 |   +-- PASS: PR #21 / run 39770297399 / merge f43baa3; nos-* identity enforced
 |   +-- PR #20 MERGED: 1a38c6b; exact-head fc5ce840 / CI 39773898154 PASS
-|   +-- A [SOURCE PASS, PR pending] unified package core/with-acs + platform overlay,
+|   +-- A [SOURCE PASS, PR merged] unified package core/with-acs + platform overlay,
 |   |       nmsolt-ops.sh (preflight/status/backup/restore/upgrade/rollback), checks.json;
 |   |       workspace ops integration 58/58 (real PG/Redis/Mongo/GenieACS, stand-in app)
-|   +-- B [SOURCE PASS, PR pending] history:prune retention, duplicate RX index dropped,
+|   +-- B [SOURCE PASS, PR merged] history:prune retention, duplicate RX index dropped,
 |   |       poll queue + worker pool
-|   |   +-- B2 [SOURCE PASS, PR pending] daily RX rollup 3 y, 90d/1y/3y charts,
+|   |   +-- B2 [SOURCE PASS, PR merged] daily RX rollup 3 y, 90d/1y/3y charts,
 |   |           hourly aggregation stall after >48 h polling gap fixed
 |   +-- C [MEASURED, NOT ADOPTED] onu_state read model 25 % slower than the snapshot
 |   |       path (10k/51k ONUs, PostgreSQL); dropped, numbers in NMS-07-PERFORMANCE.md
 |   +-- D [IN PROGRESS] D-1 write gate visible (banner, request guard, 56 locked controls,
-|   |       browser-checked; PR pending); D-2a stale never green (PR pending);
-|   |       D-2b ONU monitor/map/alarms/C-Data/HiOSO stale states (PR pending);
-|   |       D-2c partial RX + role sweep (PR pending)
+|   |       browser-checked; PR merged); D-2a stale never green (PR merged);
+|   |       D-2b ONU monitor/map/alarms/C-Data/HiOSO stale states (PR merged);
+|   |       D-2c partial RX + role sweep (PR merged)
 |   +-- E [IN PROGRESS] ONU list/search measured (4.5k/10k/51k); E2 ONU monitor scoped to
-|           one OLT (PR pending); E3 alarm page 3x faster + RX charts measured
-|           (PR pending); E4 Go poller vs simulated C300 measured (PR pending);
+|           one OLT (PR merged); E3 alarm page 3x faster + RX charts measured
+|           (PR merged); E4 Go poller vs simulated C300 measured (PR merged);
 |           host-only: queue latency, real-OLT max-repetitions check
++-- TRF-1 [SOURCE PASS, PR pending] PON port traffic graph: IF-MIB octet counters (Go poller),
+|   per-port rates raw 8 d / hourly 100 d / daily 3 y, chart on the PON port page;
+|   real-OLT counter check BLOCKED (owner); per-ONT traffic next (GenieACS first)
 +-- NMS-08 [BLOCKED] API v1 read-only + OpenAPI
 |   +-- stable IDs, freshness, pagination, scopes, redaction, rate limits
 +-- NMS-09 [BLOCKED] Maung /nosteknmsolt thin consumer

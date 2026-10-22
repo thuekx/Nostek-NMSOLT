@@ -2104,5 +2104,14 @@
         "stat_ports": "{label} ports",
         "subtitle": "Click a port to open its ONU list.",
         "title": "{label} Ports"
+    },
+    "traffic": {
+        "title": "PON port traffic",
+        "last": "Last",
+        "avg": "Average",
+        "peak": "Peak",
+        "direction_note": "↓ downstream (OLT to customers), ↑ upstream (customers to OLT). Ranges of 30 days and more use hourly/daily averages; the peak keeps the highest value.",
+        "empty": "No traffic history in this range yet. The chart fills from the second poll after the feature is on.",
+        "no_counters": "The OLT gave no traffic counters (IF-MIB ifHCInOctets/ifHCOutOctets) for this port on the last poll, so its traffic is unknown."
     }
 }

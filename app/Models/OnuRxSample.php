@@ -79,7 +79,9 @@ class OnuRxSample extends Model
      */
     protected static function needsDaily(Carbon $since): bool
     {
-        return Schema::hasTable('onu_rx_daily') && $since < now()->subDays(90);
+        // An hour of slack: the caller computes $since a moment before this runs, so an exact
+        // "90 days" request used to tip over to the daily rollup (found in TRF-1).
+        return Schema::hasTable('onu_rx_daily') && $since < now()->subDays(90)->subHour();
     }
 
     /**

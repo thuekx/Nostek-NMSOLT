@@ -102,3 +102,27 @@ func TestHexValueStringKeepsPrintableSerialBytes(t *testing.T) {
 		t.Fatalf("decodeOnuSN(hexValueString) = %q, want CDTC50573A79", got)
 	}
 }
+
+func TestMergePortTrafficKeepsMissingCountersEmpty(t *testing.T) {
+	ports := []portRow{{IfIndex: 268435456}, {IfIndex: 268435712}, {IfIndex: 268435968}}
+	values := map[string]string{
+		joinOID(ifHCInOctets, "268435456"):  "18446744073709551615", // Counter64 max survives as text
+		joinOID(ifHCOutOctets, "268435456"): "42",
+		joinOID(ifHCInOctets, "268435712"):  "", // noSuchInstance
+		joinOID(ifHCOutOctets, "268435712"): "7",
+		joinOID(ifHCInOctets, "268435968"):  "NoSuchObject",
+	}
+
+	if got := mergePortTraffic(ports, values); got != 1 {
+		t.Fatalf("mergePortTraffic counted %d ports, want 1", got)
+	}
+	if ports[0].InOctets != "18446744073709551615" || ports[0].OutOctets != "42" {
+		t.Fatalf("port 0 counters = %q/%q", ports[0].InOctets, ports[0].OutOctets)
+	}
+	if ports[1].InOctets != "" || ports[1].OutOctets != "7" {
+		t.Fatalf("port 1 counters = %q/%q, want empty in", ports[1].InOctets, ports[1].OutOctets)
+	}
+	if ports[2].InOctets != "" || ports[2].OutOctets != "" {
+		t.Fatalf("port 2 counters = %q/%q, want both empty", ports[2].InOctets, ports[2].OutOctets)
+	}
+}

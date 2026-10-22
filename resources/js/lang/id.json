@@ -2104,5 +2104,14 @@
         "stat_ports": "Port {label}",
         "subtitle": "Klik port untuk membuka daftar ONU-nya.",
         "title": "Port {label}"
+    },
+    "traffic": {
+        "title": "Trafik port PON",
+        "last": "Terakhir",
+        "avg": "Rata-rata",
+        "peak": "Puncak",
+        "direction_note": "↓ downstream (OLT ke pelanggan), ↑ upstream (pelanggan ke OLT). Rentang 30 hari ke atas memakai rata-rata per jam/hari; puncak tetap dari nilai tertinggi.",
+        "empty": "Belum ada riwayat trafik pada rentang ini. Grafik terisi mulai poll kedua setelah fitur aktif.",
+        "no_counters": "OLT tidak memberi counter trafik (IF-MIB ifHCInOctets/ifHCOutOctets) untuk port ini pada poll terakhir, jadi trafiknya tidak diketahui."
     }
 }

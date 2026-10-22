@@ -27,6 +27,11 @@ const (
 	ifOperStatus = "1.3.6.1.2.1.2.2.1.8"
 	ifName       = "1.3.6.1.2.1.31.1.1.1.1"
 
+	// IF-MIB ifXTable 64-bit octet counters (TRF-1 PON traffic). Read with GET for the GPON port
+	// ifIndexes only, never walked: the ifTable also lists every ONU/uplink/vport interface.
+	ifHCInOctets  = "1.3.6.1.2.1.31.1.1.1.6"
+	ifHCOutOctets = "1.3.6.1.2.1.31.1.1.1.10"
+
 	zteOnuType          = "1.3.6.1.4.1.3902.1012.3.28.1.1.1"
 	zteOnuName          = "1.3.6.1.4.1.3902.1012.3.28.1.1.2"
 	zteOnuDescription   = "1.3.6.1.4.1.3902.1012.3.28.1.1.3"
@@ -66,6 +71,9 @@ type portRow struct {
 	Port           int    `json:"port"`
 	OperStatusCode *int   `json:"oper_status_code"`
 	OperStatus     string `json:"oper_status"`
+	// Decimal strings: a Counter64 does not fit a PHP int or a JSON float without losing digits.
+	InOctets  string `json:"in_octets,omitempty"`
+	OutOctets string `json:"out_octets,omitempty"`
 }
 
 type onuRow struct {
@@ -109,15 +117,22 @@ type rxPowerMeta struct {
 	Error  *string `json:"error"`
 }
 
+type trafficMeta struct {
+	OK    bool    `json:"ok"`
+	Count int     `json:"count"`
+	Error *string `json:"error"`
+}
+
 type pollResult struct {
-	OK        bool        `json:"ok"`
-	Driver    string      `json:"driver"`
-	LatencyMS int64       `json:"latency_ms"`
-	System    systemInfo  `json:"system"`
-	Ports     []portRow   `json:"ports"`
-	Onus      []onuRow    `json:"onus"`
-	RXPower   rxPowerMeta `json:"rx_power"`
-	Error     *string     `json:"error"`
+	OK        bool         `json:"ok"`
+	Driver    string       `json:"driver"`
+	LatencyMS int64        `json:"latency_ms"`
+	System    systemInfo   `json:"system"`
+	Ports     []portRow    `json:"ports"`
+	Onus      []onuRow     `json:"onus"`
+	RXPower   rxPowerMeta  `json:"rx_power"`
+	Traffic   *trafficMeta `json:"traffic,omitempty"`
+	Error     *string      `json:"error"`
 }
 
 type collector struct {
@@ -130,6 +145,7 @@ func main() {
 	port := flag.Int("port", 161, "SNMP UDP port")
 	version := flag.String("version", "v2c", "SNMP version: v1 or v2c")
 	includeRX := flag.Bool("include-rx", false, "include ONU RX power table")
+	includeTraffic := flag.Bool("include-traffic", false, "include PON port octet counters (IF-MIB ifHCIn/OutOctets)")
 	timeout := flag.Duration("timeout", 10*time.Second, "SNMP timeout per request")
 	retries := flag.Int("retries", 2, "SNMP retries")
 	walkMode := flag.String("walk-mode", "bulk", "SNMP walk mode: auto, bulk, or walk")
@@ -150,7 +166,7 @@ func main() {
 	}
 	defer c.snmp.Conn.Close()
 
-	result, err := c.poll(*includeRX)
+	result, err := c.poll(*includeRX, *includeTraffic)
 	result.LatencyMS = time.Since(startedAt).Milliseconds()
 	if err != nil {
 		message := err.Error()
@@ -203,7 +219,7 @@ func newCollector(host string, port uint16, version string, community string, ti
 	return &collector{snmp: params, walkMode: walkMode}, nil
 }
 
-func (c *collector) poll(includeRX bool) (pollResult, error) {
+func (c *collector) poll(includeRX bool, includeTraffic bool) (pollResult, error) {
 	system, err := c.system()
 	if err != nil {
 		return pollResult{Driver: "unknown", System: system, Ports: []portRow{}, Onus: []onuRow{}}, err
@@ -212,6 +228,18 @@ func (c *collector) poll(includeRX bool) (pollResult, error) {
 	ports, err := c.gponPorts()
 	if err != nil {
 		return pollResult{Driver: driver(system), System: system, Ports: []portRow{}, Onus: []onuRow{}}, err
+	}
+
+	// Traffic counters are read right after the port list, so the sample time the app stamps on
+	// them (end of poll) is off by at most the ONU walk; a failure here never fails the poll.
+	var traffic *trafficMeta
+	if includeTraffic {
+		count, err := c.portTraffic(ports)
+		traffic = &trafficMeta{OK: err == nil, Count: count}
+		if err != nil {
+			message := err.Error()
+			traffic.Error = &message
+		}
 	}
 
 	c600 := isC600(system)
@@ -247,8 +275,68 @@ func (c *collector) poll(includeRX bool) (pollResult, error) {
 		Ports:   ports,
 		Onus:    onus,
 		RXPower: rxMeta,
+		Traffic: traffic,
 		Error:   nil,
 	}, nil
+}
+
+// trafficGetBatch keeps each GET well under the usual 484-byte minimum PDU an agent must accept
+// and under the ZTE limit seen with SmartOLT captures (about 30 varbinds).
+const trafficGetBatch = 20
+
+// portTraffic fills InOctets/OutOctets of each port with one GET per batch of counters and
+// returns how many ports got both counters. A port whose agent answers noSuchObject/
+// noSuchInstance keeps empty strings: the app shows "no counter", never zero traffic.
+func (c *collector) portTraffic(ports []portRow) (int, error) {
+	oids := make([]string, 0, len(ports)*2)
+	for _, port := range ports {
+		index := strconv.Itoa(port.IfIndex)
+		oids = append(oids, joinOID(ifHCInOctets, index), joinOID(ifHCOutOctets, index))
+	}
+
+	values := map[string]string{}
+	for start := 0; start < len(oids); start += trafficGetBatch {
+		end := start + trafficGetBatch
+		if end > len(oids) {
+			end = len(oids)
+		}
+		batch, err := c.get(oids[start:end])
+		if err != nil {
+			return 0, err
+		}
+		for oid, value := range batch {
+			values[oid] = value
+		}
+	}
+
+	return mergePortTraffic(ports, values), nil
+}
+
+func mergePortTraffic(ports []portRow, values map[string]string) int {
+	count := 0
+	for i := range ports {
+		index := strconv.Itoa(ports[i].IfIndex)
+		ports[i].InOctets = counterValue(values[joinOID(ifHCInOctets, index)])
+		ports[i].OutOctets = counterValue(values[joinOID(ifHCOutOctets, index)])
+		if ports[i].InOctets != "" && ports[i].OutOctets != "" {
+			count++
+		}
+	}
+
+	return count
+}
+
+// counterValue keeps only a plain unsigned decimal (what valueString makes of a Counter64);
+// anything else (empty for noSuchInstance, a type name, text) is "no counter".
+func counterValue(value string) string {
+	if value == "" {
+		return ""
+	}
+	if _, err := strconv.ParseUint(value, 10, 64); err != nil {
+		return ""
+	}
+
+	return value
 }
 
 func (c *collector) system() (systemInfo, error) {

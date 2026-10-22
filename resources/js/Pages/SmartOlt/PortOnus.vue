@@ -20,6 +20,7 @@ import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
 import { useConfirm } from '@/Composables/useConfirm';
 import { usePagination } from '@/Composables/usePagination';
 import { formatDateTime, formatRelative } from '@/lib/datetime';
+import { rxLags } from '@/lib/freshness';
 import { lastDownCauseLabel, onuPrimaryLabel, onuSecondaryLabel, phaseStateLabel } from '@/lib/onu';
 import { Head, Link, router, useForm, usePage } from '@inertiajs/vue3';
 import { useI18n } from 'vue-i18n';
@@ -553,6 +554,11 @@ const DATA_STATE = {
     empty: { label: 'portonus.stat_empty', text: 'text-slate-400', dot: 'bg-slate-300' },
 };
 const dataState = computed(() => (props.snapshot?.ok ? (props.snapshot.freshness?.state ?? 'unknown') : 'empty'));
+
+// NMS-07-D-2c partial state: the ONU status poll succeeded but the RX read did not, so the RX
+// column keeps older values. Name their age when they lag the status by more than the
+// freshness threshold (3 poll intervals).
+const rxLagging = computed(() => rxLags(props.snapshot));
 </script>
 
 <template>
@@ -685,6 +691,9 @@ const dataState = computed(() => (props.snapshot?.ok ? (props.snapshot.freshness
                                 </h3>
                                 <p v-if="snapshot.rx_power?.error" class="mt-0.5 text-xs text-red-400">
                                     {{ $t('portonus.rx_read_failed', { error: snapshot.rx_power.error }) }}
+                                </p>
+                                <p v-if="rxLagging" data-testid="rx-partial" class="mt-0.5 text-xs text-amber-300">
+                                    {{ snapshot.rx_power?.polled_at ? $t('portonus.rx_older', { age: formatRelative(snapshot.rx_power.polled_at) }) : $t('portonus.rx_never') }}
                                 </p>
                             </div>
                         </div>

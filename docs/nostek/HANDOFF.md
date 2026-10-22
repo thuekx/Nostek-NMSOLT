@@ -163,11 +163,17 @@ monitor, map, C-Data and HiOSO pages grey out the last known state of a non-fres
 say so; the alarm page names OLTs whose alarms are not being evaluated. Details:
 [NMS-07-UI-JOURNEY.md](NMS-07-UI-JOURNEY.md).
 
+## NMS-07-D-2c partial and permission states (2026-10-22)
+
+Branch `step/nms-07-d2c-permission-states` (on top of D-2b). `RoleJourneyTest` sweeps every
+GET page for admin, operator, partner and demo: no server error, every sidebar link opens,
+no link into a refused page. RX values that lag the ONU status show their age. Details:
+[NMS-07-UI-JOURNEY.md](NMS-07-UI-JOURNEY.md).
+
 ## Exact next action
 
-Refresh GitHub. Check the NMS-07-A, B, C/E, B2, D-1, D-2a and D-2b PRs (exact-head CI, owner
-merge). Then continue D-2c (partial and permission states, with E2 server-side ONU
-list paging), and the rest of E (alarm, optical, queue, poller on synthetic data). Do not
+Refresh GitHub. Check the NMS-07-A, B, C/E, B2, D-1, D-2a, D-2b and D-2c PRs (exact-head CI, owner
+merge). Then continue E2 (server-side ONU list paging), and the rest of E (alarm, optical, queue, poller on synthetic data). Do not
 modify the retained LICENSE attribution.
 
 For cross-device continuation, use the post-merge prompt in [CLOUD-HANDOFF.md](CLOUD-HANDOFF.md). PR #20 search fixes are already in main; do not recreate them.

@@ -26,3 +26,16 @@ export const STATUS_PILL = {
     unknown: 'nos-pill-muted',
     paused: 'nos-pill-muted',
 };
+
+/**
+ * NMS-07-D-2c partial state: true when a port snapshot's RX values lag its ONU status by more
+ * than the freshness threshold (the RX read failed on later polls and older values were kept),
+ * or when RX was never read although the status was.
+ */
+export function rxLags(snapshot) {
+    if (!snapshot?.ok || !snapshot.refreshed_at || !(snapshot.onus?.length > 0)) return false;
+    const polledAt = snapshot.rx_power?.polled_at;
+    if (!polledAt) return snapshot.rx_power?.ok === false;
+    const threshold = (snapshot.freshness?.threshold_seconds ?? 900) * 1000;
+    return new Date(snapshot.refreshed_at) - new Date(polledAt) > threshold;
+}

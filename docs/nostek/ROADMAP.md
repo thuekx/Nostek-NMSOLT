@@ -76,6 +76,10 @@ Branch `step/nms-07-a-unified-package`: core/with-acs/platform Compose, `scripts
 
 Branch `step/nms-07-b-data-growth`: retention command `history:prune`, duplicate RX index dropped, dedicated poll worker pool. See [NMS-07-DATA-GROWTH.md](NMS-07-DATA-GROWTH.md).
 
+## NMS-07-D-2c partial and permission checkpoint
+
+Branch `step/nms-07-d2c-permission-states`: role sweep (admin, operator, partner, demo) with no server error and no sidebar link into a refused page; RX values lagging the ONU status are labelled. See [NMS-07-UI-JOURNEY.md](NMS-07-UI-JOURNEY.md).
+
 ## NMS-07-D-2b stale ONU/map/alarm checkpoint
 
 Branch `step/nms-07-d2b-onu-states`: ONU monitor, map, alarms and C-Data/HiOSO pages never show a stale OLT's last known ONU state as live; the alarm page names OLTs whose alarms are not evaluated. See [NMS-07-UI-JOURNEY.md](NMS-07-UI-JOURNEY.md).

@@ -442,7 +442,9 @@
         "acs_yes": "Terhubung",
         "acs_stale": "Lama diam",
         "acs_no": "Belum",
-        "preregister_hint": "Daftarkan ONU yang belum tersambung lewat SN-nya — config aktif sendiri saat ONU dicolok"
+        "preregister_hint": "Daftarkan ONU yang belum tersambung lewat SN-nya — config aktif sendiri saat ONU dicolok",
+        "rx_older": "Nilai RX lebih lama dari status ONU: pembacaan RX terakhir {age}.",
+        "rx_never": "RX belum pernah terbaca; kolom RX kosong atau tidak terkini."
     },
     "tr069": {
         "enable_title": "Aktifkan TR069 Massal",

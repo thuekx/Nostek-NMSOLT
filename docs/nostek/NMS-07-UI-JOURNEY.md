@@ -144,12 +144,39 @@ fresh), `OnuInventoryService` `stale` per row (memo per OLT), C-Data and HiOSO `
   alarm page lists "OLT-DEMO-PATI · Stale · 5 hours ago".
 - Laravel 820 passed, Vitest 78 passed, `vite build` passes.
 
-## Next (D-2c, E2)
+## D-2c — partial and permission states
 
-1. **Partial states.** A poll that half failed (some PON ports refreshed, others not): the
-   port page already shows its own age; the OLT pages should name ports older than the OLT.
-2. **Permission states.** Check each role's view against `auth.can`: admin, operator,
-   partner, demo. Partner isolation is already tested server-side; the check is that the
-   UI hides or explains, rather than failing with a 403.
-3. **E2 — server-side ONU list paging.** The ONU monitor page and `/api/v1/onus` send every
+**Branch:** `step/nms-07-d2c-permission-states` (on top of D-2b).
+
+**Partial state found.** A poll refreshes every PON port at once, so the ports of one OLT
+never have different ages. The partial case is the RX read: when the ONU status poll works
+but the RX read fails, the RX column keeps older values (`preserveExistingRx`) and only an
+error line said so. The PON port page now also says how old the RX values are when they lag
+the status by more than the freshness threshold (`rxLags()` in `resources/js/lib/freshness.js`),
+or that RX was never read.
+
+**Permission states, swept per role** (`tests/Feature/RoleJourneyTest.php`), for admin,
+operator, partner and demo, each with an OLT it may see:
+
+- every sidebar link of the role opens with 200; the test's sidebar list is compared with
+  `AuthenticatedLayout.vue`, so a new link fails the test until it is classified;
+- every signed-in GET page without parameters, and every page of the role's OLT, answers
+  below 500 (more than 100 requests across the roles);
+- a page a role is refused (403/404) is never in that role's sidebar;
+- the "Add OLT" button (`add_olt`) and the ACS pin search (`manage_acs`) are shown exactly
+  when the server allows them.
+
+Result: no server error and no sidebar link into a refused page. The UI already hid the
+refused controls (users, audit log, settings, partner Telegram, add OLT, ACS pin search),
+so no code change was needed there; the test now keeps it that way. Mutation check: putting
+`users.index` in the operator sidebar fails two tests.
+
+### Evidence
+
+- `RoleJourneyTest` 4 tests (243 assertions); `freshness.spec.js` +3 (`rxLags`).
+- Laravel 824 passed, Vitest 81 passed, `vite build` passes.
+
+## Next (E2)
+
+1. **E2 — server-side ONU list paging.** The ONU monitor page and `/api/v1/onus` send every
    ONU in one response: 27.6 MB at 51,000 ONUs (NMS-07-PERFORMANCE.md).

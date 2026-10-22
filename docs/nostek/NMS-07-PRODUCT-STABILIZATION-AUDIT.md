@@ -115,6 +115,13 @@ no longer show the last known state of a stale OLT as live. The alarm page names
 alarms are not being evaluated. Next: D-2c partial and permission states. See
 [NMS-07-UI-JOURNEY.md](NMS-07-UI-JOURNEY.md).
 
+## NMS-07-D-2c result (2026-10-22)
+
+On `step/nms-07-d2c-permission-states`: a role sweep (admin, operator, partner, demo) finds
+no server error and no sidebar link into a refused page; RX values that lag the ONU status
+are now labelled with their age. The stale, partial and permission part of work package 3 is
+source PASS. See [NMS-07-UI-JOURNEY.md](NMS-07-UI-JOURNEY.md).
+
 ## NMS-07-C/E result (2026-10-22)
 
 Work package 4 (performance audit), first part, is on branch `step/nms-07-c-perf-matrix`.

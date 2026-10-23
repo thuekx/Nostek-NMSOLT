@@ -9,7 +9,8 @@ use App\Support\SmartOltSupport;
 /**
  * Reads an ONU's live detail-info via CLI and parses it into display groups
  * (identity / state / optical / last_event / all), supplemented by the
- * attenuation table for optical Rx/Tx (guide Section 6).
+ * attenuation table for optical Rx/Tx (guide Section 6) and, TRF-4, the live traffic of
+ * `show interface <onu>` (read-only).
  */
 class ZteOnuDetailService
 {
@@ -26,6 +27,7 @@ class ZteOnuDetailService
             'terminal length 0',
             "show gpon onu detail-info {$iface}",
             "show pon power attenuation {$iface}",
+            "show interface {$iface}",
         ]);
 
         $result = $this->executor->execute($olt, $script);
@@ -40,7 +42,7 @@ class ZteOnuDetailService
     }
 
     /**
-     * @return array{identity:array<string,?string>, state:array<string,?string>, optical:array<string,?string>, last_event:array<string,?string>, all:array<string,string>}
+     * @return array{identity:array<string,?string>, state:array<string,?string>, optical:array<string,?string>, last_event:array<string,?string>, traffic:array<string,?int>, all:array<string,string>}
      */
     public function parse(string $raw): array
     {
@@ -78,6 +80,7 @@ class ZteOnuDetailService
                 'last_down_time' => $this->pick($all, ['last_down_time'], [['offline', 'time']]),
                 'last_up_time' => $this->pick($all, ['last_up_time'], [['authpass']]),
             ],
+            'traffic' => $this->parseTraffic($raw),
             'all' => $all,
         ];
 
@@ -99,8 +102,10 @@ class ZteOnuDetailService
                 continue;
             }
 
-            // Skip attenuation rows, separators, and session-history rows handled elsewhere.
+            // Skip attenuation rows, separators, session-history rows and the traffic block
+            // (`show interface`), all handled elsewhere.
             if (preg_match('/^\s*(up|down)\b/i', $line)
+                || preg_match('/^\s*(input|output)(\s+peak)?\s+(rate|bandwidth)|^\s*(bytes|input|output)\s*:|^\s*(onu|total) statistic|^\s*interface peak rate/i', $line)
                 || preg_match('/^\s*-{3,}\s*$/', $line)
                 || preg_match('/^\s*\d+\s+\d{4}-\d\d-\d\d/', $line)) {
                 continue;
@@ -110,7 +115,7 @@ class ZteOnuDetailService
             $rawKey = trim($rawKey);
             $value = trim($value);
 
-            if ($rawKey === '' || stripos($line, 'show gpon') !== false || preg_match('/^(zxan|olt)[#>]/i', $rawKey)) {
+            if ($rawKey === '' || stripos($line, 'show gpon') !== false || stripos($line, 'show interface') !== false || preg_match('/^(zxan|olt)[#>]/i', $rawKey)) {
                 continue;
             }
 
@@ -234,5 +239,41 @@ class ZteOnuDetailService
         $key = preg_replace('/[^a-z0-9]+/', '_', $key) ?? '';
 
         return trim($key, '_');
+    }
+
+    /**
+     * TRF-4: live ONU traffic from `show interface gpon-onu_…` (verified on C320 V2.1.0, 2026-10-23).
+     * The OLT reports bytes per second ("Bps"); rates are returned in bits per second like TRF-1.
+     * Input = from the ONU into the OLT (customer upstream), Output = to the ONU (downstream).
+     * Missing lines stay null, never 0.
+     *
+     * @return array{down_bps:?int, up_bps:?int, down_pps:?int, up_pps:?int, down_peak_bps:?int, up_peak_bps:?int, down_total_bytes:?int, up_total_bytes:?int}
+     */
+    public function parseTraffic(string $raw): array
+    {
+        $rate = function (string $label) use ($raw): array {
+            if (preg_match('/^\s*'.$label.'\s*:\s*(\d+)\s*Bps\s+(\d+)\s*pps/im', $raw, $m)) {
+                return [(int) $m[1] * 8, (int) $m[2]];
+            }
+
+            return [null, null];
+        };
+        $total = function (string $label) use ($raw): ?int {
+            return preg_match('/^\s*'.$label.'\s*:\s*\R\s*Bytes\s*:\s*(\d+)/im', $raw, $m) ? (int) $m[1] : null;
+        };
+
+        [$upBps, $upPps] = $rate('Input rate');
+        [$downBps, $downPps] = $rate('Output rate');
+
+        return [
+            'down_bps' => $downBps,
+            'up_bps' => $upBps,
+            'down_pps' => $downPps,
+            'up_pps' => $upPps,
+            'down_peak_bps' => $rate('Output peak rate')[0],
+            'up_peak_bps' => $rate('Input peak rate')[0],
+            'down_total_bytes' => $total('Output'),
+            'up_total_bytes' => $total('Input'),
+        ];
     }
 }

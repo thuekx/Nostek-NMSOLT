@@ -854,7 +854,14 @@
         "zone_healthy": "Sehat",
         "dur_d": "h",
         "dur_h": "j",
-        "dur_m": "m"
+        "dur_m": "m",
+        "traffic_title": "Traffic (live)",
+        "traffic_down": "Download (ke ONT)",
+        "traffic_up": "Upload (dari ONT)",
+        "traffic_peak": "Puncak",
+        "traffic_total": "Total sejak counter direset",
+        "traffic_note": "Dibaca dari OLT saat halaman dibuka; tekan Refresh untuk bacaan baru. Tidak disimpan sebagai riwayat.",
+        "traffic_none": "OLT tidak mengembalikan data traffic untuk ONT ini."
     },
     "portdetail": {
         "zone": "Zona",

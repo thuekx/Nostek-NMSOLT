@@ -6,13 +6,14 @@ import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
 import { lastDownCauseLabel, phaseStateLabel } from '@/lib/onu';
 import { Head, Link, router } from '@inertiajs/vue3';
 import {
-    Activity, ArrowLeft, ChevronDown, Clock, Fingerprint, Gauge, ListChecks,
+    Activity, ArrowDownUp, ArrowLeft, ChevronDown, Clock, Fingerprint, Gauge, ListChecks,
     RefreshCw, Settings, Signal, Terminal, Zap,
 } from '@lucide/vue';
 import { computed } from 'vue';
 import { useI18n } from 'vue-i18n';
 import ArcGauge from '@/Components/Charts/ArcGauge.vue';
 import { tokenHex } from '@/lib/theme';
+import { formatBps } from '@/lib/traffic';
 
 const { t } = useI18n({ useScope: 'global' });
 
@@ -36,6 +37,24 @@ const identity = computed(() => props.groups.identity ?? {});
 const state = computed(() => props.groups.state ?? {});
 const optical = computed(() => props.groups.optical ?? {});
 const lastEvent = computed(() => props.groups.last_event ?? {});
+// TRF-4: live traffic from `show interface` (bits/s, read at page load / refresh).
+const traffic = computed(() => props.groups.traffic ?? {});
+const hasTraffic = computed(() => traffic.value.down_bps != null || traffic.value.up_bps != null);
+const formatBytes = (bytes) => {
+    if (bytes === null || bytes === undefined) return '—';
+    const units = ['B', 'KB', 'MB', 'GB', 'TB', 'PB'];
+    let v = Number(bytes);
+    let u = 0;
+    while (v >= 1000 && u < units.length - 1) {
+        v /= 1000;
+        u += 1;
+    }
+    return `${v.toFixed(u === 0 ? 0 : 2)} ${units[u]}`;
+};
+const trafficRows = computed(() => [
+    { key: 'down', label: t('onudetail.traffic_down'), rate: traffic.value.down_bps, pps: traffic.value.down_pps, peak: traffic.value.down_peak_bps, total: traffic.value.down_total_bytes, tone: 'text-cyan-300' },
+    { key: 'up', label: t('onudetail.traffic_up'), rate: traffic.value.up_bps, pps: traffic.value.up_pps, peak: traffic.value.up_peak_bps, total: traffic.value.up_total_bytes, tone: 'text-violet-300' },
+]);
 
 const num = (v) => {
     if (v === null || v === undefined) return null;
@@ -275,6 +294,27 @@ const refresh = () => router.reload({ preserveScroll: true });
                     <!-- RX power trend (historis) -->
                     <RxTrendCard :history="rx_history" :range="range" />
                 </div>
+
+                <!-- TRF-4: live traffic (show interface) -->
+                <section class="overflow-hidden rounded-lg border border-white/10 bg-slate-900/40 shadow-lg shadow-black/30 backdrop-blur-xl">
+                    <header class="flex items-center gap-2 border-b border-white/10 px-4 py-3 sm:px-6">
+                        <ArrowDownUp class="h-4 w-4 text-cyan-400" />
+                        <h3 class="text-sm font-semibold uppercase tracking-wide text-slate-200">{{ $t('onudetail.traffic_title') }}</h3>
+                    </header>
+                    <div v-if="hasTraffic" class="grid gap-4 p-5 sm:grid-cols-2 sm:p-6">
+                        <div v-for="r in trafficRows" :key="r.key" class="rounded-lg border border-white/10 bg-canvas-3/40 px-4 py-3">
+                            <div class="text-xs text-slate-400">{{ r.label }}</div>
+                            <div class="mt-1 text-2xl font-bold tabular-nums" :class="r.tone">{{ formatBps(r.rate) }}</div>
+                            <div class="mt-2 space-y-0.5 text-xs text-slate-400">
+                                <div>{{ r.pps ?? '—' }} pps</div>
+                                <div>{{ $t('onudetail.traffic_peak') }}: {{ formatBps(r.peak) }}</div>
+                                <div>{{ $t('onudetail.traffic_total') }}: {{ formatBytes(r.total) }}</div>
+                            </div>
+                        </div>
+                        <p class="text-xs text-slate-500 sm:col-span-2">{{ $t('onudetail.traffic_note') }}</p>
+                    </div>
+                    <p v-else class="p-5 text-sm text-slate-400 sm:p-6">{{ $t('onudetail.traffic_none') }}</p>
+                </section>
 
                 <!-- Detail group cards -->
                 <div class="grid gap-5 lg:grid-cols-3">

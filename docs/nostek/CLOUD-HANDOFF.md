@@ -94,10 +94,9 @@ The NMS-07 PRs #24-#34 (A, B, C/E, B2, D-1, D-2a/b/c, E2, E3, E4) are merged. NM
 evidence remains (real app image, queue latency under real workers, real-OLT max-repetitions
 check). TRF-1 PON traffic graph (owner decision: PON first, ONT later) is merged (PR #35,
 docs/nostek/TRF-1-PON-TRAFFIC.md). NMS-07-A2 (build also makes the GenieACS image, start refuses
-a missing local image) is merged (PR #36). TRF-2 waits for the owner's read-only GenieACS capture
-on the Maung VM (live ACS until NET-1-3). Next safe
-source work: per-ONT traffic through GenieACS (parseAcsTrafficMonitor exists, unused); the ZTE
-ONU traffic OID is BLOCKED on the owner (PON counters VERIFIED on a real OLT). The onu_state table was measured
+a missing local image) is merged (PR #36). Per-ONT traffic is not built: GenieACS ON HOLD (lab
+ACS only), ZTE C320 V2.1.0 per-ONU SNMP counters measured and not accurate (TRF-1-PON-TRAFFIC.md,
+"Per-ONT findings"); next option is the OLT CLI rate per ONU after an owner read-only check. The onu_state table was measured
 and not adopted (NMS-07-PERFORMANCE.md); do not re-add it without new evidence.
 Use isolated synthetic tests and Compose rendering; do not run host installers/deployments.
 

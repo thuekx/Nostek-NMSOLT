@@ -215,10 +215,12 @@ docker shim). NET-1-2 keeps its own `compose build genieacs-cwmp` workaround unt
 
 ## Exact next action
 
-Refresh GitHub. NMS-07-A2 is merged (PR #36). TRF-2 waits for the owner's read-only GenieACS capture
-on the Maung VM (the live NMSOLT and GenieACS run there until NET-1-3). Next safe source work: per-ONT
-traffic through GenieACS (`parseAcsTrafficMonitor` exists, unused). Still BLOCKED on the owner:
-real-OLT check of `max-repetitions` 25 (the PON counters are VERIFIED on OLT 192.168.254.2), the ZTE ONU traffic OID walk.
+Refresh GitHub. NMS-07-A2 is merged (PR #36). Per-ONT traffic is not built: GenieACS is ON HOLD
+(only the lab ACS with 1 ONT; customer ONTs are not on an ACS) and the ZTE C320 V2.1.0 per-ONU SNMP
+counters were measured and do not add up to the PON traffic (TRF-1-PON-TRAFFIC.md, "Per-ONT
+findings"). Next option: OLT CLI rate per ONU, after the owner's read-only `show interface
+gpon-onu_1/1/1:1`. Still BLOCKED on the owner: real-OLT check of `max-repetitions` 25 (the PON
+counters are VERIFIED on OLT 192.168.254.2).
 NMS-07 evidence that needs a host stays open (real app image, queue latency under real
 workers). Do not modify the retained LICENSE attribution.
 

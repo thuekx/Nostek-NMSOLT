@@ -55,5 +55,24 @@ hour of slack; `OnuRxDailyTest` reproduces it.
 - The PHP fallback poller (`SNMP_POLLER_DRIVER=php`) does not read the counters; the platform
   Compose runs the Go poller.
 - C-Data and HiOSO are polled through their scanners and get no PON traffic yet.
-- Per-ONT traffic: next step, first through GenieACS (WAN counters, parser exists), then OLT SNMP
-  once the ZTE ONU traffic OID is known (BLOCKED: owner read-only walk).
+- Per-ONT traffic: not built. See "Per-ONT findings" below.
+
+## Per-ONT findings (2026-10-23, owner read-only checks)
+
+- TRF-2 GenieACS [VERIFIED]: the only ACS on maung-apps is the NMS-05 lab ACS
+  (`nmsolt-maung-staging-genieacs-nbi-1`, 1 device) and it stores no traffic counters (GenieACS keeps
+  only parameters a provision fetched). Customer ONTs are not on an ACS; pointing them to one is a
+  device write (`acs_url` via CLI, behind `NMSOLT_DEVICE_WRITES_ENABLED`). ON HOLD until NET-1-3 and an
+  approved write.
+- TRF-3 OLT SNMP, ZTE C320 V2.1.0 at 192.168.254.2 [VERIFIED]: per-ONU counter tables exist under
+  `1.3.6.1.4.1.3902.1012.3.31` and `.32` (index `<onu ifIndex>.<onu id>`, extra sub-indexes ignored;
+  141 Counter64 columns; `.3902.1082.500` has none). 60 s rate checks: `.32.1.1.2` is a byte counter
+  with packets in `.32.1.1.1/.3` (`.32.2`/`.32.3` repeat `.32.1`), but summed over the 14 ONUs of
+  PON 1/1/1 it gave 1.97 Mbps while the port carried 4.1 Mbps up and 67.4 Mbps down (likely the
+  wired LAN port only). `.32.1.1.10` summed to about 75x the port traffic, `.31.1.1.1/4/9/17` jump by
+  multiples of 2^32, and `.31.x` has data for 1 ONU only. Conclusion: not accurate enough for a
+  per-ONT graph on this firmware; not built. Runbook evidence:
+  `/mnt/project-files/runbooks/trf-3-zte-onu-counter-walk.md` steps 1-4.
+- Next option [UNKNOWN]: OLT CLI `show interface gpon-onu_<s>/<p>/<o>:<id>` rate lines for a live
+  per-ONT reading on the ONU page (the uplink CLI rate parser exists); a history for every ONU over
+  CLI would load the OLT too much.

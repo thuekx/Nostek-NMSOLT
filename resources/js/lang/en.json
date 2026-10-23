@@ -854,7 +854,14 @@
         "zone_healthy": "Healthy",
         "dur_d": "d",
         "dur_h": "h",
-        "dur_m": "m"
+        "dur_m": "m",
+        "traffic_title": "Traffic (live)",
+        "traffic_down": "Download (to the ONT)",
+        "traffic_up": "Upload (from the ONT)",
+        "traffic_peak": "Peak",
+        "traffic_total": "Total since counter reset",
+        "traffic_note": "Read from the OLT when the page opens; press Refresh for a new reading. Not stored as history.",
+        "traffic_none": "The OLT returned no traffic data for this ONT."
     },
     "portdetail": {
         "zone": "Zone",

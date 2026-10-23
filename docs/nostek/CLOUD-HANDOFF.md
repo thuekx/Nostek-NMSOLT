@@ -96,7 +96,7 @@ check). TRF-1 PON traffic graph (owner decision: PON first, ONT later) is merged
 docs/nostek/TRF-1-PON-TRAFFIC.md). NMS-07-A2 (build also makes the GenieACS image, start refuses
 a missing local image) is merged (PR #36). Per-ONT traffic is not built: GenieACS ON HOLD (lab
 ACS only), ZTE C320 V2.1.0 per-ONU SNMP counters measured and not accurate (TRF-1-PON-TRAFFIC.md,
-"Per-ONT findings"); next option is the OLT CLI rate per ONU after an owner read-only check. The onu_state table was measured
+"Per-ONT findings"); TRF-4 shows live per-ONT traffic on the ONU page from the read-only CLI (no history). The onu_state table was measured
 and not adopted (NMS-07-PERFORMANCE.md); do not re-add it without new evidence.
 Use isolated synthetic tests and Compose rendering; do not run host installers/deployments.
 

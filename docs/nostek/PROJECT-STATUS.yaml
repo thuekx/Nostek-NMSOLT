@@ -47,7 +47,7 @@ latest_evidence:
     doc: docs/nostek/TRF-1-PON-TRAFFIC.md
     evidence: "Go poller --include-traffic (GET ifHCIn/OutOctets per GPON port, batches of 20); per-port rates raw 8 d / hourly 100 d / daily 3 y; chart on the PON port page. Laravel 835 passed, vitest 87, Go tests pass. Bench 3,400 ONUs / 54 ports / 20 ms RTT: 2,747 -> 2,753 requests, 71.0 -> 71.6 s. Also fixed: 90d RX chart read the daily rollup."
     real_olt: "VERIFIED 2026-10-22: OLT 192.168.254.2 answers ifHCIn/OutOctets Counter64 on a GPON port, both rising (owner read-only snmpget)."
-    per_ont: "Not built. GenieACS: only the lab ACS (1 ONT), customer ONTs not on an ACS (device write). ZTE C320 V2.1.0 per-ONU SNMP counters found (.1012.3.31/.32) but they do not add up to the PON traffic; see TRF-1-PON-TRAFFIC.md Per-ONT findings. Next option: OLT CLI rate per ONU (owner read-only check)."
+    per_ont: "Not built. GenieACS: only the lab ACS (1 ONT), customer ONTs not on an ACS (device write). ZTE C320 V2.1.0 per-ONU SNMP counters found (.1012.3.31/.32) but they do not add up to the PON traffic; see TRF-1-PON-TRAFFIC.md Per-ONT findings. TRF-4: live per-ONT traffic card on the ONU detail page from the read-only CLI `show interface gpon-onu_…` (format verified on C320 V2.1.0; not stored)."
   NMS-06:
     status: VERIFIED
     sanitized_evidence: docs/nostek/NMS-06-ZTE-C320-RUNTIME-EVIDENCE-2026-10-22.md
@@ -108,7 +108,7 @@ environment:
   live_olt_write: PROHIBITED_WITHOUT_APPROVAL
 next_action:
   id: TRF-2-ONT-TRAFFIC
-  instruction: "NMS-07 PRs #24-#34 and TRF-1 PR #35 are merged (2026-10-22). NMS-07-A2 PR #36 is merged (build makes the GenieACS image, start refuses a missing local image). Per-ONT traffic: GenieACS ON HOLD (lab ACS only), ZTE SNMP per-ONU counters measured and not accurate on C320 V2.1.0; next option is the OLT CLI rate per ONU after an owner read-only check (parseAcsTrafficMonitor exists, unused). PON counters VERIFIED on a real OLT (192.168.254.2). BLOCKED on the owner: real-OLT check of max-repetitions 25, the ZTE ONU traffic OID walk. NMS-07 evidence that needs a host stays open: real app image, queue latency under real workers (NET-1). The onu_state table was measured and not adopted (NMS-07-PERFORMANCE.md); do not re-add it without new evidence. Preserve LICENSE attribution and keep device writes disabled."
+  instruction: "NMS-07 PRs #24-#34 and TRF-1 PR #35 are merged (2026-10-22). NMS-07-A2 PR #36 is merged (build makes the GenieACS image, start refuses a missing local image). Per-ONT traffic: GenieACS ON HOLD (lab ACS only), ZTE SNMP per-ONU counters measured and not accurate on C320 V2.1.0; TRF-4 shows live per-ONT traffic on the ONU page from the read-only CLI (no history) (parseAcsTrafficMonitor exists, unused). PON counters VERIFIED on a real OLT (192.168.254.2). BLOCKED on the owner: real-OLT check of max-repetitions 25, the ZTE ONU traffic OID walk. NMS-07 evidence that needs a host stays open: real app image, queue latency under real workers (NET-1). The onu_state table was measured and not adopted (NMS-07-PERFORMANCE.md); do not re-add it without new evidence. Preserve LICENSE attribution and keep device writes disabled."
   owner: "executor"
   approval_required: false
 references:

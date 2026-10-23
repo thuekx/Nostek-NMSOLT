@@ -137,4 +137,54 @@ RAW;
         // No explicit "Last down cause:" line in this format — derived from the history table.
         $this->assertSame('DyingGasp', $groups['last_event']['last_down_cause']);
     }
+
+    public function test_parses_show_interface_traffic_in_bits_per_second(): void
+    {
+        // TRF-4: real C320 V2.1.0 output (owner read-only check, 2026-10-23), prompt anonymised.
+        $raw = <<<'RAW'
+OLT-UJI#show interface gpon-onu_1/1/1:1
+ONU statistic:
+   Input rate :              55323 Bps              169 pps
+   Output rate:             117351 Bps              185 pps
+   Input bandwidth thoughput :0.1%
+   Output bandwidth thoughput: N/A
+Interface peak rate:
+   Input peak rate :          155500000 Bps            17942 pps
+   Output peak rate:           26684456 Bps            20946 pps
+Total statistic:
+  Input:
+    Bytes:52444734909          Packets:101507095
+  Output:
+    Bytes:240406261863         Packets:211695381
+OLT-UJI#
+RAW;
+
+        $groups = $this->parser()->parse($raw);
+
+        $this->assertSame([
+            'down_bps' => 117351 * 8,
+            'up_bps' => 55323 * 8,
+            'down_pps' => 185,
+            'up_pps' => 169,
+            'down_peak_bps' => 26684456 * 8,
+            'up_peak_bps' => 155500000 * 8,
+            'down_total_bytes' => 240406261863,
+            'up_total_bytes' => 52444734909,
+        ], $groups['traffic']);
+
+        // The traffic block stays out of the generic "all fields" list.
+        foreach (array_keys($groups['all']) as $key) {
+            $this->assertStringNotContainsString('bytes', $key);
+            $this->assertStringNotContainsString('rate', $key);
+            $this->assertStringNotContainsString('show', $key);
+        }
+    }
+
+    public function test_missing_traffic_block_stays_null(): void
+    {
+        $traffic = $this->parser()->parse("gpon-onu_1/2/1:3 detail info:\n  SN : ZTEGC1234567\n")['traffic'];
+
+        $this->assertSame(array_fill_keys(array_keys($traffic), null), $traffic);
+        $this->assertCount(8, $traffic);
+    }
 }

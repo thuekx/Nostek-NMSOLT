@@ -42,7 +42,8 @@ Nostek-NMSOLT — STANDALONE NETWORK PLATFORM / API PROVIDER
 +-- TRF-1 [SOURCE PASS, PR merged] PON port traffic graph: IF-MIB octet counters (Go poller),
 |   per-port rates raw 8 d / hourly 100 d / daily 3 y, chart on the PON port page;
 |   real-OLT counters VERIFIED (192.168.254.2, owner read-only); per-ONT: GenieACS ON HOLD,
-|   ZTE SNMP per-ONU counters measured, not accurate (not built); CLI rate check next
+|   ZTE SNMP per-ONU counters measured, not accurate (not built);
+|   TRF-4 live per-ONT traffic card on the ONU page via read-only CLI
 +-- NMS-08 [BLOCKED] API v1 read-only + OpenAPI
 |   +-- stable IDs, freshness, pagination, scopes, redaction, rate limits
 +-- NMS-09 [BLOCKED] Maung /nosteknmsolt thin consumer

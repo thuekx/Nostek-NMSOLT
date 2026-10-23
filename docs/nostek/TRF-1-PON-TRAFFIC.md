@@ -73,6 +73,10 @@ hour of slack; `OnuRxDailyTest` reproduces it.
   multiples of 2^32, and `.31.x` has data for 1 ONU only. Conclusion: not accurate enough for a
   per-ONT graph on this firmware; not built. Runbook evidence:
   `/mnt/project-files/runbooks/trf-3-zte-onu-counter-walk.md` steps 1-4.
-- Next option [UNKNOWN]: OLT CLI `show interface gpon-onu_<s>/<p>/<o>:<id>` rate lines for a live
-  per-ONT reading on the ONU page (the uplink CLI rate parser exists); a history for every ONU over
-  CLI would load the OLT too much.
+- TRF-4 live per-ONT traffic [VERIFIED output format, owner read-only check on C320 V2.1.0]:
+  `show interface gpon-onu_1/1/1:1` returns `Input rate`/`Output rate` (Bps and pps), peak rates and
+  total bytes per direction (Input = upstream from the ONT, Output = downstream). The ONU detail page
+  now adds this command to its existing read-only CLI session and shows a "Traffic (live)" card
+  (download/upload in bits/s, pps, peak, totals). It is read when the page opens or is refreshed and is
+  not stored; a history for every ONU over CLI would load the OLT too much. Test:
+  `ZteOnuDetailTest::test_parses_show_interface_traffic_in_bits_per_second` (real output).

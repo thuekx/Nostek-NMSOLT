@@ -1,6 +1,8 @@
-# UI-F1: organisations and sites in NMSOLT (design v0.1, for the owner's decision)
+# UI-F1: organisations and sites in NMSOLT (design v0.2, DECIDED)
 
-Status: PROPOSED, 2026-10-25. No code yet. The owner decides D1–D4 below.
+Status: DECIDED by the owner 2026-10-25 01:02 WIB: D1 = a, D2 = a, D3 = a with RLS done right after the
+app scope (not deferred, before launch), D4 = a. Plain-language explanation given to the owner:
+`notes/nmsolt/ui-f1/penjelasan-d1-d4.md` (project files).
 Rule PRODUCT-1: design for real customers now (hosted and on-prem, many ISPs, devices on customer
 networks), not only the LIV LAN.
 
@@ -37,7 +39,7 @@ snmp_olts.organization_id NOT NULL, snmp_olts.site_id NULL
   It filters to the session's current organisation, and it is applied AND-ed with the existing scopes.
 - Another organisation's id returns **404, never 403** (same rule as the Control Center).
 - Every org-scoped endpoint gets a negative test, as in `tests/test_tenant_isolation.py` in CC.
-- Phase 2: PostgreSQL RLS on `snmp_olts.organization_id` as a second guard (D3).
+- PostgreSQL RLS on `snmp_olts.organization_id` as a second guard, right after the app scope (D3, F1d).
 
 ### 2.3 Site
 - A site is a **filter and a grouping**, not a security boundary in v1. The header picker reads
@@ -61,11 +63,19 @@ snmp_olts.organization_id NOT NULL, snmp_olts.site_id NULL
 | D3 | DB guard | a) app scope now, RLS in phase 2; b) RLS from the start | **a**: one change at a time; RLS after the scope and its tests are proven |
 | D4 | First step size | a) F1a schema + backfill + scope (no visible change); b) everything in one PR | **a**: small PRs; the picker follows in F1b |
 
+### 3.1 Owner decisions (2026-10-25)
+| # | Decision | Note |
+|---|---|---|
+| D1 | **a** | A partner that owns OLTs becomes its own organisation (F1c). A partner that is only assigned OLTs of the ISP stays a user of the ISP organisation. |
+| D2 | **a** | NMSOLT keeps its own `organizations`/`sites`; CC links by `cc_org_id` + `site.key`. CC gets links, a per-site summary API and later SSO, never ONU lists or customer data. |
+| D3 | **a, no gap** | App scope first, then RLS straight after F1a–F1c, before launch. "Launch soon after the product is done, so do not leave RLS as a big PR for later." RLS is a launch gate. |
+| D4 | **a** | F1a first: schema, backfill, scope, negative tests; no visible change. |
+
 ## 4. Steps after the decision
 1. **F1a**: migrations plus backfill to one organisation, `OrganizationScope`, and negative tests on
    every OLT-keyed endpoint. No UI change. The owner merges (security change).
 2. **F1b**: header picker, the site field on OLT forms, and site filters on the main pages.
 3. **F1c**: partners become organisations (if D1 = a), with a one-shot data migration package.
-4. **F1d**: PostgreSQL RLS (if D3 = a, phase 2).
+4. **F1d**: PostgreSQL RLS, started right after F1c (owner D3, 2026-10-25); a launch gate, not a later phase.
 
 Each step is a NMSOLT PR, and every host change is a package the owner runs (PREFLIGHT → APPLY → VERIFY).

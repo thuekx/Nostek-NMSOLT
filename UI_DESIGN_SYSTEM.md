@@ -192,7 +192,8 @@ dimigrasi per kelompok halaman; **halaman atau komponen baru memakai fondasi ini
   di blok `[data-theme]` yang sama; `ThemeTokenTest` menjaga setiap token punya nilai di kedua
   tema dan punya `--color-*` di `@theme`.
 - **Komponen** `resources/js/Components/ui/*` bergaya shadcn-vue di atas **Reka UI**: `button`,
-  `badge`, `card`, `input`, `label`, `separator`, `skeleton`, `table`, `tabs`, `dialog`, `tooltip`.
+  `badge`, `card`, `input`, `label`, `separator`, `skeleton`, `switch`, `table`, `tabs`, `dialog`,
+  `tooltip`. Pilihan nyala/mati memakai `Switch` (bukan checkbox); `tone="warning"` untuk saklar berisiko.
   Impor dari folder (`import { Button } from '@/Components/ui/button'`). Gabung kelas dengan
   `cn()` dari `@/lib/utils`. Tes: `tests/js/uiKit.spec.js`.
 - `Button` punya satu elemen akar, jadi `v-device-write` (WRITE-UI-1) dipasang langsung:

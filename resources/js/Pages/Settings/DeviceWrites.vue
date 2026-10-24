@@ -1,11 +1,11 @@
 <script setup>
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
-import Checkbox from '@/Components/Checkbox.vue';
 import InputError from '@/Components/InputError.vue';
 import InputLabel from '@/Components/InputLabel.vue';
 import PrimaryButton from '@/Components/PrimaryButton.vue';
 import SecondaryButton from '@/Components/SecondaryButton.vue';
 import TextInput from '@/Components/TextInput.vue';
+import { Switch } from '@/Components/ui/switch';
 import { formatDateTime } from '@/lib/datetime';
 import { Head, Link, useForm } from '@inertiajs/vue3';
 import { ArrowLeft, History, Lock, Server, ShieldAlert } from '@lucide/vue';
@@ -127,13 +127,17 @@ const historyLine = (entry) => {
                     <div class="space-y-5 px-5 py-5 sm:px-6">
                         <p class="text-sm text-slate-400">{{ $t('devicewrites.global_sub') }}</p>
 
-                        <label class="flex items-start gap-3">
-                            <Checkbox v-model:checked="form.enabled" class="mt-0.5 h-5 w-5 shrink-0" :disabled="!editable" />
-                            <span>
+                        <!-- Saklar on/off (owner 2026-10-24): label kiri, saklar + status kanan. -->
+                        <div class="flex items-center justify-between gap-4 rounded-lg border border-white/10 px-4 py-3">
+                            <label for="dw_global" class="min-w-0 cursor-pointer">
                                 <span class="block text-sm font-medium text-white">{{ $t('devicewrites.global_label') }}</span>
                                 <span class="block text-xs text-slate-400">{{ $t('devicewrites.global_hint') }}</span>
-                            </span>
-                        </label>
+                            </label>
+                            <div class="flex shrink-0 items-center gap-2">
+                                <span class="w-10 text-right text-xs font-semibold" :class="form.enabled ? 'text-amber-300' : 'text-slate-400'">{{ form.enabled ? $t('devicewrites.on') : $t('devicewrites.off') }}</span>
+                                <Switch id="dw_global" v-model="form.enabled" tone="warning" :disabled="!editable" data-testid="device-writes-global-switch" />
+                            </div>
+                        </div>
 
                         <div v-if="form.enabled">
                             <InputLabel for="dw_duration" :value="$t('devicewrites.duration')" />
@@ -151,9 +155,8 @@ const historyLine = (entry) => {
 
                         <fieldset class="space-y-3">
                             <legend class="text-sm font-medium text-white">{{ $t('devicewrites.channels_title') }}</legend>
-                            <label v-for="c in channelKeys" :key="c" class="flex items-start gap-3">
-                                <Checkbox v-model:checked="form.channels[c]" class="mt-0.5 h-5 w-5 shrink-0" :disabled="!editable" />
-                                <span>
+                            <div v-for="c in channelKeys" :key="c" class="flex items-center justify-between gap-4 rounded-lg border border-white/10 px-4 py-3">
+                                <label :for="`dw_channel_${c}`" class="min-w-0 cursor-pointer">
                                     <span class="block text-sm text-white">
                                         {{ $t(`devicewrites.channel_${c}`) }}
                                         <span
@@ -162,8 +165,9 @@ const historyLine = (entry) => {
                                         >{{ effective.channels?.[c] ? $t('devicewrites.on') : $t('devicewrites.off') }}</span>
                                     </span>
                                     <span class="block text-xs text-slate-400">{{ $t(`devicewrites.channel_${c}_hint`) }}</span>
-                                </span>
-                            </label>
+                                </label>
+                                <Switch :id="`dw_channel_${c}`" v-model="form.channels[c]" tone="warning" :disabled="!editable" :data-testid="`device-writes-channel-${c}`" />
+                            </div>
                         </fieldset>
 
                         <div>

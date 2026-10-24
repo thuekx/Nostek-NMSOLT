@@ -9,6 +9,7 @@ use App\Models\SnmpOlt;
 use App\Models\TelegramSetting;
 use App\Services\Alarm\OdpAlarmGrouper;
 use App\Support\DisplayTime;
+use App\Support\OrganizationContext;
 use Illuminate\Http\Client\PendingRequest;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Log;
@@ -66,12 +67,15 @@ class TelegramNotifier
         // DAN OLT bukan milik privat partner (owner_user_id null). OLT privat partner
         // hanya memberi tahu bot partner pemiliknya (di bawah).
         $global = TelegramSetting::instance();
-        if ($olt->owner_user_id === null && $olt->alarms_enabled && $global->isReady()) {
+        // UI-F1a: bot global milik instalasi, jadi hanya untuk OLT organisasi instalasi.
+        $installationOlt = app(OrganizationContext::class)->isPrimary($olt->organization_id);
+        if ($installationOlt && $olt->owner_user_id === null && $olt->alarms_enabled && $global->isReady()) {
             $configs[] = $global;
         }
 
         // Bot partner hanya bila OLT di-assign ke partner tsb DAN saklar alarm partner utk OLT itu on.
         $partnerBots = PartnerTelegramBot::query()
+            ->whereIn('user_id', app(OrganizationContext::class)->memberIdsQuery($olt->organization_id))
             ->whereHas('user.partnerOlts', fn ($q) => $q->whereKey($olt->id)
                 ->where('olt_user.alarms_enabled', true))
             ->get();

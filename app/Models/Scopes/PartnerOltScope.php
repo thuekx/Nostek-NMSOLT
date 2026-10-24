@@ -36,6 +36,11 @@ class PartnerOltScope implements Scope
         self::$guestRestrictedToGlobal = $enabled;
     }
 
+    public static function guestRestrictedToGlobal(): bool
+    {
+        return self::$guestRestrictedToGlobal;
+    }
+
     public function apply(Builder $builder, Model $model): void
     {
         $user = auth()->user();

@@ -3,8 +3,11 @@
 namespace App\Support;
 
 use App\Models\AuditLog;
+use App\Models\SnmpOlt;
+use App\Models\User;
 use Illuminate\Contracts\Auth\Authenticatable;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\DB;
 
 /**
  * Titik tunggal untuk menulis baris audit. Otomatis menangkap aktor (user),
@@ -27,6 +30,7 @@ class AuditLogger
 
         return AuditLog::create([
             'user_id' => $actor?->getAuthIdentifier(),
+            'organization_id' => static::organizationFor($auditable, $actor),
             'user_name' => $actor?->name,
             'event' => $event,
             'auditable_type' => $auditable?->getMorphClass(),
@@ -36,6 +40,28 @@ class AuditLogger
             'ip_address' => $request?->ip(),
             'user_agent' => $request !== null ? mb_substr((string) $request->userAgent(), 0, 1000) : null,
         ]);
+    }
+
+    /**
+     * UI-F1a: organisasi pemilik baris audit. Subjek ber-OLT menentukan (OLT itu sendiri atau
+     * baris ber-`snmp_olt_id`), lalu organisasi aktor. NULL = baris instalasi (sistem tanpa
+     * subjek organisasi), hanya terlihat oleh organisasi instalasi.
+     */
+    private static function organizationFor(?Model $auditable, ?Authenticatable $actor): ?string
+    {
+        if ($auditable instanceof SnmpOlt && $auditable->organization_id !== null) {
+            return $auditable->organization_id;
+        }
+
+        $oltId = $auditable?->getAttribute('snmp_olt_id');
+        if ($oltId !== null) {
+            $organizationId = DB::table('snmp_olts')->where('id', $oltId)->value('organization_id');
+            if ($organizationId !== null) {
+                return (string) $organizationId;
+            }
+        }
+
+        return $actor instanceof User ? app(OrganizationContext::class)->organizationOf($actor) : null;
     }
 
     /**

@@ -232,6 +232,10 @@ dibuang harian (`sanctum:prune-expired`), token push-nya ikut terhapus.
   (10/menit).
 - **Scoping partner:** `PartnerOltScope` berlaku di model OLT & ODP — partner hanya melihat
   OLT yang di-assign/miliknya; `{olt}`/`{odp}` di luar itu → `404`.
+- **Scoping organisasi (UI-F1a):** token bertindak dalam organisasi user pemiliknya
+  (`users.current_organization_id`, harus anggota). OLT, ODP, alarm, pin dan semua data ber-OLT
+  organisasi lain tidak ada → `404` (bukan `403`). `public/status` hanya memuat OLT global
+  organisasi instalasi.
 - **Scoping demo:** akun ber-role `demo` hanya melihat data demo dan **read-only**:
   `BlockDemoWrites` terpasang di seluruh grup `api`, jadi setiap request non-GET dari akun
   demo ditolak `403` — termasuk `POST`/`DELETE /devices`; satu-satunya pengecualian

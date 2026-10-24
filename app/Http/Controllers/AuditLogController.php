@@ -4,6 +4,9 @@ namespace App\Http\Controllers;
 
 use App\Models\AuditLog;
 use App\Models\User;
+use App\Support\AuditLogger;
+use App\Support\OrganizationContext;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 use Inertia\Response;
@@ -18,7 +21,7 @@ class AuditLogController extends Controller
         $from = $request->date('from');
         $to = $request->date('to');
 
-        $logs = AuditLog::query()
+        $logs = $this->organizationLogs()
             ->with('user:id,name,email')
             ->orderByDesc('created_at')
             ->when($event !== 'all', fn ($query) => $query->where('event', $event))
@@ -52,18 +55,35 @@ class AuditLogController extends Controller
                 'to' => $to?->toDateString(),
             ],
             'filterOptions' => [
-                'events' => AuditLog::query()
+                'events' => $this->organizationLogs()
                     ->select('event')
                     ->distinct()
                     ->orderBy('event')
                     ->pluck('event')
                     ->values(),
                 'users' => User::query()
+                    ->whereIn('id', app(OrganizationContext::class)->memberIdsQuery())
                     ->orderBy('name')
                     ->get(['id', 'name'])
                     ->map(fn (User $user) => ['id' => $user->id, 'name' => $user->name]),
             ],
         ]);
+    }
+
+    /**
+     * UI-F1a: log milik organisasi yang sedang berlaku (`audit_logs.organization_id`, diisi
+     * {@see AuditLogger}). Baris instalasi (NULL) hanya untuk organisasi instalasi.
+     *
+     * @return Builder<AuditLog>
+     */
+    private function organizationLogs(): Builder
+    {
+        $context = app(OrganizationContext::class);
+        $current = $context->currentId();
+
+        return AuditLog::query()->where(fn (Builder $q) => $q
+            ->where('organization_id', $current)
+            ->when($context->isPrimary($current), fn (Builder $q) => $q->orWhereNull('organization_id')));
     }
 
     private function applySearch($query, string $search): void

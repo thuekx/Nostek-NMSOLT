@@ -102,27 +102,30 @@ Route::middleware('auth')->group(function () {
 
         Route::get('/audit-logs', [AuditLogController::class, 'index'])->name('audit-logs.index');
 
-        Route::get('/settings', [SettingsController::class, 'edit'])->name('settings.edit');
-        // WRITE-UI-1: admin switches for device writes (only when NMSOLT_DEVICE_WRITES_ENABLED=admin).
-        Route::get('/settings/device-writes', [DeviceWriteSettingsController::class, 'index'])->name('settings.device-writes');
-        Route::put('/settings/device-writes', [DeviceWriteSettingsController::class, 'update'])->name('settings.device-writes.update');
-        Route::put('/settings/device-writes/olts/{olt}', [DeviceWriteSettingsController::class, 'updateOlt'])->whereNumber('olt')->name('settings.device-writes.olt');
-        Route::post('/settings/api-tokens', [SettingsController::class, 'createApiToken'])->name('settings.api-tokens.store');
-        Route::delete('/settings/api-tokens/{token}', [SettingsController::class, 'revokeApiToken'])->whereNumber('token')->name('settings.api-tokens.destroy');
-        Route::post('/settings/general', [SettingsController::class, 'updateGeneral'])->name('settings.general.update');
-        Route::put('/settings/alarm', [SettingsController::class, 'updateAlarm'])->name('settings.alarm.update');
-        Route::put('/settings/acs', [SettingsController::class, 'updateAcs'])->name('settings.acs.update');
-        // NBI GenieACS (7557) — terpisah dari ACS di atas yang menyimpan URL CWMP.
-        Route::put('/settings/genieacs', [SettingsController::class, 'updateGenieacs'])->name('settings.genieacs.update');
-        Route::post('/settings/genieacs/test', [SettingsController::class, 'testGenieacs'])->name('settings.genieacs.test');
-        Route::put('/settings/telegram', [SettingsController::class, 'updateTelegram'])->name('settings.telegram.update');
-        Route::post('/settings/telegram/test', [SettingsController::class, 'testTelegram'])->name('settings.telegram.test');
-        Route::post('/settings/telegram/webhook/register', [SettingsController::class, 'registerWebhook'])->name('settings.telegram.webhook.register');
-        Route::post('/settings/telegram/webhook/delete', [SettingsController::class, 'deleteWebhook'])->name('settings.telegram.webhook.delete');
-        Route::put('/settings/fcm', [SettingsController::class, 'updateFcm'])->name('settings.fcm.update');
-        Route::post('/settings/fcm/send', [SettingsController::class, 'sendFcmManual'])->name('settings.fcm.send');
-        Route::delete('/settings/mobile-devices/tokens/{token}', [SettingsController::class, 'revokeMobileToken'])->whereNumber('token')->name('settings.mobile-devices.token.destroy');
-        Route::delete('/settings/mobile-devices/fcm/{device}', [SettingsController::class, 'deleteFcmDevice'])->whereNumber('device')->name('settings.mobile-devices.fcm.destroy');
+        // UI-F1a: setelan instalasi hanya untuk admin organisasi instalasi (lain = 404).
+        Route::middleware('installation')->group(function () {
+            Route::get('/settings', [SettingsController::class, 'edit'])->name('settings.edit');
+            // WRITE-UI-1: admin switches for device writes (only when NMSOLT_DEVICE_WRITES_ENABLED=admin).
+            Route::get('/settings/device-writes', [DeviceWriteSettingsController::class, 'index'])->name('settings.device-writes');
+            Route::put('/settings/device-writes', [DeviceWriteSettingsController::class, 'update'])->name('settings.device-writes.update');
+            Route::put('/settings/device-writes/olts/{olt}', [DeviceWriteSettingsController::class, 'updateOlt'])->whereNumber('olt')->name('settings.device-writes.olt');
+            Route::post('/settings/api-tokens', [SettingsController::class, 'createApiToken'])->name('settings.api-tokens.store');
+            Route::delete('/settings/api-tokens/{token}', [SettingsController::class, 'revokeApiToken'])->whereNumber('token')->name('settings.api-tokens.destroy');
+            Route::post('/settings/general', [SettingsController::class, 'updateGeneral'])->name('settings.general.update');
+            Route::put('/settings/alarm', [SettingsController::class, 'updateAlarm'])->name('settings.alarm.update');
+            Route::put('/settings/acs', [SettingsController::class, 'updateAcs'])->name('settings.acs.update');
+            // NBI GenieACS (7557) — terpisah dari ACS di atas yang menyimpan URL CWMP.
+            Route::put('/settings/genieacs', [SettingsController::class, 'updateGenieacs'])->name('settings.genieacs.update');
+            Route::post('/settings/genieacs/test', [SettingsController::class, 'testGenieacs'])->name('settings.genieacs.test');
+            Route::put('/settings/telegram', [SettingsController::class, 'updateTelegram'])->name('settings.telegram.update');
+            Route::post('/settings/telegram/test', [SettingsController::class, 'testTelegram'])->name('settings.telegram.test');
+            Route::post('/settings/telegram/webhook/register', [SettingsController::class, 'registerWebhook'])->name('settings.telegram.webhook.register');
+            Route::post('/settings/telegram/webhook/delete', [SettingsController::class, 'deleteWebhook'])->name('settings.telegram.webhook.delete');
+            Route::put('/settings/fcm', [SettingsController::class, 'updateFcm'])->name('settings.fcm.update');
+            Route::post('/settings/fcm/send', [SettingsController::class, 'sendFcmManual'])->name('settings.fcm.send');
+            Route::delete('/settings/mobile-devices/tokens/{token}', [SettingsController::class, 'revokeMobileToken'])->whereNumber('token')->name('settings.mobile-devices.token.destroy');
+            Route::delete('/settings/mobile-devices/fcm/{device}', [SettingsController::class, 'deleteFcmDevice'])->whereNumber('device')->name('settings.mobile-devices.fcm.destroy');
+        });
     });
 
     // Bot Telegram self-service milik partner (bot sendiri, terbatas OLT yang di-assign).

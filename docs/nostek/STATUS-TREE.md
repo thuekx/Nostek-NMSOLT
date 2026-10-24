@@ -50,9 +50,13 @@ Nostek-NMSOLT — STANDALONE NETWORK PLATFORM / API PROVIDER
 |   tokens (dark + light), shadcn-vue style kit on Reka UI (Components/ui), no visual change to
 |   existing pages (64 before/after screenshots)
 +-- UI-W1 [SOURCE PASS, PR #43 merged 83fe255] device-writes checkboxes -> on/off switches (owner ask)
-+-- UI-S1 [SOURCE PASS, PR open] owner chose direction A + B + C (2026-10-24): flat look A for all
-|   pages (neutral palette, fiber-blue accent, no glass/blur/glow/particles), compact shell and
-|   dashboard header; next: B network tree + RX power band, C phone ONU/alarm pages
++-- UI-S1 [SOURCE PASS, PR #44 merged 522e398] owner chose direction A + B + C (2026-10-24): flat look A
+|   for all pages (neutral palette, fiber-blue accent, no glass/blur/glow/particles), compact shell
+|   and dashboard header
++-- UI-B1 [SOURCE PASS, PR open] "Peta Fiber" (direction B): /network tree OLT -> PON -> ODP -> ONU,
+|   TIA-598 fiber colour per PON, RX power band (1 dB histogram, thresholds as alarms) and worst-10
+|   list; one OLT per page, ONU leaves fetched per PON (read-only, snapshot only, partner scope);
+|   next: C phone ONU/alarm pages
 +-- NMS-08 [BLOCKED] API v1 read-only + OpenAPI
 |   +-- stable IDs, freshness, pagination, scopes, redaction, rate limits
 +-- NMS-09 [BLOCKED] Maung /nosteknmsolt thin consumer

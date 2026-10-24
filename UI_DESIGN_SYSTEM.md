@@ -212,6 +212,18 @@ dimigrasi per kelompok halaman; **halaman atau komponen baru memakai fondasi ini
 - Ikon judul kartu (`nos-circle-*`) = kotak 32 px membulat, bukan lingkaran 48 px.
 - Halaman baru tetap memakai `Components/ui` dan token semantik.
 
+### Peta Fiber (UI-B1, arah B)
+
+- Halaman `/network` (`Pages/Network/Tree.vue`): pohon OLT → PON → ODP → ONU, satu OLT per halaman.
+  Server mengirim ringkasan per PON/ODP saja; daun ONU diambil per PON (`network.tree.onus`) saat
+  cabang ODP dibuka. Jangan mengirim semua ONU sebuah OLT ke halaman (pelajaran NMS-07-E2).
+- Warna PON = warna serat TIA-598 ke-n (`lib/fiber.js`, `App\Support\RxBand::FIBER_COLORS`): warna
+  fisik, sengaja tidak ikut tema. Warna ODP tetap dari `OdpColors`.
+- Level RX satu sumber per sisi: `App\Support\RxBand::level()` = `useRxLevel.js` (kritis ≤ -28 / ≥ -8,
+  peringatan ≤ -25 / ≥ -10). ONU offline tidak masuk pita (RX lamanya bukan kondisi sekarang).
+- Status jujur: bila OLT tidak FRESH, semua warna level jadi abu-abu (`levelText/levelBg/levelFill`
+  dengan `stale = true`) dan `DataNotCurrent` tampil.
+
 ## 3b. TAMPILAN BAKU KOMPONEN
 
 Ukuran dan varian di bawah diimplementasikan oleh komponen dasar (`PrimaryButton`,

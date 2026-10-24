@@ -86,7 +86,10 @@ class DemoSeeder extends Seeder
                     $online = ! ($onuId === 1 && $port === 1); // sebagian offline untuk variasi
                     $rx = $this->demoRxPower($onuId, $port);
                     $sn = sprintf('ZTEGC%06d', $serialCounter++);
+                    // Bentuk sama dengan poller: tiap ONU membawa slot/port-nya sendiri.
                     $onus[] = [
+                        'slot' => $slot,
+                        'port' => $port,
                         'onu_id' => $onuId,
                         'interface' => "gpon-onu_{$slot}/1/{$port}:{$onuId}",
                         'serial_number' => $sn,

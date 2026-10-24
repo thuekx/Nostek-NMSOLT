@@ -7,6 +7,7 @@ use App\Models\SnmpOlt;
 use App\Models\User;
 use Illuminate\Contracts\Auth\Authenticatable;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
 /**
@@ -27,10 +28,32 @@ class AuditLogger
     ): ?AuditLog {
         $actor ??= auth()->user();
         $request = request();
+        $organizationId = static::organizationFor($auditable, $actor);
+        $context = app(OrganizationContext::class);
 
+        // UI-F1d: login/logout/login gagal menulis untuk organisasi aktor, bukan konteks request.
+        return app(TenantDatabase::class)->asOrganization(
+            $organizationId,
+            $organizationId === null || $context->isPrimary($organizationId),
+            fn () => static::write($event, $auditable, $properties, $description, $actor, $organizationId, $request),
+        );
+    }
+
+    /**
+     * @param  array<string, mixed>  $properties
+     */
+    private static function write(
+        string $event,
+        ?Model $auditable,
+        array $properties,
+        ?string $description,
+        ?Authenticatable $actor,
+        ?string $organizationId,
+        ?Request $request,
+    ): AuditLog {
         return AuditLog::create([
             'user_id' => $actor?->getAuthIdentifier(),
-            'organization_id' => static::organizationFor($auditable, $actor),
+            'organization_id' => $organizationId,
             'user_name' => $actor?->name,
             'event' => $event,
             'auditable_type' => $auditable?->getMorphClass(),

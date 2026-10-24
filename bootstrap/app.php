@@ -8,11 +8,13 @@ use App\Http\Middleware\EnsureUserRole;
 use App\Http\Middleware\FilterBySelectedSite;
 use App\Http\Middleware\HandleInertiaRequests;
 use App\Http\Middleware\SetLocale;
+use App\Http\Middleware\UseTenantDatabaseRole;
 use App\Support\Theme;
 use Illuminate\Foundation\Application;
 use Illuminate\Foundation\Configuration\Exceptions;
 use Illuminate\Foundation\Configuration\Middleware;
 use Illuminate\Http\Middleware\AddLinkHeadersForPreloadedAssets;
+use Illuminate\Routing\Middleware\SubstituteBindings;
 
 return Application::configure(basePath: dirname(__DIR__))
     ->withRouting(
@@ -44,12 +46,17 @@ return Application::configure(basePath: dirname(__DIR__))
             HandleInertiaRequests::class,
             BlockDemoWrites::class,
             AddLinkHeadersForPreloadedAssets::class,
+            UseTenantDatabaseRole::class,
         ]);
 
         // API bertoken (Sanctum): user demo tetap read-only.
         $middleware->api(append: [
             BlockDemoWrites::class,
+            UseTenantDatabaseRole::class,
         ]);
+
+        // UI-F1d: role tenant (RLS) dipasang setelah autentikasi, sebelum route model binding.
+        $middleware->prependToPriorityList(before: SubstituteBindings::class, prepend: UseTenantDatabaseRole::class);
 
         $middleware->alias([
             'role' => EnsureUserRole::class,

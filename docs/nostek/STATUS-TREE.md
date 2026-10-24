@@ -55,8 +55,12 @@ Nostek-NMSOLT — STANDALONE NETWORK PLATFORM / API PROVIDER
 |   |   Organisation > Site (desktop header, phone drawer; only when there is a choice), site filter on
 |   |   overview pages via `site.filter` (dashboard, OLT list, unconfigured, ONU monitor, Peta Fiber, map,
 |   |   ODP, alarms, field console); detail pages, forms and API are not filtered
+|   +-- F1d [SOURCE PASS, PR open, owner merges; launch gate] PostgreSQL Row Level Security under the
+|   |   app scope (owner D3: straight after the app scope, before launch): web/API requests SET ROLE
+|   |   nmsolt_tenant (NOBYPASSRLS) + app.org_id; policy nostek_org on snmp_olts, sites, audit_logs,
+|   |   alarm_notification_reads and every snmp_olt_id table; console/queue stay the owner role;
+|   |   `php artisan nmsolt:rls-status` -> RESULT nmsolt-rls PASS; CI job "Laravel tests (PostgreSQL 16 + RLS)"
 |   +-- F1c [NEXT] partners that own OLTs become organisations; per-organisation settings and bots
-|   +-- F1d [NEXT, launch gate] PostgreSQL RLS right after F1c (owner D3: no gap before launch)
 +-- UI-T1 [SOURCE PASS, PR #42 merged a47b020] redesign foundation: Tailwind v4 (CSS-first @theme), 23 semantic
 |   tokens (dark + light), shadcn-vue style kit on Reka UI (Components/ui), no visual change to
 |   existing pages (64 before/after screenshots)

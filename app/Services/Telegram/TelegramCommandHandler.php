@@ -5,6 +5,7 @@ namespace App\Services\Telegram;
 use App\Contracts\Telegram\TelegramBotConfig;
 use App\Models\AlarmEvent;
 use App\Models\AuditLog;
+use App\Models\DeviceWriteSetting;
 use App\Models\SnmpOlt;
 use App\Services\CData\CDataCliWriteService;
 use App\Services\CData\CDataOltScanner;
@@ -13,6 +14,7 @@ use App\Services\Hioso\HiosoCliWriteService;
 use App\Services\ZteRemoteOnuService;
 use App\Services\ZteUncfgOnuService;
 use App\Support\AuditLogger;
+use App\Support\DeviceWritePolicy;
 use App\Support\DisplayTime;
 use App\Support\SmartOltSupport;
 use Illuminate\Support\Carbon;
@@ -496,13 +498,17 @@ class TelegramCommandHandler
             return TelegramReply::make('⛔ Reboot ONU tidak didukung untuk OLT ini.', $back);
         }
 
-        $writesEnabled = (bool) config('nostek.device_writes_enabled', false);
+        DeviceWritePolicy::flush();
+        $gate = DeviceWritePolicy::decide(DeviceWriteSetting::CHANNEL_OLT, $olt);
+        $writesEnabled = $gate['allowed'];
 
         AuditLogger::log(
             event: $writesEnabled ? AuditLog::EVENT_DEVICE_WRITE_ALLOWED : AuditLog::EVENT_DEVICE_WRITE_BLOCKED,
             auditable: $olt,
             properties: [
                 'decision' => $writesEnabled ? 'allowed' : 'blocked',
+                'gate_reason' => $gate['reason'],
+                'write_channel' => DeviceWriteSetting::CHANNEL_OLT,
                 'channel' => 'telegram',
                 'action' => 'onu_reboot',
                 'slot' => $slot,
@@ -510,12 +516,12 @@ class TelegramCommandHandler
                 'onu_id' => $onuId,
             ],
             description: $writesEnabled
-                ? 'Telegram device write passed the installation safety boundary.'
-                : 'Telegram device write blocked by the installation safety boundary.',
+                ? 'Telegram device write passed the safety boundary.'
+                : 'Telegram device write blocked by the safety boundary.',
         );
 
         if (! $writesEnabled) {
-            return TelegramReply::make('⛔ Aksi tulis OLT/ONT dinonaktifkan untuk instalasi ini.', $back);
+            return TelegramReply::make('⛔ '.DeviceWritePolicy::message($gate['reason']), $back);
         }
 
         $driver = $this->oltDriver($olt);

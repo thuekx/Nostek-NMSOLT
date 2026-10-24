@@ -170,4 +170,5 @@ return [
     'cdata_vlan_tagged_ports' => 'VLAN :vlan tagged on :ports.',
     'cdata_vlan_tag_failed_some' => 'Some ports could not be tagged — ',
     'cdata_config_unsaved' => 'Not permanent yet: press Save Config so it survives an OLT reboot.',
+    'device_writes_saved' => 'Device write settings saved.',
 ];

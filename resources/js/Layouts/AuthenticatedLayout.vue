@@ -11,6 +11,7 @@ import ThemeSegmented from '@/Components/Shell/ThemeSegmented.vue';
 import UserMenu from '@/Components/Shell/UserMenu.vue';
 import { Link, usePage } from '@inertiajs/vue3';
 import { useI18n } from 'vue-i18n';
+import { formatDateTime } from '@/lib/datetime';
 import { BellRing, BookOpen, Cable, ChevronLeft, Eye, FileBarChart, LayoutDashboard, Lock, LogOut, MapPin, Menu, Radar, ScrollText, Search, Send, Settings, User, Users, Waypoints, WifiOff } from '@lucide/vue';
 
 const { t } = useI18n({ useScope: 'global' });
@@ -35,6 +36,9 @@ let sidebarMediaQuery = null;
 const can = computed(() => page.props.auth?.can ?? {});
 const isDemo = computed(() => Boolean(can.value.is_demo));
 const deviceWritesLocked = computed(() => page.props.device_writes?.enabled === false);
+// WRITE-UI-1: in admin mode the banner says who can switch writes on and when they turn off again.
+const deviceWritesAdminMode = computed(() => page.props.device_writes?.mode === 'admin');
+const deviceWritesExpiresAt = computed(() => (page.props.device_writes?.enabled ? page.props.device_writes?.expires_at ?? null : null));
 const appName = computed(() => page.props.branding?.name ?? 'Nostek-NMSOLT');
 // Atribusi pemilik permanen (dari konstanta backend, bukan Settings). Lihat GeneralSetting::OWNER.
 const owner = computed(() => page.props.branding?.owner ?? 'thuekx');
@@ -374,7 +378,27 @@ onUnmounted(() => {
                 data-testid="device-writes-banner"
             >
                 <Lock class="h-4 w-4 flex-shrink-0" />
-                <span>{{ $t('shell.device_writes_banner') }}</span>
+                <span>{{ deviceWritesAdminMode ? $t('shell.device_writes_banner_admin') : $t('shell.device_writes_banner') }}</span>
+                <Link
+                    v-if="deviceWritesAdminMode && can.manage_users"
+                    :href="route('settings.device-writes')"
+                    class="ml-auto flex-shrink-0 rounded-md border border-sky-400/40 px-2 py-0.5 text-sky-100 hover:bg-sky-500/20"
+                    data-testid="device-writes-banner-link"
+                >{{ $t('shell.device_writes_manage') }}</Link>
+            </div>
+            <div
+                v-else-if="deviceWritesExpiresAt"
+                class="flex items-center gap-2 border-b border-amber-500/30 bg-amber-500/10 px-4 py-2 text-xs font-medium text-amber-200 sm:px-6 lg:px-8"
+                role="status"
+                data-testid="device-writes-timer-banner"
+            >
+                <Lock class="h-4 w-4 flex-shrink-0" />
+                <span>{{ $t('shell.device_writes_on_until', { time: formatDateTime(deviceWritesExpiresAt) }) }}</span>
+                <Link
+                    v-if="can.manage_users"
+                    :href="route('settings.device-writes')"
+                    class="ml-auto flex-shrink-0 rounded-md border border-amber-400/40 px-2 py-0.5 text-amber-100 hover:bg-amber-500/20"
+                >{{ $t('shell.device_writes_manage') }}</Link>
             </div>
 
             <!-- Demo mode banner -->

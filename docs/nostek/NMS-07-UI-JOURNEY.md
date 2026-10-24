@@ -25,7 +25,7 @@ operator saw no reason.
 
 | Layer | What |
 | --- | --- |
-| Shared prop `device_writes` | `{enabled, gated}` for signed-in users. While writes are off, `gated` lists every gated route as method + path regex + optional condition field. The list is built from the route table (`App\Support\DeviceWriteGate`), so a new gated route is covered without UI work. |
+| Shared prop `device_writes` | `{enabled, mode, expires_at, channels, blocked_olts, gated}` for signed-in users (WRITE-UI-1 added mode, timer, channels and blocked OLTs; entries carry `channel` and `olt_segment`, and the list is sent whenever some channel or OLT is closed). While writes are off, `gated` lists every gated route as method + path regex + optional condition field. The list is built from the route table (`App\Support\DeviceWriteGate`), so a new gated route is covered without UI work. |
 | Banner | `AuthenticatedLayout` shows a read-only banner on every page while writes are off. |
 | Request guard | `resources/js/lib/deviceWrites.js` hooks the Inertia router `before` event and an axios request interceptor. A request the server would refuse never leaves the browser; the operator gets a toast: "Nothing was sent to the device". Preview requests of conditional routes (`execute`, `execute_cli` false) still go through. |
 | `v-device-write` | 56 controls in 17 screens show as disabled, with a "Locked: …" tooltip. On preview-or-execute screens, only the execute control is locked; preview stays usable. On profiles and ONU copy, the "also run on the OLT" checkbox is locked instead, so local-only saves keep working. |

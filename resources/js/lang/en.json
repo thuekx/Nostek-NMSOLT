@@ -124,7 +124,10 @@
         "hours_ago": "{n} h ago",
         "days_ago": "{n} d ago",
         "notif_target_unavailable": "This alarm has no page to open.",
-        "mark_read_failed": "Could not mark this notification as read — please try again."
+        "mark_read_failed": "Could not mark this notification as read — please try again.",
+        "device_writes_banner_admin": "Read-only: OLT/ONT write actions are switched off. An admin can switch them on in Settings → Device writes.",
+        "device_writes_manage": "Manage",
+        "device_writes_on_until": "Device writes are ON until {time}, then they switch off by themselves."
     },
     "language": {
         "label": "Language"
@@ -1650,7 +1653,10 @@
         "desc_telnet_opened": "Opened telnet session to {target}",
         "verb_created": "Added",
         "verb_updated": "Updated",
-        "verb_deleted": "Deleted"
+        "verb_deleted": "Deleted",
+        "ev_device_write_setting_changed": "Write switch",
+        "ev_device_write_allowed": "Write allowed",
+        "ev_device_write_blocked": "Write blocked"
     },
     "profile": {
         "title": "Profile",
@@ -2120,5 +2126,49 @@
         "direction_note": "↓ downstream (OLT to customers), ↑ upstream (customers to OLT). Ranges of 30 days and more use hourly/daily averages; the peak keeps the highest value.",
         "empty": "No traffic history in this range yet. The chart fills from the second poll after the feature is on.",
         "no_counters": "The OLT gave no traffic counters (IF-MIB ifHCInOctets/ifHCOutOctets) for this port on the last poll, so its traffic is unknown."
+    },
+    "devicewrites": {
+        "title": "Device writes",
+        "back": "Back to settings",
+        "mode_on_hint": "This installation runs in legacy mode (NMSOLT_DEVICE_WRITES_ENABLED=true): every device write is allowed and these switches have no effect. Ask the operator of the server to set it to \"admin\" so admins decide here.",
+        "mode_off_hint": "This installation keeps device writes off (NMSOLT_DEVICE_WRITES_ENABLED=false). That is a hard limit set on the server: the switches below cannot lift it. To let admins decide here, the server must run with NMSOLT_DEVICE_WRITES_ENABLED=admin.",
+        "state_installation_on": "Always on (legacy installation mode).",
+        "state_installation_off": "Off: locked by the installation.",
+        "state_off": "Off. Nothing is sent to OLTs or ONTs.",
+        "state_expired": "Off: the timer ran out.",
+        "state_on": "On, until an admin switches it off.",
+        "state_on_until": "On until {time}, then off by itself.",
+        "global_title": "Main switch",
+        "global_sub": "Write actions change real devices (reboot, delete, register, VLAN, WiFi). Switch them on only for the work you are doing, with a timer when you can.",
+        "global_label": "Allow device writes",
+        "global_hint": "Off = read-only for everyone, whatever the channels below say.",
+        "duration": "Switch off again after",
+        "duration_minutes": "{n} minutes",
+        "duration_none": "No timer (until switched off)",
+        "channels_title": "Channels",
+        "channel_olt": "OLT (SNMP / CLI / telnet)",
+        "channel_olt_hint": "Register, reboot, delete, rename, VLAN, profiles, port settings, bulk jobs and the telnet console.",
+        "channel_acs": "ACS (GenieACS / TR-069)",
+        "channel_acs_hint": "Changes pushed to customer devices through GenieACS, such as WiFi SSID and password.",
+        "on": "on",
+        "off": "off",
+        "reason": "Reason (required)",
+        "reason_hint": "Saved in the audit log with your name and the time, for example the ticket or the job.",
+        "save": "Save switches",
+        "olt_title": "Block per OLT",
+        "olt_sub": "A blocked OLT takes no writes even while the main switch is on. Unblocking only makes it follow the main switch again.",
+        "olt_reason": "Reason for block / unblock (required)",
+        "olt_empty": "No OLTs yet.",
+        "olt_blocked": "blocked",
+        "olt_follows": "follows main switch",
+        "olt_block": "Block",
+        "olt_unblock": "Unblock",
+        "history_title": "Recent changes",
+        "history_empty": "No changes yet.",
+        "hist_global_on": "Writes switched on ({channels}), timer {minutes} min",
+        "hist_global_off": "Writes switched off",
+        "hist_olt_blocked": "OLT {olt} blocked",
+        "hist_olt_unblocked": "OLT {olt} unblocked",
+        "open": "Device writes"
     }
 }

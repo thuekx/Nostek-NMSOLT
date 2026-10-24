@@ -9,8 +9,8 @@ import SecondaryButton from '@/Components/SecondaryButton.vue';
 import TextInput from '@/Components/TextInput.vue';
 import { useConfirm } from '@/Composables/useConfirm';
 import { formatDateTime } from '@/lib/datetime';
-import { Head, router, useForm, usePage } from '@inertiajs/vue3';
-import { AlertTriangle, Bell, Building2, Check, CheckCircle2, Cloud, Copy, Cpu, Download, ImageUp, Info, KeyRound, Plug, Plus, Send, SlidersHorizontal, Smartphone, Trash2, Upload } from '@lucide/vue';
+import { Head, Link, router, useForm, usePage } from '@inertiajs/vue3';
+import { AlertTriangle, Bell, Building2, Check, CheckCircle2, Cloud, Copy, Cpu, Download, ImageUp, Info, KeyRound, Plug, Plus, Send, ShieldAlert, SlidersHorizontal, Smartphone, Trash2, Upload } from '@lucide/vue';
 import { computed, onBeforeUnmount, ref } from 'vue';
 import { useI18n } from 'vue-i18n';
 import { alarmTypeLabel } from '@/lib/alarm';
@@ -317,7 +317,18 @@ const copyText = async (text, key) => {
 
     <AuthenticatedLayout>
         <template #header>
-            <h2 class="text-lg font-semibold leading-tight sm:text-xl text-white">{{ $t('settings.title') }}</h2>
+            <div class="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+                <h2 class="text-lg font-semibold leading-tight sm:text-xl text-white">{{ $t('settings.title') }}</h2>
+                <!-- WRITE-UI-1: device write switches live on their own page -->
+                <Link
+                    :href="route('settings.device-writes')"
+                    class="inline-flex items-center justify-center gap-2 rounded-lg border border-amber-500/40 bg-amber-500/10 px-3 py-2 text-sm font-medium text-amber-200 hover:bg-amber-500/20"
+                    data-testid="settings-device-writes-link"
+                >
+                    <ShieldAlert class="h-4 w-4" />
+                    {{ $t('devicewrites.open') }}
+                </Link>
+            </div>
         </template>
 
         <div class="min-h-[60vh] pt-5 pb-16 sm:pt-8">

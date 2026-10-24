@@ -15,6 +15,29 @@ Sanctum authentication, role checks, tenant/OLT scopes, capability checks,
 validation, throttles and audit rules continue to apply. A deployment approval
 and an explicitly approved device target are still required outside the codebase.
 
+## Admin switch (WRITE-UI-1, owner 2026-10-24)
+
+The env value is the upper limit; it now takes three values:
+
+| `NMSOLT_DEVICE_WRITES_ENABLED` | Meaning |
+| --- | --- |
+| `false` (default) | Hard off. The UI switch page is read-only and cannot lift it. |
+| `admin` | Off until an admin switches writes on in Settings → Device writes. |
+| `true` | Legacy always-on; the switches are ignored. `nmsolt-ops.sh config-check`/`status` FAIL on it. |
+
+In `admin` mode `App\Support\DeviceWritePolicy` decides every write, most restrictive first:
+global switch (with an optional auto-off timer of 15 min to 24 h) → channel (`olt` = SNMP set,
+CLI and telnet through the OLT; `acs` = GenieACS/TR-069, declared as `device.write:acs` on the two
+Wi-Fi routes) → per-OLT block. A missing row means off (global, channel) or "follow the global
+switch" (OLT); a per-OLT row can only take writes away. Only the `admin` role reaches the page
+(`role:admin`); every change needs a reason (5–500 characters) and writes a
+`device_write_setting_changed` audit row with actor, time, before/after and reason. Blocked
+requests record `gate_reason` (`installation`, `global`, `channel`, `olt`), `gate_mode`,
+`write_channel` and `olt_id`. The request middleware, the Telegram reboot callback and both queued
+jobs (re-read at run time; queue workers flush the cached switches before every job) use the
+same decision. The browser receives the channel switches and blocked OLT ids so it can lock a
+control before the request; the server still decides every request.
+
 ## Surface classification
 
 | Surface | R0 behavior | Boundary |
@@ -24,7 +47,7 @@ and an explicitly approved device target are still required outside the codebase
 | Provisioning previews and generated scripts with `execute=false` | Allowed; no device command | Validation plus conditional `device.write:execute` |
 | ONU register/execute, reboot, delete, rename/state/config | Denied by default | `device.write` plus existing role/scope/capability checks |
 | VLAN, uplink description/admin state, device config save | Denied by default | `device.write` plus existing role/scope/capability/throttle checks |
-| GenieACS Wi-Fi mutation | Denied by default | `device.write` plus role and OLT/ACS scope |
+| GenieACS Wi-Fi mutation | Denied by default | `device.write:acs` (ACS channel) plus role and OLT/ACS scope |
 | Interactive browser Telnet ticket | Denied by default | `device.write` plus secret-access authorization and one-time ticket |
 | Telegram ONU reboot callback | Denied by default | In-handler gate recheck plus existing chat authorization, OLT scope and two-step confirmation |
 | Copy ONU / bulk TR-069 dry-run | Allowed | Conditional gate with `execute=false` |

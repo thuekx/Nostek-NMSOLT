@@ -81,6 +81,9 @@ const EVENT_META = {
     logout: { class: 'bg-slate-500/15 text-slate-300 ring-1 ring-slate-500/30' },
     login_failed: { class: 'bg-orange-500/15 text-orange-300 ring-1 ring-orange-500/30' },
     telnet_opened: { class: 'bg-violet-500/15 text-violet-300 ring-1 ring-violet-500/30' },
+    device_write_setting_changed: { class: 'bg-amber-500/15 text-amber-300 ring-1 ring-amber-500/30' },
+    device_write_allowed: { class: 'bg-emerald-500/15 text-emerald-300 ring-1 ring-emerald-500/30' },
+    device_write_blocked: { class: 'bg-red-500/15 text-red-300 ring-1 ring-red-500/30' },
 };
 
 const eventMeta = (event) => (EVENT_META[event]

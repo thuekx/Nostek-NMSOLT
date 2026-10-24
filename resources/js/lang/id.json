@@ -124,7 +124,10 @@
         "hours_ago": "{n} jam lalu",
         "days_ago": "{n} hari lalu",
         "notif_target_unavailable": "Tujuan alarm ini tak bisa dibuka.",
-        "mark_read_failed": "Gagal menandai notifikasi ini dibaca — coba lagi."
+        "mark_read_failed": "Gagal menandai notifikasi ini dibaca — coba lagi.",
+        "device_writes_banner_admin": "Hanya-baca: aksi tulis OLT/ONT sedang dimatikan. Admin bisa menyalakannya di Pengaturan → Device writes.",
+        "device_writes_manage": "Atur",
+        "device_writes_on_until": "Aksi tulis perangkat NYALA sampai {time}, lalu mati sendiri."
     },
     "language": {
         "label": "Bahasa"
@@ -1650,7 +1653,10 @@
         "desc_telnet_opened": "Membuka sesi telnet ke {target}",
         "verb_created": "Menambahkan",
         "verb_updated": "Memperbarui",
-        "verb_deleted": "Menghapus"
+        "verb_deleted": "Menghapus",
+        "ev_device_write_setting_changed": "Saklar tulis",
+        "ev_device_write_allowed": "Tulis diizinkan",
+        "ev_device_write_blocked": "Tulis diblokir"
     },
     "profile": {
         "title": "Profil",
@@ -2120,5 +2126,49 @@
         "direction_note": "↓ downstream (OLT ke pelanggan), ↑ upstream (pelanggan ke OLT). Rentang 30 hari ke atas memakai rata-rata per jam/hari; puncak tetap dari nilai tertinggi.",
         "empty": "Belum ada riwayat trafik pada rentang ini. Grafik terisi mulai poll kedua setelah fitur aktif.",
         "no_counters": "OLT tidak memberi counter trafik (IF-MIB ifHCInOctets/ifHCOutOctets) untuk port ini pada poll terakhir, jadi trafiknya tidak diketahui."
+    },
+    "devicewrites": {
+        "title": "Device writes",
+        "back": "Kembali ke pengaturan",
+        "mode_on_hint": "Instalasi ini memakai mode lama (NMSOLT_DEVICE_WRITES_ENABLED=true): semua aksi tulis diizinkan dan saklar di sini tidak berpengaruh. Minta pengelola server mengubahnya ke \"admin\" agar admin yang memutuskan di sini.",
+        "mode_off_hint": "Instalasi ini mematikan aksi tulis perangkat (NMSOLT_DEVICE_WRITES_ENABLED=false). Itu batas keras dari server: saklar di bawah tidak bisa membukanya. Agar admin bisa memutuskan di sini, server harus memakai NMSOLT_DEVICE_WRITES_ENABLED=admin.",
+        "state_installation_on": "Selalu nyala (mode instalasi lama).",
+        "state_installation_off": "Mati: dikunci oleh instalasi.",
+        "state_off": "Mati. Tidak ada yang dikirim ke OLT atau ONT.",
+        "state_expired": "Mati: waktunya sudah habis.",
+        "state_on": "Nyala, sampai admin mematikannya.",
+        "state_on_until": "Nyala sampai {time}, lalu mati sendiri.",
+        "global_title": "Saklar utama",
+        "global_sub": "Aksi tulis mengubah perangkat sungguhan (reboot, hapus, registrasi, VLAN, WiFi). Nyalakan hanya untuk pekerjaan yang sedang dilakukan, pakai timer bila bisa.",
+        "global_label": "Izinkan aksi tulis perangkat",
+        "global_hint": "Mati = hanya-baca untuk semua orang, apa pun isi jalur di bawah.",
+        "duration": "Matikan lagi setelah",
+        "duration_minutes": "{n} menit",
+        "duration_none": "Tanpa timer (sampai dimatikan)",
+        "channels_title": "Jalur",
+        "channel_olt": "OLT (SNMP / CLI / telnet)",
+        "channel_olt_hint": "Registrasi, reboot, hapus, ganti nama, VLAN, profil, pengaturan port, job massal, dan konsol telnet.",
+        "channel_acs": "ACS (GenieACS / TR-069)",
+        "channel_acs_hint": "Perubahan ke perangkat pelanggan lewat GenieACS, misalnya SSID dan kata sandi WiFi.",
+        "on": "nyala",
+        "off": "mati",
+        "reason": "Alasan (wajib)",
+        "reason_hint": "Disimpan di log audit bersama nama dan waktu, misalnya nomor tiket atau pekerjaannya.",
+        "save": "Simpan saklar",
+        "olt_title": "Blokir per OLT",
+        "olt_sub": "OLT yang diblokir tidak menerima aksi tulis meskipun saklar utama nyala. Membuka blokir hanya membuatnya ikut saklar utama lagi.",
+        "olt_reason": "Alasan blokir / buka blokir (wajib)",
+        "olt_empty": "Belum ada OLT.",
+        "olt_blocked": "diblokir",
+        "olt_follows": "ikut saklar utama",
+        "olt_block": "Blokir",
+        "olt_unblock": "Buka blokir",
+        "history_title": "Perubahan terakhir",
+        "history_empty": "Belum ada perubahan.",
+        "hist_global_on": "Aksi tulis dinyalakan ({channels}), timer {minutes} menit",
+        "hist_global_off": "Aksi tulis dimatikan",
+        "hist_olt_blocked": "OLT {olt} diblokir",
+        "hist_olt_unblocked": "OLT {olt} dibuka blokirnya",
+        "open": "Device writes"
     }
 }

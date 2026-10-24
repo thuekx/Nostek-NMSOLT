@@ -2,9 +2,11 @@
 
 namespace App\Jobs;
 
+use App\Models\DeviceWriteSetting;
 use App\Models\Tr069BulkTask;
 use App\Services\ZteTr069BulkService;
 use App\Support\CliOutputSanitizer;
+use App\Support\DeviceWritePolicy;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Queue\Queueable;
 use Throwable;
@@ -43,10 +45,13 @@ class Tr069BulkConfigJob implements ShouldQueue
             return;
         }
 
-        if ($task->execute && ! config('nostek.device_writes_enabled', false)) {
+        // Re-checked at run time: an admin may have switched writes off after queueing.
+        DeviceWritePolicy::flush();
+        $gate = DeviceWritePolicy::decide(DeviceWriteSetting::CHANNEL_OLT, $olt);
+        if ($task->execute && ! $gate['allowed']) {
             $task->update([
                 'status' => 'failed',
-                'error' => 'Aksi tulis OLT/ONT dinonaktifkan untuk instalasi ini.',
+                'error' => DeviceWritePolicy::message($gate['reason']),
                 'finished_at' => now(),
             ]);
 

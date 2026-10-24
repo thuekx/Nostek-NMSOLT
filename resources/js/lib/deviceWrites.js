@@ -19,7 +19,7 @@ export function currentDeviceWriteGate() {
 }
 
 function entries(gate) {
-    if (!gate || gate.enabled || !Array.isArray(gate.gated)) return [];
+    if (!gate || !Array.isArray(gate.gated)) return [];
     if (!compiled.has(gate)) {
         compiled.set(
             gate,
@@ -27,6 +27,20 @@ function entries(gate) {
         );
     }
     return compiled.get(gate);
+}
+
+// WRITE-UI-1: an entry refuses when writes are off overall, when its channel is switched
+// off, or when the OLT in its path is blocked by an admin. Older payloads (no `channels`)
+// mean "all off" whenever enabled is false.
+function refuses(gate, entry, path) {
+    if (!gate.enabled) return true;
+    const channel = entry.channel ?? 'olt';
+    if (gate.channels && gate.channels[channel] === false) return true;
+    if (entry.olt_segment != null && Array.isArray(gate.blocked_olts) && gate.blocked_olts.length) {
+        const id = Number(path.replace(/^\/+/, '').split('/')[entry.olt_segment]);
+        if (gate.blocked_olts.includes(id)) return true;
+    }
+    return false;
 }
 
 function pathOf(url) {
@@ -65,12 +79,18 @@ export function isGatedRequest(gate, method, url, data) {
     const path = pathOf(url);
 
     return entries(gate).some(
-        (e) => e.methods.includes(m) && e.re.test(path) && (e.field === null || truthy(fieldValue(data, e.field))),
+        (e) =>
+            e.methods.includes(m) &&
+            e.re.test(path) &&
+            (e.field == null || truthy(fieldValue(data, e.field))) &&
+            refuses(gate, e, path),
     );
 }
 
-export function writesEnabled(gate) {
-    return gate == null || Boolean(gate.enabled);
+export function writesEnabled(gate, channel = null) {
+    if (gate == null) return true;
+    if (!gate.enabled) return false;
+    return channel == null || !gate.channels || gate.channels[channel] !== false;
 }
 
 /**
@@ -104,12 +124,13 @@ export function installDeviceWriteGuard({ router, axios, getGate, notify, messag
 
 /**
  * v-device-write: lock a mutating control while device writes are off.
- * Usage: <button v-device-write>…</button> (a value, when given, overrides the current gate).
+ * Usage: <button v-device-write>…</button>; <button v-device-write:acs> also locks when only
+ * that channel is off (a value, when given, overrides the current gate).
  */
 export function deviceWriteDirective(lockedTitle) {
     const apply = (el, binding) => {
         const gate = binding.value !== undefined ? binding.value : currentGate;
-        const locked = !writesEnabled(gate);
+        const locked = !writesEnabled(gate, binding.arg ?? null);
         if (locked) {
             el.setAttribute('disabled', '');
             el.setAttribute('aria-disabled', 'true');

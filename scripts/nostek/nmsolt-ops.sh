@@ -234,7 +234,9 @@ check_env() {
     value="$(env_get NMSOLT_DEVICE_WRITES_ENABLED)"
     case "${value,,}" in
         ""|0|false|no|off) result device_writes PASS "disabled" ;;
-        *) result device_writes FAIL "NMSOLT_DEVICE_WRITES_ENABLED must stay false (NMS-11 gate)" ;;
+        # WRITE-UI-1: admin = off until an admin switches writes on in the UI (audited, timer).
+        admin) result device_writes PASS "admin mode: off until an admin switches it on in Settings" ;;
+        *) result device_writes FAIL "NMSOLT_DEVICE_WRITES_ENABLED must be false or admin (NMS-11 gate)" ;;
     esac
     value="$(env_get APP_DEBUG)"
     case "${value,,}" in
@@ -391,6 +393,7 @@ cmd_status() {
     writes="$(compose exec -T app printenv NMSOLT_DEVICE_WRITES_ENABLED 2>/dev/null || true)"
     case "${writes,,}" in
         ""|0|false|no|off) result device_writes PASS "disabled in the running app" ;;
+        admin) result device_writes PASS "admin mode in the running app (UI switch decides)" ;;
         *) result device_writes FAIL "enabled in the running app" ;;
     esac
 

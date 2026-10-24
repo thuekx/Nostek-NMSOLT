@@ -125,7 +125,7 @@ Route::prefix('v1')->group(function () {
 
             // Ubah SSID & kata sandi WiFi lewat GenieACS (bukan CLI OLT).
             Route::post('olts/{olt}/onus/{slot}/{port}/{onuId}/acs-wifi', [ApiGenieacsController::class, 'updateWifi'])
-                ->middleware('device.write')
+                ->middleware('device.write:acs')
                 ->whereNumber(['slot', 'port', 'onuId'])
                 ->name('api.onus.acs-wifi');
             Route::delete('olts/{olt}/onus/{slot}/{port}/{onuId}', [OnuActionController::class, 'delete'])

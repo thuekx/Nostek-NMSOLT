@@ -18,7 +18,8 @@
         "group_help": "Bantuan",
         "group_network": "Jaringan OLT",
         "group_overview": "Ringkasan",
-        "group_watch": "Pantauan"
+        "group_watch": "Pantauan",
+        "network_tree": "Pohon jaringan"
     },
     "common": {
         "stale": "Basi",
@@ -2172,5 +2173,51 @@
         "hist_olt_blocked": "OLT {olt} diblokir",
         "hist_olt_unblocked": "OLT {olt} dibuka blokirnya",
         "open": "Device writes"
+    },
+    "network": {
+        "title": "Pohon jaringan",
+        "subtitle": "OLT → PON → ODP → ONU dengan pita redaman RX. Hanya baca, dari polling terakhir.",
+        "olt": "OLT",
+        "no_olt_title": "Belum ada OLT",
+        "no_olt_hint": "Tambahkan OLT dulu, lalu pohonnya muncul setelah polling pertama.",
+        "tree_summary": "{pons} PON · {odps} ODP · {online}/{onus} ONU online",
+        "no_pons": "Belum ada data PON dari polling.",
+        "no_odps": "Belum ada ONU atau ODP di PON ini.",
+        "unassigned": "Belum terhubung ke ODP",
+        "no_onus": "Tidak ada ONU.",
+        "loading": "Memuat ONU…",
+        "load_error": "Gagal memuat ONU. Coba buka lagi.",
+        "offline": "offline",
+        "n_critical": "{n} kritis",
+        "floating_odps": "ODP tanpa port PON (lengkapi di halaman ODP): {names}",
+        "fiber_color": "Warna serat {color} (TIA-598)",
+        "colors": {
+            "blue": "biru",
+            "orange": "oranye",
+            "green": "hijau",
+            "brown": "cokelat",
+            "slate": "abu-abu",
+            "white": "putih",
+            "red": "merah",
+            "black": "hitam",
+            "yellow": "kuning",
+            "violet": "ungu",
+            "rose": "merah muda",
+            "aqua": "tosca"
+        },
+        "legend_good": "Baik",
+        "legend_warning": "Peringatan",
+        "legend_critical": "Kritis",
+        "legend_none": "Tanpa RX",
+        "legend_offline": "Offline",
+        "band_title": "Pita redaman RX",
+        "band_subtitle": "Sebaran RX ONU online, per 1 dB. Baik -25 s.d. -10 dBm.",
+        "band_empty": "Belum ada ONU online dengan nilai RX.",
+        "band_median": "Median dBm",
+        "band_aria": "Histogram RX dari {total} ONU online",
+        "band_bar": "{from} s.d. {to} dBm: {count} ONU",
+        "worst_title": "RX terburuk",
+        "worst_subtitle": "Sampai 10 ONU online yang paling jauh dari rentang sehat.",
+        "worst_empty": "Semua ONU online dalam rentang sehat."
     }
 }

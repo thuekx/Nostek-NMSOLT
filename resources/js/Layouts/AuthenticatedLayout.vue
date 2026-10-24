@@ -11,7 +11,7 @@ import UserMenu from '@/Components/Shell/UserMenu.vue';
 import { Link, usePage } from '@inertiajs/vue3';
 import { useI18n } from 'vue-i18n';
 import { formatDateTime } from '@/lib/datetime';
-import { BellRing, BookOpen, Cable, ChevronLeft, Eye, FileBarChart, LayoutDashboard, Lock, LogOut, MapPin, Menu, Radar, ScrollText, Search, Send, Settings, User, Users, Waypoints, WifiOff } from '@lucide/vue';
+import { BellRing, BookOpen, Cable, ChevronLeft, Eye, FileBarChart, LayoutDashboard, Lock, LogOut, MapPin, Menu, Network, Radar, ScrollText, Search, Send, Settings, User, Users, Waypoints, WifiOff } from '@lucide/vue';
 
 const { t } = useI18n({ useScope: 'global' });
 
@@ -64,6 +64,7 @@ const navGroups = computed(() => {
                 { name: t('nav.smartolt'), icon: Cable, href: route('smartolt.index'), match: ['smartolt.*', 'cdata-olt.*', 'hioso-olt.*'], except: 'smartolt.unconfigured-all' },
                 { name: t('nav.unconfigured'), icon: WifiOff, href: route('smartolt.unconfigured-all'), match: 'smartolt.unconfigured-all' },
                 { name: t('nav.monitoring'), icon: Radar, href: route('monitoring.onu'), match: 'monitoring.*' },
+                { name: t('nav.network_tree'), icon: Network, href: route('network.tree'), match: 'network.*' },
             ],
         },
         {

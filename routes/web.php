@@ -10,6 +10,7 @@ use App\Http\Controllers\DeviceWriteSettingsController;
 use App\Http\Controllers\GenieacsController;
 use App\Http\Controllers\HiosoOltController;
 use App\Http\Controllers\LocaleController;
+use App\Http\Controllers\NetworkTreeController;
 use App\Http\Controllers\NotificationsController;
 use App\Http\Controllers\OdpController;
 use App\Http\Controllers\OltConfigBackupController;
@@ -190,6 +191,11 @@ Route::middleware('auth')->group(function () {
     Route::get('/smartolt/unconfigured', [SmartOltController::class, 'unconfiguredGlobal'])->name('smartolt.unconfigured-all');
     Route::get('/onu-monitoring', [SmartOltController::class, 'onuMonitor'])->name('monitoring.onu');
     Route::post('/onu-monitoring/{olt}/refresh', [SmartOltController::class, 'refreshOnuMonitor'])->middleware('throttle:olt-refresh')->name('monitoring.onu.refresh');
+
+    // UI-B1 Peta Fiber: pohon OLT → PON → ODP → ONU + pita redaman RX (baca saja).
+    Route::get('/network', [NetworkTreeController::class, 'index'])->name('network.tree');
+    Route::get('/network/{olt}/ports/{slot}/{port}/onus', [NetworkTreeController::class, 'onus'])
+        ->whereNumber(['slot', 'port'])->name('network.tree.onus');
 
     // Peta ONU — sebaran pin ONU pelanggan lintas-OLT (Leaflet + tile Google keyless).
     Route::get('/map', [OnuMapController::class, 'index'])->name('map.index');

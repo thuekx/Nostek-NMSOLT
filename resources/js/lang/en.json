@@ -18,7 +18,8 @@
         "group_help": "Help",
         "group_network": "OLT network",
         "group_overview": "Overview",
-        "group_watch": "Monitoring"
+        "group_watch": "Monitoring",
+        "network_tree": "Network tree"
     },
     "common": {
         "stale": "Stale",
@@ -2172,5 +2173,51 @@
         "hist_olt_blocked": "OLT {olt} blocked",
         "hist_olt_unblocked": "OLT {olt} unblocked",
         "open": "Device writes"
+    },
+    "network": {
+        "title": "Network tree",
+        "subtitle": "OLT → PON → ODP → ONU with the RX power band. Read-only, from the last poll.",
+        "olt": "OLT",
+        "no_olt_title": "No OLT yet",
+        "no_olt_hint": "Add an OLT first; the tree appears after its first poll.",
+        "tree_summary": "{pons} PON · {odps} ODP · {online}/{onus} ONU online",
+        "no_pons": "No PON data from polling yet.",
+        "no_odps": "No ONU or ODP on this PON yet.",
+        "unassigned": "Not linked to an ODP",
+        "no_onus": "No ONU.",
+        "loading": "Loading ONUs…",
+        "load_error": "Could not load ONUs. Open it again.",
+        "offline": "offline",
+        "n_critical": "{n} critical",
+        "floating_odps": "ODPs without a PON port (complete them on the ODP page): {names}",
+        "fiber_color": "Fiber colour {color} (TIA-598)",
+        "colors": {
+            "blue": "blue",
+            "orange": "orange",
+            "green": "green",
+            "brown": "brown",
+            "slate": "slate",
+            "white": "white",
+            "red": "red",
+            "black": "black",
+            "yellow": "yellow",
+            "violet": "violet",
+            "rose": "rose",
+            "aqua": "aqua"
+        },
+        "legend_good": "Good",
+        "legend_warning": "Warning",
+        "legend_critical": "Critical",
+        "legend_none": "No RX",
+        "legend_offline": "Offline",
+        "band_title": "RX power band",
+        "band_subtitle": "RX of online ONUs, per 1 dB. Good is -25 to -10 dBm.",
+        "band_empty": "No online ONU with an RX value yet.",
+        "band_median": "Median dBm",
+        "band_aria": "RX histogram of {total} online ONUs",
+        "band_bar": "{from} to {to} dBm: {count} ONU",
+        "worst_title": "Worst RX",
+        "worst_subtitle": "Up to 10 online ONUs furthest from the healthy range.",
+        "worst_empty": "Every online ONU is in the healthy range."
     }
 }

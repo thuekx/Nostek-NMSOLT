@@ -588,7 +588,7 @@ const rxLagging = computed(() => rxLags(props.snapshot));
                         </button>
                         <select
                             :value="currentPortKey"
-                            class="min-h-9 min-w-0 flex-1 rounded-md border-0 bg-transparent py-1.5 pl-2 pr-7 text-sm font-medium text-slate-100 focus:ring-1 focus:ring-cyan-500 sm:flex-none sm:max-w-[12rem]"
+                            class="min-h-9 min-w-0 flex-1 rounded-md border-0 bg-transparent py-1.5 pl-2 pr-7 text-sm font-medium text-slate-100 focus:ring-1 focus:ring-cyan-500 sm:flex-none sm:max-w-48"
                             :title="$t('portonus.switch_port')"
                             @change="onPortSelect"
                         >
@@ -709,7 +709,7 @@ const rxLagging = computed(() => rxLags(props.snapshot));
                             <input
                                 type="checkbox"
                                 :checked="allFilteredSelected"
-                                class="h-4 w-4 rounded border-white/10 text-cyan-400 focus:ring-cyan-500"
+                                class="h-4 w-4 rounded-sm border-white/10 text-cyan-400 focus:ring-cyan-500"
                                 @change="toggleSelectAll"
                             />
                             <span class="whitespace-nowrap">{{ $t('portonus.select_all', { count: filteredOnus.length }) }}</span>
@@ -720,7 +720,7 @@ const rxLagging = computed(() => rxLags(props.snapshot));
                                 v-model="search"
                                 type="text"
                                 :placeholder="$t('portonus.search_placeholder')"
-                                class="nos-filter-control !pl-9 !pr-9"
+                                class="nos-filter-control pl-9! pr-9!"
                             />
                             <button v-if="search" type="button" class="absolute right-2.5 top-1/2 -translate-y-1/2 text-slate-500 hover:text-white" :title="$t('common.clear')" @click="search = ''">
                                 <X class="h-4 w-4" />
@@ -814,7 +814,7 @@ const rxLagging = computed(() => rxLags(props.snapshot));
                                             v-if="canSelect"
                                             type="checkbox"
                                             :checked="isSelected(onu)"
-                                            class="mt-0.5 h-4 w-4 flex-shrink-0 rounded border-white/10 text-cyan-400 focus:ring-cyan-500"
+                                            class="mt-0.5 h-4 w-4 flex-shrink-0 rounded-sm border-white/10 text-cyan-400 focus:ring-cyan-500"
                                             @change="toggleSelect(onu)"
                                         />
                                         <div class="min-w-0">
@@ -958,7 +958,7 @@ const rxLagging = computed(() => rxLags(props.snapshot));
                                         <input
                                             type="checkbox"
                                             :checked="allFilteredSelected"
-                                            class="h-4 w-4 rounded border-white/10 text-cyan-400 focus:ring-cyan-500"
+                                            class="h-4 w-4 rounded-sm border-white/10 text-cyan-400 focus:ring-cyan-500"
                                             @change="toggleSelectAll"
                                         />
                                     </th>
@@ -979,18 +979,18 @@ const rxLagging = computed(() => rxLags(props.snapshot));
                                     v-for="onu in pagedOnus"
                                     :key="`${onu.if_index}-${onu.onu_id}`"
                                     :data-onu-id="onu.onu_id"
-                                    class="transition-colors duration-150 hover:bg-white/[0.03]"
+                                    class="transition-colors duration-150 hover:bg-white/3"
                                     :class="onu.onu_id === focusId ? 'bg-cyan-500/10' : ''"
                                 >
                                     <td v-if="canSelect" class="px-4 py-3">
                                         <input
                                             type="checkbox"
                                             :checked="isSelected(onu)"
-                                            class="h-4 w-4 rounded border-white/10 text-cyan-400 focus:ring-cyan-500"
+                                            class="h-4 w-4 rounded-sm border-white/10 text-cyan-400 focus:ring-cyan-500"
                                             @change="toggleSelect(onu)"
                                         />
                                     </td>
-                                    <td class="min-w-[14rem] px-4 py-3">
+                                    <td class="min-w-56 px-4 py-3">
                                         <div class="font-semibold text-white" :title="onu.interface">{{ onuPrimaryLabel(onu) }}</div>
                                         <div class="mt-0.5 text-xs text-slate-500">{{ onuSecondaryLabel(onu) }}</div>
                                     </td>
@@ -1046,7 +1046,7 @@ const rxLagging = computed(() => rxLags(props.snapshot));
                                             {{ onu.admin_state }}
                                         </span>
                                     </td>
-                                    <td class="min-w-[9rem] px-4 py-3 text-xs text-slate-500">
+                                    <td class="min-w-36 px-4 py-3 text-xs text-slate-500">
                                         <span :title="onu.last_down_cause || ''">{{ lastDownCauseLabel(onu.last_down_cause) }}</span>
                                     </td>
                                     <td class="px-4 py-3">
@@ -1246,7 +1246,7 @@ const rxLagging = computed(() => rxLags(props.snapshot));
                     </div>
 
                     <label class="flex items-start gap-2.5 text-sm text-slate-300">
-                        <input v-device-write v-model="copyExecute" type="checkbox" class="mt-0.5 h-4 w-4 rounded border-white/10 text-cyan-400 focus:ring-cyan-500" />
+                        <input v-device-write v-model="copyExecute" type="checkbox" class="mt-0.5 h-4 w-4 rounded-sm border-white/10 text-cyan-400 focus:ring-cyan-500" />
                         <span>
                             {{ $t('portonus.execute_after') }}
                             <span class="text-slate-500">{{ $t('portonus.execute_hint') }}</span>

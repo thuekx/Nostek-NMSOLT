@@ -161,19 +161,19 @@ const oltState = computed(() => {
                         <dl class="divide-y divide-white/5">
                             <div class="px-6 py-4">
                                 <dt class="text-xs font-semibold uppercase tracking-wide text-slate-500">sysName</dt>
-                                <dd class="mt-1 break-words text-sm text-white">{{ snapshot.system.sys_name || '-' }}</dd>
+                                <dd class="mt-1 wrap-break-word text-sm text-white">{{ snapshot.system.sys_name || '-' }}</dd>
                             </div>
                             <div class="px-6 py-4">
                                 <dt class="text-xs font-semibold uppercase tracking-wide text-slate-500">sysDescr</dt>
-                                <dd class="mt-1 break-words text-sm text-white">{{ snapshot.system.sys_descr || '-' }}</dd>
+                                <dd class="mt-1 wrap-break-word text-sm text-white">{{ snapshot.system.sys_descr || '-' }}</dd>
                             </div>
                             <div class="px-6 py-4">
                                 <dt class="text-xs font-semibold uppercase tracking-wide text-slate-500">sysObjectID</dt>
-                                <dd class="mt-1 break-words text-sm text-white">{{ snapshot.system.sys_object_id || '-' }}</dd>
+                                <dd class="mt-1 wrap-break-word text-sm text-white">{{ snapshot.system.sys_object_id || '-' }}</dd>
                             </div>
                             <div class="px-6 py-4">
                                 <dt class="text-xs font-semibold uppercase tracking-wide text-slate-500">sysUptime</dt>
-                                <dd class="mt-1 break-words text-sm text-white">{{ formatUptime(snapshot.system.sys_uptime) }}</dd>
+                                <dd class="mt-1 wrap-break-word text-sm text-white">{{ formatUptime(snapshot.system.sys_uptime) }}</dd>
                             </div>
                         </dl>
                     </div>

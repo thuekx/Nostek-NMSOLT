@@ -226,7 +226,7 @@ const errorList = computed(() => Object.values(form.errors ?? {}));
                         type="button"
                         role="tab"
                         :aria-selected="mode === m"
-                        class="min-h-11 rounded-xl border px-4 text-sm font-semibold transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyan-400/60"
+                        class="min-h-11 rounded-xl border px-4 text-sm font-semibold transition focus-visible:outline-hidden focus-visible:ring-2 focus-visible:ring-cyan-400/60"
                         :class="mode === m ? 'border-cyan-500/40 bg-cyan-500/15 text-cyan-200' : 'border-white/10 text-slate-400 hover:text-slate-200'"
                         @click="setMode(m)"
                     >
@@ -274,7 +274,7 @@ const errorList = computed(() => Object.values(form.errors ?? {}));
                             <div class="flex items-center gap-2 border-b border-white/10 px-4 py-3 text-xs font-semibold uppercase tracking-wide text-slate-400 sm:px-6">
                                 <Terminal class="h-4 w-4" /> Raw running-config
                             </div>
-                            <pre data-theme="dark" class="nos-terminal overflow-x-auto whitespace-pre-wrap break-words bg-slate-950/70 px-4 py-3 font-mono text-xs leading-relaxed text-emerald-300/90">{{ raw || $t('configonu.empty_paren') }}</pre>
+                            <pre data-theme="dark" class="nos-terminal overflow-x-auto whitespace-pre-wrap wrap-break-word bg-slate-950/70 px-4 py-3 font-mono text-xs leading-relaxed text-emerald-300/90">{{ raw || $t('configonu.empty_paren') }}</pre>
                         </div>
                     </div>
 

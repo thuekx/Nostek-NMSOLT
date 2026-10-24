@@ -37,6 +37,26 @@ export const SURFACES = ['surface-1', 'surface-2', 'surface-3', 'surface-hover']
 /** Kanvas halaman dan lapisan dekorasinya. */
 export const CANVASES = ['canvas', 'canvas-2', 'canvas-3'];
 
+/**
+ * Token SEMANTIK (UI-T1, redesign 2026-10). Halaman dan komponen baru
+ * (resources/js/Components/ui, gaya shadcn-vue) memakai PERAN, bukan ramp:
+ * `bg-card`, `text-muted-foreground`, `border-border`, `bg-primary`.
+ * Ramp di atas tetap ada untuk halaman lama sampai dimigrasi.
+ */
+export const SEMANTIC = [
+    'background', 'foreground',
+    'card', 'card-foreground',
+    'popover', 'popover-foreground',
+    'primary', 'primary-foreground',
+    'secondary', 'secondary-foreground',
+    'muted', 'muted-foreground',
+    'accent', 'accent-foreground',
+    'destructive', 'destructive-foreground',
+    'success', 'success-foreground',
+    'warning', 'warning-foreground',
+    'border', 'input', 'ring',
+];
+
 /** Seluruh nama variabel `--nos-*` yang harus punya deklarasi di app.css. */
 export function tokenNames() {
     return [
@@ -44,5 +64,6 @@ export function tokenNames() {
         ...SINGLES,
         ...SURFACES,
         ...CANVASES,
+        ...SEMANTIC,
     ];
 }

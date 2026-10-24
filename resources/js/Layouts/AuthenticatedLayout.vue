@@ -199,7 +199,7 @@ onUnmounted(() => {
         >
             <div
                 v-if="sidebarOpen"
-                class="fixed inset-0 z-40 bg-black/70 backdrop-blur-sm lg:hidden"
+                class="fixed inset-0 z-40 bg-black/70 backdrop-blur-xs lg:hidden"
                 @click="sidebarOpen = false"
             />
         </Transition>
@@ -207,7 +207,7 @@ onUnmounted(() => {
         <!-- Sidebar — mobile: drawer fixed; desktop: setinggi layar, diam saat konten digulir.
              Menu yang panjang menggulir di dalam <nav>, panel sistem tetap di dasar. -->
         <aside
-            class="nos-shell-sidebar fixed inset-y-0 left-0 z-50 flex max-w-[calc(100vw-1rem)] flex-col border-r border-white/10 bg-canvas-3/35 backdrop-blur-xl transition-all duration-200 ease-in-out lg:relative lg:flex-shrink-0 lg:translate-x-0"
+            class="nos-shell-sidebar fixed inset-y-0 left-0 z-50 flex max-w-[calc(100vw-1rem)] flex-col border-r border-white/10 bg-canvas-3/35 backdrop-blur-xl transition-all duration-200 ease-in-out lg:relative lg:shrink-0 lg:translate-x-0"
             :class="[
                 sidebarOpen ? 'translate-x-0' : '-translate-x-full',
                 sidebarCollapsed ? 'w-64 lg:w-20' : 'w-64',
@@ -219,7 +219,7 @@ onUnmounted(() => {
             <div class="relative z-10 min-h-0 flex-1">
                 <div class="flex h-full flex-col">
                     <!-- Logo -->
-                    <div class="relative flex h-[72px] flex-shrink-0 items-center justify-between border-b border-white/10 bg-canvas-3/20 px-5 backdrop-blur-sm">
+                    <div class="relative flex h-[72px] flex-shrink-0 items-center justify-between border-b border-white/10 bg-canvas-3/20 px-5 backdrop-blur-xs">
                         <Link
                             :href="route('dashboard')"
                             prefetch
@@ -269,7 +269,7 @@ onUnmounted(() => {
                                     class="group relative flex items-center rounded-xl text-xs font-semibold transition-all"
                                     :class="[
                                         isActive(link)
-                                            ? 'bg-gradient-to-r from-cyan-500 to-sky-500 text-onaccent shadow-lg shadow-cyan-500/30'
+                                            ? 'bg-linear-to-r from-cyan-500 to-sky-500 text-onaccent shadow-lg shadow-cyan-500/30'
                                             : 'text-slate-400 hover:bg-white/5 hover:text-slate-100',
                                         showSidebarContent ? 'gap-3 px-3.5 py-3' : 'mx-auto h-11 w-11 justify-center',
                                     ]"
@@ -291,7 +291,7 @@ onUnmounted(() => {
                 <!-- User account (mobile only — desktop uses header UserMenu) -->
                 <div class="border-t border-white/10 px-3 py-3 lg:hidden">
                     <div class="flex items-center gap-3 rounded-xl bg-white/5 px-3 py-2.5">
-                        <span class="flex h-9 w-9 flex-shrink-0 items-center justify-center rounded-lg bg-gradient-to-br from-cyan-500 to-sky-600 text-sm font-bold text-onaccent shadow-inner shadow-white/10">
+                        <span class="flex h-9 w-9 flex-shrink-0 items-center justify-center rounded-lg bg-linear-to-br from-cyan-500 to-sky-600 text-sm font-bold text-onaccent shadow-inner shadow-white/10">
                             {{ userInitial }}
                         </span>
                         <div class="min-w-0 flex-1">

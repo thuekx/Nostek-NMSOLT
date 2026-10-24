@@ -153,7 +153,7 @@ const submit = () => {
                         id="snmp_version"
                         v-model="form.snmp_version"
                         :disabled="connectionLocked"
-                        class="mt-1 block w-full rounded-md border-white/10 shadow-sm focus:border-cyan-500 focus:ring-cyan-500"
+                        class="mt-1 block w-full rounded-md border-white/10 shadow-xs focus:border-cyan-500 focus:ring-cyan-500"
                         required
                     >
                         <option value="v1">v1</option>
@@ -213,7 +213,7 @@ const submit = () => {
                         id="cli_transport"
                         v-model="form.cli_transport"
                         :disabled="connectionLocked"
-                        class="mt-1 block w-full rounded-md border-white/10 shadow-sm focus:border-cyan-500 focus:ring-cyan-500"
+                        class="mt-1 block w-full rounded-md border-white/10 shadow-xs focus:border-cyan-500 focus:ring-cyan-500"
                     >
                         <option value="">{{ $t('oltform.cli_transport_none') }}</option>
                         <option value="telnet">Telnet</option>
@@ -282,7 +282,7 @@ const submit = () => {
                     <input
                         v-model="form.polling_enabled"
                         type="checkbox"
-                        class="rounded border-white/10 text-cyan-400 shadow-sm focus:ring-cyan-500"
+                        class="rounded-sm border-white/10 text-cyan-400 shadow-xs focus:ring-cyan-500"
                     />
                     {{ $t('oltform.enable_autopoll') }}
                 </label>

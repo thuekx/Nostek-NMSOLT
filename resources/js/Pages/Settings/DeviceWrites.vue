@@ -141,7 +141,7 @@ const historyLine = (entry) => {
                                 id="dw_duration"
                                 v-model="form.duration"
                                 :disabled="!editable"
-                                class="mt-1 block min-h-11 w-full rounded-md border border-white/10 bg-slate-900/60 py-2.5 px-3 text-sm text-white shadow-sm focus:border-cyan-500 focus:ring-cyan-500 sm:max-w-xs"
+                                class="mt-1 block min-h-11 w-full rounded-md border border-white/10 bg-slate-900/60 py-2.5 px-3 text-sm text-white shadow-xs focus:border-cyan-500 focus:ring-cyan-500 sm:max-w-xs"
                             >
                                 <option v-for="m in durations" :key="m" :value="m">{{ $t('devicewrites.duration_minutes', { n: m }) }}</option>
                                 <option :value="null">{{ $t('devicewrites.duration_none') }}</option>

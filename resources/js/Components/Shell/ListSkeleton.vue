@@ -20,15 +20,15 @@ const pick = (i, offset = 0) => widths[(i + offset) % widths.length];
             <div v-for="i in Math.min(rows, 4)" :key="`m-${i}`" class="nos-mobile-card">
                 <div class="flex items-start justify-between gap-3">
                     <div class="min-w-0 flex-1 space-y-2">
-                        <div class="h-3.5 rounded bg-white/10" :class="pick(i)"></div>
-                        <div class="h-2.5 rounded bg-white/5" :class="pick(i, 2)"></div>
+                        <div class="h-3.5 rounded-sm bg-white/10" :class="pick(i)"></div>
+                        <div class="h-2.5 rounded-sm bg-white/5" :class="pick(i, 2)"></div>
                     </div>
                     <div class="h-5 w-14 rounded-full bg-white/10"></div>
                 </div>
                 <div class="mt-4 space-y-2">
                     <div v-for="j in 3" :key="j" class="flex items-center justify-between gap-4">
-                        <div class="h-2.5 w-16 rounded bg-white/5"></div>
-                        <div class="h-2.5 rounded bg-white/10" :class="pick(i, j)"></div>
+                        <div class="h-2.5 w-16 rounded-sm bg-white/5"></div>
+                        <div class="h-2.5 rounded-sm bg-white/10" :class="pick(i, j)"></div>
                     </div>
                 </div>
             </div>
@@ -42,12 +42,12 @@ const pick = (i, offset = 0) => widths[(i + offset) % widths.length];
                     :key="`d-${i}`"
                     class="flex items-center gap-6 px-6 py-4"
                 >
-                    <div class="h-3.5 flex-1 rounded bg-white/10" :class="pick(i)"></div>
-                    <div class="h-3.5 w-32 rounded bg-white/5"></div>
-                    <div class="h-3.5 w-24 rounded bg-white/10" :class="pick(i, 1)"></div>
+                    <div class="h-3.5 flex-1 rounded-sm bg-white/10" :class="pick(i)"></div>
+                    <div class="h-3.5 w-32 rounded-sm bg-white/5"></div>
+                    <div class="h-3.5 w-24 rounded-sm bg-white/10" :class="pick(i, 1)"></div>
                     <div class="h-5 w-16 rounded-full bg-white/10"></div>
-                    <div class="h-3.5 w-20 rounded bg-white/5"></div>
-                    <div class="h-8 w-24 rounded bg-white/5"></div>
+                    <div class="h-3.5 w-20 rounded-sm bg-white/5"></div>
+                    <div class="h-8 w-24 rounded-sm bg-white/5"></div>
                 </div>
             </div>
         </div>

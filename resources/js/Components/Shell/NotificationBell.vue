@@ -184,7 +184,7 @@ onUnmounted(() => {
             <BellRing class="h-5 w-5" />
             <span
                 v-if="unreadCount > 0"
-                class="absolute -right-1 -top-1 flex h-5 min-w-[1.25rem] items-center justify-center rounded-full bg-red-600 px-1 text-[10px] font-bold text-onaccent ring-2 ring-canvas"
+                class="absolute -right-1 -top-1 flex h-5 min-w-5 items-center justify-center rounded-full bg-red-600 px-1 text-[10px] font-bold text-onaccent ring-2 ring-canvas"
             >
                 {{ unreadCount > 99 ? '99+' : unreadCount }}
             </span>

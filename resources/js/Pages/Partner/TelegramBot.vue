@@ -161,7 +161,7 @@ const lastSent = computed(() => (props.bot.last_sent_at ? formatDateTime(props.b
                             <select
                                 id="min_severity"
                                 v-model="form.min_severity"
-                                class="mt-1 block min-h-11 w-full rounded-md border border-white/10 bg-slate-900/60 px-3 py-2.5 text-sm text-white shadow-sm focus:border-cyan-500 focus:ring-cyan-500"
+                                class="mt-1 block min-h-11 w-full rounded-md border border-white/10 bg-slate-900/60 px-3 py-2.5 text-sm text-white shadow-xs focus:border-cyan-500 focus:ring-cyan-500"
                             >
                                 <option v-for="opt in severityOptions" :key="opt.value" :value="opt.value">{{ $t(`alarms.sev_opt_${opt.value}`) }}</option>
                             </select>

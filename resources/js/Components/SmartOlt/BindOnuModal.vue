@@ -162,7 +162,7 @@ const submit = () => {
                     <ul v-else class="mt-3 max-h-[45vh] space-y-2 overflow-y-auto pr-1" role="radiogroup" :aria-label="$t('bindonu.pick_hint')">
                         <li v-for="c in filtered" :key="c.onu_id">
                             <label
-                                class="flex min-h-11 cursor-pointer items-center gap-3 rounded-lg border px-3 py-2.5 transition-colors has-[:focus-visible]:ring-2 has-[:focus-visible]:ring-cyan-400/60"
+                                class="flex min-h-11 cursor-pointer items-center gap-3 rounded-lg border px-3 py-2.5 transition-colors has-focus-visible:ring-2 has-focus-visible:ring-cyan-400/60"
                                 :class="selectedId === c.onu_id
                                     ? 'border-cyan-500/50 bg-cyan-500/10'
                                     : c.online
@@ -221,7 +221,7 @@ const submit = () => {
                 </div>
 
                 <label class="mt-4 flex items-start gap-2.5 text-sm text-slate-300">
-                    <input v-model="form.save_config" type="checkbox" class="mt-0.5 h-4 w-4 rounded border-white/10 text-cyan-400 focus:ring-cyan-500" />
+                    <input v-model="form.save_config" type="checkbox" class="mt-0.5 h-4 w-4 rounded-sm border-white/10 text-cyan-400 focus:ring-cyan-500" />
                     <span>
                         {{ $t('bindonu.save_config') }}
                         <span class="text-slate-500">{{ $t('bindonu.save_config_hint') }}</span>

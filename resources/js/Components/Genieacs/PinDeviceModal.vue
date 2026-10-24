@@ -263,13 +263,13 @@ const secondaryLabel = (d) =>
 
                         <span
                             v-if="d.device_id === currentDeviceId"
-                            class="mt-1 inline-flex items-center gap-1 rounded bg-emerald-500/15 px-1.5 py-0.5 text-[11px] text-emerald-300"
+                            class="mt-1 inline-flex items-center gap-1 rounded-sm bg-emerald-500/15 px-1.5 py-0.5 text-[11px] text-emerald-300"
                         >
                             {{ $t('acspin.badge_current') }}
                         </span>
                         <span
                             v-else-if="d.linked_to"
-                            class="mt-1 inline-flex items-center gap-1 rounded bg-amber-500/15 px-1.5 py-0.5 text-[11px] text-amber-300"
+                            class="mt-1 inline-flex items-center gap-1 rounded-sm bg-amber-500/15 px-1.5 py-0.5 text-[11px] text-amber-300"
                         >
                             <TriangleAlert class="h-3 w-3" />
                             {{ $t('acspin.badge_linked', {
@@ -281,7 +281,7 @@ const secondaryLabel = (d) =>
                         </span>
                         <span
                             v-else-if="d.manual_stale"
-                            class="mt-1 inline-flex items-center gap-1 rounded bg-amber-500/15 px-1.5 py-0.5 text-[11px] text-amber-300"
+                            class="mt-1 inline-flex items-center gap-1 rounded-sm bg-amber-500/15 px-1.5 py-0.5 text-[11px] text-amber-300"
                         >
                             <TriangleAlert class="h-3 w-3" />
                             {{ $t('acspin.badge_stale') }}

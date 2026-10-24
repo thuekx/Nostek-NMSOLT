@@ -483,11 +483,11 @@ const setAdminState = async (enabled) => {
                                     <template v-else>
                                         <dd v-if="descParsed" class="mt-1 flex flex-wrap items-center gap-x-4 gap-y-1 text-sm text-white" :title="descParsed.raw">
                                             <span v-if="descParsed.zone"><span class="text-slate-500">{{ $t('portdetail.zone') }}:</span> {{ descParsed.zone }}</span>
-                                            <span v-if="descParsed.description" class="break-words">{{ descParsed.description }}</span>
+                                            <span v-if="descParsed.description" class="wrap-break-word">{{ descParsed.description }}</span>
                                             <span v-if="descParsed.externalId" class="text-slate-400">SmartOLT #{{ descParsed.externalId }}</span>
                                             <span v-if="descParsed.authDate" class="text-slate-400">{{ $t('portdetail.authorized') }} {{ descParsed.authDate }}</span>
                                         </dd>
-                                        <dd v-else class="mt-1 break-words text-sm text-white">{{ d.description || '-' }}</dd>
+                                        <dd v-else class="mt-1 wrap-break-word text-sm text-white">{{ d.description || '-' }}</dd>
                                     </template>
 
                                     <p v-if="descToast.show" class="mt-2 text-xs" :class="descToast.ok ? 'text-emerald-300' : 'text-red-300'">

@@ -145,7 +145,7 @@ const formatDate = (value) => (value ? formatDateTime(value) : '—');
                                 v-model="form.q"
                                 type="search"
                                 :placeholder="$t('auditlogs.search_placeholder')"
-                                class="nos-filter-control !pl-9"
+                                class="nos-filter-control pl-9!"
                             >
                         </div>
                         <select v-model="form.event" class="nos-filter-control w-full sm:w-auto">
@@ -259,7 +259,7 @@ const formatDate = (value) => (value ? formatDateTime(value) : '—');
                                 <tbody class="divide-y divide-white/5">
                                     <template v-for="log in rows" :key="log.id">
                                         <tr
-                                            class="cursor-pointer transition-colors duration-150 hover:bg-white/[0.03]"
+                                            class="cursor-pointer transition-colors duration-150 hover:bg-white/3"
                                             @click="toggle(log.id)"
                                         >
                                             <td class="px-4 py-3 text-slate-500">

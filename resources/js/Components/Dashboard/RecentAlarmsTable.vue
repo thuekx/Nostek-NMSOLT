@@ -76,7 +76,7 @@ const alarmType = (type) => alarmTypeLabel(t, type);
                     </tr>
                 </thead>
                 <tbody class="divide-y divide-white/5">
-                    <tr v-for="alarm in alarms" :key="alarm.id" class="transition-colors hover:bg-white/[0.03]">
+                    <tr v-for="alarm in alarms" :key="alarm.id" class="transition-colors hover:bg-white/3">
                         <td class="whitespace-nowrap px-5 py-3 text-xs text-slate-400">{{ formatTime(alarm.last_seen_at) }}</td>
                         <td class="px-2 py-3"><span :class="severityClass(alarm.severity)">{{ alarm.severity }}</span></td>
                         <td class="px-2 py-3 text-slate-200">{{ alarmType(alarm.type) }}</td>

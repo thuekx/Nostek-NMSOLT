@@ -92,7 +92,7 @@ const iconFor = (type) => ({
         >
             <div
                 v-if="open"
-                class="fixed inset-0 z-[100] flex items-start justify-center bg-black/70 px-4 pt-[10vh] backdrop-blur-sm"
+                class="fixed inset-0 z-100 flex items-start justify-center bg-black/70 px-4 pt-[10vh] backdrop-blur-xs"
                 @click.self="close"
                 @keydown="onKeydown"
             >
@@ -104,10 +104,10 @@ const iconFor = (type) => ({
                             v-model="query"
                             type="text"
                             :placeholder="$t('shell.search_placeholder_global')"
-                            class="h-14 w-full border-0 bg-transparent text-slate-100 placeholder:text-slate-500 focus:outline-none focus:ring-0"
+                            class="h-14 w-full border-0 bg-transparent text-slate-100 placeholder:text-slate-500 focus:outline-hidden focus:ring-0"
                         />
                         <Loader2 v-if="loading" class="h-4 w-4 flex-shrink-0 animate-spin text-cyan-400" />
-                        <kbd class="hidden flex-shrink-0 items-center rounded border border-white/10 bg-slate-800/80 px-1.5 py-0.5 text-[11px] text-slate-400 sm:inline-flex">esc</kbd>
+                        <kbd class="hidden flex-shrink-0 items-center rounded-sm border border-white/10 bg-slate-800/80 px-1.5 py-0.5 text-[11px] text-slate-400 sm:inline-flex">esc</kbd>
                     </div>
 
                     <div class="max-h-[60vh] overflow-y-auto">
@@ -139,11 +139,11 @@ const iconFor = (type) => ({
                     <div class="flex items-center justify-between gap-3 border-t border-white/10 bg-canvas-3/40 px-4 py-2 text-[11px] text-slate-500">
                         <span class="flex items-center gap-3">
                             <span class="flex items-center gap-1">
-                                <kbd class="rounded border border-white/10 bg-slate-800/80 px-1.5 py-0.5">&uarr;&darr;</kbd>
+                                <kbd class="rounded-sm border border-white/10 bg-slate-800/80 px-1.5 py-0.5">&uarr;&darr;</kbd>
                                 {{ $t('shell.search_nav') }}
                             </span>
                             <span class="flex items-center gap-1">
-                                <kbd class="rounded border border-white/10 bg-slate-800/80 px-1.5 py-0.5">&crarr;</kbd>
+                                <kbd class="rounded-sm border border-white/10 bg-slate-800/80 px-1.5 py-0.5">&crarr;</kbd>
                                 {{ $t('shell.search_pick') }}
                             </span>
                         </span>

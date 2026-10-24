@@ -362,7 +362,7 @@ onUnmounted(() => { clearTimeout(previewTimer); clearTimeout(flashTimer); });
                             v-for="stat in stats"
                             :key="stat.key"
                             type="button"
-                            class="rounded-lg border border-white/10 bg-canvas-3/40 px-2 py-1.5 transition hover:border-cyan-500/40 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyan-400/60"
+                            class="rounded-lg border border-white/10 bg-canvas-3/40 px-2 py-1.5 transition hover:border-cyan-500/40 focus-visible:outline-hidden focus-visible:ring-2 focus-visible:ring-cyan-400/60"
                             :class="activeKey === stat.key ? 'border-cyan-500/40 bg-cyan-500/10' : ''"
                             @click="selectItem(stat.key)"
                         >
@@ -385,7 +385,7 @@ onUnmounted(() => { clearTimeout(previewTimer); clearTimeout(flashTimer); });
                         v-for="item in group.items"
                         :key="item.key"
                         type="button"
-                        class="inline-flex min-h-11 items-center gap-2 whitespace-nowrap rounded-xl border px-3 text-sm transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyan-400/60"
+                        class="inline-flex min-h-11 items-center gap-2 whitespace-nowrap rounded-xl border px-3 text-sm transition focus-visible:outline-hidden focus-visible:ring-2 focus-visible:ring-cyan-400/60"
                         :class="activeKey === item.key ? 'border-cyan-500/40 bg-cyan-500/15 text-cyan-200' : 'border-white/10 bg-slate-900/60 text-slate-300'"
                         @click="selectItem(item.key)"
                     >
@@ -413,7 +413,7 @@ onUnmounted(() => { clearTimeout(previewTimer); clearTimeout(flashTimer); });
                 <div v-for="group in filteredSections" :key="group.group" class="py-0.5">
                     <button
                         type="button"
-                        class="flex min-h-9 w-full items-center gap-1.5 rounded-lg px-2 text-left text-xs font-semibold uppercase tracking-wide text-slate-400 hover:text-slate-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyan-400/60"
+                        class="flex min-h-9 w-full items-center gap-1.5 rounded-lg px-2 text-left text-xs font-semibold uppercase tracking-wide text-slate-400 hover:text-slate-200 focus-visible:outline-hidden focus-visible:ring-2 focus-visible:ring-cyan-400/60"
                         :aria-expanded="!collapsed[group.group]"
                         @click="collapsed[group.group] = !collapsed[group.group]"
                     >
@@ -425,7 +425,7 @@ onUnmounted(() => { clearTimeout(previewTimer); clearTimeout(flashTimer); });
                         <li v-for="item in group.items" :key="item.key">
                             <button
                                 type="button"
-                                class="group flex min-h-10 w-full items-center gap-2.5 rounded-lg px-2.5 text-left text-sm transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyan-400/60"
+                                class="group flex min-h-10 w-full items-center gap-2.5 rounded-lg px-2.5 text-left text-sm transition focus-visible:outline-hidden focus-visible:ring-2 focus-visible:ring-cyan-400/60"
                                 :class="activeKey === item.key ? 'bg-cyan-500/15 text-cyan-100 ring-1 ring-cyan-500/30' : 'text-slate-300 hover:bg-white/5 hover:text-slate-100'"
                                 :aria-current="activeKey === item.key ? 'page' : undefined"
                                 @click="selectItem(item.key)"
@@ -473,7 +473,7 @@ onUnmounted(() => { clearTimeout(previewTimer); clearTimeout(flashTimer); });
                         <div v-if="lockedCount" class="flex items-start gap-2 border-b border-white/10 bg-amber-500/10 px-4 py-2.5 text-xs text-amber-200 sm:px-6">
                             <Lock class="mt-0.5 h-3.5 w-3.5 shrink-0" />
                             <span>{{ $t('onucfg.locked_hint', { profile: baseline.onu_profile }) }}</span>
-                            <button type="button" class="ml-auto shrink-0 font-semibold text-amber-100 underline underline-offset-2 hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-amber-400/60" @click="selectItem('profile')">
+                            <button type="button" class="ml-auto shrink-0 font-semibold text-amber-100 underline underline-offset-2 hover:text-white focus-visible:outline-hidden focus-visible:ring-2 focus-visible:ring-amber-400/60" @click="selectItem('profile')">
                                 {{ $t('onucfg.locked_goto') }}
                             </button>
                         </div>
@@ -535,7 +535,7 @@ onUnmounted(() => { clearTimeout(previewTimer); clearTimeout(flashTimer); });
                                             v-for="(row, index) in rows"
                                             :key="`d-${index}`"
                                             class="transition-colors duration-700"
-                                            :class="[isFlashed(row) ? 'bg-emerald-500/10' : 'hover:bg-white/[0.03]', canWrite && !locked(row) ? 'cursor-pointer' : '']"
+                                            :class="[isFlashed(row) ? 'bg-emerald-500/10' : 'hover:bg-white/3', canWrite && !locked(row) ? 'cursor-pointer' : '']"
                                             @dblclick="canWrite && openEdit(index)"
                                         >
                                             <td v-for="column in active.columns" :key="column.key" class="px-4 py-3 font-mono text-slate-200 first:pl-6">{{ cell(column, row) }}</td>
@@ -635,7 +635,7 @@ onUnmounted(() => { clearTimeout(previewTimer); clearTimeout(flashTimer); });
                     <summary class="flex cursor-pointer items-center gap-2 px-4 py-3 text-sm font-semibold text-slate-300 hover:text-slate-100 sm:px-6">
                         <Terminal class="h-4 w-4 text-cyan-400" /> {{ $t('onucfg.raw_title') }}
                     </summary>
-                    <pre data-theme="dark" class="nos-terminal overflow-x-auto whitespace-pre-wrap break-words rounded-b-lg border-t border-white/10 bg-slate-950/70 px-4 py-3 font-mono text-xs leading-relaxed text-emerald-300/90">{{ rawText || '—' }}</pre>
+                    <pre data-theme="dark" class="nos-terminal overflow-x-auto whitespace-pre-wrap wrap-break-word rounded-b-lg border-t border-white/10 bg-slate-950/70 px-4 py-3 font-mono text-xs leading-relaxed text-emerald-300/90">{{ rawText || '—' }}</pre>
                 </details>
             </div>
         </div>
@@ -660,7 +660,7 @@ onUnmounted(() => { clearTimeout(previewTimer); clearTimeout(flashTimer); });
                     <div v-for="field in visibleFields" :key="field.key" :class="field.type === 'multi' || field.type === 'bool' ? 'sm:col-span-2' : ''">
                         <label v-if="field.type === 'bool'" class="flex min-h-11 cursor-pointer items-center justify-between gap-3 rounded-lg border border-white/10 bg-canvas-3/40 px-4 text-sm text-slate-200">
                             {{ tr(field.label) }}
-                            <input v-model="dialog.row[field.key]" type="checkbox" class="h-5 w-5 rounded border-white/20 text-cyan-400 focus:ring-cyan-500" />
+                            <input v-model="dialog.row[field.key]" type="checkbox" class="h-5 w-5 rounded-sm border-white/20 text-cyan-400 focus:ring-cyan-500" />
                         </label>
                         <template v-else>
                             <label :for="`onucfg-${field.key}`" class="flex items-center gap-1 text-xs font-medium text-slate-400">
@@ -683,7 +683,7 @@ onUnmounted(() => { clearTimeout(previewTimer); clearTimeout(flashTimer); });
                                     class="flex min-h-11 cursor-pointer items-center gap-2 rounded-xl border px-3 text-sm transition"
                                     :class="(dialog.row[field.key] ?? []).includes(option) ? 'border-cyan-500/40 bg-cyan-500/15 text-cyan-100' : 'border-white/10 text-slate-300 hover:border-white/20'"
                                 >
-                                    <input type="checkbox" class="h-4 w-4 rounded border-white/20 text-cyan-400 focus:ring-cyan-500" :checked="(dialog.row[field.key] ?? []).includes(option)" :disabled="busy" @change="toggleMulti(field, option)" />
+                                    <input type="checkbox" class="h-4 w-4 rounded-sm border-white/20 text-cyan-400 focus:ring-cyan-500" :checked="(dialog.row[field.key] ?? []).includes(option)" :disabled="busy" @change="toggleMulti(field, option)" />
                                     {{ option }}
                                 </label>
                             </div>
@@ -741,7 +741,7 @@ onUnmounted(() => { clearTimeout(previewTimer); clearTimeout(flashTimer); });
     <ConfirmModal :state="confirmState" @confirm="handleConfirm" @cancel="handleCancel" />
 
     <!-- Toast hasil kirim -->
-    <div class="pointer-events-none fixed inset-x-0 bottom-4 z-[70] flex flex-col items-center gap-2 px-4 sm:inset-x-auto sm:right-4 sm:items-end sm:px-0" aria-live="polite">
+    <div class="pointer-events-none fixed inset-x-0 bottom-4 z-70 flex flex-col items-center gap-2 px-4 sm:inset-x-auto sm:right-4 sm:items-end sm:px-0" aria-live="polite">
         <TransitionGroup
             enter-active-class="transition duration-200 ease-out"
             enter-from-class="opacity-0 translate-y-2"
@@ -759,7 +759,7 @@ onUnmounted(() => { clearTimeout(previewTimer); clearTimeout(flashTimer); });
             >
                 <CheckCircle2 v-if="item.type === 'success'" class="mt-0.5 h-5 w-5 shrink-0 text-emerald-400" />
                 <TriangleAlert v-else class="mt-0.5 h-5 w-5 shrink-0 text-rose-400" />
-                <span class="min-w-0 flex-1 break-words">{{ item.message }}</span>
+                <span class="min-w-0 flex-1 wrap-break-word">{{ item.message }}</span>
             </div>
         </TransitionGroup>
     </div>

@@ -40,7 +40,7 @@ onUnmounted(() => document.removeEventListener('click', onClickOutside));
             class="flex h-11 items-center gap-3 rounded-xl border border-white/10 bg-slate-900/60 pl-1 pr-3 transition-colors hover:border-cyan-500/30 hover:bg-slate-900/80"
             @click.stop="open = !open"
         >
-            <span class="flex h-9 w-9 items-center justify-center rounded-lg bg-gradient-to-br from-cyan-500 to-sky-600 text-sm font-semibold text-onaccent shadow-inner shadow-white/10">
+            <span class="flex h-9 w-9 items-center justify-center rounded-lg bg-linear-to-br from-cyan-500 to-sky-600 text-sm font-semibold text-onaccent shadow-inner shadow-white/10">
                 {{ initial }}
             </span>
             <span class="hidden text-left sm:block">
@@ -84,7 +84,7 @@ onUnmounted(() => document.removeEventListener('click', onClickOutside));
                         type="button"
                         role="radio"
                         :aria-checked="preference === choice.value"
-                        class="flex w-full items-center gap-3 px-4 py-2.5 text-left text-sm transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-cyan-400/60"
+                        class="flex w-full items-center gap-3 px-4 py-2.5 text-left text-sm transition-colors focus-visible:outline-hidden focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-cyan-400/60"
                         :class="preference === choice.value
                             ? 'bg-cyan-500/15 text-cyan-300'
                             : 'text-slate-300 hover:bg-white/5 hover:text-white'"

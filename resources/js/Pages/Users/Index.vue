@@ -286,7 +286,7 @@ const deleteUser = async (user) => {
                                 </tr>
                             </thead>
                             <tbody class="divide-y divide-white/5">
-                                <tr v-for="user in users" :key="user.id" class="transition-colors duration-150 hover:bg-white/[0.03]">
+                                <tr v-for="user in users" :key="user.id" class="transition-colors duration-150 hover:bg-white/3">
                                     <td class="px-4 py-3">
                                         <div class="flex items-center gap-3">
                                             <div class="flex h-8 w-8 items-center justify-center rounded-full bg-sky-500/15 text-xs font-semibold text-cyan-300 ring-1 ring-cyan-500/30">
@@ -403,12 +403,12 @@ const deleteUser = async (user) => {
                             <label
                                 v-for="olt in oltOptions"
                                 :key="olt.value"
-                                class="flex cursor-pointer items-center gap-3 rounded-md px-2 py-1.5 transition-colors hover:bg-white/[0.04]"
+                                class="flex cursor-pointer items-center gap-3 rounded-md px-2 py-1.5 transition-colors hover:bg-white/4"
                             >
                                 <input
                                     type="checkbox"
                                     :checked="form.olt_ids.includes(olt.value)"
-                                    class="h-4 w-4 rounded border-white/20 bg-slate-800 text-cyan-500 focus:ring-cyan-500"
+                                    class="h-4 w-4 rounded-sm border-white/20 bg-slate-800 text-cyan-500 focus:ring-cyan-500"
                                     @change="toggleOlt(olt.value)"
                                 />
                                 <span class="min-w-0">

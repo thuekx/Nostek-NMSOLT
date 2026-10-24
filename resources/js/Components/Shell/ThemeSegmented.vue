@@ -25,7 +25,7 @@ const CHOICES = [
             role="radio"
             :aria-checked="preference === choice.value"
             :title="$t(choice.label)"
-            class="flex min-h-11 flex-col items-center justify-center gap-0.5 rounded-md px-1 py-1 text-xs font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyan-400/60"
+            class="flex min-h-11 flex-col items-center justify-center gap-0.5 rounded-md px-1 py-1 text-xs font-medium transition-colors focus-visible:outline-hidden focus-visible:ring-2 focus-visible:ring-cyan-400/60"
             :class="preference === choice.value ? 'bg-cyan-500/15 text-cyan-300' : 'text-slate-400 hover:bg-white/5 hover:text-white'"
             @click="setTheme(choice.value)"
         >

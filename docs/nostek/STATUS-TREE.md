@@ -46,6 +46,9 @@ Nostek-NMSOLT — STANDALONE NETWORK PLATFORM / API PROVIDER
 |   TRF-4 live per-ONT traffic card on the ONU page via read-only CLI
 +-- WRITE-UI-1 [SOURCE PASS, PR #40 merged] admin switch for device writes in the UI
 |   (env false = hard off, admin = UI decides; global + timer, channel olt/acs, per-OLT block, audit)
++-- UI-T1 [SOURCE PASS, PR open] redesign foundation: Tailwind v4 (CSS-first @theme), 23 semantic
+|   tokens (dark + light), shadcn-vue style kit on Reka UI (Components/ui), no visual change to
+|   existing pages (64 before/after screenshots); page redesign follows the owner's direction choice
 +-- NMS-08 [BLOCKED] API v1 read-only + OpenAPI
 |   +-- stable IDs, freshness, pagination, scopes, redaction, rate limits
 +-- NMS-09 [BLOCKED] Maung /nosteknmsolt thin consumer

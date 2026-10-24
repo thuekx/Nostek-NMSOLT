@@ -23,7 +23,7 @@ const filled = computed(() => Math.max(0, Math.min(100, Number(props.percent) ||
 </script>
 
 <template>
-    <div class="relative mx-auto aspect-square w-full max-w-[13rem]">
+    <div class="relative mx-auto aspect-square w-full max-w-52">
         <svg viewBox="0 0 200 200" class="h-full w-full" role="img" :aria-label="label || undefined">
             <path :d="ARC" fill="none" stroke-width="16" stroke-linecap="round" class="stroke-slate-400/15" />
             <path

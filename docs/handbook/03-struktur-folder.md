@@ -19,7 +19,7 @@ package.json / lock        Dependensi JS (`npm test` = Vitest)
 go.mod / go.sum            Modul Go untuk SNMP poller
 vite.config.js             Build frontend (emptyOutDir:false → chunk lama disimpan; chunk ikon `vendor-icons`)
 vitest.config.js           Konfigurasi Vitest (tests/js/*.spec.js)
-tailwind.config.js / tailwind.tokens.mjs   Tailwind + token warna tema
+tailwind.tokens.mjs                      daftar token warna tema (Tailwind v4: @theme di app.css)
 phpunit.xml                Konfigurasi test (SQLite in-memory)
 install.sh                 Deploy satu perintah di Ubuntu bersih (supervisor, nginx, Go poller, …)
 Dockerfile / docker-compose.yml / docker/   Deploy "appliance" (lihat 18)

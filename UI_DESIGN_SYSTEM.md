@@ -127,8 +127,8 @@ Seluruh warna aplikasi adalah CSS custom property yang nilainya ditetapkan per t
 adalah bawaan; pengguna memilih Gelap / Terang / Ikuti Sistem.
 
 
-- `tailwind.tokens.mjs` (daftar nama) + `tailwind.config.js` memetakan seluruh ramp ke
-  `rgb(var(--nos-<ramp>-<stop>) / <alpha-value>)`; nilainya di `resources/css/app.css` pada blok
+- `tailwind.tokens.mjs` (daftar nama) + blok `@theme` di `resources/css/app.css` (Tailwind v4,
+  sejak UI-T1) memetakan seluruh ramp ke `--color-<nama>: rgb(var(--nos-<nama>))`; nilainya di `resources/css/app.css` pada blok
   `[data-theme="dark"]` dan `[data-theme="light"]`. Dijaga `tests/Feature/ThemeTokenTest`.
 - Server: `App\Support\Theme` (kolom `users.theme` → cookie `nos_theme` → bawaan gelap),
   `<html data-theme>` dari `AppServiceProvider::bootTheme`, skrip `system` di `<head>` ber-nonce CSP.
@@ -176,6 +176,30 @@ bukan `themeRgb`.
 - Stop **500/600 setiap ramp aksen dipatok** sama di kedua tema; seri status grafik boleh heks 500.
 - `backdrop-filter` **dimatikan untuk semua elemen di tema terang** (aturan global di `app.css`).
 - Lihat halaman di **kedua tema** dan di lebar 360 px sebelum selesai.
+
+## 3a-2. FONDASI BARU (UI-T1, Okt 2026): TOKEN SEMANTIK + KOMPONEN `ui/`
+
+Persiapan perombakan tampilan. Halaman lama tetap memakai ramp dan kelas di bawah sampai
+dimigrasi per kelompok halaman; **halaman atau komponen baru memakai fondasi ini**.
+
+- **Tailwind v4** lewat `@tailwindcss/vite` (tanpa `tailwind.config.js` dan PostCSS). Konfigurasi
+  ada di `resources/css/app.css`: `@import 'tailwindcss'`, `@plugin '@tailwindcss/forms'`,
+  `@custom-variant dark`, `@theme`.
+- **Token semantik** (`SEMANTIC` di `tailwind.tokens.mjs`): peran, bukan warna. `background`,
+  `foreground`, `card`, `popover`, `primary`, `secondary`, `muted`, `accent`, `destructive`,
+  `success`, `warning` (masing-masing dengan `-foreground`), `border`, `input`, `ring`.
+  Kelasnya `bg-card`, `text-muted-foreground`, `border-border`, `bg-success/10`. Nilai per tema
+  di blok `[data-theme]` yang sama; `ThemeTokenTest` menjaga setiap token punya nilai di kedua
+  tema dan punya `--color-*` di `@theme`.
+- **Komponen** `resources/js/Components/ui/*` bergaya shadcn-vue di atas **Reka UI**: `button`,
+  `badge`, `card`, `input`, `label`, `separator`, `skeleton`, `table`, `tabs`, `dialog`, `tooltip`.
+  Impor dari folder (`import { Button } from '@/Components/ui/button'`). Gabung kelas dengan
+  `cn()` dari `@/lib/utils`. Tes: `tests/js/uiKit.spec.js`.
+- `Button` punya satu elemen akar, jadi `v-device-write` (WRITE-UI-1) dipasang langsung:
+  `<Button v-device-write variant="destructive">`.
+- Warna status (success/warning/destructive) hanya untuk status, bukan hiasan. Status basi atau
+  tidak diketahui tidak pernah memakai `success`.
+- Teks UI tetap lewat `vue-i18n` (`resources/js/lang/{id,en}.json`).
 
 ## 3b. TAMPILAN BAKU KOMPONEN
 

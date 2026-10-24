@@ -51,7 +51,7 @@ const save = () => {
             v-model="draft"
             type="text"
             maxlength="64"
-            class="nos-input w-full min-w-[9rem] max-w-[18rem] text-xs"
+            class="nos-input w-full min-w-36 max-w-[18rem] text-xs"
             :placeholder="$t('portlabel.placeholder')"
             :disabled="busy"
             @keyup.enter="save"
@@ -59,7 +59,7 @@ const save = () => {
         />
         <button
             type="button"
-            class="rounded p-1 text-emerald-400 transition hover:bg-emerald-500/10 hover:text-emerald-300 disabled:opacity-50"
+            class="rounded-sm p-1 text-emerald-400 transition hover:bg-emerald-500/10 hover:text-emerald-300 disabled:opacity-50"
             :title="$t('common.save')"
             :disabled="busy"
             @click="save"
@@ -68,7 +68,7 @@ const save = () => {
         </button>
         <button
             type="button"
-            class="rounded p-1 text-slate-400 transition hover:bg-white/5 hover:text-white disabled:opacity-50"
+            class="rounded-sm p-1 text-slate-400 transition hover:bg-white/5 hover:text-white disabled:opacity-50"
             :title="$t('common.cancel')"
             :disabled="busy"
             @click="editing = false"
@@ -80,14 +80,14 @@ const save = () => {
     <div v-else class="flex items-center gap-1.5">
         <span
             v-if="label"
-            class="break-words"
+            class="wrap-break-word"
             :class="variant === 'header' ? 'text-sm text-slate-300' : 'text-sm text-white'"
         >{{ label }}</span>
         <span v-else class="text-xs text-slate-500">{{ editable ? $t('portlabel.empty') : '-' }}</span>
         <button
             v-if="editable"
             type="button"
-            class="rounded p-1 text-slate-500 transition hover:bg-white/5 hover:text-cyan-300"
+            class="rounded-sm p-1 text-slate-500 transition hover:bg-white/5 hover:text-cyan-300"
             :title="label ? $t('portlabel.edit_title') : $t('portlabel.add_title')"
             @click="start"
         >

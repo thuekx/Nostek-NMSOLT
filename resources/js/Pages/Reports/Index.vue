@@ -209,7 +209,7 @@ const rxClass = (level) => {
                                     </tr>
                                 </thead>
                                 <tbody class="divide-y divide-white/5">
-                                    <tr v-for="(row, idx) in pageItems" :key="idx" class="transition-colors duration-150 hover:bg-white/[0.03]">
+                                    <tr v-for="(row, idx) in pageItems" :key="idx" class="transition-colors duration-150 hover:bg-white/3">
                                         <td v-for="column in report.columns" :key="column.key" class="px-4 py-3 text-xs text-slate-200">
                                             <span v-if="isStatusColumn(column.key)" :class="['inline-flex items-center rounded-full border px-2.5 py-0.5 text-xs font-medium', statusClass(row[column.key])]">
                                                 {{ row[column.key] }}

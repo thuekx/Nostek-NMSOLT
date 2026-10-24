@@ -305,7 +305,7 @@ const onOdpMoved = ({ id, latitude, longitude }) => {
                 <!-- Kartu detail pin ONU — menempel tepat di atas pin, maks setinggi peta -->
                 <div
                     v-if="selectedPin && cardPos"
-                    class="nos-pin-popup absolute z-[500] w-72"
+                    class="nos-pin-popup absolute z-500 w-72"
                     :style="cardStyle"
                 >
                     <div ref="pinCardEl" class="overflow-y-auto overscroll-contain rounded-2xl" :style="{ maxHeight: cardMaxHeight }">
@@ -318,7 +318,7 @@ const onOdpMoved = ({ id, latitude, longitude }) => {
                      daftar ONU anggota; dibatasi lebar layar supaya tak meluber di ponsel. -->
                 <div
                     v-if="selectedOdp && odpCardPos"
-                    class="nos-pin-popup absolute z-[500] w-80 max-w-[calc(100vw-1.5rem)]"
+                    class="nos-pin-popup absolute z-500 w-80 max-w-[calc(100vw-1.5rem)]"
                     :style="odpCardStyle"
                 >
                     <div ref="odpCardEl" class="overflow-y-auto overscroll-contain rounded-2xl" :style="{ maxHeight: cardMaxHeight }">
@@ -333,8 +333,8 @@ const onOdpMoved = ({ id, latitude, longitude }) => {
                 </div>
 
                 <!-- Empty hint -->
-                <div v-if="!pins.length && !odps.length && !addMode" class="pointer-events-none absolute inset-x-0 bottom-6 z-[400] flex justify-center">
-                    <div class="pointer-events-auto flex items-center gap-2 rounded-full border border-white/10 bg-slate-900/85 px-4 py-2 text-sm text-slate-300 backdrop-blur">
+                <div v-if="!pins.length && !odps.length && !addMode" class="pointer-events-none absolute inset-x-0 bottom-6 z-400 flex justify-center">
+                    <div class="pointer-events-auto flex items-center gap-2 rounded-full border border-white/10 bg-slate-900/85 px-4 py-2 text-sm text-slate-300 backdrop-blur-sm">
                         <MapPin class="h-4 w-4 text-cyan-400" />
                         {{ $t('map.empty_before') }} <button type="button" class="font-semibold text-cyan-300 underline" @click="toggleAddMode">{{ $t('map.add_pin') }}</button> {{ $t('map.empty_after') }}
                     </div>

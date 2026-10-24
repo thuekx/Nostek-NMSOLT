@@ -46,9 +46,9 @@ const countColorMap = {
             <li
                 v-for="item in items"
                 :key="item.key"
-                class="flex items-center gap-3 rounded-xl px-2 py-2.5 transition-colors hover:bg-white/[0.03]"
+                class="flex items-center gap-3 rounded-xl px-2 py-2.5 transition-colors hover:bg-white/3"
             >
-                <span :class="accentMap[item.key]" class="!h-9 !w-9">
+                <span :class="accentMap[item.key]" class="h-9! w-9!">
                     <component :is="iconMap[item.key]" class="h-4 w-4" />
                 </span>
                 <div class="min-w-0 flex-1">

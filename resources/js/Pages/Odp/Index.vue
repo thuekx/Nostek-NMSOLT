@@ -384,7 +384,7 @@ const mapHref = (odp) =>
                                 v-model="search"
                                 type="text"
                                 :placeholder="$t('odp.search_placeholder')"
-                                class="nos-filter-control !pl-9 !pr-9"
+                                class="nos-filter-control pl-9! pr-9!"
                             />
                             <button
                                 v-if="search"
@@ -451,7 +451,7 @@ const mapHref = (odp) =>
                                 <div class="nos-mobile-card-header">
                                     <div class="min-w-0">
                                         <h4 class="nos-mobile-card-title flex items-center gap-1.5">
-                                            <span class="inline-block h-2.5 w-2.5 shrink-0 rounded-sm ring-1 ring-slate-400/70" :style="{ background: odpColor(odp) }"></span>
+                                            <span class="inline-block h-2.5 w-2.5 shrink-0 rounded-xs ring-1 ring-slate-400/70" :style="{ background: odpColor(odp) }"></span>
                                             {{ odp.name }}
                                         </h4>
                                         <p class="nos-mobile-card-subtitle">{{ odp.olt_name }} · {{ $t('odp.col_port') }} {{ portLabel(odp) }}</p>
@@ -504,11 +504,11 @@ const mapHref = (odp) =>
                                     </tr>
                                 </thead>
                                 <tbody class="divide-y divide-white/5">
-                                    <tr v-for="odp in pagedOdps" :key="odp.id" class="transition-colors duration-150 hover:bg-white/[0.03]">
+                                    <tr v-for="odp in pagedOdps" :key="odp.id" class="transition-colors duration-150 hover:bg-white/3">
                                         <td class="px-4 py-3 font-medium text-white">
                                             <span class="flex items-center gap-2">
                                                 <!-- Titik warna = warna pin ODP ini di peta. -->
-                                                <span class="inline-block h-2.5 w-2.5 shrink-0 rounded-sm ring-1 ring-slate-400/70" :style="{ background: odpColor(odp) }"></span>
+                                                <span class="inline-block h-2.5 w-2.5 shrink-0 rounded-xs ring-1 ring-slate-400/70" :style="{ background: odpColor(odp) }"></span>
                                                 <img
                                                     v-if="odp.photo_url"
                                                     :src="odp.photo_url"
@@ -688,7 +688,7 @@ const mapHref = (odp) =>
                             {{ $t('odp.connected_title', { count: connected.length }) }}
                         </h4>
                         <p v-if="!connected.length" class="mt-2 text-sm text-slate-500">{{ $t('odp.connected_empty') }}</p>
-                        <ul v-else class="mt-2 max-h-[22rem] space-y-1.5 overflow-y-auto pr-1">
+                        <ul v-else class="mt-2 max-h-88 space-y-1.5 overflow-y-auto pr-1">
                             <li
                                 v-for="onu in connected"
                                 :key="`c-${onu.slot}-${onu.port}-${onu.onu_id}`"
@@ -697,7 +697,7 @@ const mapHref = (odp) =>
                                 <component :is="onu.online ? Wifi : WifiOff" class="h-4 w-4 flex-shrink-0" :class="onu.online ? 'text-emerald-400' : 'text-red-400'" />
                                 <div class="min-w-0 flex-1">
                                     <p
-                                        class="break-words text-sm leading-snug text-slate-100"
+                                        class="wrap-break-word text-sm leading-snug text-slate-100"
                                         :title="onu.name || $t('odp.onu_unnamed')"
                                     >
                                         {{ onu.name || $t('odp.onu_unnamed') }}
@@ -722,11 +722,11 @@ const mapHref = (odp) =>
                                 v-model="candidateSearch"
                                 type="text"
                                 :placeholder="$t('odp.add_onu_search')"
-                                class="nos-input block w-full !pl-9"
+                                class="nos-input block w-full pl-9!"
                             />
                         </div>
                         <p v-if="!candidates.length" class="mt-2 text-sm text-slate-500">{{ $t('odp.add_onu_empty') }}</p>
-                        <ul v-else class="mt-2 max-h-[19rem] space-y-1.5 overflow-y-auto pr-1">
+                        <ul v-else class="mt-2 max-h-76 space-y-1.5 overflow-y-auto pr-1">
                             <li
                                 v-for="onu in candidates"
                                 :key="`a-${onu.slot}-${onu.port}-${onu.onu_id}`"
@@ -735,7 +735,7 @@ const mapHref = (odp) =>
                                 <component :is="onu.online ? Wifi : WifiOff" class="h-4 w-4 flex-shrink-0" :class="onu.online ? 'text-emerald-400' : 'text-red-400'" />
                                 <div class="min-w-0 flex-1">
                                     <p
-                                        class="break-words text-sm leading-snug text-slate-100"
+                                        class="wrap-break-word text-sm leading-snug text-slate-100"
                                         :title="onu.name || $t('odp.onu_unnamed')"
                                     >
                                         {{ onu.name || $t('odp.onu_unnamed') }}

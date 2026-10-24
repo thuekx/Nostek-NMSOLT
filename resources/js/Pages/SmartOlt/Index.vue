@@ -280,7 +280,7 @@ const pollStatus = (olt) => {
                 <div v-show="activeTab === 'zte'" class="nos-glass-panel">
                     <!-- Card header -->
                     <div class="flex items-center gap-3 border-b border-white/10 px-4 py-4 sm:px-6">
-                        <span class="nos-circle-sky !h-10 !w-10">
+                        <span class="nos-circle-sky h-10! w-10!">
                             <Cable class="h-5 w-5" />
                         </span>
                         <div>
@@ -418,7 +418,7 @@ const pollStatus = (olt) => {
                                 <tr
                                     v-for="olt in olts"
                                     :key="olt.id"
-                                    class="transition-colors duration-150 hover:bg-white/[0.03]"
+                                    class="transition-colors duration-150 hover:bg-white/3"
                                 >
                                     <td class="px-4 py-3">
                                         <div class="flex items-center gap-1.5 font-medium text-white">
@@ -533,7 +533,7 @@ const pollStatus = (olt) => {
                 <div v-show="isNonZteTab" class="nos-glass-panel">
                     <!-- Card header -->
                     <div class="flex items-center gap-3 border-b border-white/10 px-4 py-4 sm:px-6">
-                        <span class="nos-circle-sky !h-10 !w-10">
+                        <span class="nos-circle-sky h-10! w-10!">
                             <component :is="nonZteIcon" class="h-5 w-5" />
                         </span>
                         <div>
@@ -669,7 +669,7 @@ const pollStatus = (olt) => {
                                 <tr
                                     v-for="olt in nonZteOlts"
                                     :key="olt.id"
-                                    class="transition-colors duration-150 hover:bg-white/[0.03]"
+                                    class="transition-colors duration-150 hover:bg-white/3"
                                 >
                                     <td class="px-4 py-3">
                                         <div class="flex items-center gap-1.5 font-medium text-white">

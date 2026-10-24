@@ -65,7 +65,7 @@ const ipHref = (ip) => (IPV4.test(ip ?? '') ? `http://${ip}` : null);
                         :href="ipHref(acs.ip)"
                         target="_blank"
                         rel="noopener noreferrer"
-                        class="rounded text-cyan-300 underline decoration-cyan-500/40 underline-offset-2 hover:text-cyan-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyan-400/60"
+                        class="rounded-sm text-cyan-300 underline decoration-cyan-500/40 underline-offset-2 hover:text-cyan-200 focus-visible:outline-hidden focus-visible:ring-2 focus-visible:ring-cyan-400/60"
                         :title="$t('acspin.ip_open')"
                         @click.stop
                     >{{ acs.ip }}</a>

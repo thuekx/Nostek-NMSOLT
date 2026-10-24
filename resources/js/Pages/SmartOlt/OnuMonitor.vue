@@ -281,13 +281,13 @@ const phaseDotClass = (onu) => {
                                 v-model="search"
                                 type="text"
                                 :placeholder="$t('onumonitor.search_placeholder')"
-                                class="nos-filter-control !pl-9 !pr-9"
+                                class="nos-filter-control pl-9! pr-9!"
                             />
                             <button v-if="search" type="button" class="absolute right-2.5 top-1/2 -translate-y-1/2 text-slate-500 hover:text-white" :title="$t('common.clear')" @click="search = ''">
                                 <X class="h-4 w-4" />
                             </button>
                         </div>
-                        <select v-model="oltFilter" class="nos-filter-control w-full sm:w-auto" :class="hasOlt ? '' : '!border-cyan-500/50 !bg-cyan-500/10'" @change="onOltChange">
+                        <select v-model="oltFilter" class="nos-filter-control w-full sm:w-auto" :class="hasOlt ? '' : 'border-cyan-500/50! bg-cyan-500/10!'" @change="onOltChange">
                             <option value="" disabled>{{ $t('onumonitor.select_olt_option') }}</option>
                             <option v-for="olt in olts" :key="olt.id" :value="olt.id">{{ olt.name }}</option>
                         </select>
@@ -497,7 +497,7 @@ const phaseDotClass = (onu) => {
                                         <tr
                                             v-for="onu in pagedOnus"
                                             :key="`${onu.olt_id}-${onu.slot}-${onu.port}-${onu.onu_id}`"
-                                            class="transition-colors duration-150 hover:bg-white/[0.03]"
+                                            class="transition-colors duration-150 hover:bg-white/3"
                                         >
                                             <td class="px-4 py-3 text-xs text-slate-300">{{ onu.olt_name }}</td>
                                             <td class="px-4 py-3">

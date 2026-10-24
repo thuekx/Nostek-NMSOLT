@@ -128,7 +128,7 @@ onBeforeUnmount(() => observer?.disconnect());
                             <Sparkles class="h-3.5 w-3.5" /> {{ $t('panduan.hero_badge') }}
                         </span>
                         <h1 class="mt-3 text-2xl font-bold tracking-tight sm:text-3xl">
-                            <span class="bg-gradient-to-r from-white via-cyan-100 to-sky-300 bg-clip-text text-transparent">{{ $t('panduan.hero_title', { app: appName }) }}</span>
+                            <span class="bg-linear-to-r from-white via-cyan-100 to-sky-300 bg-clip-text text-transparent">{{ $t('panduan.hero_title', { app: appName }) }}</span>
                         </h1>
                         <p class="mt-2 max-w-2xl text-sm leading-relaxed text-slate-300 sm:text-base">
                             {{ $t('panduan.hero_desc') }}
@@ -141,7 +141,7 @@ onBeforeUnmount(() => observer?.disconnect());
                                 <Users class="h-3.5 w-3.5 text-emerald-300" /> {{ $t('panduan.hero_roles') }}
                             </span>
                             <span class="hidden items-center gap-1.5 rounded-lg border border-white/10 bg-white/5 px-3 py-1.5 text-xs text-slate-200 sm:inline-flex">
-                                <kbd class="rounded border border-white/15 bg-slate-800 px-1.5 py-0.5 font-mono text-[10px] text-slate-300">⌘K</kbd> {{ $t('panduan.hero_search') }}
+                                <kbd class="rounded-sm border border-white/15 bg-slate-800 px-1.5 py-0.5 font-mono text-[10px] text-slate-300">⌘K</kbd> {{ $t('panduan.hero_search') }}
                             </span>
                         </div>
                     </div>
@@ -181,7 +181,7 @@ onBeforeUnmount(() => observer?.disconnect());
                             class="nos-spotlight nos-ring group relative scroll-mt-24 overflow-hidden rounded-2xl border border-white/10 bg-slate-900/40 shadow-lg shadow-black/30 backdrop-blur-xl transition-all duration-200 hover:border-white/20"
                         >
                             <!-- Aksen atas per-bagian -->
-                            <div class="h-1 bg-gradient-to-r to-transparent" :class="accentOf(sec).bar"></div>
+                            <div class="h-1 bg-linear-to-r to-transparent" :class="accentOf(sec).bar"></div>
 
                             <div class="flex items-center gap-3.5 border-b border-white/10 px-5 py-4 sm:px-6">
                                 <div class="flex h-11 w-11 flex-shrink-0 items-center justify-center rounded-xl ring-1" :class="accentOf(sec).tile">

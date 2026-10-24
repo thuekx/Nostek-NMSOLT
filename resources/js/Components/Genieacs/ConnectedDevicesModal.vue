@@ -187,7 +187,7 @@ const activeWifiCount = computed(() =>
                                 </tr>
                             </thead>
                             <tbody class="divide-y divide-white/5">
-                                <tr v-for="(h, i) in visibleHosts" :key="i" class="hover:bg-white/[0.03]">
+                                <tr v-for="(h, i) in visibleHosts" :key="i" class="hover:bg-white/3">
                                     <td class="px-4 py-2.5 text-slate-200">{{ h.hostname || '—' }}</td>
                                     <td class="px-4 py-2.5 font-mono text-xs text-slate-300">{{ h.ip_address || '—' }}</td>
                                     <td class="px-4 py-2.5 font-mono text-xs text-slate-400">{{ h.mac_address || '—' }}</td>

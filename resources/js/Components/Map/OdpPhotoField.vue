@@ -100,7 +100,7 @@ const remove = async () => {
         </button>
         <div
             v-else
-            class="flex flex-col items-center justify-center gap-1 rounded-xl border border-dashed border-white/15 bg-white/[0.03] text-slate-500"
+            class="flex flex-col items-center justify-center gap-1 rounded-xl border border-dashed border-white/15 bg-white/3 text-slate-500"
             :class="compact ? 'h-20' : 'h-32'"
         >
             <ImageOff class="h-5 w-5" />

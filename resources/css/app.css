@@ -1,194 +1,1675 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+@import 'tailwindcss';
+@import 'tw-animate-css';
+
+@plugin '@tailwindcss/forms';
+
+@source '../../vendor/laravel/framework/src/Illuminate/Pagination/resources/views/*.blade.php';
+
+@custom-variant dark (&:where([data-theme="dark"], [data-theme="dark"] *));
+
+@theme {
+  --font-sans:
+    Manrope, ui-sans-serif, system-ui, sans-serif, 'Apple Color Emoji',
+    'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
+
+  --color-slate-50: rgb(var(--nos-slate-50));
+  --color-slate-100: rgb(var(--nos-slate-100));
+  --color-slate-200: rgb(var(--nos-slate-200));
+  --color-slate-300: rgb(var(--nos-slate-300));
+  --color-slate-400: rgb(var(--nos-slate-400));
+  --color-slate-500: rgb(var(--nos-slate-500));
+  --color-slate-600: rgb(var(--nos-slate-600));
+  --color-slate-700: rgb(var(--nos-slate-700));
+  --color-slate-800: rgb(var(--nos-slate-800));
+  --color-slate-900: rgb(var(--nos-slate-900));
+  --color-slate-950: rgb(var(--nos-slate-950));
+
+  --color-gray-50: rgb(var(--nos-gray-50));
+  --color-gray-100: rgb(var(--nos-gray-100));
+  --color-gray-200: rgb(var(--nos-gray-200));
+  --color-gray-300: rgb(var(--nos-gray-300));
+  --color-gray-400: rgb(var(--nos-gray-400));
+  --color-gray-500: rgb(var(--nos-gray-500));
+  --color-gray-600: rgb(var(--nos-gray-600));
+  --color-gray-700: rgb(var(--nos-gray-700));
+  --color-gray-800: rgb(var(--nos-gray-800));
+  --color-gray-900: rgb(var(--nos-gray-900));
+  --color-gray-950: rgb(var(--nos-gray-950));
+
+  --color-zinc-50: rgb(var(--nos-zinc-50));
+  --color-zinc-100: rgb(var(--nos-zinc-100));
+  --color-zinc-200: rgb(var(--nos-zinc-200));
+  --color-zinc-300: rgb(var(--nos-zinc-300));
+  --color-zinc-400: rgb(var(--nos-zinc-400));
+  --color-zinc-500: rgb(var(--nos-zinc-500));
+  --color-zinc-600: rgb(var(--nos-zinc-600));
+  --color-zinc-700: rgb(var(--nos-zinc-700));
+  --color-zinc-800: rgb(var(--nos-zinc-800));
+  --color-zinc-900: rgb(var(--nos-zinc-900));
+  --color-zinc-950: rgb(var(--nos-zinc-950));
+
+  --color-neutral-50: rgb(var(--nos-neutral-50));
+  --color-neutral-100: rgb(var(--nos-neutral-100));
+  --color-neutral-200: rgb(var(--nos-neutral-200));
+  --color-neutral-300: rgb(var(--nos-neutral-300));
+  --color-neutral-400: rgb(var(--nos-neutral-400));
+  --color-neutral-500: rgb(var(--nos-neutral-500));
+  --color-neutral-600: rgb(var(--nos-neutral-600));
+  --color-neutral-700: rgb(var(--nos-neutral-700));
+  --color-neutral-800: rgb(var(--nos-neutral-800));
+  --color-neutral-900: rgb(var(--nos-neutral-900));
+  --color-neutral-950: rgb(var(--nos-neutral-950));
+
+  --color-stone-50: rgb(var(--nos-stone-50));
+  --color-stone-100: rgb(var(--nos-stone-100));
+  --color-stone-200: rgb(var(--nos-stone-200));
+  --color-stone-300: rgb(var(--nos-stone-300));
+  --color-stone-400: rgb(var(--nos-stone-400));
+  --color-stone-500: rgb(var(--nos-stone-500));
+  --color-stone-600: rgb(var(--nos-stone-600));
+  --color-stone-700: rgb(var(--nos-stone-700));
+  --color-stone-800: rgb(var(--nos-stone-800));
+  --color-stone-900: rgb(var(--nos-stone-900));
+  --color-stone-950: rgb(var(--nos-stone-950));
+
+  --color-red-50: rgb(var(--nos-red-50));
+  --color-red-100: rgb(var(--nos-red-100));
+  --color-red-200: rgb(var(--nos-red-200));
+  --color-red-300: rgb(var(--nos-red-300));
+  --color-red-400: rgb(var(--nos-red-400));
+  --color-red-500: rgb(var(--nos-red-500));
+  --color-red-600: rgb(var(--nos-red-600));
+  --color-red-700: rgb(var(--nos-red-700));
+  --color-red-800: rgb(var(--nos-red-800));
+  --color-red-900: rgb(var(--nos-red-900));
+  --color-red-950: rgb(var(--nos-red-950));
+
+  --color-orange-50: rgb(var(--nos-orange-50));
+  --color-orange-100: rgb(var(--nos-orange-100));
+  --color-orange-200: rgb(var(--nos-orange-200));
+  --color-orange-300: rgb(var(--nos-orange-300));
+  --color-orange-400: rgb(var(--nos-orange-400));
+  --color-orange-500: rgb(var(--nos-orange-500));
+  --color-orange-600: rgb(var(--nos-orange-600));
+  --color-orange-700: rgb(var(--nos-orange-700));
+  --color-orange-800: rgb(var(--nos-orange-800));
+  --color-orange-900: rgb(var(--nos-orange-900));
+  --color-orange-950: rgb(var(--nos-orange-950));
+
+  --color-amber-50: rgb(var(--nos-amber-50));
+  --color-amber-100: rgb(var(--nos-amber-100));
+  --color-amber-200: rgb(var(--nos-amber-200));
+  --color-amber-300: rgb(var(--nos-amber-300));
+  --color-amber-400: rgb(var(--nos-amber-400));
+  --color-amber-500: rgb(var(--nos-amber-500));
+  --color-amber-600: rgb(var(--nos-amber-600));
+  --color-amber-700: rgb(var(--nos-amber-700));
+  --color-amber-800: rgb(var(--nos-amber-800));
+  --color-amber-900: rgb(var(--nos-amber-900));
+  --color-amber-950: rgb(var(--nos-amber-950));
+
+  --color-yellow-50: rgb(var(--nos-yellow-50));
+  --color-yellow-100: rgb(var(--nos-yellow-100));
+  --color-yellow-200: rgb(var(--nos-yellow-200));
+  --color-yellow-300: rgb(var(--nos-yellow-300));
+  --color-yellow-400: rgb(var(--nos-yellow-400));
+  --color-yellow-500: rgb(var(--nos-yellow-500));
+  --color-yellow-600: rgb(var(--nos-yellow-600));
+  --color-yellow-700: rgb(var(--nos-yellow-700));
+  --color-yellow-800: rgb(var(--nos-yellow-800));
+  --color-yellow-900: rgb(var(--nos-yellow-900));
+  --color-yellow-950: rgb(var(--nos-yellow-950));
+
+  --color-lime-50: rgb(var(--nos-lime-50));
+  --color-lime-100: rgb(var(--nos-lime-100));
+  --color-lime-200: rgb(var(--nos-lime-200));
+  --color-lime-300: rgb(var(--nos-lime-300));
+  --color-lime-400: rgb(var(--nos-lime-400));
+  --color-lime-500: rgb(var(--nos-lime-500));
+  --color-lime-600: rgb(var(--nos-lime-600));
+  --color-lime-700: rgb(var(--nos-lime-700));
+  --color-lime-800: rgb(var(--nos-lime-800));
+  --color-lime-900: rgb(var(--nos-lime-900));
+  --color-lime-950: rgb(var(--nos-lime-950));
+
+  --color-green-50: rgb(var(--nos-green-50));
+  --color-green-100: rgb(var(--nos-green-100));
+  --color-green-200: rgb(var(--nos-green-200));
+  --color-green-300: rgb(var(--nos-green-300));
+  --color-green-400: rgb(var(--nos-green-400));
+  --color-green-500: rgb(var(--nos-green-500));
+  --color-green-600: rgb(var(--nos-green-600));
+  --color-green-700: rgb(var(--nos-green-700));
+  --color-green-800: rgb(var(--nos-green-800));
+  --color-green-900: rgb(var(--nos-green-900));
+  --color-green-950: rgb(var(--nos-green-950));
+
+  --color-emerald-50: rgb(var(--nos-emerald-50));
+  --color-emerald-100: rgb(var(--nos-emerald-100));
+  --color-emerald-200: rgb(var(--nos-emerald-200));
+  --color-emerald-300: rgb(var(--nos-emerald-300));
+  --color-emerald-400: rgb(var(--nos-emerald-400));
+  --color-emerald-500: rgb(var(--nos-emerald-500));
+  --color-emerald-600: rgb(var(--nos-emerald-600));
+  --color-emerald-700: rgb(var(--nos-emerald-700));
+  --color-emerald-800: rgb(var(--nos-emerald-800));
+  --color-emerald-900: rgb(var(--nos-emerald-900));
+  --color-emerald-950: rgb(var(--nos-emerald-950));
+
+  --color-teal-50: rgb(var(--nos-teal-50));
+  --color-teal-100: rgb(var(--nos-teal-100));
+  --color-teal-200: rgb(var(--nos-teal-200));
+  --color-teal-300: rgb(var(--nos-teal-300));
+  --color-teal-400: rgb(var(--nos-teal-400));
+  --color-teal-500: rgb(var(--nos-teal-500));
+  --color-teal-600: rgb(var(--nos-teal-600));
+  --color-teal-700: rgb(var(--nos-teal-700));
+  --color-teal-800: rgb(var(--nos-teal-800));
+  --color-teal-900: rgb(var(--nos-teal-900));
+  --color-teal-950: rgb(var(--nos-teal-950));
+
+  --color-cyan-50: rgb(var(--nos-cyan-50));
+  --color-cyan-100: rgb(var(--nos-cyan-100));
+  --color-cyan-200: rgb(var(--nos-cyan-200));
+  --color-cyan-300: rgb(var(--nos-cyan-300));
+  --color-cyan-400: rgb(var(--nos-cyan-400));
+  --color-cyan-500: rgb(var(--nos-cyan-500));
+  --color-cyan-600: rgb(var(--nos-cyan-600));
+  --color-cyan-700: rgb(var(--nos-cyan-700));
+  --color-cyan-800: rgb(var(--nos-cyan-800));
+  --color-cyan-900: rgb(var(--nos-cyan-900));
+  --color-cyan-950: rgb(var(--nos-cyan-950));
+
+  --color-sky-50: rgb(var(--nos-sky-50));
+  --color-sky-100: rgb(var(--nos-sky-100));
+  --color-sky-200: rgb(var(--nos-sky-200));
+  --color-sky-300: rgb(var(--nos-sky-300));
+  --color-sky-400: rgb(var(--nos-sky-400));
+  --color-sky-500: rgb(var(--nos-sky-500));
+  --color-sky-600: rgb(var(--nos-sky-600));
+  --color-sky-700: rgb(var(--nos-sky-700));
+  --color-sky-800: rgb(var(--nos-sky-800));
+  --color-sky-900: rgb(var(--nos-sky-900));
+  --color-sky-950: rgb(var(--nos-sky-950));
+
+  --color-blue-50: rgb(var(--nos-blue-50));
+  --color-blue-100: rgb(var(--nos-blue-100));
+  --color-blue-200: rgb(var(--nos-blue-200));
+  --color-blue-300: rgb(var(--nos-blue-300));
+  --color-blue-400: rgb(var(--nos-blue-400));
+  --color-blue-500: rgb(var(--nos-blue-500));
+  --color-blue-600: rgb(var(--nos-blue-600));
+  --color-blue-700: rgb(var(--nos-blue-700));
+  --color-blue-800: rgb(var(--nos-blue-800));
+  --color-blue-900: rgb(var(--nos-blue-900));
+  --color-blue-950: rgb(var(--nos-blue-950));
+
+  --color-indigo-50: rgb(var(--nos-indigo-50));
+  --color-indigo-100: rgb(var(--nos-indigo-100));
+  --color-indigo-200: rgb(var(--nos-indigo-200));
+  --color-indigo-300: rgb(var(--nos-indigo-300));
+  --color-indigo-400: rgb(var(--nos-indigo-400));
+  --color-indigo-500: rgb(var(--nos-indigo-500));
+  --color-indigo-600: rgb(var(--nos-indigo-600));
+  --color-indigo-700: rgb(var(--nos-indigo-700));
+  --color-indigo-800: rgb(var(--nos-indigo-800));
+  --color-indigo-900: rgb(var(--nos-indigo-900));
+  --color-indigo-950: rgb(var(--nos-indigo-950));
+
+  --color-violet-50: rgb(var(--nos-violet-50));
+  --color-violet-100: rgb(var(--nos-violet-100));
+  --color-violet-200: rgb(var(--nos-violet-200));
+  --color-violet-300: rgb(var(--nos-violet-300));
+  --color-violet-400: rgb(var(--nos-violet-400));
+  --color-violet-500: rgb(var(--nos-violet-500));
+  --color-violet-600: rgb(var(--nos-violet-600));
+  --color-violet-700: rgb(var(--nos-violet-700));
+  --color-violet-800: rgb(var(--nos-violet-800));
+  --color-violet-900: rgb(var(--nos-violet-900));
+  --color-violet-950: rgb(var(--nos-violet-950));
+
+  --color-purple-50: rgb(var(--nos-purple-50));
+  --color-purple-100: rgb(var(--nos-purple-100));
+  --color-purple-200: rgb(var(--nos-purple-200));
+  --color-purple-300: rgb(var(--nos-purple-300));
+  --color-purple-400: rgb(var(--nos-purple-400));
+  --color-purple-500: rgb(var(--nos-purple-500));
+  --color-purple-600: rgb(var(--nos-purple-600));
+  --color-purple-700: rgb(var(--nos-purple-700));
+  --color-purple-800: rgb(var(--nos-purple-800));
+  --color-purple-900: rgb(var(--nos-purple-900));
+  --color-purple-950: rgb(var(--nos-purple-950));
+
+  --color-fuchsia-50: rgb(var(--nos-fuchsia-50));
+  --color-fuchsia-100: rgb(var(--nos-fuchsia-100));
+  --color-fuchsia-200: rgb(var(--nos-fuchsia-200));
+  --color-fuchsia-300: rgb(var(--nos-fuchsia-300));
+  --color-fuchsia-400: rgb(var(--nos-fuchsia-400));
+  --color-fuchsia-500: rgb(var(--nos-fuchsia-500));
+  --color-fuchsia-600: rgb(var(--nos-fuchsia-600));
+  --color-fuchsia-700: rgb(var(--nos-fuchsia-700));
+  --color-fuchsia-800: rgb(var(--nos-fuchsia-800));
+  --color-fuchsia-900: rgb(var(--nos-fuchsia-900));
+  --color-fuchsia-950: rgb(var(--nos-fuchsia-950));
+
+  --color-pink-50: rgb(var(--nos-pink-50));
+  --color-pink-100: rgb(var(--nos-pink-100));
+  --color-pink-200: rgb(var(--nos-pink-200));
+  --color-pink-300: rgb(var(--nos-pink-300));
+  --color-pink-400: rgb(var(--nos-pink-400));
+  --color-pink-500: rgb(var(--nos-pink-500));
+  --color-pink-600: rgb(var(--nos-pink-600));
+  --color-pink-700: rgb(var(--nos-pink-700));
+  --color-pink-800: rgb(var(--nos-pink-800));
+  --color-pink-900: rgb(var(--nos-pink-900));
+  --color-pink-950: rgb(var(--nos-pink-950));
+
+  --color-rose-50: rgb(var(--nos-rose-50));
+  --color-rose-100: rgb(var(--nos-rose-100));
+  --color-rose-200: rgb(var(--nos-rose-200));
+  --color-rose-300: rgb(var(--nos-rose-300));
+  --color-rose-400: rgb(var(--nos-rose-400));
+  --color-rose-500: rgb(var(--nos-rose-500));
+  --color-rose-600: rgb(var(--nos-rose-600));
+  --color-rose-700: rgb(var(--nos-rose-700));
+  --color-rose-800: rgb(var(--nos-rose-800));
+  --color-rose-900: rgb(var(--nos-rose-900));
+  --color-rose-950: rgb(var(--nos-rose-950));
+
+  --color-white: rgb(var(--nos-white));
+  --color-black: rgb(var(--nos-black));
+  --color-paper: rgb(var(--nos-paper));
+  --color-onaccent: rgb(var(--nos-onaccent));
+
+  --color-surface-1: rgb(var(--nos-surface-1));
+  --color-surface-2: rgb(var(--nos-surface-2));
+  --color-surface-3: rgb(var(--nos-surface-3));
+  --color-surface-hover: rgb(var(--nos-surface-hover));
+
+  --color-canvas-2: rgb(var(--nos-canvas-2));
+  --color-canvas-3: rgb(var(--nos-canvas-3));
+  --color-canvas: rgb(var(--nos-canvas));
+
+  --color-background: rgb(var(--nos-background));
+  --color-foreground: rgb(var(--nos-foreground));
+  --color-card: rgb(var(--nos-card));
+  --color-card-foreground: rgb(var(--nos-card-foreground));
+  --color-popover: rgb(var(--nos-popover));
+  --color-popover-foreground: rgb(var(--nos-popover-foreground));
+  --color-primary: rgb(var(--nos-primary));
+  --color-primary-foreground: rgb(var(--nos-primary-foreground));
+  --color-secondary: rgb(var(--nos-secondary));
+  --color-secondary-foreground: rgb(var(--nos-secondary-foreground));
+  --color-muted: rgb(var(--nos-muted));
+  --color-muted-foreground: rgb(var(--nos-muted-foreground));
+  --color-accent: rgb(var(--nos-accent));
+  --color-accent-foreground: rgb(var(--nos-accent-foreground));
+  --color-destructive: rgb(var(--nos-destructive));
+  --color-destructive-foreground: rgb(var(--nos-destructive-foreground));
+  --color-success: rgb(var(--nos-success));
+  --color-success-foreground: rgb(var(--nos-success-foreground));
+  --color-warning: rgb(var(--nos-warning));
+  --color-warning-foreground: rgb(var(--nos-warning-foreground));
+  --color-border: rgb(var(--nos-border));
+  --color-input: rgb(var(--nos-input));
+  --color-ring: rgb(var(--nos-ring));
+
+  --radius-card: 0.625rem;
+}
 
 /* =====================================================================
-   TOKEN DUA TEMA — sumber kebenaran seluruh warna aplikasi
-   =====================================================================
-   Setiap ramp Tailwind di tailwind.config.js menunjuk ke variabel di sini
-   lewat `rgb(var(--nos-x) / <alpha-value>)`. Mengganti tema = mengganti
-   atribut data-theme di <html>; tidak ada satu pun kelas utilitas yang
-   perlu berubah.
+ TOKEN DUA TEMA — sumber kebenaran seluruh warna aplikasi
+ =====================================================================
+ Setiap ramp Tailwind di blok @theme di atas menunjuk ke variabel di sini
+ lewat `rgb(var(--nos-x))` (opasitas `/70` via color-mix v4). Mengganti tema = mengganti
+ atribut data-theme di <html>; tidak ada satu pun kelas utilitas yang
+ perlu berubah.
 
-   Nilai blok "dark" di bawah ini SAMA PERSIS dengan palet bawaan Tailwind.
-   Itu disengaja: tema gelap yang sudah berjalan harus merender identik
-   setelah migrasi ke token ini.
+ Nilai blok "dark" di bawah ini SAMA PERSIS dengan palet bawaan Tailwind.
+ Itu disengaja: tema gelap yang sudah berjalan harus merender identik
+ setelah migrasi ke token ini.
 
-   Formatnya channel RGB tanpa pembungkus (`15 23 42`, bukan `#0f172a`)
-   supaya modifier opasitas `/70` tetap bekerja.
+ Formatnya channel RGB tanpa pembungkus (`15 23 42`, bukan `#0f172a`)
+ supaya modifier opasitas `/70` tetap bekerja.
 
-   `:where(:root)` ikut dipasang sebagai jaring pengaman: kalau atribut
-   data-theme sempat kosong atau bernilai tak dikenal, variabelnya tetap
-   terisi dan halaman tidak berubah jadi transparan seluruhnya. Dibungkus
-   `:where()` supaya spesifisitasnya nol — blok tema terang di bawah selalu
-   menang, tidak bergantung urutan.
-   ===================================================================== */
+ `:where(:root)` ikut dipasang sebagai jaring pengaman: kalau atribut
+ data-theme sempat kosong atau bernilai tak dikenal, variabelnya tetap
+ terisi dan halaman tidak berubah jadi transparan seluruhnya. Dibungkus
+ `:where()` supaya spesifisitasnya nol — blok tema terang di bawah selalu
+ menang, tidak bergantung urutan.
+ ===================================================================== */
 :where(:root),
 [data-theme="dark"] {
-    /* slate */
-    --nos-slate-50: 248 250 252; --nos-slate-100: 241 245 249; --nos-slate-200: 226 232 240; --nos-slate-300: 203 213 225; --nos-slate-400: 148 163 184; --nos-slate-500: 100 116 139; --nos-slate-600: 71 85 105; --nos-slate-700: 51 65 85; --nos-slate-800: 30 41 59; --nos-slate-900: 15 23 42; --nos-slate-950: 2 6 23;
-    /* gray */
-    --nos-gray-50: 249 250 251; --nos-gray-100: 243 244 246; --nos-gray-200: 229 231 235; --nos-gray-300: 209 213 219; --nos-gray-400: 156 163 175; --nos-gray-500: 107 114 128; --nos-gray-600: 75 85 99; --nos-gray-700: 55 65 81; --nos-gray-800: 31 41 55; --nos-gray-900: 17 24 39; --nos-gray-950: 3 7 18;
-    /* zinc */
-    --nos-zinc-50: 250 250 250; --nos-zinc-100: 244 244 245; --nos-zinc-200: 228 228 231; --nos-zinc-300: 212 212 216; --nos-zinc-400: 161 161 170; --nos-zinc-500: 113 113 122; --nos-zinc-600: 82 82 91; --nos-zinc-700: 63 63 70; --nos-zinc-800: 39 39 42; --nos-zinc-900: 24 24 27; --nos-zinc-950: 9 9 11;
-    /* neutral */
-    --nos-neutral-50: 250 250 250; --nos-neutral-100: 245 245 245; --nos-neutral-200: 229 229 229; --nos-neutral-300: 212 212 212; --nos-neutral-400: 163 163 163; --nos-neutral-500: 115 115 115; --nos-neutral-600: 82 82 82; --nos-neutral-700: 64 64 64; --nos-neutral-800: 38 38 38; --nos-neutral-900: 23 23 23; --nos-neutral-950: 10 10 10;
-    /* stone */
-    --nos-stone-50: 250 250 249; --nos-stone-100: 245 245 244; --nos-stone-200: 231 229 228; --nos-stone-300: 214 211 209; --nos-stone-400: 168 162 158; --nos-stone-500: 120 113 108; --nos-stone-600: 87 83 78; --nos-stone-700: 68 64 60; --nos-stone-800: 41 37 36; --nos-stone-900: 28 25 23; --nos-stone-950: 12 10 9;
-    /* red */
-    --nos-red-50: 254 242 242; --nos-red-100: 254 226 226; --nos-red-200: 254 202 202; --nos-red-300: 252 165 165; --nos-red-400: 248 113 113; --nos-red-500: 239 68 68; --nos-red-600: 220 38 38; --nos-red-700: 185 28 28; --nos-red-800: 153 27 27; --nos-red-900: 127 29 29; --nos-red-950: 69 10 10;
-    /* orange */
-    --nos-orange-50: 255 247 237; --nos-orange-100: 255 237 213; --nos-orange-200: 254 215 170; --nos-orange-300: 253 186 116; --nos-orange-400: 251 146 60; --nos-orange-500: 249 115 22; --nos-orange-600: 234 88 12; --nos-orange-700: 194 65 12; --nos-orange-800: 154 52 18; --nos-orange-900: 124 45 18; --nos-orange-950: 67 20 7;
-    /* amber */
-    --nos-amber-50: 255 251 235; --nos-amber-100: 254 243 199; --nos-amber-200: 253 230 138; --nos-amber-300: 252 211 77; --nos-amber-400: 251 191 36; --nos-amber-500: 245 158 11; --nos-amber-600: 217 119 6; --nos-amber-700: 180 83 9; --nos-amber-800: 146 64 14; --nos-amber-900: 120 53 15; --nos-amber-950: 69 26 3;
-    /* yellow */
-    --nos-yellow-50: 254 252 232; --nos-yellow-100: 254 249 195; --nos-yellow-200: 254 240 138; --nos-yellow-300: 253 224 71; --nos-yellow-400: 250 204 21; --nos-yellow-500: 234 179 8; --nos-yellow-600: 202 138 4; --nos-yellow-700: 161 98 7; --nos-yellow-800: 133 77 14; --nos-yellow-900: 113 63 18; --nos-yellow-950: 66 32 6;
-    /* lime */
-    --nos-lime-50: 247 254 231; --nos-lime-100: 236 252 203; --nos-lime-200: 217 249 157; --nos-lime-300: 190 242 100; --nos-lime-400: 163 230 53; --nos-lime-500: 132 204 22; --nos-lime-600: 101 163 13; --nos-lime-700: 77 124 15; --nos-lime-800: 63 98 18; --nos-lime-900: 54 83 20; --nos-lime-950: 26 46 5;
-    /* green */
-    --nos-green-50: 240 253 244; --nos-green-100: 220 252 231; --nos-green-200: 187 247 208; --nos-green-300: 134 239 172; --nos-green-400: 74 222 128; --nos-green-500: 34 197 94; --nos-green-600: 22 163 74; --nos-green-700: 21 128 61; --nos-green-800: 22 101 52; --nos-green-900: 20 83 45; --nos-green-950: 5 46 22;
-    /* emerald */
-    --nos-emerald-50: 236 253 245; --nos-emerald-100: 209 250 229; --nos-emerald-200: 167 243 208; --nos-emerald-300: 110 231 183; --nos-emerald-400: 52 211 153; --nos-emerald-500: 16 185 129; --nos-emerald-600: 5 150 105; --nos-emerald-700: 4 120 87; --nos-emerald-800: 6 95 70; --nos-emerald-900: 6 78 59; --nos-emerald-950: 2 44 34;
-    /* teal */
-    --nos-teal-50: 240 253 250; --nos-teal-100: 204 251 241; --nos-teal-200: 153 246 228; --nos-teal-300: 94 234 212; --nos-teal-400: 45 212 191; --nos-teal-500: 20 184 166; --nos-teal-600: 13 148 136; --nos-teal-700: 15 118 110; --nos-teal-800: 17 94 89; --nos-teal-900: 19 78 74; --nos-teal-950: 4 47 46;
-    /* cyan */
-    --nos-cyan-50: 236 254 255; --nos-cyan-100: 207 250 254; --nos-cyan-200: 165 243 252; --nos-cyan-300: 103 232 249; --nos-cyan-400: 34 211 238; --nos-cyan-500: 6 182 212; --nos-cyan-600: 8 145 178; --nos-cyan-700: 14 116 144; --nos-cyan-800: 21 94 117; --nos-cyan-900: 22 78 99; --nos-cyan-950: 8 51 68;
-    /* sky */
-    --nos-sky-50: 240 249 255; --nos-sky-100: 224 242 254; --nos-sky-200: 186 230 253; --nos-sky-300: 125 211 252; --nos-sky-400: 56 189 248; --nos-sky-500: 14 165 233; --nos-sky-600: 2 132 199; --nos-sky-700: 3 105 161; --nos-sky-800: 7 89 133; --nos-sky-900: 12 74 110; --nos-sky-950: 8 47 73;
-    /* blue */
-    --nos-blue-50: 239 246 255; --nos-blue-100: 219 234 254; --nos-blue-200: 191 219 254; --nos-blue-300: 147 197 253; --nos-blue-400: 96 165 250; --nos-blue-500: 59 130 246; --nos-blue-600: 37 99 235; --nos-blue-700: 29 78 216; --nos-blue-800: 30 64 175; --nos-blue-900: 30 58 138; --nos-blue-950: 23 37 84;
-    /* indigo */
-    --nos-indigo-50: 238 242 255; --nos-indigo-100: 224 231 255; --nos-indigo-200: 199 210 254; --nos-indigo-300: 165 180 252; --nos-indigo-400: 129 140 248; --nos-indigo-500: 99 102 241; --nos-indigo-600: 79 70 229; --nos-indigo-700: 67 56 202; --nos-indigo-800: 55 48 163; --nos-indigo-900: 49 46 129; --nos-indigo-950: 30 27 75;
-    /* violet */
-    --nos-violet-50: 245 243 255; --nos-violet-100: 237 233 254; --nos-violet-200: 221 214 254; --nos-violet-300: 196 181 253; --nos-violet-400: 167 139 250; --nos-violet-500: 139 92 246; --nos-violet-600: 124 58 237; --nos-violet-700: 109 40 217; --nos-violet-800: 91 33 182; --nos-violet-900: 76 29 149; --nos-violet-950: 46 16 101;
-    /* purple */
-    --nos-purple-50: 250 245 255; --nos-purple-100: 243 232 255; --nos-purple-200: 233 213 255; --nos-purple-300: 216 180 254; --nos-purple-400: 192 132 252; --nos-purple-500: 168 85 247; --nos-purple-600: 147 51 234; --nos-purple-700: 126 34 206; --nos-purple-800: 107 33 168; --nos-purple-900: 88 28 135; --nos-purple-950: 59 7 100;
-    /* fuchsia */
-    --nos-fuchsia-50: 253 244 255; --nos-fuchsia-100: 250 232 255; --nos-fuchsia-200: 245 208 254; --nos-fuchsia-300: 240 171 252; --nos-fuchsia-400: 232 121 249; --nos-fuchsia-500: 217 70 239; --nos-fuchsia-600: 192 38 211; --nos-fuchsia-700: 162 28 175; --nos-fuchsia-800: 134 25 143; --nos-fuchsia-900: 112 26 117; --nos-fuchsia-950: 74 4 78;
-    /* pink */
-    --nos-pink-50: 253 242 248; --nos-pink-100: 252 231 243; --nos-pink-200: 251 207 232; --nos-pink-300: 249 168 212; --nos-pink-400: 244 114 182; --nos-pink-500: 236 72 153; --nos-pink-600: 219 39 119; --nos-pink-700: 190 24 93; --nos-pink-800: 157 23 77; --nos-pink-900: 131 24 67; --nos-pink-950: 80 7 36;
-    /* rose */
-    --nos-rose-50: 255 241 242; --nos-rose-100: 255 228 230; --nos-rose-200: 254 205 211; --nos-rose-300: 253 164 175; --nos-rose-400: 251 113 133; --nos-rose-500: 244 63 94; --nos-rose-600: 225 29 72; --nos-rose-700: 190 18 60; --nos-rose-800: 159 18 57; --nos-rose-900: 136 19 55; --nos-rose-950: 76 5 25;
+  /* slate */
+  --nos-slate-50: 248 250 252;
+  --nos-slate-100: 241 245 249;
+  --nos-slate-200: 226 232 240;
+  --nos-slate-300: 203 213 225;
+  --nos-slate-400: 148 163 184;
+  --nos-slate-500: 100 116 139;
+  --nos-slate-600: 71 85 105;
+  --nos-slate-700: 51 65 85;
+  --nos-slate-800: 30 41 59;
+  --nos-slate-900: 15 23 42;
+  --nos-slate-950: 2 6 23;
+  /* gray */
+  --nos-gray-50: 249 250 251;
+  --nos-gray-100: 243 244 246;
+  --nos-gray-200: 229 231 235;
+  --nos-gray-300: 209 213 219;
+  --nos-gray-400: 156 163 175;
+  --nos-gray-500: 107 114 128;
+  --nos-gray-600: 75 85 99;
+  --nos-gray-700: 55 65 81;
+  --nos-gray-800: 31 41 55;
+  --nos-gray-900: 17 24 39;
+  --nos-gray-950: 3 7 18;
+  /* zinc */
+  --nos-zinc-50: 250 250 250;
+  --nos-zinc-100: 244 244 245;
+  --nos-zinc-200: 228 228 231;
+  --nos-zinc-300: 212 212 216;
+  --nos-zinc-400: 161 161 170;
+  --nos-zinc-500: 113 113 122;
+  --nos-zinc-600: 82 82 91;
+  --nos-zinc-700: 63 63 70;
+  --nos-zinc-800: 39 39 42;
+  --nos-zinc-900: 24 24 27;
+  --nos-zinc-950: 9 9 11;
+  /* neutral */
+  --nos-neutral-50: 250 250 250;
+  --nos-neutral-100: 245 245 245;
+  --nos-neutral-200: 229 229 229;
+  --nos-neutral-300: 212 212 212;
+  --nos-neutral-400: 163 163 163;
+  --nos-neutral-500: 115 115 115;
+  --nos-neutral-600: 82 82 82;
+  --nos-neutral-700: 64 64 64;
+  --nos-neutral-800: 38 38 38;
+  --nos-neutral-900: 23 23 23;
+  --nos-neutral-950: 10 10 10;
+  /* stone */
+  --nos-stone-50: 250 250 249;
+  --nos-stone-100: 245 245 244;
+  --nos-stone-200: 231 229 228;
+  --nos-stone-300: 214 211 209;
+  --nos-stone-400: 168 162 158;
+  --nos-stone-500: 120 113 108;
+  --nos-stone-600: 87 83 78;
+  --nos-stone-700: 68 64 60;
+  --nos-stone-800: 41 37 36;
+  --nos-stone-900: 28 25 23;
+  --nos-stone-950: 12 10 9;
+  /* red */
+  --nos-red-50: 254 242 242;
+  --nos-red-100: 254 226 226;
+  --nos-red-200: 254 202 202;
+  --nos-red-300: 252 165 165;
+  --nos-red-400: 248 113 113;
+  --nos-red-500: 239 68 68;
+  --nos-red-600: 220 38 38;
+  --nos-red-700: 185 28 28;
+  --nos-red-800: 153 27 27;
+  --nos-red-900: 127 29 29;
+  --nos-red-950: 69 10 10;
+  /* orange */
+  --nos-orange-50: 255 247 237;
+  --nos-orange-100: 255 237 213;
+  --nos-orange-200: 254 215 170;
+  --nos-orange-300: 253 186 116;
+  --nos-orange-400: 251 146 60;
+  --nos-orange-500: 249 115 22;
+  --nos-orange-600: 234 88 12;
+  --nos-orange-700: 194 65 12;
+  --nos-orange-800: 154 52 18;
+  --nos-orange-900: 124 45 18;
+  --nos-orange-950: 67 20 7;
+  /* amber */
+  --nos-amber-50: 255 251 235;
+  --nos-amber-100: 254 243 199;
+  --nos-amber-200: 253 230 138;
+  --nos-amber-300: 252 211 77;
+  --nos-amber-400: 251 191 36;
+  --nos-amber-500: 245 158 11;
+  --nos-amber-600: 217 119 6;
+  --nos-amber-700: 180 83 9;
+  --nos-amber-800: 146 64 14;
+  --nos-amber-900: 120 53 15;
+  --nos-amber-950: 69 26 3;
+  /* yellow */
+  --nos-yellow-50: 254 252 232;
+  --nos-yellow-100: 254 249 195;
+  --nos-yellow-200: 254 240 138;
+  --nos-yellow-300: 253 224 71;
+  --nos-yellow-400: 250 204 21;
+  --nos-yellow-500: 234 179 8;
+  --nos-yellow-600: 202 138 4;
+  --nos-yellow-700: 161 98 7;
+  --nos-yellow-800: 133 77 14;
+  --nos-yellow-900: 113 63 18;
+  --nos-yellow-950: 66 32 6;
+  /* lime */
+  --nos-lime-50: 247 254 231;
+  --nos-lime-100: 236 252 203;
+  --nos-lime-200: 217 249 157;
+  --nos-lime-300: 190 242 100;
+  --nos-lime-400: 163 230 53;
+  --nos-lime-500: 132 204 22;
+  --nos-lime-600: 101 163 13;
+  --nos-lime-700: 77 124 15;
+  --nos-lime-800: 63 98 18;
+  --nos-lime-900: 54 83 20;
+  --nos-lime-950: 26 46 5;
+  /* green */
+  --nos-green-50: 240 253 244;
+  --nos-green-100: 220 252 231;
+  --nos-green-200: 187 247 208;
+  --nos-green-300: 134 239 172;
+  --nos-green-400: 74 222 128;
+  --nos-green-500: 34 197 94;
+  --nos-green-600: 22 163 74;
+  --nos-green-700: 21 128 61;
+  --nos-green-800: 22 101 52;
+  --nos-green-900: 20 83 45;
+  --nos-green-950: 5 46 22;
+  /* emerald */
+  --nos-emerald-50: 236 253 245;
+  --nos-emerald-100: 209 250 229;
+  --nos-emerald-200: 167 243 208;
+  --nos-emerald-300: 110 231 183;
+  --nos-emerald-400: 52 211 153;
+  --nos-emerald-500: 16 185 129;
+  --nos-emerald-600: 5 150 105;
+  --nos-emerald-700: 4 120 87;
+  --nos-emerald-800: 6 95 70;
+  --nos-emerald-900: 6 78 59;
+  --nos-emerald-950: 2 44 34;
+  /* teal */
+  --nos-teal-50: 240 253 250;
+  --nos-teal-100: 204 251 241;
+  --nos-teal-200: 153 246 228;
+  --nos-teal-300: 94 234 212;
+  --nos-teal-400: 45 212 191;
+  --nos-teal-500: 20 184 166;
+  --nos-teal-600: 13 148 136;
+  --nos-teal-700: 15 118 110;
+  --nos-teal-800: 17 94 89;
+  --nos-teal-900: 19 78 74;
+  --nos-teal-950: 4 47 46;
+  /* cyan */
+  --nos-cyan-50: 236 254 255;
+  --nos-cyan-100: 207 250 254;
+  --nos-cyan-200: 165 243 252;
+  --nos-cyan-300: 103 232 249;
+  --nos-cyan-400: 34 211 238;
+  --nos-cyan-500: 6 182 212;
+  --nos-cyan-600: 8 145 178;
+  --nos-cyan-700: 14 116 144;
+  --nos-cyan-800: 21 94 117;
+  --nos-cyan-900: 22 78 99;
+  --nos-cyan-950: 8 51 68;
+  /* sky */
+  --nos-sky-50: 240 249 255;
+  --nos-sky-100: 224 242 254;
+  --nos-sky-200: 186 230 253;
+  --nos-sky-300: 125 211 252;
+  --nos-sky-400: 56 189 248;
+  --nos-sky-500: 14 165 233;
+  --nos-sky-600: 2 132 199;
+  --nos-sky-700: 3 105 161;
+  --nos-sky-800: 7 89 133;
+  --nos-sky-900: 12 74 110;
+  --nos-sky-950: 8 47 73;
+  /* blue */
+  --nos-blue-50: 239 246 255;
+  --nos-blue-100: 219 234 254;
+  --nos-blue-200: 191 219 254;
+  --nos-blue-300: 147 197 253;
+  --nos-blue-400: 96 165 250;
+  --nos-blue-500: 59 130 246;
+  --nos-blue-600: 37 99 235;
+  --nos-blue-700: 29 78 216;
+  --nos-blue-800: 30 64 175;
+  --nos-blue-900: 30 58 138;
+  --nos-blue-950: 23 37 84;
+  /* indigo */
+  --nos-indigo-50: 238 242 255;
+  --nos-indigo-100: 224 231 255;
+  --nos-indigo-200: 199 210 254;
+  --nos-indigo-300: 165 180 252;
+  --nos-indigo-400: 129 140 248;
+  --nos-indigo-500: 99 102 241;
+  --nos-indigo-600: 79 70 229;
+  --nos-indigo-700: 67 56 202;
+  --nos-indigo-800: 55 48 163;
+  --nos-indigo-900: 49 46 129;
+  --nos-indigo-950: 30 27 75;
+  /* violet */
+  --nos-violet-50: 245 243 255;
+  --nos-violet-100: 237 233 254;
+  --nos-violet-200: 221 214 254;
+  --nos-violet-300: 196 181 253;
+  --nos-violet-400: 167 139 250;
+  --nos-violet-500: 139 92 246;
+  --nos-violet-600: 124 58 237;
+  --nos-violet-700: 109 40 217;
+  --nos-violet-800: 91 33 182;
+  --nos-violet-900: 76 29 149;
+  --nos-violet-950: 46 16 101;
+  /* purple */
+  --nos-purple-50: 250 245 255;
+  --nos-purple-100: 243 232 255;
+  --nos-purple-200: 233 213 255;
+  --nos-purple-300: 216 180 254;
+  --nos-purple-400: 192 132 252;
+  --nos-purple-500: 168 85 247;
+  --nos-purple-600: 147 51 234;
+  --nos-purple-700: 126 34 206;
+  --nos-purple-800: 107 33 168;
+  --nos-purple-900: 88 28 135;
+  --nos-purple-950: 59 7 100;
+  /* fuchsia */
+  --nos-fuchsia-50: 253 244 255;
+  --nos-fuchsia-100: 250 232 255;
+  --nos-fuchsia-200: 245 208 254;
+  --nos-fuchsia-300: 240 171 252;
+  --nos-fuchsia-400: 232 121 249;
+  --nos-fuchsia-500: 217 70 239;
+  --nos-fuchsia-600: 192 38 211;
+  --nos-fuchsia-700: 162 28 175;
+  --nos-fuchsia-800: 134 25 143;
+  --nos-fuchsia-900: 112 26 117;
+  --nos-fuchsia-950: 74 4 78;
+  /* pink */
+  --nos-pink-50: 253 242 248;
+  --nos-pink-100: 252 231 243;
+  --nos-pink-200: 251 207 232;
+  --nos-pink-300: 249 168 212;
+  --nos-pink-400: 244 114 182;
+  --nos-pink-500: 236 72 153;
+  --nos-pink-600: 219 39 119;
+  --nos-pink-700: 190 24 93;
+  --nos-pink-800: 157 23 77;
+  --nos-pink-900: 131 24 67;
+  --nos-pink-950: 80 7 36;
+  /* rose */
+  --nos-rose-50: 255 241 242;
+  --nos-rose-100: 255 228 230;
+  --nos-rose-200: 254 205 211;
+  --nos-rose-300: 253 164 175;
+  --nos-rose-400: 251 113 133;
+  --nos-rose-500: 244 63 94;
+  --nos-rose-600: 225 29 72;
+  --nos-rose-700: 190 18 60;
+  --nos-rose-800: 159 18 57;
+  --nos-rose-900: 136 19 55;
+  --nos-rose-950: 76 5 25;
 
-    /* Warna tunggal. `white` ikut berbalik di tema terang — itulah yang
-       membuat ~560 garis rambut (border-white/10 dkk) benar sendiri. */
-    --nos-white: 255 255 255;
-    --nos-black: 0 0 0;
-    --nos-paper: 255 255 255;
-    --nos-onaccent: 255 255 255;
+  /* Warna tunggal. `white` ikut berbalik di tema terang — itulah yang
+     membuat ~560 garis rambut (border-white/10 dkk) benar sendiri. */
+  --nos-white: 255 255 255;
+  --nos-black: 0 0 0;
+  --nos-paper: 255 255 255;
+  --nos-onaccent: 255 255 255;
 
-    /* Permukaan opak kolom tabel menempel (sticky). Menggantikan heks
-       arbitrer bg-[#0c1630] dkk yang sebelumnya melewati tema. */
-    --nos-surface-1: 12 22 48;      /* #0c1630 sidebar, header, popover */
-    --nos-surface-2: 13 23 48;      /* #0d1730 sel kolom aksi */
-    --nos-surface-3: 11 18 38;      /* #0b1226 header kolom aksi */
-    --nos-surface-hover: 20 31 61;  /* #141f3d hover baris */
+  /* Permukaan opak kolom tabel menempel (sticky). Menggantikan heks
+     arbitrer bg-[#0c1630] dkk yang sebelumnya melewati tema. */
+  --nos-surface-1: 12 22 48; /* #0c1630 sidebar, header, popover */
+  --nos-surface-2: 13 23 48; /* #0d1730 sel kolom aksi */
+  --nos-surface-3: 11 18 38; /* #0b1226 header kolom aksi */
+  --nos-surface-hover: 20 31 61; /* #141f3d hover baris */
 
-    /* Kanvas halaman & dekorasinya. */
-    --nos-canvas: 11 19 41;         /* #0b1329 */
-    --nos-canvas-2: 13 25 56;       /* #0d1938 */
-    --nos-canvas-3: 8 14 31;        /* #080e1f */
+  /* Kanvas halaman & dekorasinya. */
+  --nos-canvas: 11 19 41; /* #0b1329 */
+  --nos-canvas-2: 13 25 56; /* #0d1938 */
+  --nos-canvas-3: 8 14 31; /* #080e1f */
+
+  /* Semantik (UI-T1): peran, bukan warna. Dipakai Components/ui. */
+  --nos-background: 11 14 19;
+  --nos-foreground: 230 234 240;
+  --nos-card: 17 21 28;
+  --nos-card-foreground: 230 234 240;
+  --nos-popover: 20 25 33;
+  --nos-popover-foreground: 230 234 240;
+  --nos-primary: 77 141 255;
+  --nos-primary-foreground: 255 255 255;
+  --nos-secondary: 28 34 44;
+  --nos-secondary-foreground: 230 234 240;
+  --nos-muted: 24 29 38;
+  --nos-muted-foreground: 139 149 165;
+  --nos-accent: 30 37 48;
+  --nos-accent-foreground: 230 234 240;
+  --nos-destructive: 239 83 80;
+  --nos-destructive-foreground: 255 255 255;
+  --nos-success: 52 199 115;
+  --nos-success-foreground: 6 32 17;
+  --nos-warning: 240 173 50;
+  --nos-warning-foreground: 38 24 0;
+  --nos-border: 38 46 58;
+  --nos-input: 44 53 67;
+  --nos-ring: 77 141 255;
 }
 
 /* =====================================================================
-   TEMA TERANG — bersih & solid
-   =====================================================================
-   Bukan inversi buta. Dua aturan, tiga penyimpangan:
+ TEMA TERANG — bersih & solid
+ =====================================================================
+ Bukan inversi buta. Dua aturan, tiga penyimpangan:
 
-   1. NETRAL (slate dkk) dicerminkan: stop permukaan jadi terang, stop teks
-      jadi gelap. Akibatnya ramp ini MENYILANG antara stop 500 dan 600 —
-      400 gelap, 600 terang. Kode yang memperlakukan slate sebagai kontinum
-      (mis. gradien from-slate-400 to-slate-600) akan terlihat aneh; saat
-      ini tidak ada yang begitu.
+ 1. NETRAL (slate dkk) dicerminkan: stop permukaan jadi terang, stop teks
+    jadi gelap. Akibatnya ramp ini MENYILANG antara stop 500 dan 600 —
+    400 gelap, 600 terang. Kode yang memperlakukan slate sebagai kontinum
+    (mis. gradien from-slate-400 to-slate-600) akan terlihat aneh; saat
+    ini tidak ada yang begitu.
 
-   2. AKSEN & STATUS digeser dua stop, dengan 500 dan 600 DIPATOK tidak
-      berubah. Mencerminkan di sekitar 500 salah: itu memberi
-      light-400 = cyan-600 yang cuma 3,68:1 di atas putih (gagal AA).
-      Karena 500/600 dipatok, seluruh nos-btn-*, nos-circle-*, dan nos-pill-*
-      berlatar identik di kedua tema — identitas cyan tetap utuh; yang
-      menggelap hanya teksnya.
+ 2. AKSEN & STATUS digeser dua stop, dengan 500 dan 600 DIPATOK tidak
+    berubah. Mencerminkan di sekitar 500 salah: itu memberi
+    light-400 = cyan-600 yang cuma 3,68:1 di atas putih (gagal AA).
+    Karena 500/600 dipatok, seluruh nos-btn-*, nos-circle-*, dan nos-pill-*
+    berlatar identik di kedua tema — identitas cyan tetap utuh; yang
+    menggelap hanya teksnya.
 
-   Penyimpangan:
-   · slate-950 TETAP GELAP. 69 dari 74 pemakaiannya adalah scrim modal
-     (bg-slate-950/80 dkk); scrim terang di atas konten terang tidak
-     menggelapkan apa pun dan modal jadi melayang tanpa pemisahan.
-   · slate-900 jadi putih murni, bukan cermin slate-100 (#f1f5f9) —
-     panel adalah kertas.
-   · slate-500 digeser ke #5c6a7e. Nilai cerminnya (#64748b) hanya 4,06:1
-     di atas kanvas, gagal AA tipis; #5c6a7e = 4,72:1 dan bedanya tak terasa.
+ Penyimpangan:
+ · slate-950 TETAP GELAP. 69 dari 74 pemakaiannya adalah scrim modal
+   (bg-slate-950/80 dkk); scrim terang di atas konten terang tidak
+   menggelapkan apa pun dan modal jadi melayang tanpa pemisahan.
+ · slate-900 jadi putih murni, bukan cermin slate-100 (#f1f5f9) —
+   panel adalah kertas.
+ · slate-500 digeser ke #5c6a7e. Nilai cerminnya (#64748b) hanya 4,06:1
+   di atas kanvas, gagal AA tipis; #5c6a7e = 4,72:1 dan bedanya tak terasa.
 
-   Himpunan nama di blok ini WAJIB sama persis dengan blok gelap — dijaga
-   tests/Feature/ThemeTokenTest.
-   ===================================================================== */
+ Himpunan nama di blok ini WAJIB sama persis dengan blok gelap — dijaga
+ tests/Feature/ThemeTokenTest.
+ ===================================================================== */
 [data-theme="light"] {
-    /* --- Netral: cermin dari ramp gelap, dengan tiga penyimpangan --- */
-    /* slate */
-    --nos-slate-50: 2 6 23; --nos-slate-100: 15 23 42; --nos-slate-200: 30 41 59; --nos-slate-300: 51 65 85; --nos-slate-400: 71 85 105; --nos-slate-500: 92 106 126; --nos-slate-600: 148 163 184; --nos-slate-700: 203 213 225; --nos-slate-800: 226 232 240; --nos-slate-900: 255 255 255; --nos-slate-950: 15 23 42;
-    /* gray */
-    --nos-gray-50: 3 7 18; --nos-gray-100: 17 24 39; --nos-gray-200: 31 41 55; --nos-gray-300: 55 65 81; --nos-gray-400: 75 85 99; --nos-gray-500: 107 114 128; --nos-gray-600: 156 163 175; --nos-gray-700: 209 213 219; --nos-gray-800: 229 231 235; --nos-gray-900: 255 255 255; --nos-gray-950: 17 24 39;
-    /* zinc */
-    --nos-zinc-50: 9 9 11; --nos-zinc-100: 24 24 27; --nos-zinc-200: 39 39 42; --nos-zinc-300: 63 63 70; --nos-zinc-400: 82 82 91; --nos-zinc-500: 113 113 122; --nos-zinc-600: 161 161 170; --nos-zinc-700: 212 212 216; --nos-zinc-800: 228 228 231; --nos-zinc-900: 255 255 255; --nos-zinc-950: 24 24 27;
-    /* neutral */
-    --nos-neutral-50: 10 10 10; --nos-neutral-100: 23 23 23; --nos-neutral-200: 38 38 38; --nos-neutral-300: 64 64 64; --nos-neutral-400: 82 82 82; --nos-neutral-500: 115 115 115; --nos-neutral-600: 163 163 163; --nos-neutral-700: 212 212 212; --nos-neutral-800: 229 229 229; --nos-neutral-900: 255 255 255; --nos-neutral-950: 23 23 23;
-    /* stone */
-    --nos-stone-50: 12 10 9; --nos-stone-100: 28 25 23; --nos-stone-200: 41 37 36; --nos-stone-300: 68 64 60; --nos-stone-400: 87 83 78; --nos-stone-500: 120 113 108; --nos-stone-600: 168 162 158; --nos-stone-700: 214 211 209; --nos-stone-800: 231 229 228; --nos-stone-900: 255 255 255; --nos-stone-950: 28 25 23;
+  /* --- Netral: cermin dari ramp gelap, dengan tiga penyimpangan --- */
+  /* slate */
+  --nos-slate-50: 2 6 23;
+  --nos-slate-100: 15 23 42;
+  --nos-slate-200: 30 41 59;
+  --nos-slate-300: 51 65 85;
+  --nos-slate-400: 71 85 105;
+  --nos-slate-500: 92 106 126;
+  --nos-slate-600: 148 163 184;
+  --nos-slate-700: 203 213 225;
+  --nos-slate-800: 226 232 240;
+  --nos-slate-900: 255 255 255;
+  --nos-slate-950: 15 23 42;
+  /* gray */
+  --nos-gray-50: 3 7 18;
+  --nos-gray-100: 17 24 39;
+  --nos-gray-200: 31 41 55;
+  --nos-gray-300: 55 65 81;
+  --nos-gray-400: 75 85 99;
+  --nos-gray-500: 107 114 128;
+  --nos-gray-600: 156 163 175;
+  --nos-gray-700: 209 213 219;
+  --nos-gray-800: 229 231 235;
+  --nos-gray-900: 255 255 255;
+  --nos-gray-950: 17 24 39;
+  /* zinc */
+  --nos-zinc-50: 9 9 11;
+  --nos-zinc-100: 24 24 27;
+  --nos-zinc-200: 39 39 42;
+  --nos-zinc-300: 63 63 70;
+  --nos-zinc-400: 82 82 91;
+  --nos-zinc-500: 113 113 122;
+  --nos-zinc-600: 161 161 170;
+  --nos-zinc-700: 212 212 216;
+  --nos-zinc-800: 228 228 231;
+  --nos-zinc-900: 255 255 255;
+  --nos-zinc-950: 24 24 27;
+  /* neutral */
+  --nos-neutral-50: 10 10 10;
+  --nos-neutral-100: 23 23 23;
+  --nos-neutral-200: 38 38 38;
+  --nos-neutral-300: 64 64 64;
+  --nos-neutral-400: 82 82 82;
+  --nos-neutral-500: 115 115 115;
+  --nos-neutral-600: 163 163 163;
+  --nos-neutral-700: 212 212 212;
+  --nos-neutral-800: 229 229 229;
+  --nos-neutral-900: 255 255 255;
+  --nos-neutral-950: 23 23 23;
+  /* stone */
+  --nos-stone-50: 12 10 9;
+  --nos-stone-100: 28 25 23;
+  --nos-stone-200: 41 37 36;
+  --nos-stone-300: 68 64 60;
+  --nos-stone-400: 87 83 78;
+  --nos-stone-500: 120 113 108;
+  --nos-stone-600: 168 162 158;
+  --nos-stone-700: 214 211 209;
+  --nos-stone-800: 231 229 228;
+  --nos-stone-900: 255 255 255;
+  --nos-stone-950: 28 25 23;
 
-    /* --- Aksen & status: stop 500/600 DIPATOK (latar tombol, tint, ring),
-       stop teks digeser dua tingkat lebih gelap agar lolos kontras AA. --- */
-    /* red */
-    --nos-red-50: 69 10 10; --nos-red-100: 127 29 29; --nos-red-200: 127 29 29; --nos-red-300: 153 27 27; --nos-red-400: 185 28 28; --nos-red-500: 239 68 68; --nos-red-600: 220 38 38; --nos-red-700: 248 113 113; --nos-red-800: 252 165 165; --nos-red-900: 254 202 202; --nos-red-950: 254 242 242;
-    /* orange */
-    --nos-orange-50: 67 20 7; --nos-orange-100: 124 45 18; --nos-orange-200: 124 45 18; --nos-orange-300: 154 52 18; --nos-orange-400: 194 65 12; --nos-orange-500: 249 115 22; --nos-orange-600: 234 88 12; --nos-orange-700: 251 146 60; --nos-orange-800: 253 186 116; --nos-orange-900: 254 215 170; --nos-orange-950: 255 247 237;
-    /* amber */
-    --nos-amber-50: 69 26 3; --nos-amber-100: 120 53 15; --nos-amber-200: 120 53 15; --nos-amber-300: 146 64 14; --nos-amber-400: 180 83 9; --nos-amber-500: 245 158 11; --nos-amber-600: 217 119 6; --nos-amber-700: 251 191 36; --nos-amber-800: 252 211 77; --nos-amber-900: 253 230 138; --nos-amber-950: 255 251 235;
-    /* yellow */
-    --nos-yellow-50: 66 32 6; --nos-yellow-100: 113 63 18; --nos-yellow-200: 113 63 18; --nos-yellow-300: 133 77 14; --nos-yellow-400: 161 98 7; --nos-yellow-500: 234 179 8; --nos-yellow-600: 202 138 4; --nos-yellow-700: 250 204 21; --nos-yellow-800: 253 224 71; --nos-yellow-900: 254 240 138; --nos-yellow-950: 254 252 232;
-    /* lime */
-    --nos-lime-50: 26 46 5; --nos-lime-100: 54 83 20; --nos-lime-200: 54 83 20; --nos-lime-300: 63 98 18; --nos-lime-400: 77 124 15; --nos-lime-500: 132 204 22; --nos-lime-600: 101 163 13; --nos-lime-700: 163 230 53; --nos-lime-800: 190 242 100; --nos-lime-900: 217 249 157; --nos-lime-950: 247 254 231;
-    /* green */
-    --nos-green-50: 5 46 22; --nos-green-100: 20 83 45; --nos-green-200: 20 83 45; --nos-green-300: 22 101 52; --nos-green-400: 21 128 61; --nos-green-500: 34 197 94; --nos-green-600: 22 163 74; --nos-green-700: 74 222 128; --nos-green-800: 134 239 172; --nos-green-900: 187 247 208; --nos-green-950: 240 253 244;
-    /* emerald */
-    --nos-emerald-50: 2 44 34; --nos-emerald-100: 6 78 59; --nos-emerald-200: 6 78 59; --nos-emerald-300: 6 95 70; --nos-emerald-400: 4 120 87; --nos-emerald-500: 16 185 129; --nos-emerald-600: 5 150 105; --nos-emerald-700: 52 211 153; --nos-emerald-800: 110 231 183; --nos-emerald-900: 167 243 208; --nos-emerald-950: 236 253 245;
-    /* teal */
-    --nos-teal-50: 4 47 46; --nos-teal-100: 19 78 74; --nos-teal-200: 19 78 74; --nos-teal-300: 17 94 89; --nos-teal-400: 15 118 110; --nos-teal-500: 20 184 166; --nos-teal-600: 13 148 136; --nos-teal-700: 45 212 191; --nos-teal-800: 94 234 212; --nos-teal-900: 153 246 228; --nos-teal-950: 240 253 250;
-    /* cyan */
-    --nos-cyan-50: 8 51 68; --nos-cyan-100: 22 78 99; --nos-cyan-200: 22 78 99; --nos-cyan-300: 21 94 117; --nos-cyan-400: 14 116 144; --nos-cyan-500: 6 182 212; --nos-cyan-600: 8 145 178; --nos-cyan-700: 34 211 238; --nos-cyan-800: 103 232 249; --nos-cyan-900: 165 243 252; --nos-cyan-950: 236 254 255;
-    /* sky */
-    --nos-sky-50: 8 47 73; --nos-sky-100: 12 74 110; --nos-sky-200: 12 74 110; --nos-sky-300: 7 89 133; --nos-sky-400: 3 105 161; --nos-sky-500: 14 165 233; --nos-sky-600: 2 132 199; --nos-sky-700: 56 189 248; --nos-sky-800: 125 211 252; --nos-sky-900: 186 230 253; --nos-sky-950: 240 249 255;
-    /* blue */
-    --nos-blue-50: 23 37 84; --nos-blue-100: 30 58 138; --nos-blue-200: 30 58 138; --nos-blue-300: 30 64 175; --nos-blue-400: 29 78 216; --nos-blue-500: 59 130 246; --nos-blue-600: 37 99 235; --nos-blue-700: 96 165 250; --nos-blue-800: 147 197 253; --nos-blue-900: 191 219 254; --nos-blue-950: 239 246 255;
-    /* indigo */
-    --nos-indigo-50: 30 27 75; --nos-indigo-100: 49 46 129; --nos-indigo-200: 49 46 129; --nos-indigo-300: 55 48 163; --nos-indigo-400: 67 56 202; --nos-indigo-500: 99 102 241; --nos-indigo-600: 79 70 229; --nos-indigo-700: 129 140 248; --nos-indigo-800: 165 180 252; --nos-indigo-900: 199 210 254; --nos-indigo-950: 238 242 255;
-    /* violet */
-    --nos-violet-50: 46 16 101; --nos-violet-100: 76 29 149; --nos-violet-200: 76 29 149; --nos-violet-300: 91 33 182; --nos-violet-400: 109 40 217; --nos-violet-500: 139 92 246; --nos-violet-600: 124 58 237; --nos-violet-700: 167 139 250; --nos-violet-800: 196 181 253; --nos-violet-900: 221 214 254; --nos-violet-950: 245 243 255;
-    /* purple */
-    --nos-purple-50: 59 7 100; --nos-purple-100: 88 28 135; --nos-purple-200: 88 28 135; --nos-purple-300: 107 33 168; --nos-purple-400: 126 34 206; --nos-purple-500: 168 85 247; --nos-purple-600: 147 51 234; --nos-purple-700: 192 132 252; --nos-purple-800: 216 180 254; --nos-purple-900: 233 213 255; --nos-purple-950: 250 245 255;
-    /* fuchsia */
-    --nos-fuchsia-50: 74 4 78; --nos-fuchsia-100: 112 26 117; --nos-fuchsia-200: 112 26 117; --nos-fuchsia-300: 134 25 143; --nos-fuchsia-400: 162 28 175; --nos-fuchsia-500: 217 70 239; --nos-fuchsia-600: 192 38 211; --nos-fuchsia-700: 232 121 249; --nos-fuchsia-800: 240 171 252; --nos-fuchsia-900: 245 208 254; --nos-fuchsia-950: 253 244 255;
-    /* pink */
-    --nos-pink-50: 80 7 36; --nos-pink-100: 131 24 67; --nos-pink-200: 131 24 67; --nos-pink-300: 157 23 77; --nos-pink-400: 190 24 93; --nos-pink-500: 236 72 153; --nos-pink-600: 219 39 119; --nos-pink-700: 244 114 182; --nos-pink-800: 249 168 212; --nos-pink-900: 251 207 232; --nos-pink-950: 253 242 248;
-    /* rose */
-    --nos-rose-50: 76 5 25; --nos-rose-100: 136 19 55; --nos-rose-200: 136 19 55; --nos-rose-300: 159 18 57; --nos-rose-400: 190 18 60; --nos-rose-500: 244 63 94; --nos-rose-600: 225 29 72; --nos-rose-700: 251 113 133; --nos-rose-800: 253 164 175; --nos-rose-900: 254 205 211; --nos-rose-950: 255 241 242;
+  /* --- Aksen & status: stop 500/600 DIPATOK (latar tombol, tint, ring),
+     stop teks digeser dua tingkat lebih gelap agar lolos kontras AA. --- */
+  /* red */
+  --nos-red-50: 69 10 10;
+  --nos-red-100: 127 29 29;
+  --nos-red-200: 127 29 29;
+  --nos-red-300: 153 27 27;
+  --nos-red-400: 185 28 28;
+  --nos-red-500: 239 68 68;
+  --nos-red-600: 220 38 38;
+  --nos-red-700: 248 113 113;
+  --nos-red-800: 252 165 165;
+  --nos-red-900: 254 202 202;
+  --nos-red-950: 254 242 242;
+  /* orange */
+  --nos-orange-50: 67 20 7;
+  --nos-orange-100: 124 45 18;
+  --nos-orange-200: 124 45 18;
+  --nos-orange-300: 154 52 18;
+  --nos-orange-400: 194 65 12;
+  --nos-orange-500: 249 115 22;
+  --nos-orange-600: 234 88 12;
+  --nos-orange-700: 251 146 60;
+  --nos-orange-800: 253 186 116;
+  --nos-orange-900: 254 215 170;
+  --nos-orange-950: 255 247 237;
+  /* amber */
+  --nos-amber-50: 69 26 3;
+  --nos-amber-100: 120 53 15;
+  --nos-amber-200: 120 53 15;
+  --nos-amber-300: 146 64 14;
+  --nos-amber-400: 180 83 9;
+  --nos-amber-500: 245 158 11;
+  --nos-amber-600: 217 119 6;
+  --nos-amber-700: 251 191 36;
+  --nos-amber-800: 252 211 77;
+  --nos-amber-900: 253 230 138;
+  --nos-amber-950: 255 251 235;
+  /* yellow */
+  --nos-yellow-50: 66 32 6;
+  --nos-yellow-100: 113 63 18;
+  --nos-yellow-200: 113 63 18;
+  --nos-yellow-300: 133 77 14;
+  --nos-yellow-400: 161 98 7;
+  --nos-yellow-500: 234 179 8;
+  --nos-yellow-600: 202 138 4;
+  --nos-yellow-700: 250 204 21;
+  --nos-yellow-800: 253 224 71;
+  --nos-yellow-900: 254 240 138;
+  --nos-yellow-950: 254 252 232;
+  /* lime */
+  --nos-lime-50: 26 46 5;
+  --nos-lime-100: 54 83 20;
+  --nos-lime-200: 54 83 20;
+  --nos-lime-300: 63 98 18;
+  --nos-lime-400: 77 124 15;
+  --nos-lime-500: 132 204 22;
+  --nos-lime-600: 101 163 13;
+  --nos-lime-700: 163 230 53;
+  --nos-lime-800: 190 242 100;
+  --nos-lime-900: 217 249 157;
+  --nos-lime-950: 247 254 231;
+  /* green */
+  --nos-green-50: 5 46 22;
+  --nos-green-100: 20 83 45;
+  --nos-green-200: 20 83 45;
+  --nos-green-300: 22 101 52;
+  --nos-green-400: 21 128 61;
+  --nos-green-500: 34 197 94;
+  --nos-green-600: 22 163 74;
+  --nos-green-700: 74 222 128;
+  --nos-green-800: 134 239 172;
+  --nos-green-900: 187 247 208;
+  --nos-green-950: 240 253 244;
+  /* emerald */
+  --nos-emerald-50: 2 44 34;
+  --nos-emerald-100: 6 78 59;
+  --nos-emerald-200: 6 78 59;
+  --nos-emerald-300: 6 95 70;
+  --nos-emerald-400: 4 120 87;
+  --nos-emerald-500: 16 185 129;
+  --nos-emerald-600: 5 150 105;
+  --nos-emerald-700: 52 211 153;
+  --nos-emerald-800: 110 231 183;
+  --nos-emerald-900: 167 243 208;
+  --nos-emerald-950: 236 253 245;
+  /* teal */
+  --nos-teal-50: 4 47 46;
+  --nos-teal-100: 19 78 74;
+  --nos-teal-200: 19 78 74;
+  --nos-teal-300: 17 94 89;
+  --nos-teal-400: 15 118 110;
+  --nos-teal-500: 20 184 166;
+  --nos-teal-600: 13 148 136;
+  --nos-teal-700: 45 212 191;
+  --nos-teal-800: 94 234 212;
+  --nos-teal-900: 153 246 228;
+  --nos-teal-950: 240 253 250;
+  /* cyan */
+  --nos-cyan-50: 8 51 68;
+  --nos-cyan-100: 22 78 99;
+  --nos-cyan-200: 22 78 99;
+  --nos-cyan-300: 21 94 117;
+  --nos-cyan-400: 14 116 144;
+  --nos-cyan-500: 6 182 212;
+  --nos-cyan-600: 8 145 178;
+  --nos-cyan-700: 34 211 238;
+  --nos-cyan-800: 103 232 249;
+  --nos-cyan-900: 165 243 252;
+  --nos-cyan-950: 236 254 255;
+  /* sky */
+  --nos-sky-50: 8 47 73;
+  --nos-sky-100: 12 74 110;
+  --nos-sky-200: 12 74 110;
+  --nos-sky-300: 7 89 133;
+  --nos-sky-400: 3 105 161;
+  --nos-sky-500: 14 165 233;
+  --nos-sky-600: 2 132 199;
+  --nos-sky-700: 56 189 248;
+  --nos-sky-800: 125 211 252;
+  --nos-sky-900: 186 230 253;
+  --nos-sky-950: 240 249 255;
+  /* blue */
+  --nos-blue-50: 23 37 84;
+  --nos-blue-100: 30 58 138;
+  --nos-blue-200: 30 58 138;
+  --nos-blue-300: 30 64 175;
+  --nos-blue-400: 29 78 216;
+  --nos-blue-500: 59 130 246;
+  --nos-blue-600: 37 99 235;
+  --nos-blue-700: 96 165 250;
+  --nos-blue-800: 147 197 253;
+  --nos-blue-900: 191 219 254;
+  --nos-blue-950: 239 246 255;
+  /* indigo */
+  --nos-indigo-50: 30 27 75;
+  --nos-indigo-100: 49 46 129;
+  --nos-indigo-200: 49 46 129;
+  --nos-indigo-300: 55 48 163;
+  --nos-indigo-400: 67 56 202;
+  --nos-indigo-500: 99 102 241;
+  --nos-indigo-600: 79 70 229;
+  --nos-indigo-700: 129 140 248;
+  --nos-indigo-800: 165 180 252;
+  --nos-indigo-900: 199 210 254;
+  --nos-indigo-950: 238 242 255;
+  /* violet */
+  --nos-violet-50: 46 16 101;
+  --nos-violet-100: 76 29 149;
+  --nos-violet-200: 76 29 149;
+  --nos-violet-300: 91 33 182;
+  --nos-violet-400: 109 40 217;
+  --nos-violet-500: 139 92 246;
+  --nos-violet-600: 124 58 237;
+  --nos-violet-700: 167 139 250;
+  --nos-violet-800: 196 181 253;
+  --nos-violet-900: 221 214 254;
+  --nos-violet-950: 245 243 255;
+  /* purple */
+  --nos-purple-50: 59 7 100;
+  --nos-purple-100: 88 28 135;
+  --nos-purple-200: 88 28 135;
+  --nos-purple-300: 107 33 168;
+  --nos-purple-400: 126 34 206;
+  --nos-purple-500: 168 85 247;
+  --nos-purple-600: 147 51 234;
+  --nos-purple-700: 192 132 252;
+  --nos-purple-800: 216 180 254;
+  --nos-purple-900: 233 213 255;
+  --nos-purple-950: 250 245 255;
+  /* fuchsia */
+  --nos-fuchsia-50: 74 4 78;
+  --nos-fuchsia-100: 112 26 117;
+  --nos-fuchsia-200: 112 26 117;
+  --nos-fuchsia-300: 134 25 143;
+  --nos-fuchsia-400: 162 28 175;
+  --nos-fuchsia-500: 217 70 239;
+  --nos-fuchsia-600: 192 38 211;
+  --nos-fuchsia-700: 232 121 249;
+  --nos-fuchsia-800: 240 171 252;
+  --nos-fuchsia-900: 245 208 254;
+  --nos-fuchsia-950: 253 244 255;
+  /* pink */
+  --nos-pink-50: 80 7 36;
+  --nos-pink-100: 131 24 67;
+  --nos-pink-200: 131 24 67;
+  --nos-pink-300: 157 23 77;
+  --nos-pink-400: 190 24 93;
+  --nos-pink-500: 236 72 153;
+  --nos-pink-600: 219 39 119;
+  --nos-pink-700: 244 114 182;
+  --nos-pink-800: 249 168 212;
+  --nos-pink-900: 251 207 232;
+  --nos-pink-950: 253 242 248;
+  /* rose */
+  --nos-rose-50: 76 5 25;
+  --nos-rose-100: 136 19 55;
+  --nos-rose-200: 136 19 55;
+  --nos-rose-300: 159 18 57;
+  --nos-rose-400: 190 18 60;
+  --nos-rose-500: 244 63 94;
+  --nos-rose-600: 225 29 72;
+  --nos-rose-700: 251 113 133;
+  --nos-rose-800: 253 164 175;
+  --nos-rose-900: 254 205 211;
+  --nos-rose-950: 255 241 242;
 
-    /* Membalik `white` inilah yang membuat ~560 garis rambut
-       (border-white/10 dkk) dan ~150 teks putih benar dengan sendirinya. */
-    --nos-white: 15 23 42;
-    /* Bayangan jadi abu-biru: hitam 30% di latar terang tampak kotor. */
-    --nos-black: 100 116 139;
-    --nos-paper: 255 255 255;
-    --nos-onaccent: 255 255 255;
+  /* Membalik `white` inilah yang membuat ~560 garis rambut
+     (border-white/10 dkk) dan ~150 teks putih benar dengan sendirinya. */
+  --nos-white: 15 23 42;
+  /* Bayangan jadi abu-biru: hitam 30% di latar terang tampak kotor. */
+  --nos-black: 100 116 139;
+  --nos-paper: 255 255 255;
+  --nos-onaccent: 255 255 255;
 
-    /* Permukaan opak kolom tabel menempel. */
-    --nos-surface-1: 255 255 255;
-    --nos-surface-2: 255 255 255;
-    --nos-surface-3: 248 250 252;
-    --nos-surface-hover: 238 242 247;
+  /* Permukaan opak kolom tabel menempel. */
+  --nos-surface-1: 255 255 255;
+  --nos-surface-2: 255 255 255;
+  --nos-surface-3: 248 250 252;
+  --nos-surface-hover: 238 242 247;
 
-    /* Kanvas: biru-abu sangat muda, dipinjam dari Kas.light aplikasi HP. */
-    --nos-canvas: 245 247 251;    /* #F5F7FB */
-    --nos-canvas-2: 255 255 255;
-    --nos-canvas-3: 237 241 247;
+  /* Kanvas: biru-abu sangat muda, dipinjam dari Kas.light aplikasi HP. */
+  --nos-canvas: 245 247 251; /* #F5F7FB */
+  --nos-canvas-2: 255 255 255;
+  --nos-canvas-3: 237 241 247;
+
+  /* Semantik (UI-T1): peran, bukan warna. Dipakai Components/ui. */
+  --nos-background: 246 247 249;
+  --nos-foreground: 22 30 41;
+  --nos-card: 255 255 255;
+  --nos-card-foreground: 22 30 41;
+  --nos-popover: 255 255 255;
+  --nos-popover-foreground: 22 30 41;
+  --nos-primary: 31 104 204;
+  --nos-primary-foreground: 255 255 255;
+  --nos-secondary: 236 239 243;
+  --nos-secondary-foreground: 22 30 41;
+  --nos-muted: 240 242 245;
+  --nos-muted-foreground: 84 95 112;
+  --nos-accent: 232 236 242;
+  --nos-accent-foreground: 22 30 41;
+  --nos-destructive: 196 50 52;
+  --nos-destructive-foreground: 255 255 255;
+  --nos-success: 26 127 69;
+  --nos-success-foreground: 255 255 255;
+  --nos-warning: 168 104 8;
+  --nos-warning-foreground: 255 255 255;
+  --nos-border: 219 224 231;
+  --nos-input: 205 211 220;
+  --nos-ring: 31 104 204;
 }
+
+/*
+  The default border color has changed to `currentcolor` in Tailwind CSS v4,
+  so we've added these compatibility styles to make sure everything still
+  looks the same as it did with Tailwind CSS v3.
+
+  If we ever want to remove these styles, we need to add an explicit border
+  color utility to any element that depends on these defaults.
+*/
+@layer base {
+  *,
+  ::after,
+  ::before,
+  ::backdrop,
+  ::file-selector-button {
+    border-color: var(--color-gray-200, currentcolor);
+  }
+}
+
+@utility nos-page {
+  /* === Page chrome === */
+  @apply py-8 pb-16;
+  min-height: 60vh;
+}
+
+@utility nos-page-compact {
+  @apply py-6;
+}
+
+@utility nos-container {
+  @apply w-full px-4 sm:px-6 lg:px-8;
+}
+
+@utility nos-container-narrow {
+  @apply mx-auto max-w-5xl px-4 sm:px-6 lg:px-8;
+}
+
+@utility nos-app-shell {
+  @media (min-width: 1024px) {
+    height: 100vh;
+    overflow: hidden;
+  }
+}
+
+@utility nos-app-scroll {
+  @media (min-width: 1024px) {
+    min-height: 0;
+    overflow-x: hidden;
+    overflow-y: auto;
+  }
+}
+
+@utility nos-grid-stage {
+  /* === Kerangka aplikasi desktop ===
+       Setinggi layar: sidebar, header, footer diam; hanya .nos-app-scroll yang menggulir
+       (diberi atribut `scroll-region` supaya preserveScroll Inertia bekerja). HP tetap
+       menggulir di level dokumen. scripts/snapshot.mjs membuka kerangka ini untuk full-page. */
+
+  /* === Stage Utama Dashboard Grid === */
+  position: relative;
+  background-color: rgb(var(--nos-canvas));
+  background-image:
+    radial-gradient(
+      ellipse 80% 80% at 50% -20%,
+      rgba(14, 165, 233, 0.25),
+      transparent 70%
+    ),
+    linear-gradient(
+      180deg,
+      rgb(var(--nos-canvas-2)) 0%,
+      rgb(var(--nos-canvas)) 45%,
+      rgb(var(--nos-canvas-3)) 100%
+    );
+  min-height: 100vh;
+  width: 100%;
+
+  /* ===================================================================
+       TEMA TERANG — penimpaan kelas nos-*
+       ===================================================================
+       Arah visual: kanvas biru-abu
+       muda, kartu putih solid, garis tipis, bayangan rapat. Tanpa blur,
+       tanpa grid neon, tanpa pendar cyan — kedalaman dari garis & bayangan.
+
+       Tema gelap TIDAK disentuh oleh blok ini; semua aturan di sini
+       bergerbang [data-theme="light"].
+       =================================================================== */
+
+  /* Kanvas datar. Grid neon & pendar dimatikan, bukan dipudarkan: di latar
+       terang keduanya hanya jadi jaring biru dan noda kehijauan. */
+  [data-theme='light'] & {
+    background-image: linear-gradient(
+      180deg,
+      rgb(var(--nos-canvas-2)) 0%,
+      rgb(var(--nos-canvas)) 55%,
+      rgb(var(--nos-canvas-3)) 100%
+    );
+  }
+}
+
+@utility nos-grid-pattern {
+  /* Grid Lines Pattern Layer (Terlihat Jelas Penuh di Seluruh Layar Tanpa Masking) */
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  background-size: 32px 32px;
+  background-image:
+    linear-gradient(to right, rgba(56, 189, 248, 0.15) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(56, 189, 248, 0.15) 1px, transparent 1px);
+
+  [data-theme='light'] & {
+    display: none;
+  }
+}
+
+@utility nos-top-light {
+  /* Efek Pendaran Cahaya di Tengah Atas (Top-Center Ambient Spotlight yang Hidup) */
+  position: fixed;
+  top: -120px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 950px;
+  max-width: 95vw;
+  height: 480px;
+  z-index: 0;
+  pointer-events: none;
+  background: radial-gradient(
+    ellipse at center top,
+    rgba(6, 182, 212, 0.4) 0%,
+    rgba(14, 165, 233, 0.22) 40%,
+    rgba(99, 102, 241, 0.12) 65%,
+    transparent 85%
+  );
+  filter: blur(55px);
+
+  [data-theme='light'] & {
+    display: none;
+  }
+}
+
+@utility nos-ambient-glow {
+  position: fixed;
+  top: -40px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 600px;
+  height: 220px;
+  z-index: 0;
+  pointer-events: none;
+  background: radial-gradient(
+    ellipse at center top,
+    rgba(34, 211, 238, 0.5) 0%,
+    rgba(56, 189, 248, 0.25) 45%,
+    transparent 80%
+  );
+  filter: blur(40px);
+
+  [data-theme='light'] & {
+    display: none;
+  }
+}
+
+@utility nos-grid-bg {
+  /* === Dark base background (wavy grid lives in <GridWaves/>) === */
+  position: relative;
+  background-color: transparent;
+}
+
+@utility nos-glass-panel {
+  /* === Dark glass surfaces === */
+  @apply overflow-hidden rounded-2xl border border-white/10 bg-slate-900/10 shadow-lg shadow-black/30 backdrop-blur-xl;
+  box-shadow:
+    0 18px 48px rgba(2, 6, 23, 0.44),
+    0 0 0 1px rgba(56, 189, 248, 0.035),
+    0 0 34px rgba(14, 165, 233, 0.1);
+
+  /* Panel jadi kertas. Di tema gelap panel NMS hanya bg-slate-900/10 +
+       blur — di atas kanvas terang itu = putih 10%, panelnya lenyap. Blur
+       dimatikan: di atas kanvas nyaris seragam ia tak terlihat tapi tetap
+       memaksa compositor layer terpisah saat menggulir. Bayangan diganti
+       (bukan dipucatkan): halo besar tema gelap tampak kotor di latar terang. */
+  [data-theme='light'] & {
+    background-color: rgb(var(--nos-surface-1));
+    -webkit-backdrop-filter: none;
+    backdrop-filter: none;
+    box-shadow:
+      0 1px 2px rgb(15 23 42 / 0.04),
+      0 8px 24px rgb(15 23 42 / 0.06);
+  }
+}
+
+@utility nos-glass-card {
+  @apply rounded-2xl border border-white/10 bg-slate-900/10 p-5 shadow-lg shadow-black/30 backdrop-blur-xl;
+  box-shadow:
+    0 18px 48px rgba(2, 6, 23, 0.44),
+    0 0 0 1px rgba(56, 189, 248, 0.035),
+    0 0 34px rgba(14, 165, 233, 0.1);
+
+  [data-theme='light'] & {
+    background-color: rgb(var(--nos-surface-1));
+    -webkit-backdrop-filter: none;
+    backdrop-filter: none;
+    box-shadow:
+      0 1px 2px rgb(15 23 42 / 0.04),
+      0 8px 24px rgb(15 23 42 / 0.06);
+  }
+}
+
+@utility nos-glass-hover {
+  @apply transition-all duration-200 hover:border-white/20 hover:bg-slate-900/20 hover:shadow-cyan-500/10;
+
+  &:hover {
+    box-shadow:
+      0 24px 62px rgba(2, 6, 23, 0.5),
+      0 0 0 1px rgba(56, 189, 248, 0.08),
+      0 0 46px rgba(14, 165, 233, 0.18);
+  }
+
+  [data-theme='light'] &:hover {
+    background-color: rgb(var(--nos-surface-1));
+    box-shadow:
+      0 1px 2px rgb(15 23 42 / 0.05),
+      0 12px 28px rgb(15 23 42 / 0.1);
+  }
+}
+
+@utility nos-glass-header {
+  @apply flex items-center gap-3 border-b border-white/10 px-5 py-4 sm:px-6;
+}
+
+@utility nos-circle {
+  /* === Colored circle icons (stat cards, action grid) === */
+  @apply flex h-12 w-12 flex-shrink-0 items-center justify-center rounded-full ring-1;
+}
+
+@utility nos-circle-sky {
+  @apply nos-circle bg-sky-500/15 text-sky-400 ring-sky-500/30;
+}
+
+@utility nos-circle-cyan {
+  @apply nos-circle bg-cyan-500/15 text-cyan-400 ring-cyan-500/30;
+}
+
+@utility nos-circle-emerald {
+  @apply nos-circle bg-emerald-500/15 text-emerald-400 ring-emerald-500/30;
+}
+
+@utility nos-circle-purple {
+  @apply nos-circle bg-purple-500/15 text-purple-400 ring-purple-500/30;
+}
+
+@utility nos-circle-red {
+  @apply nos-circle bg-red-500/15 text-red-400 ring-red-500/30;
+}
+
+@utility nos-circle-amber {
+  @apply nos-circle bg-amber-500/15 text-amber-400 ring-amber-500/30;
+}
+
+@utility nos-circle-slate {
+  @apply nos-circle bg-slate-500/15 text-slate-300 ring-slate-500/30;
+}
+
+@utility nos-pill {
+  /* === Pills / badges === */
+  /* Lencana status — definisi baku (UI_DESIGN_SYSTEM). Bahaya = rose. */
+  @apply inline-flex items-center gap-1 rounded-md px-2.5 py-0.5 text-xs font-semibold ring-1;
+}
+
+@utility nos-pill-success {
+  @apply nos-pill bg-emerald-500/20 text-emerald-300 ring-emerald-500/40;
+}
+
+@utility nos-pill-danger {
+  @apply nos-pill bg-rose-500/20 text-rose-300 ring-rose-500/40;
+}
+
+@utility nos-pill-warning {
+  @apply nos-pill bg-amber-500/20 text-amber-300 ring-amber-500/40;
+}
+
+@utility nos-pill-info {
+  @apply nos-pill bg-sky-500/20 text-sky-300 ring-sky-500/40;
+}
+
+@utility nos-pill-muted {
+  @apply nos-pill bg-slate-700/40 text-slate-300 ring-slate-600/50;
+}
+
+@utility nos-pill-critical {
+  @apply nos-pill bg-rose-600/25 text-rose-200 ring-rose-500/50;
+}
+
+@utility nos-pill-major {
+  @apply nos-pill bg-orange-500/25 text-orange-200 ring-orange-500/50;
+}
+
+@utility nos-pill-minor {
+  @apply nos-pill bg-amber-500/25 text-amber-200 ring-amber-500/50;
+}
+
+@utility nos-input {
+  /* === Inputs (dark) === */
+  @apply rounded-lg border-white/10 bg-slate-900/60 text-slate-100 shadow-inner shadow-black/20 placeholder:text-slate-500 focus:border-cyan-500 focus:ring-cyan-500;
+
+  /* Kolom input: putih penuh, tanpa bayangan dalam. `shadow-inner
+       shadow-black/20` membuat kolom tampak cekung di permukaan gelap; di
+       kertas putih efeknya hanya tepi yang kotor. */
+  [data-theme='light'] & {
+    background-color: rgb(var(--nos-surface-1));
+    box-shadow: none;
+  }
+}
+
+@utility nos-filter {
+  /* === Filter card (bentuk standar lintas halaman; dipakai via <FilterCard/>) === */
+  @apply overflow-hidden rounded-lg border border-white/10 bg-slate-900/10 shadow-lg shadow-black/30 backdrop-blur-xl;
+
+  [data-theme='light'] & {
+    background-color: rgb(var(--nos-surface-1));
+    -webkit-backdrop-filter: none;
+    backdrop-filter: none;
+    box-shadow:
+      0 1px 2px rgb(15 23 42 / 0.04),
+      0 8px 24px rgb(15 23 42 / 0.06);
+  }
+}
+
+@utility nos-filter-head {
+  @apply flex flex-wrap items-center gap-3 border-b border-white/10 px-4 py-4 sm:px-6;
+
+  [data-theme='light'] & {
+    background-color: rgb(var(--nos-surface-3));
+  }
+}
+
+@utility nos-filter-body {
+  @apply px-4 py-4 sm:px-6;
+}
+
+@utility nos-filter-grid {
+  /* Grid field: 1 kolom (mobile) → 2 → 4 (desktop). Field "lebar" pakai sm:col-span-2. */
+  @apply grid gap-4 sm:grid-cols-2 lg:grid-cols-4;
+}
+
+@utility nos-filter-label {
+  @apply mb-1 block text-xs font-medium uppercase tracking-wide text-slate-500;
+}
+
+@utility nos-filter-control {
+  /* Kontrol input/select seragam. Tinggi 44px (target sentuh), fokus cyan. */
+  @apply block min-h-11 w-full rounded-lg border-white/10 bg-slate-900/60 px-3 text-sm text-slate-100 shadow-inner shadow-black/20 placeholder:text-slate-500 focus:border-cyan-500 focus:ring-cyan-500 disabled:cursor-not-allowed disabled:opacity-50;
+
+  [data-theme='light'] & {
+    background-color: rgb(var(--nos-surface-1));
+    box-shadow: none;
+  }
+}
+
+@utility nos-filter-actions {
+  /* Baris tombol aksi (Reset/Terapkan) di kaki kartu filter server-side. */
+  @apply mt-4 grid gap-2 border-t border-white/10 pt-4 sm:flex sm:flex-wrap sm:items-center sm:justify-end;
+}
+
+@utility nos-filter-reset {
+  @apply inline-flex min-h-11 items-center justify-center gap-2 rounded-lg border border-white/10 bg-slate-900/60 px-4 text-sm font-medium text-slate-200 transition-colors hover:bg-white/4 disabled:cursor-not-allowed disabled:opacity-50;
+
+  [data-theme='light'] & {
+    background-color: rgb(var(--nos-surface-1));
+  }
+}
+
+@utility nos-filter-apply {
+  @apply inline-flex min-h-11 items-center justify-center gap-2 rounded-lg bg-cyan-500 px-4 text-sm font-medium text-onaccent transition-colors hover:bg-cyan-600;
+}
+
+@utility nos-link {
+  @apply font-medium text-cyan-400 transition-colors hover:text-cyan-300;
+}
+
+@utility nos-link-muted {
+  @apply font-medium text-slate-400 transition-colors hover:text-slate-200;
+}
+
+@utility nos-alert-success {
+  /* === Alerts === */
+  @apply mb-5 flex items-center gap-3 rounded-lg border border-emerald-500/30 bg-emerald-500/10 px-4 py-3 text-sm text-emerald-200;
+}
+
+@utility nos-alert-danger {
+  @apply mb-5 flex items-center gap-3 rounded-lg border border-red-500/30 bg-red-500/10 px-4 py-3 text-sm text-red-200;
+}
+
+@utility nos-panel {
+  /* === Legacy aliases (nos-panel/nos-card now route to dark glass) === */
+  @apply overflow-hidden rounded-2xl border border-white/10 bg-slate-900/10 shadow-lg shadow-black/30 backdrop-blur-xl;
+  box-shadow:
+    0 18px 48px rgba(2, 6, 23, 0.44),
+    0 0 0 1px rgba(56, 189, 248, 0.035),
+    0 0 34px rgba(14, 165, 233, 0.1);
+
+  [data-theme='light'] & {
+    background-color: rgb(var(--nos-surface-1));
+    -webkit-backdrop-filter: none;
+    backdrop-filter: none;
+    box-shadow:
+      0 1px 2px rgb(15 23 42 / 0.04),
+      0 8px 24px rgb(15 23 42 / 0.06);
+  }
+}
+
+@utility nos-card {
+  @apply rounded-2xl border border-white/10 bg-slate-900/10 p-5 shadow-lg shadow-black/30 backdrop-blur-xl;
+  box-shadow:
+    0 18px 48px rgba(2, 6, 23, 0.44),
+    0 0 0 1px rgba(56, 189, 248, 0.035),
+    0 0 34px rgba(14, 165, 233, 0.1);
+
+  [data-theme='light'] & {
+    background-color: rgb(var(--nos-surface-1));
+    -webkit-backdrop-filter: none;
+    backdrop-filter: none;
+    box-shadow:
+      0 1px 2px rgb(15 23 42 / 0.04),
+      0 8px 24px rgb(15 23 42 / 0.06);
+  }
+}
+
+@utility nos-stat {
+  /* === Kartu statistik ringkas (label + angka) — dipakai lintas halaman monitoring === */
+  @apply rounded-lg border border-white/10 bg-slate-900/60 p-5 shadow-xs shadow-black/30;
+
+  [data-theme='light'] & {
+    background-color: rgb(var(--nos-surface-1));
+    box-shadow:
+      0 1px 2px rgb(15 23 42 / 0.04),
+      0 8px 24px rgb(15 23 42 / 0.06);
+  }
+}
+
+@utility nos-mobile-list {
+  /* === Mobile data cards === */
+  @apply divide-y divide-white/5 md:hidden;
+}
+
+@utility nos-mobile-card {
+  @apply p-4;
+}
+
+@utility nos-mobile-card-header {
+  @apply flex items-start justify-between gap-3;
+}
+
+@utility nos-mobile-card-title {
+  @apply min-w-0 text-sm font-semibold text-white;
+}
+
+@utility nos-mobile-card-subtitle {
+  @apply mt-1 wrap-break-word text-xs text-slate-500;
+}
+
+@utility nos-mobile-fields {
+  @apply mt-4 space-y-2;
+}
+
+@utility nos-mobile-field {
+  @apply flex items-start justify-between gap-4 text-sm;
+}
+
+@utility nos-mobile-label {
+  @apply shrink-0 text-xs font-medium uppercase tracking-wide text-slate-500;
+}
+
+@utility nos-mobile-value {
+  @apply min-w-0 wrap-break-word text-right tabular-nums text-slate-200;
+}
+
+@utility nos-table-desktop {
+  @apply hidden overflow-x-auto md:block;
+
+  & table {
+    border-collapse: separate;
+    border-spacing: 0;
+  }
+}
+
+@utility nos-table-card {
+  @apply rounded-lg border border-white/10 bg-slate-900/95 shadow-xl shadow-black/40;
+
+  [data-theme='light'] & {
+    background-color: rgb(var(--nos-surface-1));
+    box-shadow:
+      0 1px 2px rgb(15 23 42 / 0.04),
+      0 8px 24px rgb(15 23 42 / 0.06);
+  }
+}
+
+@utility nos-panel-header {
+  @apply flex items-center gap-3 border-b border-white/10 px-6 py-4;
+}
+
+@utility nos-panel-header-compact {
+  @apply flex items-center gap-3 border-b border-white/10 px-5 py-4;
+}
+
+@utility nos-icon-tile {
+  @apply flex h-9 w-9 flex-shrink-0 items-center justify-center rounded-lg bg-sky-500/15 text-sky-300 ring-1 ring-sky-500/30;
+}
+
+@utility nos-icon-tile-sm {
+  @apply flex h-8 w-8 flex-shrink-0 items-center justify-center rounded-lg bg-sky-500/15 text-sky-300 ring-1 ring-sky-500/30;
+}
+
+@utility nos-btn-secondary-base {
+  /* Permukaan mengambang (dropdown shell, palet pencarian, laci samping).
+       Di tema gelap latar 95% opak ditopang backdrop-blur; di tema terang blur
+       dimatikan global sehingga sisa 5% transparansi menampakkan isi halaman
+       di belakangnya (angka dasbor terbaca di balik notifikasi). Di sini
+       dibuat opak. Tema gelap sengaja tidak disentuh. */
+  /* Tombol sekunder baku (SecondaryButton): di tema terang permukaan opak surface-1. */
+  [data-theme='light'] & {
+    background-color: rgb(var(--nos-surface-1));
+  }
+}
+
+@utility nos-popover {
+  [data-theme='light'] & {
+    background-color: rgb(var(--nos-surface-1));
+    -webkit-backdrop-filter: none;
+    backdrop-filter: none;
+    box-shadow:
+      0 2px 6px rgb(15 23 42 / 0.06),
+      0 16px 40px rgb(15 23 42 / 0.14);
+  }
+}
+
+@utility nos-toast {
+  /* Toast melayang (Shell/FlashMessages). Di tema gelap `bg-*-950/70` + blur;
+       di tema terang blur dimatikan global sehingga latar 70%-nya membiarkan
+       teks halaman di belakang ikut terbaca. Jadi kertas opak — warna tepi,
+       ikon, dan teks tidak disentuh. Bayangan lewat `--tw-shadow` supaya
+       ring/shadow Tailwind di markup tidak ikut terhapus (spesifikasi §3a UI_DESIGN_SYSTEM). */
+  [data-theme='light'] & {
+    background-color: rgb(var(--nos-surface-1));
+    --tw-shadow:
+      0 1px 2px rgb(15 23 42 / 0.06), 0 14px 32px rgb(15 23 42 / 0.13);
+  }
+}
+
+@utility nos-surface {
+  /* Kartu kaca ad-hoc yang ditulis langsung di halaman (`bg-slate-900/40..60`
+       + blur, bukan lewat nos-card/nos-panel). Di tema terang putih 40% di atas
+       kanvas terang nyaris tak terlihat; penanda ini membuatnya kertas opak.
+       Tema gelap tidak berubah. */
+  [data-theme='light'] & {
+    background-color: rgb(var(--nos-surface-1));
+    box-shadow:
+      0 1px 2px rgb(15 23 42 / 0.04),
+      0 8px 24px rgb(15 23 42 / 0.06);
+  }
+}
+
+@utility nos-shell-sidebar {
+  /* Kerangka aplikasi (sidebar, header, footer). Di tema gelap ketiganya
+       kaca tipis bg-canvas-3/35 di atas kanvas navy. Di tema terang nilai yang
+       sama nyaris sewarna kanvas — batas sidebar lenyap. Jadi kertas putih
+       opak (blur sudah dimatikan global di tema terang), dengan garis tepi
+       yang sudah ada di markup. */
+  [data-theme='light'] & {
+    background-color: rgb(var(--nos-surface-1));
+  }
+}
+
+@utility nos-shell-bar {
+  [data-theme='light'] & {
+    background-color: rgb(var(--nos-surface-1));
+  }
+}
+
+@utility nos-terminal {
+  /* Blok keluaran CLI/skrip OLT (.nos-terminal) dan gambar rak/panel perangkat
+       fisik (.nos-device). Dikunci gelap lewat data-theme="dark" di
+       markupnya (konvensi terminal; warna sintaks hijau/cyan dirancang untuk
+       latar gelap). Latarnya /70 transparan — di atas panel gelap tak terlihat
+       bedanya, tapi di atas kertas putih jadi abu kusam. Maka di tema terang
+       latarnya dibuat opak. Tema gelap tidak disentuh. */
+  [data-theme='light'] & {
+    background-color: rgb(2 6 23 / 0.94);
+  }
+}
+
+@utility nos-device {
+  [data-theme='light'] & {
+    background-color: rgb(2 6 23 / 0.94);
+  }
+}
+
+@utility nos-spotlight {
+  /* === Landing: interactive spotlight (cursor-follow highlight) === */
+  position: relative;
+  & > * {
+    position: relative;
+    z-index: 1;
+  }
+  &::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    z-index: 0;
+    border-radius: inherit;
+    pointer-events: none;
+    opacity: 0;
+    transition: opacity 0.35s ease;
+    background: radial-gradient(
+      420px circle at var(--spot-x, 50%) var(--spot-y, 50%),
+      rgba(56, 189, 248, 0.16),
+      transparent 55%
+    );
+  }
+  &:hover::before {
+    opacity: 1;
+  }
+}
+
+@utility nos-ring {
+  /* === Landing: animated gradient ring border (hover) === */
+  &::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    z-index: 0;
+    border-radius: inherit;
+    padding: 1px;
+    pointer-events: none;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+    background: conic-gradient(
+      from var(--ring-angle, 0deg),
+      transparent 0deg,
+      rgba(56, 189, 248, 0.65) 70deg,
+      rgba(168, 85, 247, 0.55) 140deg,
+      transparent 210deg
+    );
+    -webkit-mask:
+      linear-gradient(#000 0 0) content-box,
+      linear-gradient(#000 0 0);
+    -webkit-mask-composite: xor;
+    mask-composite: exclude;
+  }
+  &:hover::after {
+    opacity: 1;
+    animation: nos-ring-spin 4s linear infinite;
+  }
+}
+
+@utility nos-marquee {
+  /* === Landing: marquee (infinite horizontal scroll) === */
+  display: flex;
+  width: max-content;
+  animation: nos-marquee 34s linear infinite;
+  .nos-marquee-wrap:hover & {
+    animation-play-state: paused;
+  }
+}
+
+@utility nos-marquee-wrap {
+  &:hover .nos-marquee {
+    animation-play-state: paused;
+  }
+}
+
+@utility nos-float {
+  /* === Landing: gentle idle float === */
+  animation: nos-float 6s ease-in-out infinite;
+}
+
 
 @layer base {
     /* Dipasang pada tiap simpul ber-data-theme, bukan hanya di <html>, supaya
@@ -263,456 +1744,6 @@
 }
 
 @layer components {
-    /* === Page chrome === */
-    .nos-page {
-        @apply py-8 pb-16;
-        min-height: 60vh;
-    }
-
-    .nos-page-compact {
-        @apply py-6;
-    }
-
-    .nos-container {
-        @apply w-full px-4 sm:px-6 lg:px-8;
-    }
-
-    .nos-container-narrow {
-        @apply mx-auto max-w-5xl px-4 sm:px-6 lg:px-8;
-    }
-
-    /* === Kerangka aplikasi desktop ===
-       Setinggi layar: sidebar, header, footer diam; hanya .nos-app-scroll yang menggulir
-       (diberi atribut `scroll-region` supaya preserveScroll Inertia bekerja). HP tetap
-       menggulir di level dokumen. scripts/snapshot.mjs membuka kerangka ini untuk full-page. */
-    @media (min-width: 1024px) {
-        .nos-app-shell {
-            height: 100vh;
-            overflow: hidden;
-        }
-
-        .nos-app-scroll {
-            min-height: 0;
-            overflow-x: hidden;
-            overflow-y: auto;
-        }
-    }
-
-    /* === Stage Utama Dashboard Grid === */
-    .nos-grid-stage {
-        position: relative;
-        background-color: rgb(var(--nos-canvas));
-        background-image:
-            radial-gradient(ellipse 80% 80% at 50% -20%, rgba(14, 165, 233, 0.25), transparent 70%),
-            linear-gradient(180deg, rgb(var(--nos-canvas-2)) 0%, rgb(var(--nos-canvas)) 45%, rgb(var(--nos-canvas-3)) 100%);
-        min-height: 100vh;
-        width: 100%;
-    }
-
-    /* Grid Lines Pattern Layer (Terlihat Jelas Penuh di Seluruh Layar Tanpa Masking) */
-    .nos-grid-pattern {
-        position: fixed;
-        inset: 0;
-        z-index: 0;
-        pointer-events: none;
-        background-size: 32px 32px;
-        background-image:
-            linear-gradient(to right, rgba(56, 189, 248, 0.15) 1px, transparent 1px),
-            linear-gradient(to bottom, rgba(56, 189, 248, 0.15) 1px, transparent 1px);
-    }
-
-    /* Efek Pendaran Cahaya di Tengah Atas (Top-Center Ambient Spotlight yang Hidup) */
-    .nos-top-light {
-        position: fixed;
-        top: -120px;
-        left: 50%;
-        transform: translateX(-50%);
-        width: 950px;
-        max-width: 95vw;
-        height: 480px;
-        z-index: 0;
-        pointer-events: none;
-        background: radial-gradient(
-            ellipse at center top,
-            rgba(6, 182, 212, 0.40) 0%,
-            rgba(14, 165, 233, 0.22) 40%,
-            rgba(99, 102, 241, 0.12) 65%,
-            transparent 85%
-        );
-        filter: blur(55px);
-    }
-
-    .nos-ambient-glow {
-        position: fixed;
-        top: -40px;
-        left: 50%;
-        transform: translateX(-50%);
-        width: 600px;
-        height: 220px;
-        z-index: 0;
-        pointer-events: none;
-        background: radial-gradient(
-            ellipse at center top,
-            rgba(34, 211, 238, 0.50) 0%,
-            rgba(56, 189, 248, 0.25) 45%,
-            transparent 80%
-        );
-        filter: blur(40px);
-    }
-
-    /* === Dark base background (wavy grid lives in <GridWaves/>) === */
-    .nos-grid-bg {
-        position: relative;
-        background-color: transparent;
-    }
-
-    /* === Dark glass surfaces === */
-    .nos-glass-panel {
-        @apply overflow-hidden rounded-2xl border border-white/10 bg-slate-900/10 shadow-lg shadow-black/30 backdrop-blur-xl;
-    }
-
-    .nos-glass-card {
-        @apply rounded-2xl border border-white/10 bg-slate-900/10 p-5 shadow-lg shadow-black/30 backdrop-blur-xl;
-    }
-
-    .nos-glass-hover {
-        @apply transition-all duration-200 hover:border-white/20 hover:bg-slate-900/20 hover:shadow-cyan-500/10;
-    }
-
-    .nos-glass-header {
-        @apply flex items-center gap-3 border-b border-white/10 px-5 py-4 sm:px-6;
-    }
-
-    /* === Colored circle icons (stat cards, action grid) === */
-    .nos-circle {
-        @apply flex h-12 w-12 flex-shrink-0 items-center justify-center rounded-full ring-1;
-    }
-
-    .nos-circle-sky    { @apply nos-circle bg-sky-500/15 text-sky-400 ring-sky-500/30; }
-    .nos-circle-cyan   { @apply nos-circle bg-cyan-500/15 text-cyan-400 ring-cyan-500/30; }
-    .nos-circle-emerald{ @apply nos-circle bg-emerald-500/15 text-emerald-400 ring-emerald-500/30; }
-    .nos-circle-purple { @apply nos-circle bg-purple-500/15 text-purple-400 ring-purple-500/30; }
-    .nos-circle-red    { @apply nos-circle bg-red-500/15 text-red-400 ring-red-500/30; }
-    .nos-circle-amber  { @apply nos-circle bg-amber-500/15 text-amber-400 ring-amber-500/30; }
-    .nos-circle-slate  { @apply nos-circle bg-slate-500/15 text-slate-300 ring-slate-500/30; }
-
-    /* === Pills / badges === */
-    /* Lencana status — definisi baku (UI_DESIGN_SYSTEM). Bahaya = rose. */
-    .nos-pill {
-        @apply inline-flex items-center gap-1 rounded-md px-2.5 py-0.5 text-xs font-semibold ring-1;
-    }
-    .nos-pill-success { @apply nos-pill bg-emerald-500/20 text-emerald-300 ring-emerald-500/40; }
-    .nos-pill-danger  { @apply nos-pill bg-rose-500/20 text-rose-300 ring-rose-500/40; }
-    .nos-pill-warning { @apply nos-pill bg-amber-500/20 text-amber-300 ring-amber-500/40; }
-    .nos-pill-info    { @apply nos-pill bg-sky-500/20 text-sky-300 ring-sky-500/40; }
-    .nos-pill-muted   { @apply nos-pill bg-slate-700/40 text-slate-300 ring-slate-600/50; }
-    .nos-pill-critical{ @apply nos-pill bg-rose-600/25 text-rose-200 ring-rose-500/50; }
-    .nos-pill-major   { @apply nos-pill bg-orange-500/25 text-orange-200 ring-orange-500/50; }
-    .nos-pill-minor   { @apply nos-pill bg-amber-500/25 text-amber-200 ring-amber-500/50; }
-
-    /* === Inputs (dark) === */
-    .nos-input {
-        @apply rounded-lg border-white/10 bg-slate-900/60 text-slate-100 shadow-inner shadow-black/20 placeholder:text-slate-500 focus:border-cyan-500 focus:ring-cyan-500;
-    }
-
-    /* === Filter card (bentuk standar lintas halaman; dipakai via <FilterCard/>) === */
-    .nos-filter {
-        @apply overflow-hidden rounded-lg border border-white/10 bg-slate-900/10 shadow-lg shadow-black/30 backdrop-blur-xl;
-    }
-
-    .nos-filter-head {
-        @apply flex flex-wrap items-center gap-3 border-b border-white/10 px-4 py-4 sm:px-6;
-    }
-
-    .nos-filter-body {
-        @apply px-4 py-4 sm:px-6;
-    }
-
-    /* Grid field: 1 kolom (mobile) → 2 → 4 (desktop). Field "lebar" pakai sm:col-span-2. */
-    .nos-filter-grid {
-        @apply grid gap-4 sm:grid-cols-2 lg:grid-cols-4;
-    }
-
-    .nos-filter-label {
-        @apply mb-1 block text-xs font-medium uppercase tracking-wide text-slate-500;
-    }
-
-    /* Kontrol input/select seragam. Tinggi 44px (target sentuh), fokus cyan. */
-    .nos-filter-control {
-        @apply block min-h-11 w-full rounded-lg border-white/10 bg-slate-900/60 px-3 text-sm text-slate-100 shadow-inner shadow-black/20 placeholder:text-slate-500 focus:border-cyan-500 focus:ring-cyan-500 disabled:cursor-not-allowed disabled:opacity-50;
-    }
-
-    /* Baris tombol aksi (Reset/Terapkan) di kaki kartu filter server-side. */
-    .nos-filter-actions {
-        @apply mt-4 grid gap-2 border-t border-white/10 pt-4 sm:flex sm:flex-wrap sm:items-center sm:justify-end;
-    }
-
-    .nos-filter-reset {
-        @apply inline-flex min-h-11 items-center justify-center gap-2 rounded-lg border border-white/10 bg-slate-900/60 px-4 text-sm font-medium text-slate-200 transition-colors hover:bg-white/[0.04] disabled:cursor-not-allowed disabled:opacity-50;
-    }
-
-    .nos-filter-apply {
-        @apply inline-flex min-h-11 items-center justify-center gap-2 rounded-lg bg-cyan-500 px-4 text-sm font-medium text-onaccent transition-colors hover:bg-cyan-600;
-    }
-
-    .nos-link {
-        @apply font-medium text-cyan-400 transition-colors hover:text-cyan-300;
-    }
-
-    .nos-link-muted {
-        @apply font-medium text-slate-400 transition-colors hover:text-slate-200;
-    }
-
-    /* === Alerts === */
-    .nos-alert-success {
-        @apply mb-5 flex items-center gap-3 rounded-lg border border-emerald-500/30 bg-emerald-500/10 px-4 py-3 text-sm text-emerald-200;
-    }
-
-    .nos-alert-danger {
-        @apply mb-5 flex items-center gap-3 rounded-lg border border-red-500/30 bg-red-500/10 px-4 py-3 text-sm text-red-200;
-    }
-
-    /* === Legacy aliases (nos-panel/nos-card now route to dark glass) === */
-    .nos-panel {
-        @apply overflow-hidden rounded-2xl border border-white/10 bg-slate-900/10 shadow-lg shadow-black/30 backdrop-blur-xl;
-    }
-
-    .nos-card {
-        @apply rounded-2xl border border-white/10 bg-slate-900/10 p-5 shadow-lg shadow-black/30 backdrop-blur-xl;
-    }
-
-    /* === Kartu statistik ringkas (label + angka) — dipakai lintas halaman monitoring === */
-    .nos-stat {
-        @apply rounded-lg border border-white/10 bg-slate-900/60 p-5 shadow-sm shadow-black/30;
-    }
-
-    /* === Mobile data cards === */
-    .nos-mobile-list {
-        @apply divide-y divide-white/5 md:hidden;
-    }
-
-    .nos-mobile-card {
-        @apply p-4;
-    }
-
-    .nos-mobile-card-header {
-        @apply flex items-start justify-between gap-3;
-    }
-
-    .nos-mobile-card-title {
-        @apply min-w-0 text-sm font-semibold text-white;
-    }
-
-    .nos-mobile-card-subtitle {
-        @apply mt-1 break-words text-xs text-slate-500;
-    }
-
-    .nos-mobile-fields {
-        @apply mt-4 space-y-2;
-    }
-
-    .nos-mobile-field {
-        @apply flex items-start justify-between gap-4 text-sm;
-    }
-
-    .nos-mobile-label {
-        @apply shrink-0 text-xs font-medium uppercase tracking-wide text-slate-500;
-    }
-
-    .nos-mobile-value {
-        @apply min-w-0 break-words text-right tabular-nums text-slate-200;
-    }
-
-    .nos-table-desktop {
-        @apply hidden overflow-x-auto md:block;
-    }
-
-    .nos-table-desktop table {
-        border-collapse: separate;
-        border-spacing: 0;
-    }
-
-    .nos-table-card {
-        @apply rounded-lg border border-white/10 bg-slate-900/95 shadow-xl shadow-black/40;
-    }
-
-    .nos-glass-panel,
-    .nos-glass-card,
-    .nos-panel,
-    .nos-card {
-        box-shadow:
-            0 18px 48px rgba(2, 6, 23, 0.44),
-            0 0 0 1px rgba(56, 189, 248, 0.035),
-            0 0 34px rgba(14, 165, 233, 0.10);
-    }
-
-    .nos-glass-hover:hover {
-        box-shadow:
-            0 24px 62px rgba(2, 6, 23, 0.50),
-            0 0 0 1px rgba(56, 189, 248, 0.08),
-            0 0 46px rgba(14, 165, 233, 0.18);
-    }
-
-    .nos-panel-header {
-        @apply flex items-center gap-3 border-b border-white/10 px-6 py-4;
-    }
-
-    .nos-panel-header-compact {
-        @apply flex items-center gap-3 border-b border-white/10 px-5 py-4;
-    }
-
-    .nos-icon-tile {
-        @apply flex h-9 w-9 flex-shrink-0 items-center justify-center rounded-lg bg-sky-500/15 text-sky-300 ring-1 ring-sky-500/30;
-    }
-
-    .nos-icon-tile-sm {
-        @apply flex h-8 w-8 flex-shrink-0 items-center justify-center rounded-lg bg-sky-500/15 text-sky-300 ring-1 ring-sky-500/30;
-    }
-
-    /* ===================================================================
-       TEMA TERANG — penimpaan kelas nos-*
-       ===================================================================
-       Arah visual: kanvas biru-abu
-       muda, kartu putih solid, garis tipis, bayangan rapat. Tanpa blur,
-       tanpa grid neon, tanpa pendar cyan — kedalaman dari garis & bayangan.
-
-       Tema gelap TIDAK disentuh oleh blok ini; semua aturan di sini
-       bergerbang [data-theme="light"].
-       =================================================================== */
-
-    /* Kanvas datar. Grid neon & pendar dimatikan, bukan dipudarkan: di latar
-       terang keduanya hanya jadi jaring biru dan noda kehijauan. */
-    [data-theme="light"] .nos-grid-stage {
-        background-image: linear-gradient(
-            180deg,
-            rgb(var(--nos-canvas-2)) 0%,
-            rgb(var(--nos-canvas)) 55%,
-            rgb(var(--nos-canvas-3)) 100%
-        );
-    }
-
-    [data-theme="light"] .nos-grid-pattern,
-    [data-theme="light"] .nos-top-light,
-    [data-theme="light"] .nos-ambient-glow {
-        display: none;
-    }
-
-    /* Panel jadi kertas. Di tema gelap panel NMS hanya bg-slate-900/10 +
-       blur — di atas kanvas terang itu = putih 10%, panelnya lenyap. Blur
-       dimatikan: di atas kanvas nyaris seragam ia tak terlihat tapi tetap
-       memaksa compositor layer terpisah saat menggulir. Bayangan diganti
-       (bukan dipucatkan): halo besar tema gelap tampak kotor di latar terang. */
-    [data-theme="light"] .nos-glass-panel,
-    [data-theme="light"] .nos-glass-card,
-    [data-theme="light"] .nos-panel,
-    [data-theme="light"] .nos-card,
-    [data-theme="light"] .nos-filter {
-        background-color: rgb(var(--nos-surface-1));
-        -webkit-backdrop-filter: none;
-        backdrop-filter: none;
-        box-shadow:
-            0 1px 2px rgb(15 23 42 / 0.04),
-            0 8px 24px rgb(15 23 42 / 0.06);
-    }
-
-    /* Permukaan mengambang (dropdown shell, palet pencarian, laci samping).
-       Di tema gelap latar 95% opak ditopang backdrop-blur; di tema terang blur
-       dimatikan global sehingga sisa 5% transparansi menampakkan isi halaman
-       di belakangnya (angka dasbor terbaca di balik notifikasi). Di sini
-       dibuat opak. Tema gelap sengaja tidak disentuh. */
-    /* Tombol sekunder baku (SecondaryButton): di tema terang permukaan opak surface-1. */
-    [data-theme="light"] .nos-btn-secondary-base {
-        background-color: rgb(var(--nos-surface-1));
-    }
-
-    [data-theme="light"] .nos-popover {
-        background-color: rgb(var(--nos-surface-1));
-        -webkit-backdrop-filter: none;
-        backdrop-filter: none;
-        box-shadow:
-            0 2px 6px rgb(15 23 42 / 0.06),
-            0 16px 40px rgb(15 23 42 / 0.14);
-    }
-
-    /* Toast melayang (Shell/FlashMessages). Di tema gelap `bg-*-950/70` + blur;
-       di tema terang blur dimatikan global sehingga latar 70%-nya membiarkan
-       teks halaman di belakang ikut terbaca. Jadi kertas opak — warna tepi,
-       ikon, dan teks tidak disentuh. Bayangan lewat `--tw-shadow` supaya
-       ring/shadow Tailwind di markup tidak ikut terhapus (spesifikasi §3a UI_DESIGN_SYSTEM). */
-    [data-theme="light"] .nos-toast {
-        background-color: rgb(var(--nos-surface-1));
-        --tw-shadow:
-            0 1px 2px rgb(15 23 42 / 0.06),
-            0 14px 32px rgb(15 23 42 / 0.13);
-    }
-
-    /* Kartu kaca ad-hoc yang ditulis langsung di halaman (`bg-slate-900/40..60`
-       + blur, bukan lewat nos-card/nos-panel). Di tema terang putih 40% di atas
-       kanvas terang nyaris tak terlihat; penanda ini membuatnya kertas opak.
-       Tema gelap tidak berubah. */
-    [data-theme="light"] .nos-surface {
-        background-color: rgb(var(--nos-surface-1));
-        box-shadow:
-            0 1px 2px rgb(15 23 42 / 0.04),
-            0 8px 24px rgb(15 23 42 / 0.06);
-    }
-
-    [data-theme="light"] .nos-glass-hover:hover {
-        background-color: rgb(var(--nos-surface-1));
-        box-shadow:
-            0 1px 2px rgb(15 23 42 / 0.05),
-            0 12px 28px rgb(15 23 42 / 0.10);
-    }
-
-    [data-theme="light"] .nos-filter-head {
-        background-color: rgb(var(--nos-surface-3));
-    }
-
-    [data-theme="light"] .nos-stat,
-    [data-theme="light"] .nos-table-card {
-        background-color: rgb(var(--nos-surface-1));
-        box-shadow:
-            0 1px 2px rgb(15 23 42 / 0.04),
-            0 8px 24px rgb(15 23 42 / 0.06);
-    }
-
-    /* Kolom input: putih penuh, tanpa bayangan dalam. `shadow-inner
-       shadow-black/20` membuat kolom tampak cekung di permukaan gelap; di
-       kertas putih efeknya hanya tepi yang kotor. */
-    [data-theme="light"] .nos-input,
-    [data-theme="light"] .nos-filter-control,
-    [data-theme="light"] textarea,
-    [data-theme="light"] select:not([multiple]):not([size]),
-    [data-theme="light"] select[multiple],
-    [data-theme="light"] select[size] {
-        background-color: rgb(var(--nos-surface-1));
-        box-shadow: none;
-    }
-
-    [data-theme="light"] .nos-filter-reset {
-        background-color: rgb(var(--nos-surface-1));
-    }
-
-    /* Kerangka aplikasi (sidebar, header, footer). Di tema gelap ketiganya
-       kaca tipis bg-canvas-3/35 di atas kanvas navy. Di tema terang nilai yang
-       sama nyaris sewarna kanvas — batas sidebar lenyap. Jadi kertas putih
-       opak (blur sudah dimatikan global di tema terang), dengan garis tepi
-       yang sudah ada di markup. */
-    [data-theme="light"] .nos-shell-sidebar,
-    [data-theme="light"] .nos-shell-bar {
-        background-color: rgb(var(--nos-surface-1));
-    }
-
-    /* Blok keluaran CLI/skrip OLT (.nos-terminal) dan gambar rak/panel perangkat
-       fisik (.nos-device). Dikunci gelap lewat data-theme="dark" di
-       markupnya (konvensi terminal; warna sintaks hijau/cyan dirancang untuk
-       latar gelap). Latarnya /70 transparan — di atas panel gelap tak terlihat
-       bedanya, tapi di atas kertas putih jadi abu kusam. Maka di tema terang
-       latarnya dibuat opak. Tema gelap tidak disentuh. */
-    [data-theme="light"] .nos-terminal,
-    [data-theme="light"] .nos-device {
-        background-color: rgb(2 6 23 / 0.94);
-    }
 
     /* Blur dimatikan di tema terang untuk SEMUA elemen, bukan dikecilkan: di
        atas kanvas nyaris seragam blur tidak menghasilkan efek visual apa pun
@@ -721,77 +1752,6 @@
     [data-theme="light"] [class*="backdrop-blur"] {
         -webkit-backdrop-filter: none;
         backdrop-filter: none;
-    }
-
-    /* === Landing: interactive spotlight (cursor-follow highlight) === */
-    .nos-spotlight {
-        position: relative;
-    }
-    .nos-spotlight > * {
-        position: relative;
-        z-index: 1;
-    }
-    .nos-spotlight::before {
-        content: '';
-        position: absolute;
-        inset: 0;
-        z-index: 0;
-        border-radius: inherit;
-        pointer-events: none;
-        opacity: 0;
-        transition: opacity 0.35s ease;
-        background: radial-gradient(
-            420px circle at var(--spot-x, 50%) var(--spot-y, 50%),
-            rgba(56, 189, 248, 0.16),
-            transparent 55%
-        );
-    }
-    .nos-spotlight:hover::before {
-        opacity: 1;
-    }
-
-    /* === Landing: animated gradient ring border (hover) === */
-    .nos-ring::after {
-        content: '';
-        position: absolute;
-        inset: 0;
-        z-index: 0;
-        border-radius: inherit;
-        padding: 1px;
-        pointer-events: none;
-        opacity: 0;
-        transition: opacity 0.3s ease;
-        background: conic-gradient(
-            from var(--ring-angle, 0deg),
-            transparent 0deg,
-            rgba(56, 189, 248, 0.65) 70deg,
-            rgba(168, 85, 247, 0.55) 140deg,
-            transparent 210deg
-        );
-        -webkit-mask:
-            linear-gradient(#000 0 0) content-box,
-            linear-gradient(#000 0 0);
-        -webkit-mask-composite: xor;
-        mask-composite: exclude;
-    }
-    .nos-ring:hover::after {
-        opacity: 1;
-        animation: nos-ring-spin 4s linear infinite;
-    }
-
-    /* === Landing: marquee (infinite horizontal scroll) === */
-    .nos-marquee {
-        display: flex;
-        width: max-content;
-        animation: nos-marquee 34s linear infinite;
-    }
-    .nos-marquee-wrap:hover .nos-marquee {
-        animation-play-state: paused;
-    }
-
-    /* === Landing: gentle idle float === */
-    .nos-float {
-        animation: nos-float 6s ease-in-out infinite;
     }
 }
 

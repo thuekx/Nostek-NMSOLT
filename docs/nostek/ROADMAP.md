@@ -70,7 +70,7 @@ On every session start: retrieve this file, status YAML and HANDOFF; validate Gi
 
 ## WRITE-UI-1 device-write admin switch checkpoint
 
-Owner request 2026-10-24. Env `NMSOLT_DEVICE_WRITES_ENABLED=admin` lets admins switch device writes in Settings → Device writes (global + timer, channel olt/acs, per-OLT block, reason + audit); `false` stays the default hard off. Source PR for the owner to merge; a host takes it with one env change to `admin` in the deploy package. See [NMS-02-SECURITY-MATRIX.md](NMS-02-SECURITY-MATRIX.md).
+Owner request 2026-10-24. Env `NMSOLT_DEVICE_WRITES_ENABLED=admin` lets admins switch device writes in Settings → Device writes (global + timer, channel olt/acs, per-OLT block, reason + audit); `false` stays the default hard off. Merged as PR #40; a host takes it with one env change to `admin` in the deploy package. See [NMS-02-SECURITY-MATRIX.md](NMS-02-SECURITY-MATRIX.md).
 
 ## NMS-07-A unified package checkpoint
 

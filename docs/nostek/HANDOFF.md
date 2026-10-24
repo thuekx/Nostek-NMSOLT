@@ -221,9 +221,9 @@ counters were measured and do not add up to the PON traffic (TRF-1-PON-TRAFFIC.m
 findings"). TRF-4: the ONU detail page shows live per-ONT traffic from the read-only CLI
 `show interface gpon-onu_…` (format verified on C320 V2.1.0; not stored as history). Still BLOCKED on the owner: real-OLT check of `max-repetitions` 25 (the PON
 counters are VERIFIED on OLT 192.168.254.2).
-WRITE-UI-1 (owner 2026-10-24): branch `step/write-ui-1-device-write-switch` adds Settings → Device
+WRITE-UI-1 (owner 2026-10-24, PR #40 merged) adds Settings → Device
 writes (env `admin` = admins decide: global switch + timer, channel olt/acs, per-OLT block,
-reason + audit; `false` stays the default hard off). The owner merges it; a host takes it with
+reason + audit; `false` stays the default hard off). A host takes it with
 one env change `false` → `admin` in a deploy package.
 NMS-07 evidence that needs a host stays open (real app image, queue latency under real
 workers). Do not modify the retained LICENSE attribution.

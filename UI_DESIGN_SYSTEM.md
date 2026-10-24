@@ -241,7 +241,7 @@ Ubah komponennya, jangan menulis ulang gaya per halaman.
 | Unsur | Spesifikasi |
 |---|---|
 | Font | **Manrope 400–800** (`font-sans`). |
-| Tombol teks | tinggi **44 px** (`min-h-11`), `sm` = 34 px untuk footer modal & bilah massal; `rounded-xl`; `text-sm font-semibold`, tanpa uppercase; ikon 16 px + `gap-2`. |
+| Tombol teks | tinggi **44 px di HP, 36 px dari `sm:`** (`min-h-11 sm:min-h-9`), `sm` = 32 px untuk footer modal & bilah massal; `rounded-lg`; datar dengan token `primary` / `card`+`border` / `destructive` (UI-S2, tanpa gradien); `text-sm font-medium`, tanpa uppercase; ikon 16 px + `gap-2`. |
 | Varian tombol | primary `from-cyan-500 to-sky-500` → hover `-600`, `text-onaccent` · secondary `border-slate-700/80 bg-slate-900/80 text-slate-200` · success `from-emerald-600 to-teal-600` · warning `from-amber-500 to-orange-500` teks `slate-950` · danger `from-rose-600 to-red-600`. |
 | Fokus & nonaktif | `focus-visible:ring-2 ring-cyan-400/60 ring-offset-2 ring-offset-canvas` (danger: ring rose) · `disabled:opacity-50 cursor-not-allowed`. |
 | Tombol ikon (aksi baris) | 36 px di `sm:` ke atas, 44 px di HP; `rounded-lg`; isi tipis `bg-{c}-500/15 text-{c}-300 ring-1 ring-{c}-500/30`; varian default/primary/info/success/warning/danger; selalu `title` (otomatis jadi `aria-label`). |

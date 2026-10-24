@@ -19,7 +19,8 @@
         "group_network": "Jaringan OLT",
         "group_overview": "Ringkasan",
         "group_watch": "Pantauan",
-        "network_tree": "Pohon jaringan"
+        "network_tree": "Pohon jaringan",
+        "field_console": "Konsol lapangan"
     },
     "common": {
         "stale": "Basi",
@@ -2219,5 +2220,33 @@
         "worst_title": "RX terburuk",
         "worst_subtitle": "Sampai 10 ONU online yang paling jauh dari rentang sehat.",
         "worst_empty": "Semua ONU online dalam rentang sehat."
+    },
+    "field": {
+        "title": "Konsol lapangan",
+        "subtitle": "Untuk teknisi di lokasi: cari ONU, lihat RX dan alarm berat.",
+        "search_label": "Cari ONU",
+        "search_placeholder": "SN, nama pelanggan, atau MAC",
+        "search_btn": "Cari",
+        "too_short": "Ketik minimal 3 karakter.",
+        "no_results": "Tidak ada ONU yang cocok dengan \"{q}\".",
+        "alarms_title": "Alarm berat aktif",
+        "alarms_empty": "Tidak ada alarm critical atau major yang aktif.",
+        "back": "Kembali",
+        "no_name": "Tanpa nama",
+        "status_online": "Online",
+        "status_offline": "Offline",
+        "status_unknown": "Tidak terkini",
+        "down_cause": "Penyebab putus",
+        "rx_now": "RX sekarang",
+        "no_odp": "Belum terhubung ke ODP",
+        "address": "Alamat",
+        "directions": "Arah ke lokasi",
+        "call": "Telepon",
+        "on_map": "Di peta",
+        "full_detail": "Detail lengkap",
+        "onu_alarms": "Alarm aktif ONU ini",
+        "onu_alarms_empty": "Tidak ada alarm aktif.",
+        "port_wide": "Seluruh PON/ODP",
+        "this_onu": "ONU ini"
     }
 }

@@ -58,3 +58,20 @@ describe('RxBandChart', () => {
         }
     });
 });
+
+describe('RxGauge (UI-C1)', async () => {
+    const { default: RxGauge } = await import('@/Components/Field/RxGauge.vue');
+
+    it('places the marker by dBm and clamps outside the band', () => {
+        const left = (dbm) => mount(RxGauge, { props: { dbm } }).get('[data-testid=rx-gauge-marker]').attributes('style');
+        expect(left(-19)).toContain('left: 50%');
+        expect(left(-40)).toContain('left: 0%');
+        expect(left(0)).toContain('left: 100%');
+    });
+
+    it('has no marker without RX and no colour when stale', () => {
+        expect(mount(RxGauge, { props: { dbm: null } }).find('[data-testid=rx-gauge-marker]').exists()).toBe(false);
+        const html = mount(RxGauge, { props: { dbm: -20, stale: true } }).html();
+        expect(html).not.toMatch(/bg-(success|warning|destructive)/);
+    });
+});

@@ -11,7 +11,7 @@ import UserMenu from '@/Components/Shell/UserMenu.vue';
 import { Link, usePage } from '@inertiajs/vue3';
 import { useI18n } from 'vue-i18n';
 import { formatDateTime } from '@/lib/datetime';
-import { BellRing, BookOpen, Cable, ChevronLeft, Eye, FileBarChart, LayoutDashboard, Lock, LogOut, MapPin, Menu, Network, Radar, ScrollText, Search, Send, Settings, User, Users, Waypoints, WifiOff } from '@lucide/vue';
+import { BellRing, BookOpen, Cable, ChevronLeft, Eye, FileBarChart, LayoutDashboard, Lock, LogOut, MapPin, Menu, Network, Radar, ScrollText, Search, Send, Settings, Smartphone, User, Users, Waypoints, WifiOff } from '@lucide/vue';
 
 const { t } = useI18n({ useScope: 'global' });
 
@@ -73,6 +73,7 @@ const navGroups = computed(() => {
             items: [
                 { name: t('nav.map'), icon: MapPin, href: route('map.index'), match: 'map.*' },
                 { name: t('nav.odp'), icon: Waypoints, href: route('odp.index'), match: 'odp.*' },
+                { name: t('nav.field_console'), icon: Smartphone, href: route('field.index'), match: 'field.*' },
             ],
         },
         {

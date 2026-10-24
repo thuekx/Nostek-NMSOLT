@@ -224,6 +224,14 @@ dimigrasi per kelompok halaman; **halaman atau komponen baru memakai fondasi ini
 - Status jujur: bila OLT tidak FRESH, semua warna level jadi abu-abu (`levelText/levelBg/levelFill`
   dengan `stale = true`) dan `DataNotCurrent` tampil.
 
+### Konsol Lapangan (UI-C1, arah C)
+
+- `/field` dan `/field/onu/{olt}/{slot}/{port}/{onu}` (`Pages/Field/*`): untuk HP teknisi. Lebar maks
+  `max-w-2xl`, teks dasar 16 px, angka RX 48 px, target sentuh minimal 56 px (`min-h-14`/`h-14`).
+- Hanya baca. Tombol tulis (reboot, ganti nama) tidak diletakkan di sini; "Detail lengkap" membuka
+  halaman port yang memakai `v-device-write`.
+- `RxGauge` menandai posisi RX di pita -32..-6 dBm; abu-abu bila data tidak segar.
+
 ## 3b. TAMPILAN BAKU KOMPONEN
 
 Ukuran dan varian di bawah diimplementasikan oleh komponen dasar (`PrimaryButton`,

@@ -26,7 +26,7 @@ class RoleJourneyTest extends TestCase
     /** Sidebar of AuthenticatedLayout.vue, by role (mirrors its `can` conditions). */
     private const COMMON_NAV = [
         'dashboard', 'smartolt.index', 'smartolt.unconfigured-all', 'monitoring.onu', 'network.tree',
-        'map.index', 'odp.index', 'alarms.index', 'reports.index', 'panduan',
+        'map.index', 'odp.index', 'field.index', 'alarms.index', 'reports.index', 'panduan',
     ];
 
     private const ROLE_NAV = [

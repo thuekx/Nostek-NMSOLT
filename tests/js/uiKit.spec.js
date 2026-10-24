@@ -7,6 +7,7 @@ import { Button } from '@/Components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/Components/ui/card';
 import { Dialog, DialogContent, DialogTitle, DialogTrigger } from '@/Components/ui/dialog';
 import { Input } from '@/Components/ui/input';
+import { Switch } from '@/Components/ui/switch';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/Components/ui/tabs';
 import { cn } from '@/lib/utils';
 import { deviceWriteDirective } from '@/lib/deviceWrites';
@@ -103,5 +104,30 @@ describe('Dialog', () => {
         expect(document.body.textContent).toContain('Impact preview');
         expect(document.body.querySelector('[data-slot=dialog-content] .sr-only')?.textContent).toBe('Close');
         w.unmount();
+    });
+});
+
+describe('Switch', () => {
+    it('is an accessible on/off switch bound to v-model', async () => {
+        let value = false;
+        const w = mount(Switch, { props: { modelValue: false, 'onUpdate:modelValue': (v) => { value = v; w.setProps({ modelValue: v }); } } });
+        const el = w.get('[role=switch]');
+        expect(el.attributes('aria-checked')).toBe('false');
+        await el.trigger('click');
+        expect(value).toBe(true);
+        expect(w.get('[role=switch]').attributes('aria-checked')).toBe('true');
+        expect(el.attributes('type')).toBe('button');
+    });
+
+    it('uses the warning colour when on for risky switches', () => {
+        const w = mount(Switch, { props: { modelValue: true, tone: 'warning' } });
+        expect(w.get('[role=switch]').classes()).toContain('data-[state=checked]:bg-warning');
+    });
+
+    it('does not toggle when disabled', async () => {
+        let changed = false;
+        const w = mount(Switch, { props: { modelValue: false, disabled: true, 'onUpdate:modelValue': () => { changed = true; } } });
+        await w.get('[role=switch]').trigger('click');
+        expect(changed).toBe(false);
     });
 });

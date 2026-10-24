@@ -69,4 +69,22 @@ return [
         'slug' => env('NMSOLT_ORG_SLUG', 'default'),
         'name' => env('NMSOLT_ORG_NAME', env('APP_NAME', 'NMSOLT')),
     ],
+
+    /*
+    |--------------------------------------------------------------------------
+    | Row Level Security (UI-F1d, PostgreSQL only)
+    |--------------------------------------------------------------------------
+    |
+    | Second guard under the app scope: web and API requests run as a
+    | database role without BYPASSRLS, so PostgreSQL itself hides other
+    | organisations' rows even when code forgets the scope. Console, queue
+    | and scheduler stay on the owner role (they poll every OLT).
+    | `php artisan nmsolt:rls-status` shows the state; disabling it here is
+    | only for an emergency rollback.
+    |
+    */
+    'rls' => [
+        'enabled' => filter_var(env('NMSOLT_RLS_ENABLED', true), FILTER_VALIDATE_BOOL),
+        'role' => env('NMSOLT_RLS_ROLE', 'nmsolt_tenant'),
+    ],
 ];

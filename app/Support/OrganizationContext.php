@@ -149,6 +149,16 @@ class OrganizationContext
             ->select('user_id');
     }
 
+    /**
+     * UI-F1d: samakan organisasi di sesi PostgreSQL (RLS) dengan konteks saat ini. Dipanggil saat
+     * konteks berubah di tengah request (bot Telegram, status publik); no-op di luar role tenant.
+     */
+    public function syncDatabase(?User $user = null): void
+    {
+        $organizationId = $user !== null ? $this->organizationOf($user) : $this->currentId();
+        app(TenantDatabase::class)->set($organizationId, $this->isPrimary($organizationId));
+    }
+
     /** Dipanggil setelah keanggotaan berubah di request yang sama. */
     public function forget(?User $user = null): void
     {

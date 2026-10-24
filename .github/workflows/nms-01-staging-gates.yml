@@ -144,6 +144,60 @@ jobs:
       - name: Run repository test wrapper with SQLite gate
         run: bash scripts/test.sh
 
+  php-tests-pgsql:
+    name: Laravel tests (PostgreSQL 16 + RLS)
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    services:
+      postgres:
+        # Same image digest as docker-compose.yml. Throwaway CI database, fake password.
+        image: postgres:16-alpine@sha256:deb28ee471183cb0c303113dac9b2433c51eeeeb678def7af9a9ec5820367815
+        env:
+          POSTGRES_DB: nmsolt_ci
+          POSTGRES_USER: nmsolt_ci
+          POSTGRES_PASSWORD: ci-placeholder-not-real-credentials
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd "pg_isready -U nmsolt_ci -d nmsolt_ci"
+          --health-interval 5s --health-timeout 5s --health-retries 20
+    env:
+      DB_CONNECTION: pgsql
+      DB_HOST: 127.0.0.1
+      DB_PORT: '5432'
+      DB_DATABASE: nmsolt_ci
+      DB_USERNAME: nmsolt_ci
+      DB_PASSWORD: ci-placeholder-not-real-credentials
+      APP_CONFIG_CACHE: /nonexistent/nos-test-config.php
+      APP_ROUTES_CACHE: /nonexistent/nos-test-routes.php
+    steps:
+      - uses: actions/checkout@v4
+      - uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.3'
+          extensions: mbstring, dom, pdo_pgsql, pdo_sqlite, sqlite3, snmp, pcntl, redis, gd, zip, sockets, bcmath, intl
+          tools: composer:v2
+          coverage: none
+      - run: composer install --prefer-dist --no-interaction --no-progress
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: npm
+      - name: Compile Vite assets for Laravel Inertia feature tests
+        run: |
+          npm ci --no-audit --no-fund
+          npm run build
+      - name: Generate ephemeral Laravel test encryption key
+        shell: bash
+        run: |
+          php -r 'file_put_contents(getenv("GITHUB_ENV"), "APP_KEY=base64:".base64_encode(random_bytes(32)).PHP_EOL, FILE_APPEND);'
+      - name: Migrate and check Row Level Security (UI-F1d)
+        run: |
+          php artisan migrate --force --no-interaction
+          php artisan nmsolt:rls-status
+      - name: Run Laravel tests on PostgreSQL (RLS tests run here, skipped on SQLite)
+        run: php artisan test
+
   docker-build:
     name: Build NMSOLT and GenieACS images (no run, no push)
     runs-on: ubuntu-latest

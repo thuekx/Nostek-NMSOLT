@@ -9,6 +9,7 @@ use App\Models\TelegramSetting;
 use App\Services\Telegram\TelegramCommandHandler;
 use App\Services\Telegram\TelegramNotifier;
 use App\Services\Telegram\TelegramReply;
+use App\Support\OrganizationContext;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -91,6 +92,9 @@ class TelegramWebhookController extends Controller
         }
 
         Auth::setUser($partnerBot->user);
+        // UI-F1d: RLS mengikuti organisasi partner pemilik bot.
+        app(OrganizationContext::class)->forget();
+        app(OrganizationContext::class)->syncDatabase();
 
         return $partnerBot;
     }

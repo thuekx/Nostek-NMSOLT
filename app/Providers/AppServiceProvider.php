@@ -3,9 +3,11 @@
 namespace App\Providers;
 
 use App\Models\AuditLog;
+use App\Models\User;
 use App\Support\AuditLogger;
 use App\Support\DeviceWritePolicy;
 use App\Support\OrganizationContext;
+use App\Support\TenantDatabase;
 use App\Support\Theme;
 use Illuminate\Auth\Events\Failed;
 use Illuminate\Auth\Events\Login;
@@ -27,6 +29,8 @@ class AppServiceProvider extends ServiceProvider
     {
         // UI-F1: satu konteks organisasi per request/job (cache keanggotaan tidak bocor antar-job).
         $this->app->scoped(OrganizationContext::class);
+        // UI-F1d: status role tenant PostgreSQL per request/job.
+        $this->app->scoped(TenantDatabase::class);
     }
 
     /**
@@ -58,6 +62,11 @@ class AppServiceProvider extends ServiceProvider
         // halaman tujuan saat dibuka. Aktifkan lagi bila perlu: Vite::prefetch(concurrency: 3);
 
         Event::listen(Login::class, function (Login $event) {
+            // UI-F1d: sisa request login berjalan untuk organisasi user yang baru masuk.
+            // Event ini terbit sebelum guard memasang user, jadi user diberikan langsung.
+            if ($event->user instanceof User) {
+                app(OrganizationContext::class)->syncDatabase($event->user);
+            }
             AuditLogger::log(AuditLog::EVENT_LOGIN, null, [], 'Login ke sistem', $event->user);
         });
 

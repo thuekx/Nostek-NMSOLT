@@ -4,6 +4,7 @@ namespace App\Models\Scopes;
 
 use App\Models\SnmpOlt;
 use App\Models\User;
+use App\Support\OrganizationContext;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Scope;
@@ -34,6 +35,9 @@ class PartnerOltScope implements Scope
     public static function restrictGuestToGlobalOlts(bool $enabled = true): void
     {
         self::$guestRestrictedToGlobal = $enabled;
+
+        // UI-F1d: RLS mengikuti (tamu terbatas = organisasi instalasi).
+        app(OrganizationContext::class)->syncDatabase();
     }
 
     public static function guestRestrictedToGlobal(): bool

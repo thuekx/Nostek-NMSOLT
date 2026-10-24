@@ -3,9 +3,13 @@
 namespace App\Http\Middleware;
 
 use App\Models\GeneralSetting;
+use App\Models\Organization;
+use App\Models\Site;
+use App\Models\User;
 use App\Services\Alarm\AlarmNotificationService;
 use App\Support\DeviceWriteGate;
 use App\Support\Locale;
+use App\Support\OrganizationContext;
 use App\Support\Theme;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -54,6 +58,42 @@ class HandleInertiaRequests extends Middleware
             'locales' => Locale::options(),
             // NMS-07-D: the UI shows the device write boundary instead of failing with a 403.
             'device_writes' => fn () => $user ? DeviceWriteGate::sharedPayload() : null,
+            // UI-F1b: pemilih "Organisasi ▸ Site" di header.
+            'org_context' => fn () => $user ? $this->organizationPayload($user) : null,
+        ];
+    }
+
+    /**
+     * Organisasi yang berlaku, organisasi lain yang ia anggotai, dan site-nya. Pemilih hanya
+     * tampil bila ada pilihan (lebih dari satu organisasi atau lebih dari satu site), jadi
+     * instalasi satu ISP tanpa site terlihat sama seperti sebelumnya.
+     *
+     * @return array<string, mixed>|null
+     */
+    private function organizationPayload(User $user): ?array
+    {
+        $context = app(OrganizationContext::class);
+        $currentId = $context->organizationOf($user);
+
+        if ($currentId === null) {
+            return null;
+        }
+
+        $organizations = Organization::query()
+            ->whereIn('id', $context->membershipsOf($user))
+            ->orderBy('name')
+            ->get(['id', 'name']);
+
+        $sites = Site::query()
+            ->orderBy('name')
+            ->get(['id', 'key', 'name']);
+
+        return [
+            'current' => $organizations->firstWhere('id', $currentId)?->only(['id', 'name']),
+            'organizations' => $organizations->map->only(['id', 'name'])->values(),
+            'sites' => $sites->map->only(['id', 'key', 'name'])->values(),
+            'site_id' => $context->selectedSiteId($user),
+            'show_picker' => $organizations->count() > 1 || $sites->count() > 1,
         ];
     }
 

@@ -31,6 +31,8 @@ class User extends Authenticatable
     protected $auditExclude = [
         'last_notifications_read_at',
         'email_verified_at',
+        // UI-F1b: site penyaring di header = preferensi tampilan, bukan aksi.
+        'current_site_id',
     ];
 
     /**

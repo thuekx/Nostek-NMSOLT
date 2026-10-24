@@ -171,4 +171,9 @@ return [
     'cdata_vlan_tag_failed_some' => 'Sebagian port gagal di-tag — ',
     'cdata_config_unsaved' => 'Belum permanen: tekan Simpan Config agar tetap ada setelah OLT reboot.',
     'device_writes_saved' => 'Pengaturan device writes disimpan.',
+    // UI-F1b organisasi dan site
+    'site_added' => 'Site berhasil ditambahkan.',
+    'site_updated' => 'Site berhasil diperbarui.',
+    'site_deleted' => 'Site dihapus. OLT di dalamnya kini tanpa site.',
+    'olt_site_updated' => 'Site OLT diperbarui.',
 ];

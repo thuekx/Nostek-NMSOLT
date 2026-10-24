@@ -2,6 +2,7 @@
 
 namespace App\Models\Scopes;
 
+use App\Models\Site;
 use App\Models\SnmpOlt;
 use App\Support\OrganizationContext;
 use Illuminate\Database\Eloquent\Builder;
@@ -16,6 +17,9 @@ use Illuminate\Database\Eloquent\Scope;
  * Organisasi lain tidak pernah terlihat: route model binding menghasilkan 404, bukan 403.
  * Baris tanpa OLT (`snmp_olt_id` NULL, mis. profil global, setelan device write global) adalah
  * milik instalasi: hanya terlihat oleh organisasi instalasi ({@see $installRows}).
+ *
+ * Bila user memilih site dan request lewat middleware `site.filter`, OLT dan data ber-OLT juga
+ * disaring ke site itu (filter tampilan, bukan isolasi).
  *
  * Lapis kedua (PostgreSQL RLS) menyusul di F1d, sebelum launching (keputusan owner D3).
  */
@@ -40,8 +44,18 @@ class OrganizationScope implements Scope
             return;
         }
 
-        if ($model instanceof SnmpOlt) {
+        if ($model instanceof Site) {
             $builder->where($table.'.organization_id', $organizationId);
+
+            return;
+        }
+
+        // UI-F1b: saring site (bukan batas keamanan) hanya aktif di halaman ringkasan.
+        $siteId = $context->siteFilterId();
+
+        if ($model instanceof SnmpOlt) {
+            $builder->where($table.'.organization_id', $organizationId)
+                ->when($siteId !== null, fn (Builder $q) => $q->where($table.'.site_id', $siteId));
 
             return;
         }
@@ -49,9 +63,10 @@ class OrganizationScope implements Scope
         $olts = SnmpOlt::query()
             ->withoutGlobalScopes()
             ->where('organization_id', $organizationId)
+            ->when($siteId !== null, fn ($q) => $q->where('site_id', $siteId))
             ->select('id');
 
-        if ($this->installRows && $context->isPrimary($organizationId)) {
+        if ($this->installRows && $siteId === null && $context->isPrimary($organizationId)) {
             $builder->where(fn (Builder $q) => $q
                 ->whereIn($table.'.snmp_olt_id', $olts)
                 ->orWhereNull($table.'.snmp_olt_id'));

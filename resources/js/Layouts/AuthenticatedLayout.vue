@@ -5,13 +5,14 @@ import FlashMessages from '@/Components/Shell/FlashMessages.vue';
 import GlobalSearch from '@/Components/Shell/GlobalSearch.vue';
 import LanguageSwitcher from '@/Components/Shell/LanguageSwitcher.vue';
 import NotificationBell from '@/Components/Shell/NotificationBell.vue';
+import OrgSitePicker from '@/Components/Shell/OrgSitePicker.vue';
 import SystemInfoPanel from '@/Components/Shell/SystemInfoPanel.vue';
 import ThemeSegmented from '@/Components/Shell/ThemeSegmented.vue';
 import UserMenu from '@/Components/Shell/UserMenu.vue';
 import { Link, usePage } from '@inertiajs/vue3';
 import { useI18n } from 'vue-i18n';
 import { formatDateTime } from '@/lib/datetime';
-import { BellRing, BookOpen, Cable, ChevronLeft, Eye, FileBarChart, LayoutDashboard, Lock, LogOut, MapPin, Menu, Network, Radar, ScrollText, Search, Send, Settings, Smartphone, User, Users, Waypoints, WifiOff } from '@lucide/vue';
+import { BellRing, BookOpen, Building2, Cable, ChevronLeft, Eye, FileBarChart, LayoutDashboard, Lock, LogOut, MapPin, Menu, Network, Radar, ScrollText, Search, Send, Settings, Smartphone, User, Users, Waypoints, WifiOff } from '@lucide/vue';
 
 const { t } = useI18n({ useScope: 'global' });
 
@@ -95,6 +96,7 @@ const navGroups = computed(() => {
                     match: 'users.*',
                 },
                 can.value.is_partner && { name: t('nav.partner_telegram'), icon: Send, href: route('partner.telegram.edit'), match: 'partner.telegram.*' },
+                can.value.manage_users && !can.value.is_partner && { name: t('nav.organization'), icon: Building2, href: route('organization.index'), match: 'organization.*' },
                 can.value.manage_users && !can.value.is_partner && { name: t('nav.audit_logs'), icon: ScrollText, href: route('audit-logs.index'), match: 'audit-logs.*' },
                 can.value.manage_users && !can.value.is_partner && { name: t('nav.settings'), icon: Settings, href: route('settings.edit'), match: 'settings.*' },
             ].filter(Boolean),
@@ -239,6 +241,11 @@ onUnmounted(() => {
                         </button>
                     </div>
 
+                    <!-- UI-F1b: pemilih organisasi/site di laci HP (desktop: di header atas) -->
+                    <div v-if="$page.props.org_context?.show_picker" class="border-b border-border px-4 py-3 lg:hidden">
+                        <OrgSitePicker stacked />
+                    </div>
+
                     <!-- Navigation -->
                     <nav class="min-h-0 flex-1 overflow-y-auto px-3 py-4">
                         <template v-for="(group, gi) in navGroups" :key="group.key">
@@ -340,6 +347,8 @@ onUnmounted(() => {
                             <span class="text-xs">&#8984;</span>K
                         </kbd>
                     </button>
+
+                    <OrgSitePicker />
 
                     <div class="ml-auto flex items-center gap-3">
                                 <LanguageSwitcher />

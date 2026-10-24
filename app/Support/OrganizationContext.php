@@ -5,6 +5,7 @@ namespace App\Support;
 use App\Models\Scopes\PartnerOltScope;
 use App\Models\User;
 use Illuminate\Database\Query\Builder as QueryBuilder;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
 /**
@@ -22,6 +23,8 @@ use Illuminate\Support\Facades\DB;
  */
 class OrganizationContext
 {
+    private const SITE_FILTER = 'nostek.site_filter';
+
     private ?string $primaryId = null;
 
     /** @var array<int, ?string> */
@@ -97,6 +100,45 @@ class OrganizationContext
     public function isMember(User $user, ?string $organizationId): bool
     {
         return $organizationId !== null && in_array($organizationId, $this->membershipsOf($user), true);
+    }
+
+    /**
+     * UI-F1b: site pilihan user (`users.current_site_id`) bila site itu milik organisasi yang
+     * berlaku; selain itu null (= semua site).
+     */
+    public function selectedSiteId(User $user): ?string
+    {
+        $siteId = $user->current_site_id;
+        $organizationId = $this->organizationOf($user);
+
+        if ($siteId === null || $organizationId === null) {
+            return null;
+        }
+
+        $owned = DB::table('sites')
+            ->where('id', $siteId)
+            ->where('organization_id', $organizationId)
+            ->exists();
+
+        return $owned ? (string) $siteId : null;
+    }
+
+    /**
+     * UI-F1b: aktifkan saring site untuk request ini. Hanya dipanggil middleware `site.filter`
+     * pada halaman ringkasan (dashboard, daftar OLT, ONU, peta, ODP, alarm, Peta Fiber, Konsol
+     * Lapangan), jadi halaman detail dan formulir tetap melihat seluruh organisasi.
+     */
+    public function filterBySite(Request $request, ?string $siteId): void
+    {
+        // Disimpan di request (bukan di instance ini) supaya tidak terbawa ke request lain.
+        $request->attributes->set(self::SITE_FILTER, $siteId);
+    }
+
+    public function siteFilterId(): ?string
+    {
+        $siteId = request()->attributes->get(self::SITE_FILTER);
+
+        return is_string($siteId) ? $siteId : null;
     }
 
     /** Subquery id user anggota organisasi yang berlaku (daftar user, audit log, penerima). */

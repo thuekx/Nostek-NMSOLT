@@ -20,7 +20,8 @@
         "group_overview": "Overview",
         "group_watch": "Monitoring",
         "network_tree": "Network tree",
-        "field_console": "Field console"
+        "field_console": "Field console",
+        "organization": "Organisation & sites"
     },
     "common": {
         "stale": "Stale",
@@ -2248,5 +2249,43 @@
         "onu_alarms_empty": "No active alarm.",
         "port_wide": "Whole PON/ODP",
         "this_onu": "This ONU"
+    },
+    "organization": {
+        "title": "Organisation & sites",
+        "subtitle": "Sites (POP, datacenter, area) group and filter OLTs. Access is still bounded by the organisation.",
+        "kind_isp": "ISP",
+        "kind_reseller": "Reseller",
+        "kind_demo": "Demo",
+        "cc_linked": "Linked to Control Center",
+        "sites_title": "Sites",
+        "sites_hint": "The site key matches the Control Center site key, so the two can be linked.",
+        "no_sites": "No sites yet. Without sites every page shows the whole organisation as before.",
+        "site_kind_pop": "POP",
+        "site_kind_datacenter": "Datacenter",
+        "site_kind_area": "Area",
+        "olt_count": "{n} OLT",
+        "edit": "Edit site",
+        "delete": "Delete",
+        "cancel": "Cancel",
+        "save": "Save",
+        "add_site": "Add site",
+        "delete_title": "Delete site {name}?",
+        "delete_message": "This site has no OLTs.",
+        "delete_message_olts": "{n} OLTs in this site will have no site. OLT data does not change.",
+        "field_name": "Name",
+        "field_key": "Key (site key)",
+        "field_kind": "Kind",
+        "field_region": "Region",
+        "field_timezone": "Time zone",
+        "key_hint": "Key: lower-case letters, digits and dashes, unique in this organisation (e.g. juwana, pati-kota).",
+        "olts_title": "OLTs per site",
+        "olts_hint": "Every OLT has a site.",
+        "olts_unassigned": "{n} OLTs have no site yet.",
+        "no_olts": "No OLTs yet.",
+        "no_site": "No site",
+        "olt_site_label": "Site for {olt}",
+        "picker_org": "Organisation",
+        "picker_site": "Site",
+        "all_sites": "All sites"
     }
 }

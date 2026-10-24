@@ -51,7 +51,10 @@ Nostek-NMSOLT — STANDALONE NETWORK PLATFORM / API PROVIDER
 |   |   audit_logs organization_id, backfill to one installation organisation, OrganizationScope on
 |   |   SnmpOlt and every snmp_olt_id model (other org = 404), installation settings only for the
 |   |   installation org, alarms/push/bot per org, public status = installation org; no visible change
-|   +-- F1b [NEXT] header picker Organisation > Site, site field on OLT forms, site filters
+|   +-- F1b [SOURCE PASS, PR open, owner merges] /organization page (sites CRUD, OLT -> site), header picker
+|   |   Organisation > Site (desktop header, phone drawer; only when there is a choice), site filter on
+|   |   overview pages via `site.filter` (dashboard, OLT list, unconfigured, ONU monitor, Peta Fiber, map,
+|   |   ODP, alarms, field console); detail pages, forms and API are not filtered
 |   +-- F1c [NEXT] partners that own OLTs become organisations; per-organisation settings and bots
 |   +-- F1d [NEXT, launch gate] PostgreSQL RLS right after F1c (owner D3: no gap before launch)
 +-- UI-T1 [SOURCE PASS, PR #42 merged a47b020] redesign foundation: Tailwind v4 (CSS-first @theme), 23 semantic

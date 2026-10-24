@@ -30,7 +30,7 @@ class RoleJourneyTest extends TestCase
     ];
 
     private const ROLE_NAV = [
-        'admin' => ['users.index', 'audit-logs.index', 'settings.edit'],
+        'admin' => ['users.index', 'organization.index', 'audit-logs.index', 'settings.edit'],
         'operator' => [],
         'partner' => ['partner.telegram.edit'],
         'demo' => [],

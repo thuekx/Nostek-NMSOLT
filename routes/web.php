@@ -17,6 +17,7 @@ use App\Http\Controllers\OdpController;
 use App\Http\Controllers\OltConfigBackupController;
 use App\Http\Controllers\OltPortLabelController;
 use App\Http\Controllers\OnuMapController;
+use App\Http\Controllers\OrganizationController;
 use App\Http\Controllers\PanduanController;
 use App\Http\Controllers\Partner\TelegramBotController as PartnerTelegramBotController;
 use App\Http\Controllers\ProfileController;
@@ -59,7 +60,7 @@ Route::get('/healthz', function () {
 Route::get('/', fn () => redirect()->route('dashboard'));
 
 Route::get('/dashboard', [DashboardController::class, 'index'])
-    ->middleware(['auth', 'verified'])
+    ->middleware(['auth', 'verified', 'site.filter'])
     ->name('dashboard');
 
 // Ganti bahasa UI (ID/EN). Terbuka untuk tamu (login) & user login.
@@ -86,13 +87,17 @@ Route::middleware('auth')->group(function () {
     Route::post('/notifications/alarms/{alarm}/open', [NotificationsController::class, 'open'])->whereNumber('alarm')->name('notifications.alarms.open');
     Route::post('/notifications/alarms/{alarm}/read', [NotificationsController::class, 'markRead'])->whereNumber('alarm')->name('notifications.alarms.read');
 
-    Route::get('/alarms', [AlarmController::class, 'index'])->name('alarms.index');
+    Route::get('/alarms', [AlarmController::class, 'index'])->middleware('site.filter')->name('alarms.index');
 
     Route::get('/reports', [ReportController::class, 'index'])->name('reports.index');
     Route::get('/reports/export/csv', [ReportController::class, 'exportCsv'])->name('reports.export.csv');
     Route::get('/reports/export/pdf', [ReportController::class, 'exportPdf'])->name('reports.export.pdf');
 
     Route::get('/panduan', PanduanController::class)->name('panduan');
+
+    // UI-F1b: pemilih "Organisasi ▸ Site" di header (semua user).
+    Route::put('/organization/current', [OrganizationController::class, 'switchOrganization'])->name('organization.switch');
+    Route::put('/organization/site', [OrganizationController::class, 'selectSite'])->name('organization.site');
 
     Route::middleware('role:admin')->group(function () {
         Route::get('/users', [UserController::class, 'index'])->name('users.index');
@@ -101,6 +106,13 @@ Route::middleware('auth')->group(function () {
         Route::delete('/users/{user}', [UserController::class, 'destroy'])->name('users.destroy');
 
         Route::get('/audit-logs', [AuditLogController::class, 'index'])->name('audit-logs.index');
+
+        // UI-F1b: site organisasi dan penempatan OLT ke site.
+        Route::get('/organization', [OrganizationController::class, 'index'])->name('organization.index');
+        Route::post('/organization/sites', [OrganizationController::class, 'storeSite'])->name('organization.sites.store');
+        Route::put('/organization/sites/{site}', [OrganizationController::class, 'updateSite'])->whereUuid('site')->name('organization.sites.update');
+        Route::delete('/organization/sites/{site}', [OrganizationController::class, 'destroySite'])->whereUuid('site')->name('organization.sites.destroy');
+        Route::put('/organization/olts/{olt}/site', [OrganizationController::class, 'assignOltSite'])->whereNumber('olt')->name('organization.olts.site');
 
         // UI-F1a: setelan instalasi hanya untuk admin organisasi instalasi (lain = 404).
         Route::middleware('installation')->group(function () {
@@ -189,25 +201,25 @@ Route::middleware('auth')->group(function () {
     Route::post('/hioso-olt/{olt}/ports/{slot}/{port}/onus/{onuId}/info', [HiosoOltController::class, 'updateOnuInfo'])->middleware('device.write')->name('hioso-olt.onu.info');
     Route::delete('/hioso-olt/{olt}/ports/{slot}/{port}/onus/{onuId}', [HiosoOltController::class, 'deleteOnu'])->middleware('device.write')->name('hioso-olt.onu.delete');
 
-    Route::get('/smartolt', [SmartOltController::class, 'index'])->name('smartolt.index');
+    Route::get('/smartolt', [SmartOltController::class, 'index'])->middleware('site.filter')->name('smartolt.index');
     Route::get('/smartolt/create', [SmartOltController::class, 'create'])->middleware('role:admin,operator,partner')->name('smartolt.create');
     Route::post('/smartolt', [SmartOltController::class, 'store'])->middleware('role:admin,operator,partner')->name('smartolt.store');
-    Route::get('/smartolt/unconfigured', [SmartOltController::class, 'unconfiguredGlobal'])->name('smartolt.unconfigured-all');
-    Route::get('/onu-monitoring', [SmartOltController::class, 'onuMonitor'])->name('monitoring.onu');
+    Route::get('/smartolt/unconfigured', [SmartOltController::class, 'unconfiguredGlobal'])->middleware('site.filter')->name('smartolt.unconfigured-all');
+    Route::get('/onu-monitoring', [SmartOltController::class, 'onuMonitor'])->middleware('site.filter')->name('monitoring.onu');
     Route::post('/onu-monitoring/{olt}/refresh', [SmartOltController::class, 'refreshOnuMonitor'])->middleware('throttle:olt-refresh')->name('monitoring.onu.refresh');
 
     // UI-B1 Peta Fiber: pohon OLT → PON → ODP → ONU + pita redaman RX (baca saja).
-    Route::get('/network', [NetworkTreeController::class, 'index'])->name('network.tree');
+    Route::get('/network', [NetworkTreeController::class, 'index'])->middleware('site.filter')->name('network.tree');
     Route::get('/network/{olt}/ports/{slot}/{port}/onus', [NetworkTreeController::class, 'onus'])
         ->whereNumber(['slot', 'port'])->name('network.tree.onus');
 
     // UI-C1 Konsol Lapangan: halaman HP teknisi (cari ONU, alarm berat, kartu ONU). Baca saja.
-    Route::get('/field', [FieldConsoleController::class, 'index'])->name('field.index');
+    Route::get('/field', [FieldConsoleController::class, 'index'])->middleware('site.filter')->name('field.index');
     Route::get('/field/onu/{olt}/{slot}/{port}/{onuId}', [FieldConsoleController::class, 'onu'])
         ->whereNumber(['slot', 'port', 'onuId'])->name('field.onu');
 
     // Peta ONU — sebaran pin ONU pelanggan lintas-OLT (Leaflet + tile Google keyless).
-    Route::get('/map', [OnuMapController::class, 'index'])->name('map.index');
+    Route::get('/map', [OnuMapController::class, 'index'])->middleware('site.filter')->name('map.index');
     Route::post('/map/resolve-link', [OnuMapController::class, 'resolveLink'])->name('map.resolve-link');
     Route::post('/map/pins', [OnuMapController::class, 'store'])->name('map.pins.store');
     Route::put('/map/pins/{pin}', [OnuMapController::class, 'update'])->name('map.pins.update');
@@ -265,7 +277,7 @@ Route::middleware('auth')->group(function () {
         ->name('genieacs.onu.unpin');
     // Halaman pengelolaan ODP — prefix rute sengaja `odp.*` (bukan `map.odps.index`) supaya
     // penanda menu aktif `map.*` milik Peta ONU tidak ikut menyala.
-    Route::get('/odp', [OdpController::class, 'index'])->name('odp.index');
+    Route::get('/odp', [OdpController::class, 'index'])->middleware('site.filter')->name('odp.index');
     Route::get('/odp/{odp}/onus', [OdpController::class, 'onus'])->name('odp.onus');
     Route::get('/smartolt/{olt}/detail', [SmartOltController::class, 'detail'])->name('smartolt.detail');
     Route::post('/smartolt/{olt}/hardware/refresh', [SmartOltController::class, 'refreshHardware'])->name('smartolt.hardware.refresh');

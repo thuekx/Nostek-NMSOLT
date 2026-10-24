@@ -2248,5 +2248,16 @@
         "onu_alarms_empty": "Tidak ada alarm aktif.",
         "port_wide": "Seluruh PON/ODP",
         "this_onu": "ONU ini"
+    },
+    "impact": {
+        "title": "Dampak",
+        "loading": "Menghitung yang terdampak…",
+        "error": "Pratinjau dampak tidak tersedia. Aksi tetap bisa dilanjutkan.",
+        "summary": "{onus} ONU terdampak, {online} sedang online",
+        "alarms": "{n} alarm aktif",
+        "no_odp": "tanpa ODP",
+        "customers": "Pelanggan",
+        "more": "dan {n} lainnya",
+        "stale": "Data OLT tidak terkini: angka ini keadaan terakhir yang diketahui."
     }
 }

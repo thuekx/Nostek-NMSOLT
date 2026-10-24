@@ -8,6 +8,8 @@ export function useConfirm() {
         confirmLabel: 'Konfirmasi',
         cancelLabel: 'Batal',
         variant: 'danger',
+        // UI-F6: { oltId, slot, port, onuIds? } → ConfirmModal menampilkan pratinjau dampak.
+        impact: null,
         resolve: null,
     });
 
@@ -17,6 +19,7 @@ export function useConfirm() {
         confirmState.confirmLabel = options.confirmLabel ?? 'Konfirmasi';
         confirmState.cancelLabel = options.cancelLabel ?? 'Batal';
         confirmState.variant = options.variant ?? 'danger';
+        confirmState.impact = options.impact ?? null;
         confirmState.show = true;
 
         return new Promise((resolve) => {

@@ -60,7 +60,10 @@ Nostek-NMSOLT — STANDALONE NETWORK PLATFORM / API PROVIDER
 |   (big ONU search by SN/name/MAC, urgent active alarms critical first) and /field/onu card (big RX
 |   with band gauge, down cause, ODP, address, directions/call/map/full-detail buttons, ONU + port
 |   alarms); read-only, writes stay on the full pages behind the device-writes gate
-+-- UI-S2 [SOURCE PASS, PR open] flat compact Primary/Secondary/Danger buttons (44 px phone, 36 px desktop)
++-- UI-S2 [SOURCE PASS, PR #47 merged fbf766f] flat compact Primary/Secondary/Danger buttons (44 px phone, 36 px desktop)
++-- UI-F6 [SOURCE PASS, PR open, owner merges] impact preview in the confirm dialog before ONU reboot /
+|   enable-disable / delete / bulk delete (ZTE, C-Data, HiOSO) and PON port disable: ONUs, online,
+|   ODPs, customers, active alarms, stale note; read-only GET impact.port, fails open; NMS-11 base
 +-- NMS-08 [BLOCKED] API v1 read-only + OpenAPI
 |   +-- stable IDs, freshness, pagination, scopes, redaction, rate limits
 +-- NMS-09 [BLOCKED] Maung /nosteknmsolt thin consumer

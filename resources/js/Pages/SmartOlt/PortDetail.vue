@@ -316,6 +316,8 @@ const setAdminState = async (enabled) => {
         confirmLabel: t(enabled ? 'portdetail.enable_port' : 'portdetail.disable_port'),
         cancelLabel: t('common.cancel'),
         variant: enabled ? 'warning' : 'danger',
+        // UI-F6: mematikan port memutus semua ONU di PON ini; tunjukkan siapa yang kena.
+        impact: !enabled && props.slot !== null && props.port !== null ? { oltId: props.olt.id, slot: props.slot, port: props.port } : null,
     });
 
     if (!ok) return;

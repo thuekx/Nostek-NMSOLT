@@ -11,6 +11,7 @@ use App\Models\User;
 use App\Services\Alarm\OdpAlarmGrouper;
 use App\Services\AlarmEvaluator;
 use App\Services\Telegram\TelegramNotifier;
+use App\Support\OrganizationContext;
 use App\Support\SmartOltSupport;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Log;
@@ -238,6 +239,8 @@ class FcmAlarmNotifier
         // hanya partner pemiliknya (ditangani blok partner di bawah).
         if ($olt->owner_user_id === null && $olt->alarms_enabled) {
             $ids = User::query()
+                // UI-F1a: hanya anggota organisasi pemilik OLT (job tanpa login, scope tidak aktif).
+                ->whereIn('id', app(OrganizationContext::class)->memberIdsQuery($olt->organization_id))
                 ->where(function ($q) use ($olt) {
                     // Admin: semua OLT.
                     $q->where('role', UserRole::Admin->value)
@@ -255,6 +258,7 @@ class FcmAlarmNotifier
         // Partner: independen dari saklar admin — hanya bila di-assign ke OLT ini DAN saklar
         // alarm partner utk OLT itu on (`olt_user.alarms_enabled`).
         $partnerIds = User::query()
+            ->whereIn('id', app(OrganizationContext::class)->memberIdsQuery($olt->organization_id))
             ->where('role', UserRole::Partner->value)
             ->whereHas('partnerOlts', fn ($r) => $r->whereKey($olt->id)
                 ->where('olt_user.alarms_enabled', true))

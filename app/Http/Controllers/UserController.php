@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Enums\UserRole;
 use App\Models\SnmpOlt;
 use App\Models\User;
+use App\Support\OrganizationContext;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -32,6 +33,7 @@ class UserController extends Controller
         }
 
         $users = User::query()
+            ->whereIn('id', app(OrganizationContext::class)->memberIdsQuery())
             ->with('partnerOlts:id')
             ->orderBy('name')
             ->get()
@@ -92,6 +94,8 @@ class UserController extends Controller
 
     public function update(Request $request, User $user): RedirectResponse
     {
+        $this->abortUnlessSameOrganization($request, $user);
+
         $data = $request->validate($this->rules($user));
 
         // Cegah admin terakhir menurunkan rolenya sendiri sehingga sistem terkunci.
@@ -125,7 +129,9 @@ class UserController extends Controller
             'role' => ['required', Rule::enum(UserRole::class)],
             'password' => [$user ? 'nullable' : 'required', Password::defaults()],
             'olt_ids' => ['nullable', 'array'],
-            'olt_ids.*' => ['integer', 'exists:snmp_olts,id'],
+            // Hanya OLT organisasi yang sedang berlaku (UI-F1): id OLT organisasi lain = tidak ada.
+            'olt_ids.*' => ['integer', Rule::exists('snmp_olts', 'id')
+                ->where('organization_id', app(OrganizationContext::class)->currentId())],
         ];
     }
 
@@ -155,6 +161,8 @@ class UserController extends Controller
 
     public function destroy(Request $request, User $user): RedirectResponse
     {
+        $this->abortUnlessSameOrganization($request, $user);
+
         if ($user->id === $request->user()->id) {
             return back()->with('error', __('flash.cant_delete_self'));
         }
@@ -177,8 +185,15 @@ class UserController extends Controller
     private function isLastAdmin(User $user): bool
     {
         return User::query()
+            ->whereIn('id', app(OrganizationContext::class)->memberIdsQuery())
             ->where('role', UserRole::Admin->value)
             ->where('id', '!=', $user->id)
             ->doesntExist();
+    }
+
+    /** User organisasi lain tidak ada bagi admin ini: 404, bukan 403 (UI-F1). */
+    private function abortUnlessSameOrganization(Request $request, User $user): void
+    {
+        abort_unless($request->user()->sharesOrganizationWith($user), 404);
     }
 }

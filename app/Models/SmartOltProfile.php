@@ -3,10 +3,16 @@
 namespace App\Models;
 
 use App\Models\Concerns\Auditable;
+use App\Models\Scopes\OrganizationScope;
 use Illuminate\Database\Eloquent\Model;
 
 class SmartOltProfile extends Model
 {
+    protected static function booted(): void
+    {
+        static::addGlobalScope(new OrganizationScope(installRows: true));
+    }
+
     use Auditable;
 
     public const TYPES = ['onu_type', 'tcont', 'vlan', 'ip'];

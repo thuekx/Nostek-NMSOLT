@@ -5,6 +5,7 @@ namespace App\Providers;
 use App\Models\AuditLog;
 use App\Support\AuditLogger;
 use App\Support\DeviceWritePolicy;
+use App\Support\OrganizationContext;
 use App\Support\Theme;
 use Illuminate\Auth\Events\Failed;
 use Illuminate\Auth\Events\Login;
@@ -24,7 +25,8 @@ class AppServiceProvider extends ServiceProvider
      */
     public function register(): void
     {
-        //
+        // UI-F1: satu konteks organisasi per request/job (cache keanggotaan tidak bocor antar-job).
+        $this->app->scoped(OrganizationContext::class);
     }
 
     /**

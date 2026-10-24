@@ -53,4 +53,20 @@ return [
     |
     */
     'poll_queue' => env('NMSOLT_POLL_QUEUE', 'polling'),
+
+    /*
+    |--------------------------------------------------------------------------
+    | Primary organisation (UI-F1)
+    |--------------------------------------------------------------------------
+    |
+    | The UI-F1 migration puts every existing OLT and user into one organisation
+    | with this slug and name (the installation's own ISP, `is_installation`).
+    | It also owns installation-level rows (global Telegram bot,
+    | system audit entries, settings without an OLT).
+    |
+    */
+    'organization' => [
+        'slug' => env('NMSOLT_ORG_SLUG', 'default'),
+        'name' => env('NMSOLT_ORG_NAME', env('APP_NAME', 'NMSOLT')),
+    ],
 ];

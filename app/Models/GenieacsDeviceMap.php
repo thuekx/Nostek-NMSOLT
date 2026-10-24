@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Models\Scopes\OrganizationScope;
 use Illuminate\Database\Eloquent\Model;
 
 /**
@@ -12,6 +13,11 @@ use Illuminate\Database\Eloquent\Model;
  */
 class GenieacsDeviceMap extends Model
 {
+    protected static function booted(): void
+    {
+        static::addGlobalScope(new OrganizationScope(installRows: true));
+    }
+
     public const METHOD_SERIAL = 'serial';
 
     public const METHOD_MAC = 'mac';

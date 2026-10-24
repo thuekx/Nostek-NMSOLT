@@ -19,7 +19,8 @@
         "group_network": "OLT network",
         "group_overview": "Overview",
         "group_watch": "Monitoring",
-        "network_tree": "Network tree"
+        "network_tree": "Network tree",
+        "field_console": "Field console"
     },
     "common": {
         "stale": "Stale",
@@ -2219,5 +2220,33 @@
         "worst_title": "Worst RX",
         "worst_subtitle": "Up to 10 online ONUs furthest from the healthy range.",
         "worst_empty": "Every online ONU is in the healthy range."
+    },
+    "field": {
+        "title": "Field console",
+        "subtitle": "For technicians on site: find an ONU, see its RX and urgent alarms.",
+        "search_label": "Find ONU",
+        "search_placeholder": "SN, customer name, or MAC",
+        "search_btn": "Search",
+        "too_short": "Type at least 3 characters.",
+        "no_results": "No ONU matches \"{q}\".",
+        "alarms_title": "Urgent active alarms",
+        "alarms_empty": "No active critical or major alarm.",
+        "back": "Back",
+        "no_name": "No name",
+        "status_online": "Online",
+        "status_offline": "Offline",
+        "status_unknown": "Not current",
+        "down_cause": "Down cause",
+        "rx_now": "RX now",
+        "no_odp": "Not linked to an ODP",
+        "address": "Address",
+        "directions": "Directions",
+        "call": "Call",
+        "on_map": "On map",
+        "full_detail": "Full detail",
+        "onu_alarms": "Active alarms for this ONU",
+        "onu_alarms_empty": "No active alarm.",
+        "port_wide": "Whole PON/ODP",
+        "this_onu": "This ONU"
     }
 }

@@ -7,6 +7,7 @@ use App\Http\Controllers\CDataOltController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\DashboardSearchController;
 use App\Http\Controllers\DeviceWriteSettingsController;
+use App\Http\Controllers\FieldConsoleController;
 use App\Http\Controllers\GenieacsController;
 use App\Http\Controllers\HiosoOltController;
 use App\Http\Controllers\LocaleController;
@@ -196,6 +197,11 @@ Route::middleware('auth')->group(function () {
     Route::get('/network', [NetworkTreeController::class, 'index'])->name('network.tree');
     Route::get('/network/{olt}/ports/{slot}/{port}/onus', [NetworkTreeController::class, 'onus'])
         ->whereNumber(['slot', 'port'])->name('network.tree.onus');
+
+    // UI-C1 Konsol Lapangan: halaman HP teknisi (cari ONU, alarm berat, kartu ONU). Baca saja.
+    Route::get('/field', [FieldConsoleController::class, 'index'])->name('field.index');
+    Route::get('/field/onu/{olt}/{slot}/{port}/{onuId}', [FieldConsoleController::class, 'onu'])
+        ->whereNumber(['slot', 'port', 'onuId'])->name('field.onu');
 
     // Peta ONU — sebaran pin ONU pelanggan lintas-OLT (Leaflet + tile Google keyless).
     Route::get('/map', [OnuMapController::class, 'index'])->name('map.index');

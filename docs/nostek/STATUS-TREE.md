@@ -53,10 +53,10 @@ Nostek-NMSOLT — STANDALONE NETWORK PLATFORM / API PROVIDER
 +-- UI-S1 [SOURCE PASS, PR #44 merged 522e398] owner chose direction A + B + C (2026-10-24): flat look A
 |   for all pages (neutral palette, fiber-blue accent, no glass/blur/glow/particles), compact shell
 |   and dashboard header
-+-- UI-B1 [SOURCE PASS, PR open] "Peta Fiber" (direction B): /network tree OLT -> PON -> ODP -> ONU,
++-- UI-B1 [SOURCE PASS, PR #45 merged 8fba4a2] "Peta Fiber" (direction B): /network tree OLT -> PON -> ODP -> ONU,
 |   TIA-598 fiber colour per PON, RX power band (1 dB histogram, thresholds as alarms) and worst-10
 |   list; one OLT per page, ONU leaves fetched per PON (read-only, snapshot only, partner scope)
-+-- UI-C1 [SOURCE PASS, PR open] "Konsol Lapangan" (direction C): /field phone page for technicians
++-- UI-C1 [SOURCE PASS, PR #46] "Konsol Lapangan" (direction C): /field phone page for technicians
 |   (big ONU search by SN/name/MAC, urgent active alarms critical first) and /field/onu card (big RX
 |   with band gauge, down cause, ODP, address, directions/call/map/full-detail buttons, ONU + port
 |   alarms); read-only, writes stay on the full pages behind the device-writes gate

@@ -5,7 +5,6 @@ import FlashMessages from '@/Components/Shell/FlashMessages.vue';
 import GlobalSearch from '@/Components/Shell/GlobalSearch.vue';
 import LanguageSwitcher from '@/Components/Shell/LanguageSwitcher.vue';
 import NotificationBell from '@/Components/Shell/NotificationBell.vue';
-import SidebarConstellation from '@/Components/Shell/SidebarConstellation.vue';
 import SystemInfoPanel from '@/Components/Shell/SystemInfoPanel.vue';
 import ThemeSegmented from '@/Components/Shell/ThemeSegmented.vue';
 import UserMenu from '@/Components/Shell/UserMenu.vue';
@@ -153,13 +152,7 @@ onUnmounted(() => {
          hanya area konten (.nos-app-scroll, `scroll-region` untuk preserveScroll Inertia) yang
          menggulir. HP tetap menggulir di level dokumen dengan bar atas sticky.
          Snapshot full-page membuka kerangka ini lewat CSS (lihat scripts/snapshot.mjs). -->
-    <div class="nos-grid-stage nos-app-shell flex min-h-screen flex-col lg:flex-row text-slate-100 font-sans antialiased selection:bg-cyan-500 selection:text-onaccent">
-        <!-- 1. Background Grid Pattern Layer -->
-        <div class="nos-grid-pattern" aria-hidden="true"></div>
-
-        <!-- 2. Efek Light Beam di Tengah Atas (Natural Spotlight) -->
-        <div class="nos-top-light" aria-hidden="true"></div>
-        <div class="nos-ambient-glow" aria-hidden="true"></div>
+    <div class="nos-grid-stage nos-app-shell flex min-h-screen flex-col lg:flex-row text-foreground font-sans antialiased selection:bg-primary selection:text-primary-foreground">
         <!-- Mobile top bar (sticky, tetap terlihat saat scroll) -->
         <div class="nos-shell-bar sticky top-0 z-50 flex h-14 flex-shrink-0 items-center gap-3 border-b border-white/10 bg-canvas-3/40 px-4 backdrop-blur-xl lg:hidden">
             <button
@@ -213,13 +206,11 @@ onUnmounted(() => {
                 sidebarCollapsed ? 'w-64 lg:w-20' : 'w-64',
             ]"
         >
-            <SidebarConstellation v-if="showSidebarContent" />
-
             <!-- Blok atas: logo + navigasi. Mengisi sisa tinggi sidebar; <nav> menggulir sendiri. -->
             <div class="relative z-10 min-h-0 flex-1">
                 <div class="flex h-full flex-col">
                     <!-- Logo -->
-                    <div class="relative flex h-[72px] flex-shrink-0 items-center justify-between border-b border-white/10 bg-canvas-3/20 px-5 backdrop-blur-xs">
+                    <div class="relative flex h-14 flex-shrink-0 items-center justify-between border-b border-border px-4">
                         <Link
                             :href="route('dashboard')"
                             prefetch
@@ -228,11 +219,11 @@ onUnmounted(() => {
                             @click="sidebarOpen = false"
                         >
                             <div class="relative flex-shrink-0">
-                                <ApplicationLogo class="h-8 w-auto fill-current text-cyan-400" />
+                                <ApplicationLogo class="h-7 w-auto fill-current text-primary" />
                             </div>
                             <div v-if="showSidebarContent" class="min-w-0">
-                                <div class="truncate text-base font-bold leading-tight text-white">{{ appName }}</div>
-                                <div class="truncate text-[11px] text-slate-500">{{ $t('shell.app_subtitle') }}</div>
+                                <div class="truncate text-sm font-semibold leading-tight text-foreground">{{ appName }}</div>
+                                <div class="truncate text-[11px] text-muted-foreground">{{ $t('shell.app_subtitle') }}</div>
                             </div>
                         </Link>
                         <!-- Desktop collapse toggle — always centered on right border -->
@@ -252,26 +243,26 @@ onUnmounted(() => {
                             <!-- Label kelompok; saat sidebar diciutkan berubah jadi garis pemisah -->
                             <div
                                 v-if="showSidebarContent"
-                                class="px-3 pb-1.5 text-[9.5px] font-bold uppercase tracking-[0.16em] text-slate-500"
-                                :class="gi === 0 ? 'pt-0.5' : 'pt-4'"
+                                class="px-3 pb-1 text-[11px] font-medium text-muted-foreground"
+                                :class="gi === 0 ? 'pt-0.5' : 'pt-5'"
                             >
                                 {{ group.label }}
                             </div>
                             <div v-else-if="gi > 0" class="mx-auto my-2.5 h-px w-8 bg-slate-700/70" role="separator" :aria-label="group.label"></div>
 
-                            <div class="space-y-1.5">
+                            <div class="space-y-0.5">
                                 <Link
                                     v-for="link in group.items"
                                     :key="link.name"
                                     :href="link.href"
                                     prefetch
                                     :cache-for="['30s', '1m']"
-                                    class="group relative flex items-center rounded-xl text-xs font-semibold transition-all"
+                                    class="group relative flex items-center rounded-md text-[13px] font-medium transition-colors"
                                     :class="[
                                         isActive(link)
-                                            ? 'bg-linear-to-r from-cyan-500 to-sky-500 text-onaccent shadow-lg shadow-cyan-500/30'
-                                            : 'text-slate-400 hover:bg-white/5 hover:text-slate-100',
-                                        showSidebarContent ? 'gap-3 px-3.5 py-3' : 'mx-auto h-11 w-11 justify-center',
+                                            ? 'bg-accent text-foreground before:absolute before:inset-y-1.5 before:left-0 before:w-0.5 before:rounded-full before:bg-primary'
+                                            : 'text-muted-foreground hover:bg-accent/60 hover:text-foreground',
+                                        showSidebarContent ? 'gap-3 px-3 py-2' : 'mx-auto h-10 w-10 justify-center',
                                     ]"
                                     :title="!showSidebarContent ? link.name : null"
                                     @click="sidebarOpen = false"
@@ -334,16 +325,16 @@ onUnmounted(() => {
             <header
                 class="nos-shell-bar sticky top-0 z-30 hidden flex-shrink-0 border-b border-white/10 bg-canvas-3/35 backdrop-blur-xl lg:block"
             >
-                <div class="flex h-[72px] w-full items-center gap-4 px-6 lg:px-8">
+                <div class="flex h-14 w-full items-center gap-4 px-6 lg:px-8">
                     <!-- Search trigger -->
                     <button
                         type="button"
-                        class="group flex h-11 max-w-2xl flex-1 items-center gap-3 rounded-xl border border-white/10 bg-slate-900/60 px-4 text-left text-sm text-slate-500 transition-colors hover:border-cyan-500/30 hover:bg-slate-900/80 hover:text-slate-300"
+                        class="group flex h-9 max-w-xl flex-1 items-center gap-3 rounded-md border border-input bg-background px-3 text-left text-sm text-muted-foreground transition-colors hover:border-ring/50 hover:text-foreground"
                         @click="searchOpen = true"
                     >
-                        <Search class="h-4 w-4 flex-shrink-0 text-slate-500 group-hover:text-cyan-400" />
+                        <Search class="h-4 w-4 flex-shrink-0" />
                         <span class="flex-1 truncate">{{ $t('common.search_placeholder') }}</span>
-                        <kbd class="hidden items-center gap-1 rounded-md border border-white/10 bg-slate-800/80 px-2 py-0.5 text-[11px] font-medium text-slate-400 sm:inline-flex">
+                        <kbd class="hidden items-center gap-1 rounded border border-border bg-muted px-1.5 py-0.5 text-[11px] font-medium text-muted-foreground sm:inline-flex">
                             <span class="text-xs">&#8984;</span>K
                         </kbd>
                     </button>
@@ -361,7 +352,7 @@ onUnmounted(() => {
             <!-- Page header slot (optional, used by inner pages) — ikut scroll -->
             <header
                 v-if="$slots.header"
-                class="flex-shrink-0 border-b border-white/10 bg-canvas-3/30 backdrop-blur-xl"
+                class="flex-shrink-0 border-b border-border"
             >
                 <div class="flex min-h-14 w-full items-center px-4 py-3 sm:px-6 lg:px-8">
                     <div class="w-full text-slate-100">
@@ -373,7 +364,7 @@ onUnmounted(() => {
             <!-- NMS-07-D: device write boundary is off — every OLT/ONT write control is locked -->
             <div
                 v-if="deviceWritesLocked"
-                class="flex items-center gap-2 border-b border-sky-500/30 bg-sky-500/10 px-4 py-2 text-xs font-medium text-sky-200 sm:px-6 lg:px-8"
+                class="flex items-center gap-2 border-b border-border bg-muted px-4 py-2 text-xs font-medium text-muted-foreground sm:px-6 lg:px-8"
                 role="status"
                 data-testid="device-writes-banner"
             >
@@ -382,13 +373,13 @@ onUnmounted(() => {
                 <Link
                     v-if="deviceWritesAdminMode && can.manage_users"
                     :href="route('settings.device-writes')"
-                    class="ml-auto flex-shrink-0 rounded-md border border-sky-400/40 px-2 py-0.5 text-sky-100 hover:bg-sky-500/20"
+                    class="ml-auto flex-shrink-0 rounded-md border border-input bg-background px-2 py-0.5 text-foreground hover:bg-accent"
                     data-testid="device-writes-banner-link"
                 >{{ $t('shell.device_writes_manage') }}</Link>
             </div>
             <div
                 v-else-if="deviceWritesExpiresAt"
-                class="flex items-center gap-2 border-b border-amber-500/30 bg-amber-500/10 px-4 py-2 text-xs font-medium text-amber-200 sm:px-6 lg:px-8"
+                class="flex items-center gap-2 border-b border-warning/30 bg-warning/10 px-4 py-2 text-xs font-medium text-warning sm:px-6 lg:px-8"
                 role="status"
                 data-testid="device-writes-timer-banner"
             >
@@ -397,7 +388,7 @@ onUnmounted(() => {
                 <Link
                     v-if="can.manage_users"
                     :href="route('settings.device-writes')"
-                    class="ml-auto flex-shrink-0 rounded-md border border-amber-400/40 px-2 py-0.5 text-amber-100 hover:bg-amber-500/20"
+                    class="ml-auto flex-shrink-0 rounded-md border border-warning/40 px-2 py-0.5 text-warning hover:bg-warning/15"
                 >{{ $t('shell.device_writes_manage') }}</Link>
             </div>
 

@@ -238,8 +238,10 @@
         "col_status": "Status",
         "no_active_alarms": "Tidak ada alarm aktif.",
         "remote_actions": "Aksi ONU Jarak Jauh",
-        "hero_title": "Platform Manajemen & Provisioning OLT ZTE",
-        "hero_subtitle": "Monitor dan kelola perangkat OLT dan ONU secara terpusat.",
+        "hero_title": "Ringkasan jaringan",
+        "hero_subtitle": "OLT, ONU, dan alarm dari polling terakhir.",
+        "last_poll": "Polling terakhir {time}",
+        "no_poll_yet": "Belum ada polling",
         "modal": {
             "reboot_title": "Reboot ONU",
             "reset_title": "Reset ONU",

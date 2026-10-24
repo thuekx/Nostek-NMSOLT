@@ -202,6 +202,16 @@ dimigrasi per kelompok halaman; **halaman atau komponen baru memakai fondasi ini
   tidak diketahui tidak pernah memakai `success`.
 - Teks UI tetap lewat `vue-i18n` (`resources/js/lang/{id,en}.json`).
 
+### Tampilan datar (UI-S1, owner memilih arah A + B + C, 24 Okt 2026)
+
+- Ramp `slate`, `cyan`, `sky` dan token `canvas`/`surface` dipetakan ulang ke palet netral + aksen biru
+  serat. Kelas lama (`bg-slate-900/40`, `text-cyan-400`) otomatis ikut gaya baru.
+- Blok **di luar @layer** di akhir `app.css` meratakan semua halaman: tanpa grid neon, pendar, blur,
+  dan halo; `nos-glass-*`, `nos-panel`, `nos-card`, `nos-surface` = permukaan `card` + `border`.
+  Aturan kaca di bawah (3b) berlaku sebagai struktur, bukan lagi tampilannya.
+- Ikon judul kartu (`nos-circle-*`) = kotak 32 px membulat, bukan lingkaran 48 px.
+- Halaman baru tetap memakai `Components/ui` dan token semantik.
+
 ## 3b. TAMPILAN BAKU KOMPONEN
 
 Ukuran dan varian di bawah diimplementasikan oleh komponen dasar (`PrimaryButton`,

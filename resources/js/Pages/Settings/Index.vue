@@ -762,7 +762,7 @@ const copyText = async (text, key) => {
                                 <select
                                     id="alarm_min_severity"
                                     v-model="alarmForm.min_severity"
-                                    class="mt-1 block min-h-11 w-full rounded-md border border-white/10 bg-slate-900/60 py-2.5 px-3 text-sm text-white shadow-sm focus:border-cyan-500 focus:ring-cyan-500"
+                                    class="mt-1 block min-h-11 w-full rounded-md border border-white/10 bg-slate-900/60 py-2.5 px-3 text-sm text-white shadow-xs focus:border-cyan-500 focus:ring-cyan-500"
                                 >
                                     <option v-for="opt in severityOptions" :key="opt.value" :value="opt.value">{{ $t(`alarms.sev_opt_${opt.value}`) }}</option>
                                 </select>
@@ -1067,7 +1067,7 @@ const copyText = async (text, key) => {
                                         <td class="px-5 py-3 font-medium text-slate-100 sm:px-4">{{ d.device }}</td>
                                         <td class="px-4 py-3 text-slate-300">
                                             {{ d.user }}
-                                            <span v-if="d.role" class="ml-1.5 rounded bg-white/5 px-1.5 py-0.5 text-[10px] uppercase tracking-wide text-slate-400">{{ d.role }}</span>
+                                            <span v-if="d.role" class="ml-1.5 rounded-sm bg-white/5 px-1.5 py-0.5 text-[10px] uppercase tracking-wide text-slate-400">{{ d.role }}</span>
                                         </td>
                                         <td class="px-4 py-3 text-slate-400">{{ d.last_used_at ? formatDateTime(d.last_used_at) : '—' }}</td>
                                         <td class="px-4 py-3 text-slate-400">{{ d.created_at ? formatDateTime(d.created_at) : '—' }}</td>
@@ -1265,7 +1265,7 @@ const copyText = async (text, key) => {
                                 <div v-if="api.tokens.length > 0" class="space-y-3 sm:hidden">
                                     <div v-for="t in api.tokens" :key="t.id" class="rounded-lg border border-white/10 bg-canvas-3/40 p-4">
                                         <div class="flex items-start justify-between gap-3">
-                                            <p class="min-w-0 break-words font-medium text-white">{{ t.name }}</p>
+                                            <p class="min-w-0 wrap-break-word font-medium text-white">{{ t.name }}</p>
                                             <button type="button" class="inline-flex shrink-0 items-center gap-1.5 rounded-md px-2.5 py-1.5 text-xs font-medium text-red-300 transition-colors hover:bg-red-500/10" @click="revokeToken(t.id)">
                                                 <Trash2 class="h-3.5 w-3.5" />
                                                 {{ $t('settings.revoke') }}

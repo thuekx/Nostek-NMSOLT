@@ -280,7 +280,7 @@ const submit = () => {
                 />
                 <div
                     v-if="searchResults.length"
-                    class="absolute z-20 mt-1 max-h-60 w-full overflow-auto rounded-lg border border-white/10 bg-slate-900/95 shadow-xl backdrop-blur"
+                    class="absolute z-20 mt-1 max-h-60 w-full overflow-auto rounded-lg border border-white/10 bg-slate-900/95 shadow-xl backdrop-blur-sm"
                 >
                     <button
                         v-for="onu in searchResults"

@@ -120,7 +120,7 @@ const fmt = (v) => formatDateTime(v);
                 <div class="grid gap-6 lg:grid-cols-2">
                     <div class="nos-glass-panel">
                         <div class="flex items-center gap-3 border-b border-white/10 px-4 py-4 sm:px-6">
-                            <span class="nos-circle-sky !h-10 !w-10"><Server class="h-5 w-5" /></span>
+                            <span class="nos-circle-sky h-10! w-10!"><Server class="h-5 w-5" /></span>
                             <div>
                                 <h3 class="text-base font-semibold text-white">{{ $t('cdatadetail.system_info') }}</h3>
                                 <p class="text-xs text-slate-400">{{ olt.ip }}:{{ olt.snmp_port }} · {{ olt.snmp_version }}</p>
@@ -129,7 +129,7 @@ const fmt = (v) => formatDateTime(v);
                         <div class="grid gap-4 p-6 sm:grid-cols-2">
                             <div>
                                 <p class="text-xs uppercase tracking-wider text-slate-500">{{ $t('portonus.description') }}</p>
-                                <p class="mt-1 break-words text-sm text-slate-200">{{ system.sys_descr || '—' }}</p>
+                                <p class="mt-1 wrap-break-word text-sm text-slate-200">{{ system.sys_descr || '—' }}</p>
                             </div>
                             <div>
                                 <p class="text-xs uppercase tracking-wider text-slate-500">{{ $t('cdatadetail.system_name') }}</p>
@@ -175,7 +175,7 @@ const fmt = (v) => formatDateTime(v);
                 <!-- Visualisasi chassis (panel depan) — posisi sama dengan halaman detail ZTE -->
                 <div v-if="panel" class="nos-glass-panel">
                     <div class="flex items-center gap-3 border-b border-white/10 px-4 py-4 sm:px-6">
-                        <span class="nos-circle-cyan !h-10 !w-10"><LayoutPanelTop class="h-5 w-5" /></span>
+                        <span class="nos-circle-cyan h-10! w-10!"><LayoutPanelTop class="h-5 w-5" /></span>
                         <div>
                             <h3 class="text-base font-semibold text-white">{{ $t('cdatadetail.panel_front') }}</h3>
                             <p class="text-xs text-slate-400">{{ $t('cdatadetail.panel_sub', { family: olt.capabilities.vendor_family }) }}</p>

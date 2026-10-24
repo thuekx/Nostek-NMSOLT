@@ -149,7 +149,7 @@ const submitTag = async () => {
         <template #header>
             <div class="flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
                 <div class="flex items-center gap-3">
-                    <span class="nos-circle-cyan !h-10 !w-10 flex-shrink-0"><Cable class="h-5 w-5" /></span>
+                    <span class="nos-circle-cyan h-10! w-10! flex-shrink-0"><Cable class="h-5 w-5" /></span>
                     <div>
                         <h1 class="font-mono text-xl font-semibold text-slate-100">{{ name }}</h1>
                         <p class="mt-1 flex flex-wrap items-center gap-2 text-sm text-slate-400">
@@ -273,11 +273,11 @@ const submitTag = async () => {
                                         </div>
                                         <div class="col-span-2 bg-canvas-3/40 px-4 py-3">
                                             <dt class="text-xs uppercase tracking-wide text-slate-500">{{ $t('cdataport.description') }}</dt>
-                                            <dd class="mt-1 break-words text-sm text-slate-100">{{ dash(info.description) }}</dd>
+                                            <dd class="mt-1 wrap-break-word text-sm text-slate-100">{{ dash(info.description) }}</dd>
                                         </div>
                                         <div v-if="port_label" class="col-span-2 bg-canvas-3/40 px-4 py-3">
                                             <dt class="text-xs uppercase tracking-wide text-slate-500">{{ $t('cdataport.label') }}</dt>
-                                            <dd class="mt-1 break-words text-sm text-slate-100">{{ port_label }}</dd>
+                                            <dd class="mt-1 wrap-break-word text-sm text-slate-100">{{ port_label }}</dd>
                                         </div>
                                         <div class="col-span-2 bg-canvas-3/40 px-4 py-3">
                                             <dt class="text-xs uppercase tracking-wide text-slate-500">{{ $t('portdetail.updated') }}</dt>

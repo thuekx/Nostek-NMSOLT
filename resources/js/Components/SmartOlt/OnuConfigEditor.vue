@@ -123,7 +123,7 @@ const cols = {
     uniVlan: '8rem 6rem 7rem minmax(5rem,1fr) minmax(5rem,1fr) 2.75rem',
 };
 
-const fieldClass = 'mt-1 block w-full rounded-md border-white/10 bg-canvas-3/40 text-slate-100 shadow-sm focus:border-cyan-500 focus:ring-cyan-500';
+const fieldClass = 'mt-1 block w-full rounded-md border-white/10 bg-canvas-3/40 text-slate-100 shadow-xs focus:border-cyan-500 focus:ring-cyan-500';
 </script>
 
 <template>
@@ -499,7 +499,7 @@ const fieldClass = 'mt-1 block w-full rounded-md border-white/10 bg-canvas-3/40 
             <header class="flex items-center justify-between border-b border-white/10 px-4 py-3 sm:px-6">
                 <h3 class="flex items-center gap-2 text-sm font-semibold uppercase tracking-wide text-slate-200"><Cloud class="h-4 w-4 text-cyan-400" /> TR069 / ACS</h3>
                 <label class="inline-flex cursor-pointer items-center gap-2">
-                    <input v-model="cfg.tr069" type="checkbox" class="h-4 w-4 rounded border-white/10 text-cyan-400 focus:ring-cyan-500" />
+                    <input v-model="cfg.tr069" type="checkbox" class="h-4 w-4 rounded-sm border-white/10 text-cyan-400 focus:ring-cyan-500" />
                     <span class="text-xs font-medium text-slate-300">Enable</span>
                 </label>
             </header>
@@ -526,7 +526,7 @@ const fieldClass = 'mt-1 block w-full rounded-md border-white/10 bg-canvas-3/40 
             <header class="flex items-center justify-between border-b border-white/10 px-4 py-3 sm:px-6">
                 <h3 class="flex items-center gap-2 text-sm font-semibold uppercase tracking-wide text-slate-200"><ShieldCheck class="h-4 w-4 text-cyan-400" /> Security-mgmt (Remote ONT)</h3>
                 <label class="inline-flex cursor-pointer items-center gap-2">
-                    <input v-model="cfg.remote_ont" type="checkbox" class="h-4 w-4 rounded border-white/10 text-cyan-400 focus:ring-cyan-500" />
+                    <input v-model="cfg.remote_ont" type="checkbox" class="h-4 w-4 rounded-sm border-white/10 text-cyan-400 focus:ring-cyan-500" />
                     <span class="text-xs font-medium text-slate-300">Enable</span>
                 </label>
             </header>

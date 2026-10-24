@@ -111,7 +111,7 @@ const reset = () => submit({ color: null });
 
             <!-- Cakupan -->
             <label v-if="hasPort" class="mt-4 flex items-start gap-2 rounded-xl border border-white/10 bg-white/5 px-3 py-2.5 text-xs text-slate-200">
-                <input v-model="applyToPort" type="checkbox" class="mt-0.5 rounded border-white/20 bg-slate-900 text-cyan-500 focus:ring-cyan-500" />
+                <input v-model="applyToPort" type="checkbox" class="mt-0.5 rounded-sm border-white/20 bg-slate-900 text-cyan-500 focus:ring-cyan-500" />
                 <span>
                     {{ $t('map.odp_color_apply_port', { port: portLabel, count: portCount }) }}
                     <span class="mt-0.5 block text-[11px] text-slate-400">{{ $t('map.odp_color_apply_port_hint') }}</span>

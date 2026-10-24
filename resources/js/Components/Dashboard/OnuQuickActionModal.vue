@@ -123,7 +123,7 @@ const submit = () => {
         >
             <div
                 v-if="open && meta"
-                class="fixed inset-0 z-[110] flex items-start justify-center bg-black/70 px-4 pt-[10vh] backdrop-blur-sm"
+                class="fixed inset-0 z-110 flex items-start justify-center bg-black/70 px-4 pt-[10vh] backdrop-blur-xs"
                 @click.self="close"
             >
                 <div class="w-full max-w-md overflow-hidden rounded-2xl border border-white/10 bg-slate-900/95 shadow-2xl shadow-black/60 backdrop-blur-xl">
@@ -144,7 +144,7 @@ const submit = () => {
                     </div>
 
                     <div v-if="!meta.available" class="px-5 py-5">
-                        <div class="nos-alert-danger !mb-0">
+                        <div class="nos-alert-danger mb-0!">
                             <AlertTriangle class="h-5 w-5 flex-shrink-0" />
                             <span>{{ $t('dashboard.modal.not_implemented') }}</span>
                         </div>
@@ -195,7 +195,7 @@ const submit = () => {
                                 type="button"
                                 :disabled="!selected || submitting"
                                 class="rounded-lg px-4 py-2 text-sm font-semibold text-white transition-all disabled:cursor-not-allowed disabled:opacity-50"
-                                :class="meta.destructive ? 'bg-gradient-to-r from-red-500 to-rose-600 shadow-lg shadow-red-500/30 hover:shadow-red-500/50' : 'bg-gradient-to-r from-cyan-500 to-sky-600 shadow-lg shadow-cyan-500/30 hover:shadow-cyan-500/50'"
+                                :class="meta.destructive ? 'bg-linear-to-r from-red-500 to-rose-600 shadow-lg shadow-red-500/30 hover:shadow-red-500/50' : 'bg-linear-to-r from-cyan-500 to-sky-600 shadow-lg shadow-cyan-500/30 hover:shadow-cyan-500/50'"
                                 @click="submit"
                             >
                                 <Loader2 v-if="submitting" class="mr-1 inline h-4 w-4 animate-spin" />

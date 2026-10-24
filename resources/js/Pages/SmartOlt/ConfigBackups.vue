@@ -211,7 +211,7 @@ const labelFor = (id) => {
                                 </tr>
                             </thead>
                             <tbody class="divide-y divide-white/5">
-                                <tr v-for="b in rows" :key="b.id" class="hover:bg-white/[0.02]">
+                                <tr v-for="b in rows" :key="b.id" class="hover:bg-white/2">
                                     <td class="px-4 py-3 text-xs text-slate-200">{{ formatDateTime(b.captured_at) }}</td>
                                     <td class="px-4 py-3 text-xs text-slate-400">{{ formatSize(b.size_bytes) }}</td>
                                     <td class="px-4 py-3">

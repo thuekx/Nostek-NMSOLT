@@ -219,7 +219,7 @@ const syncFromOlt = () => {
                             </div>
                             <div class="md:col-span-2">
                                 <label class="inline-flex items-center gap-2 text-sm text-slate-200">
-                                    <input v-device-write v-model="createForms[type.key].execute_cli" type="checkbox" class="rounded border-white/10 text-cyan-400 shadow-sm focus:ring-cyan-500" />
+                                    <input v-device-write v-model="createForms[type.key].execute_cli" type="checkbox" class="rounded-sm border-white/10 text-cyan-400 shadow-xs focus:ring-cyan-500" />
                                     {{ $t('profiles.execute_cli') }}
                                 </label>
                             </div>
@@ -259,12 +259,12 @@ const syncFromOlt = () => {
                                     <TextInput v-else v-model="editing[profile.id].notes" class="block w-full" />
                                     <div class="space-y-2">
                                         <label class="inline-flex items-center gap-2 text-sm text-slate-200">
-                                            <input v-model="editing[profile.id].is_active" type="checkbox" class="rounded border-white/10 text-cyan-400 shadow-sm focus:ring-cyan-500" />
+                                            <input v-model="editing[profile.id].is_active" type="checkbox" class="rounded-sm border-white/10 text-cyan-400 shadow-xs focus:ring-cyan-500" />
                                             {{ $t('profiles.active') }}
                                         </label>
                                         <label class="block">
                                             <span class="inline-flex items-center gap-2 text-sm text-slate-200">
-                                                <input v-device-write v-model="editing[profile.id].execute_cli" type="checkbox" class="rounded border-white/10 text-cyan-400 shadow-sm focus:ring-cyan-500" />
+                                                <input v-device-write v-model="editing[profile.id].execute_cli" type="checkbox" class="rounded-sm border-white/10 text-cyan-400 shadow-xs focus:ring-cyan-500" />
                                                 {{ $t('profiles.execute_cli') }}
                                             </span>
                                         </label>
@@ -342,7 +342,7 @@ const syncFromOlt = () => {
                                         {{ $t('profiles.empty') }}
                                     </td>
                                 </tr>
-                                <tr v-for="profile in rowsFor(type)" :key="profile.id" class="transition-colors duration-150 hover:bg-white/[0.03]">
+                                <tr v-for="profile in rowsFor(type)" :key="profile.id" class="transition-colors duration-150 hover:bg-white/3">
                                     <template v-if="editing[profile.id]">
                                         <td class="px-4 py-3">
                                             <TextInput v-model="editing[profile.id].name" class="block w-48" required />
@@ -362,11 +362,11 @@ const syncFromOlt = () => {
                                         </td>
                                         <td class="px-4 py-3">
                                             <label class="inline-flex items-center gap-2 text-xs text-slate-200">
-                                                <input v-model="editing[profile.id].is_active" type="checkbox" class="rounded border-white/10 text-cyan-400 shadow-sm focus:ring-cyan-500" />
+                                                <input v-model="editing[profile.id].is_active" type="checkbox" class="rounded-sm border-white/10 text-cyan-400 shadow-xs focus:ring-cyan-500" />
                                                 {{ $t('profiles.active') }}
                                             </label>
                                             <label class="mt-2 inline-flex items-center gap-2 text-xs text-slate-200">
-                                                <input v-device-write v-model="editing[profile.id].execute_cli" type="checkbox" class="rounded border-white/10 text-cyan-400 shadow-sm focus:ring-cyan-500" />
+                                                <input v-device-write v-model="editing[profile.id].execute_cli" type="checkbox" class="rounded-sm border-white/10 text-cyan-400 shadow-xs focus:ring-cyan-500" />
                                                 {{ $t('profiles.execute_cli') }}
                                             </label>
                                         </td>

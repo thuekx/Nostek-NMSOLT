@@ -257,7 +257,7 @@ onBeforeUnmount(() => {
         <div
             data-theme="dark"
             v-if="olt"
-            class="fixed z-[120] flex flex-col overflow-hidden rounded-xl border border-white/10 bg-slate-950/95 shadow-2xl shadow-black/60 backdrop-blur-xl"
+            class="fixed z-120 flex flex-col overflow-hidden rounded-xl border border-white/10 bg-slate-950/95 shadow-2xl shadow-black/60 backdrop-blur-xl"
             :style="windowStyle"
         >
             <!-- Title bar (drag handle) -->
@@ -274,13 +274,13 @@ onBeforeUnmount(() => {
                     <span class="ml-2 truncate text-[11px] text-slate-500">{{ olt.ip }} · {{ statusMessage }}</span>
                 </div>
                 <div class="flex flex-shrink-0 items-center gap-1">
-                    <button type="button" class="rounded p-1 text-slate-400 transition-colors hover:bg-white/10 hover:text-white" title="Minimize" @mousedown.stop @click="toggleMin">
+                    <button type="button" class="rounded-sm p-1 text-slate-400 transition-colors hover:bg-white/10 hover:text-white" title="Minimize" @mousedown.stop @click="toggleMin">
                         <Minus class="h-4 w-4" />
                     </button>
-                    <button type="button" class="rounded p-1 text-slate-400 transition-colors hover:bg-white/10 hover:text-white" :title="maximized ? 'Restore' : 'Maximize'" @mousedown.stop @click="toggleMax">
+                    <button type="button" class="rounded-sm p-1 text-slate-400 transition-colors hover:bg-white/10 hover:text-white" :title="maximized ? 'Restore' : 'Maximize'" @mousedown.stop @click="toggleMax">
                         <Maximize2 class="h-4 w-4" />
                     </button>
-                    <button type="button" class="rounded p-1 text-slate-400 transition-colors hover:bg-red-500/20 hover:text-red-300" :title="$t('common.close')" @mousedown.stop @click="close">
+                    <button type="button" class="rounded-sm p-1 text-slate-400 transition-colors hover:bg-red-500/20 hover:text-red-300" :title="$t('common.close')" @mousedown.stop @click="close">
                         <X class="h-4 w-4" />
                     </button>
                 </div>

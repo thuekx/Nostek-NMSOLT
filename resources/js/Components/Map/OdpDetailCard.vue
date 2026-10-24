@@ -108,8 +108,8 @@ const deleteOdp = async () => {
         <div class="flex items-start justify-between gap-2">
             <div class="min-w-0">
                 <div class="flex items-start gap-1.5">
-                    <span class="mt-1 inline-block h-2.5 w-2.5 shrink-0 rounded-sm ring-1 ring-slate-400/70" :style="{ background: color }"></span>
-                    <h3 class="break-words text-sm font-semibold leading-snug text-white" :title="odp.name">{{ odp.name }}</h3>
+                    <span class="mt-1 inline-block h-2.5 w-2.5 shrink-0 rounded-xs ring-1 ring-slate-400/70" :style="{ background: color }"></span>
+                    <h3 class="wrap-break-word text-sm font-semibold leading-snug text-white" :title="odp.name">{{ odp.name }}</h3>
                 </div>
                 <p class="mt-0.5 truncate text-[11px] text-slate-400">
                     {{ $t('map.odp_label') }} · {{ odp.olt_name }}<span v-if="odp.port != null"> · {{ $t('map.odp_port') }} {{ odp.slot }}/{{ odp.port }}</span>
@@ -141,7 +141,7 @@ const deleteOdp = async () => {
                     <!-- Nama pelanggan dibiarkan membungkus (maks 2 baris) — dipotong 1 baris
                          bikin nama panjang "…(ODP X)" tak terbaca sama sekali. -->
                     <span
-                        class="line-clamp-2 break-words font-medium leading-snug text-slate-100"
+                        class="line-clamp-2 wrap-break-word font-medium leading-snug text-slate-100"
                         :title="onu.name || onu.interface || `ONU #${onu.onu_id}`"
                     >{{ onu.name || onu.interface || `ONU #${onu.onu_id}` }}</span>
                     <span class="block truncate text-[10px] text-slate-500">{{ onu.serial_number || onu.interface || '—' }}</span>

@@ -331,9 +331,9 @@ const lastRefreshText = computed(() => (props.lastRefresh ? formatDateTime(props
         <!-- Chassis frame -->
         <div v-else class="p-4 sm:p-6">
             <!-- Orientasi vertikal (C300 dll): kartu berdiri, ramping, port 1 kolom -->
-            <div v-if="!isHorizontal" class="flex gap-2 overflow-x-auto rounded-xl border border-white/10 bg-gradient-to-b from-canvas-3/70 to-slate-900/30 p-4 shadow-inner">
+            <div v-if="!isHorizontal" class="flex gap-2 overflow-x-auto rounded-xl border border-white/10 bg-linear-to-b from-canvas-3/70 to-slate-900/30 p-4 shadow-inner">
                 <!-- Rack rail kiri -->
-                <div class="flex w-2.5 flex-shrink-0 flex-col items-center justify-around rounded bg-slate-800/60 py-3">
+                <div class="flex w-2.5 flex-shrink-0 flex-col items-center justify-around rounded-sm bg-slate-800/60 py-3">
                     <span v-for="n in 6" :key="n" class="h-1.5 w-1.5 rounded-full bg-slate-600/80"></span>
                 </div>
 
@@ -345,7 +345,7 @@ const lastRefreshText = computed(() => (props.lastRefresh ? formatDateTime(props
                     <template v-for="entry in col.stack" :key="entry.key">
                         <!-- Slot kosong -->
                         <div v-if="entry.empty" class="flex flex-1 flex-col overflow-hidden rounded-lg border border-dashed border-white/10 bg-canvas-3/20">
-                            <div class="border-b border-white/5 bg-white/[0.02] px-1 py-2 text-center">
+                            <div class="border-b border-white/5 bg-white/2 px-1 py-2 text-center">
                                 <div class="text-[10px] font-medium uppercase tracking-wide text-slate-500">Slot {{ entry.slot }}</div>
                                 <div class="text-sm font-semibold text-slate-700">—</div>
                             </div>
@@ -356,7 +356,7 @@ const lastRefreshText = computed(() => (props.lastRefresh ? formatDateTime(props
 
                         <!-- Kartu terpasang -->
                         <div v-else class="flex flex-1 flex-col overflow-hidden rounded-lg border border-white/10 bg-canvas-3/50">
-                            <div class="border-b border-white/10 bg-white/[0.03] px-1 py-2 text-center">
+                            <div class="border-b border-white/10 bg-white/3 px-1 py-2 text-center">
                                 <div class="text-[10px] font-medium uppercase tracking-wide text-slate-500">Slot {{ entry.card.slot }}</div>
                                 <div class="truncate text-sm font-bold text-white" :title="entry.card.real_type || entry.card.cfg_type">{{ entry.card.cfg_type || '—' }}</div>
                                 <div class="text-[10px] text-slate-500">{{ portCount(entry.card) }}p</div>
@@ -376,14 +376,14 @@ const lastRefreshText = computed(() => (props.lastRefresh ? formatDateTime(props
                                 <!-- Kartu power: konektor daya -48V + 2 port LAN RJ45 -->
                                 <div v-else-if="isPowerCard(entry.card)" class="flex flex-col items-center justify-center gap-7 py-2" title="Kartu catu daya: konektor -48V + 2 port LAN">
                                     <div class="flex flex-col items-center gap-0.5">
-                                        <div class="flex h-12 w-8 flex-col items-center justify-center gap-1.5 rounded border border-amber-500/30 bg-amber-500/10">
+                                        <div class="flex h-12 w-8 flex-col items-center justify-center gap-1.5 rounded-sm border border-amber-500/30 bg-amber-500/10">
                                             <span class="h-2 w-2 rounded-full bg-amber-400/80"></span>
                                             <span class="h-2 w-2 rounded-full bg-amber-400/80"></span>
                                         </div>
                                         <span class="text-[7px] font-medium uppercase tracking-wide text-slate-500">-48V</span>
                                     </div>
                                     <div class="flex flex-col items-center gap-2">
-                                        <div v-for="n in 2" :key="n" class="flex h-5 w-7 flex-col items-start justify-center gap-0.5 rounded-sm border border-slate-500/50 bg-slate-800/80 py-1 pl-1">
+                                        <div v-for="n in 2" :key="n" class="flex h-5 w-7 flex-col items-start justify-center gap-0.5 rounded-xs border border-slate-500/50 bg-slate-800/80 py-1 pl-1">
                                             <span v-for="p in 4" :key="p" class="h-px w-3 bg-amber-300/40"></span>
                                         </div>
                                     </div>
@@ -392,7 +392,7 @@ const lastRefreshText = computed(() => (props.lastRefresh ? formatDateTime(props
                             </div>
                             <!-- Kartu kontrol (SCXN): 3 port LAN manajemen, di tengah paruh bawah kartu -->
                             <div v-if="isControlCard(entry.card)" class="flex flex-1 flex-col items-center justify-center gap-1.5 px-1.5" title="Port LAN manajemen">
-                                <div v-for="n in 3" :key="n" class="flex h-5 w-7 flex-col items-start justify-center gap-0.5 rounded-sm border border-slate-500/50 bg-slate-800/80 py-1 pl-1">
+                                <div v-for="n in 3" :key="n" class="flex h-5 w-7 flex-col items-start justify-center gap-0.5 rounded-xs border border-slate-500/50 bg-slate-800/80 py-1 pl-1">
                                     <span v-for="p in 4" :key="p" class="h-px w-3 bg-amber-300/40"></span>
                                 </div>
                             </div>
@@ -424,13 +424,13 @@ const lastRefreshText = computed(() => (props.lastRefresh ? formatDateTime(props
                 </div>
 
                 <!-- Rack rail kanan -->
-                <div class="flex w-2.5 flex-shrink-0 flex-col items-center justify-around rounded bg-slate-800/60 py-3">
+                <div class="flex w-2.5 flex-shrink-0 flex-col items-center justify-around rounded-sm bg-slate-800/60 py-3">
                     <span v-for="n in 6" :key="n" class="h-1.5 w-1.5 rounded-full bg-slate-600/80"></span>
                 </div>
             </div>
 
             <!-- Orientasi horizontal (C320): line-card span penuh, slot kontrol (≥3) berbagi 2 kolom -->
-            <div v-else class="grid grid-cols-2 gap-2 rounded-xl border border-white/10 bg-gradient-to-b from-canvas-3/70 to-slate-900/30 p-4 shadow-inner">
+            <div v-else class="grid grid-cols-2 gap-2 rounded-xl border border-white/10 bg-linear-to-b from-canvas-3/70 to-slate-900/30 p-4 shadow-inner">
                 <template v-for="entry in chassisSlots" :key="entry.key">
                     <!-- Slot kosong -->
                     <div v-if="entry.empty" class="flex items-center gap-2 rounded-lg border border-dashed border-white/10 bg-canvas-3/20 px-4 py-4" :class="isWideSlot(entry) ? 'col-span-2' : ''">
@@ -460,14 +460,14 @@ const lastRefreshText = computed(() => (props.lastRefresh ? formatDateTime(props
                             <!-- Kartu power: konektor daya -48V + 2 port LAN RJ45 -->
                             <div v-else-if="isPowerCard(entry.card)" class="flex items-center gap-3" title="Kartu catu daya: konektor -48V + 2 port LAN">
                                 <div class="flex flex-col items-center gap-0.5">
-                                    <div class="flex h-7 w-10 items-center justify-center gap-1 rounded border border-amber-500/30 bg-amber-500/10">
+                                    <div class="flex h-7 w-10 items-center justify-center gap-1 rounded-sm border border-amber-500/30 bg-amber-500/10">
                                         <span class="h-2 w-2 rounded-full bg-amber-400/80"></span>
                                         <span class="h-2 w-2 rounded-full bg-amber-400/80"></span>
                                     </div>
                                     <span class="text-[8px] font-medium uppercase tracking-wide text-slate-500">-48V</span>
                                 </div>
                                 <div class="flex items-end gap-2">
-                                    <div v-for="n in 2" :key="n" class="flex h-6 w-5 items-end justify-center gap-px rounded-sm border border-slate-500/50 bg-slate-800/80 px-0.5 pb-0.5">
+                                    <div v-for="n in 2" :key="n" class="flex h-6 w-5 items-end justify-center gap-px rounded-xs border border-slate-500/50 bg-slate-800/80 px-0.5 pb-0.5">
                                         <span v-for="p in 4" :key="p" class="h-2.5 w-px bg-amber-300/40"></span>
                                     </div>
                                 </div>
@@ -508,16 +508,16 @@ const lastRefreshText = computed(() => (props.lastRefresh ? formatDateTime(props
             <div class="mt-3 flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
                 <div class="flex flex-wrap items-center gap-x-4 gap-y-1.5 text-xs text-slate-400">
                     <span class="flex items-center gap-1.5">
-                        <span class="h-3 w-3 rounded bg-emerald-500 shadow-[0_0_8px_rgba(16,185,129,0.7)]"></span> {{ $t('configonu.chassis_active') }}
+                        <span class="h-3 w-3 rounded-sm bg-emerald-500 shadow-[0_0_8px_rgba(16,185,129,0.7)]"></span> {{ $t('configonu.chassis_active') }}
                     </span>
                     <span class="flex items-center gap-1.5">
-                        <span class="h-3 w-3 rounded bg-red-500 shadow-[0_0_8px_rgba(239,68,68,0.7)]"></span> {{ $t('configonu.chassis_inactive') }}
+                        <span class="h-3 w-3 rounded-sm bg-red-500 shadow-[0_0_8px_rgba(239,68,68,0.7)]"></span> {{ $t('configonu.chassis_inactive') }}
                     </span>
                     <span class="flex items-center gap-1.5">
-                        <span class="h-3 w-3 rounded bg-amber-400/60"></span> Standby
+                        <span class="h-3 w-3 rounded-sm bg-amber-400/60"></span> Standby
                     </span>
                     <span class="flex items-center gap-1.5">
-                        <span class="h-3 w-3 rounded bg-slate-700"></span> {{ $t('configonu.chassis_empty_legend') }}
+                        <span class="h-3 w-3 rounded-sm bg-slate-700"></span> {{ $t('configonu.chassis_empty_legend') }}
                     </span>
                 </div>
                 <p class="text-[11px] text-slate-500" v-html="$t('configonu.chassis_note')"></p>

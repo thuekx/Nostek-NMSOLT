@@ -75,7 +75,7 @@ onUnmounted(() => {
 
 <template>
     <div
-        class="pointer-events-none fixed inset-x-0 top-16 z-[70] flex flex-col items-center gap-2 px-4 sm:inset-x-auto sm:right-4 sm:top-20 sm:items-end sm:px-0"
+        class="pointer-events-none fixed inset-x-0 top-16 z-70 flex flex-col items-center gap-2 px-4 sm:inset-x-auto sm:right-4 sm:top-20 sm:items-end sm:px-0"
         aria-live="polite"
         aria-atomic="false"
     >
@@ -99,7 +99,7 @@ onUnmounted(() => {
             >
                 <CheckCircle2 v-if="toast.type === 'success'" class="mt-0.5 h-5 w-5 flex-shrink-0 text-emerald-400" />
                 <TriangleAlert v-else class="mt-0.5 h-5 w-5 flex-shrink-0 text-red-400" />
-                <span class="min-w-0 flex-1 break-words">{{ toast.message }}</span>
+                <span class="min-w-0 flex-1 wrap-break-word">{{ toast.message }}</span>
                 <button
                     type="button"
                     class="-mr-1 -mt-0.5 flex h-6 w-6 flex-shrink-0 items-center justify-center rounded-md opacity-70 transition hover:bg-white/10 hover:opacity-100"

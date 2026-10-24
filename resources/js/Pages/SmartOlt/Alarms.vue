@@ -259,7 +259,7 @@ const goFallback = () => {
                         v-for="card in cards"
                         :key="card.key"
                         type="button"
-                        class="rounded-lg border border-white/10 bg-slate-900/40 backdrop-blur-xl p-5 text-left shadow-sm shadow-black/30 transition hover:-translate-y-0.5"
+                        class="rounded-lg border border-white/10 bg-slate-900/40 backdrop-blur-xl p-5 text-left shadow-xs shadow-black/30 transition hover:-translate-y-0.5"
                         :class="form.severity === card.key ? 'ring-2 ring-cyan-500' : ''"
                         @click="setSeverity(card.key)"
                     >
@@ -276,7 +276,7 @@ const goFallback = () => {
                                 v-model="form.q"
                                 type="search"
                                 :placeholder="$t('alarms.search_placeholder')"
-                                class="nos-filter-control !pl-9"
+                                class="nos-filter-control pl-9!"
                             >
                         </div>
                         <select v-model="form.severity" class="nos-filter-control w-full sm:w-auto">
@@ -345,7 +345,7 @@ const goFallback = () => {
                                 v-for="alarm in rows"
                                 :key="alarm.id"
                                 class="nos-mobile-card relative"
-                                :class="alarm.contextual_navigation ? 'cursor-pointer transition hover:bg-white/[0.03] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-cyan-500' : ''"
+                                :class="alarm.contextual_navigation ? 'cursor-pointer transition hover:bg-white/3 focus-visible:outline-hidden focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-cyan-500' : ''"
                                 :role="alarm.contextual_navigation ? 'button' : undefined"
                                 :tabindex="alarm.contextual_navigation ? 0 : undefined"
                                 :aria-label="alarm.contextual_navigation ? $t('shell.open_notification') : undefined"
@@ -417,8 +417,8 @@ const goFallback = () => {
                                 <tr
                                     v-for="alarm in rows"
                                     :key="alarm.id"
-                                    class="transition-colors duration-150 hover:bg-white/[0.03]"
-                                    :class="alarm.contextual_navigation ? 'cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-cyan-500' : ''"
+                                    class="transition-colors duration-150 hover:bg-white/3"
+                                    :class="alarm.contextual_navigation ? 'cursor-pointer focus-visible:outline-hidden focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-cyan-500' : ''"
                                     :role="alarm.contextual_navigation ? 'button' : undefined"
                                     :tabindex="alarm.contextual_navigation ? 0 : undefined"
                                     :aria-label="alarm.contextual_navigation ? $t('shell.open_notification') : undefined"

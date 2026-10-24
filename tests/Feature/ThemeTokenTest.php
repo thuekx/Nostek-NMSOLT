@@ -8,12 +8,12 @@ use Tests\TestCase;
 /**
  * Penjaga kontrak dua tema.
  *
- * tailwind.config.js membangun seluruh palet dari daftar nama di
- * tailwind.tokens.mjs menjadi `rgb(var(--nos-nama) / <alpha-value>)`.
- * Nilainya sendiri hidup di resources/css/app.css, satu blok per tema.
+ * Blok `@theme` di resources/css/app.css (Tailwind v4) memetakan setiap nama
+ * di tailwind.tokens.mjs menjadi `--color-nama: rgb(var(--nos-nama))`.
+ * Nilainya sendiri hidup di app.css yang sama, satu blok per tema.
  *
- * Kalau sebuah nama dirujuk config tapi TIDAK dideklarasikan di app.css,
- * nilai `rgb(var(--nos-nama) / 1)` menjadi invalid: browser mengabaikan
+ * Kalau sebuah nama dirujuk @theme tapi TIDAK dideklarasikan di blok tema,
+ * nilai `rgb(var(--nos-nama))` menjadi invalid: browser mengabaikan
  * propertinya dan elemen itu jadi transparan — tanpa error build, tanpa
  * error konsol. Kelas yang "hilang" seperti ini pernah lolos berbulan-bulan
  * (lihat UI_DESIGN_SYSTEM.md §4 soal nos-btn-cyan). Test ini yang menangkapnya.
@@ -45,7 +45,7 @@ class ThemeTokenTest extends TestCase
             }
         }
 
-        return array_merge($names, $list('SINGLES'), $list('SURFACES'), $list('CANVASES'));
+        return array_merge($names, $list('SINGLES'), $list('SURFACES'), $list('CANVASES'), $list('SEMANTIC'));
     }
 
     /** @return array<string, list<string>> blok tema => nama variabel yang dideklarasikan */
@@ -130,5 +130,25 @@ class ThemeTokenTest extends TestCase
                 );
             }
         }
+    }
+
+    #[Test]
+    public function blok_theme_memetakan_tepat_setiap_token(): void
+    {
+        $css = file_get_contents(base_path('resources/css/app.css'));
+        preg_match('/^@theme \{(.*?)^\}/ms', $css, $theme);
+        $this->assertNotEmpty($theme, 'Blok @theme tidak ditemukan di app.css');
+
+        preg_match_all('/--color-([a-z0-9-]+):\s*rgb\(var\(--nos-([a-z0-9-]+)\)\);/', $theme[1], $maps, PREG_SET_ORDER);
+
+        $mapped = [];
+        foreach ($maps as [$_full, $color, $token]) {
+            $this->assertSame($color, $token, "--color-{$color} menunjuk ke --nos-{$token}; namanya harus sama.");
+            $mapped[] = $token;
+        }
+
+        $names = $this->tokenNames();
+        $this->assertEmpty(array_diff($names, $mapped), 'Token tanpa --color-* di @theme: '.implode(', ', array_slice(array_diff($names, $mapped), 0, 15)));
+        $this->assertEmpty(array_diff($mapped, $names), 'Warna @theme di luar tailwind.tokens.mjs: '.implode(', ', array_diff($mapped, $names)));
     }
 }

@@ -145,7 +145,7 @@ const fmt = (v) => formatDateTime(v);
         <template #header>
             <div class="flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
                 <div class="flex items-center gap-3">
-                    <span class="nos-circle-cyan !h-10 !w-10 flex-shrink-0"><Tags class="h-5 w-5" /></span>
+                    <span class="nos-circle-cyan h-10! w-10! flex-shrink-0"><Tags class="h-5 w-5" /></span>
                     <div>
                         <h1 class="text-xl font-semibold text-slate-100">{{ $t('cdatavlan.title', { name: olt.name }) }}</h1>
                         <p class="mt-1 text-sm text-slate-400">{{ $t('cdatavlan.subtitle', { ip: olt.ip }) }}</p>
@@ -214,7 +214,7 @@ const fmt = (v) => formatDateTime(v);
                         <!-- Tambah VLAN -->
                         <div class="nos-glass-panel">
                             <div class="flex items-center gap-3 border-b border-white/10 px-4 py-4 sm:px-6">
-                                <span class="nos-circle-emerald !h-10 !w-10 flex-shrink-0"><Plus class="h-5 w-5" /></span>
+                                <span class="nos-circle-emerald h-10! w-10! flex-shrink-0"><Plus class="h-5 w-5" /></span>
                                 <div>
                                     <h3 class="text-base font-semibold text-slate-100">{{ $t('cdatavlan.add_title') }}</h3>
                                     <p class="text-xs text-slate-400">{{ isEpon ? $t('cdatavlan.add_sub_epon') : $t('cdatavlan.add_sub') }}</p>
@@ -286,7 +286,7 @@ const fmt = (v) => formatDateTime(v);
                         <div class="nos-table-card">
                             <div class="flex flex-col gap-3 border-b border-white/10 px-4 py-4 sm:px-6 lg:flex-row lg:items-center lg:justify-between">
                                 <div class="flex items-center gap-3">
-                                    <span class="nos-circle-sky !h-10 !w-10 flex-shrink-0"><Network class="h-5 w-5" /></span>
+                                    <span class="nos-circle-sky h-10! w-10! flex-shrink-0"><Network class="h-5 w-5" /></span>
                                     <div>
                                         <h3 class="text-base font-semibold text-slate-100">{{ $t('cdatavlan.list_title') }}</h3>
                                         <p class="text-xs text-slate-400">
@@ -362,7 +362,7 @@ const fmt = (v) => formatDateTime(v);
                                             </tr>
                                         </thead>
                                         <tbody class="divide-y divide-white/5">
-                                            <tr v-for="v in filtered" :key="v.id" class="transition-colors duration-150 hover:bg-white/[0.03]">
+                                            <tr v-for="v in filtered" :key="v.id" class="transition-colors duration-150 hover:bg-white/3">
                                                 <td class="px-4 py-3 font-mono text-sm font-semibold tabular-nums text-slate-100">{{ v.id }}</td>
                                                 <td class="px-4 py-3 text-slate-200">{{ v.description || '—' }}</td>
                                                 <td class="px-4 py-3">

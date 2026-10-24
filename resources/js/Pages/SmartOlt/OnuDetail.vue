@@ -199,7 +199,7 @@ const refresh = () => router.reload({ preserveScroll: true });
                 <!-- Hero stat cards -->
                 <div class="grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
                     <!-- Status -->
-                    <div class="rounded-lg border border-white/10 bg-slate-900/40 p-5 shadow-sm shadow-black/30 backdrop-blur-xl">
+                    <div class="rounded-lg border border-white/10 bg-slate-900/40 p-5 shadow-xs shadow-black/30 backdrop-blur-xl">
                         <div class="flex items-center justify-between">
                             <p class="text-xs font-medium uppercase tracking-wider text-slate-500">{{ $t('common.status') }}</p>
                             <span class="h-2.5 w-2.5 rounded-full" :class="online ? 'bg-emerald-500 shadow-[0_0_8px] shadow-emerald-500/60' : 'bg-slate-500'"></span>
@@ -212,7 +212,7 @@ const refresh = () => router.reload({ preserveScroll: true });
                         </p>
                     </div>
                     <!-- RX power -->
-                    <div class="rounded-lg border border-white/10 bg-slate-900/40 p-5 shadow-sm shadow-black/30 backdrop-blur-xl">
+                    <div class="rounded-lg border border-white/10 bg-slate-900/40 p-5 shadow-xs shadow-black/30 backdrop-blur-xl">
                         <div class="flex items-center justify-between">
                             <p class="text-xs font-medium uppercase tracking-wider text-slate-500">RX Power ONU</p>
                             <Signal class="h-4 w-4 text-slate-500" />
@@ -223,7 +223,7 @@ const refresh = () => router.reload({ preserveScroll: true });
                         <p class="mt-1 text-xs text-slate-500">{{ $t('onudetail.rx_hint') }}</p>
                     </div>
                     <!-- Distance -->
-                    <div class="rounded-lg border border-white/10 bg-slate-900/40 p-5 shadow-sm shadow-black/30 backdrop-blur-xl">
+                    <div class="rounded-lg border border-white/10 bg-slate-900/40 p-5 shadow-xs shadow-black/30 backdrop-blur-xl">
                         <div class="flex items-center justify-between">
                             <p class="text-xs font-medium uppercase tracking-wider text-slate-500">{{ $t('onudetail.distance') }}</p>
                             <Gauge class="h-4 w-4 text-slate-500" />
@@ -232,7 +232,7 @@ const refresh = () => router.reload({ preserveScroll: true });
                         <p class="mt-1 text-xs text-slate-500">{{ $t('onudetail.distance_hint') }}</p>
                     </div>
                     <!-- Online duration -->
-                    <div class="rounded-lg border border-white/10 bg-slate-900/40 p-5 shadow-sm shadow-black/30 backdrop-blur-xl">
+                    <div class="rounded-lg border border-white/10 bg-slate-900/40 p-5 shadow-xs shadow-black/30 backdrop-blur-xl">
                         <div class="flex items-center justify-between">
                             <p class="text-xs font-medium uppercase tracking-wider text-slate-500">Online Duration</p>
                             <Clock class="h-4 w-4 text-slate-500" />
@@ -258,7 +258,7 @@ const refresh = () => router.reload({ preserveScroll: true });
                                     <span class="mt-1 text-xs text-slate-400">dBm · {{ rxZoneLabel }}</span>
                                 </ArcGauge>
                                 <div class="mt-3 flex flex-wrap items-center justify-center gap-2 text-xs">
-                                    <span class="rounded-full px-2 py-0.5 font-medium ring-1" :class="[rxToneCur.bg, rxToneCur.text, rxToneCur.ring]">RX Power</span>
+                                    <span class="rounded-full px-2 py-0.5 font-medium ring-1" :class="[rxToneCur.bg, rxToneCur.text, rxToneCur.ring-3]">RX Power</span>
                                     <span class="text-slate-500">{{ $t('onudetail.safe_zone') }} <span class="text-emerald-400">-25…-10 dBm</span></span>
                                 </div>
                             </div>

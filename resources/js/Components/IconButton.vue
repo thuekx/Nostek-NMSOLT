@@ -26,9 +26,9 @@ const props = defineProps({
 });
 
 // Tampilan baku (UI_DESIGN_SYSTEM): isi berwarna tipis per varian, 44 px di HP
-// dan 36 px mulai `sm:`. Sengaja tanpa backdrop-blur — tombol ini muncul puluhan kali per
+// dan 36 px mulai `sm:`. Sengaja tanpa backdrop-blur-sm — tombol ini muncul puluhan kali per
 // tabel, dan blur per tombol membuat Chromium kehabisan tile saat menggulir.
-const base = 'inline-flex h-11 w-11 items-center justify-center rounded-lg ring-1 transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-1 focus-visible:ring-offset-canvas disabled:cursor-not-allowed disabled:opacity-50 sm:h-9 sm:w-9';
+const base = 'inline-flex h-11 w-11 items-center justify-center rounded-lg ring-1 transition-colors focus:outline-hidden focus-visible:ring-2 focus-visible:ring-offset-1 focus-visible:ring-offset-canvas disabled:cursor-not-allowed disabled:opacity-50 sm:h-9 sm:w-9';
 
 const variants = {
     default: 'bg-slate-500/15 text-slate-300 ring-slate-500/30 hover:bg-slate-500/25 hover:text-slate-100 focus-visible:ring-slate-400/60',

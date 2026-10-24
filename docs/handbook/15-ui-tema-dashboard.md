@@ -42,7 +42,7 @@ Tema bernuansa **"dark glass cyber/NOC"** — pas untuk dashboard monitoring jar
   `rounded-md`. Padding kartu `p-5`, padding konten halaman `px-4 sm:px-6 lg:px-8`.
 - **Gerak halus.** `transition` 150–200ms, transisi antar-halaman `name="page"` (fade + geser),
   hormati `prefers-reduced-motion` (sudah di-handle di `app.css`).
-- **Font.** `Manrope` 400–800 (fallback sans), di-set di `tailwind.config.js` dan dimuat dari
+- **Font.** `Manrope` 400–800 (fallback sans), di-set di blok `@theme` `resources/css/app.css` dan dimuat dari
   fonts.bunny.net.
 
 > **Mental model:** setiap layar = kartu kaca melayang di atas latar grid statis (gelap) atau kanvas
@@ -343,7 +343,7 @@ Checklist ini **mengikat** untuk setiap PR yang menyentuh tampilan dashboard:
     [12](12-frontend.md) §gotcha & [13](13-troubleshooting-maintenance.md)).
 12. **Hormati gerak.** Animasi baru harus mati di `prefers-reduced-motion` (pola sudah ada di
     `app.css`).
-13. **Bila menambah aset font/warna global** → lewat `tailwind.config.js` / `app.css`, bukan style
+13. **Bila menambah aset font/warna global** → lewat `@theme` / token di `app.css`, bukan style
     inline berulang.
 
 ### Yang harus dihindari

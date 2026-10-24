@@ -56,7 +56,7 @@ const onSelect = (event) => {
     <div v-if="navPorts.length > 1" class="flex min-w-0 items-center gap-1 rounded-lg border border-white/10 bg-slate-900/80 p-1">
         <button
             type="button"
-            class="flex h-11 w-11 flex-shrink-0 items-center justify-center rounded-md text-slate-300 transition-colors enabled:hover:bg-white/5 enabled:hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyan-400/60 disabled:cursor-not-allowed disabled:opacity-30 sm:h-9 sm:w-9"
+            class="flex h-11 w-11 flex-shrink-0 items-center justify-center rounded-md text-slate-300 transition-colors enabled:hover:bg-white/5 enabled:hover:text-white focus-visible:outline-hidden focus-visible:ring-2 focus-visible:ring-cyan-400/60 disabled:cursor-not-allowed disabled:opacity-30 sm:h-9 sm:w-9"
             :disabled="!prevPort"
             :title="prevPort ? portName(prevPort) : $t('portonus.port_first')"
             :aria-label="prevPort ? portName(prevPort) : $t('portonus.port_first')"
@@ -77,7 +77,7 @@ const onSelect = (event) => {
         </select>
         <button
             type="button"
-            class="flex h-11 w-11 flex-shrink-0 items-center justify-center rounded-md text-slate-300 transition-colors enabled:hover:bg-white/5 enabled:hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyan-400/60 disabled:cursor-not-allowed disabled:opacity-30 sm:h-9 sm:w-9"
+            class="flex h-11 w-11 flex-shrink-0 items-center justify-center rounded-md text-slate-300 transition-colors enabled:hover:bg-white/5 enabled:hover:text-white focus-visible:outline-hidden focus-visible:ring-2 focus-visible:ring-cyan-400/60 disabled:cursor-not-allowed disabled:opacity-30 sm:h-9 sm:w-9"
             :disabled="!nextPort"
             :title="nextPort ? portName(nextPort) : $t('portonus.port_last')"
             :aria-label="nextPort ? portName(nextPort) : $t('portonus.port_last')"

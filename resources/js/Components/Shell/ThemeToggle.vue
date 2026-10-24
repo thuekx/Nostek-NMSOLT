@@ -24,7 +24,7 @@ const label = computed(() => `${t('common.theme')}: ${t(LABELS[preference.value]
 <template>
     <button
         type="button"
-        class="flex h-10 w-10 items-center justify-center rounded-xl border border-white/10 bg-slate-900/60 text-slate-300 transition-colors hover:border-cyan-500/30 hover:bg-slate-900/80 hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyan-400/60 lg:h-11 lg:w-11"
+        class="flex h-10 w-10 items-center justify-center rounded-xl border border-white/10 bg-slate-900/60 text-slate-300 transition-colors hover:border-cyan-500/30 hover:bg-slate-900/80 hover:text-white focus-visible:outline-hidden focus-visible:ring-2 focus-visible:ring-cyan-400/60 lg:h-11 lg:w-11"
         :title="label"
         :aria-label="label"
         @click="cycleTheme"

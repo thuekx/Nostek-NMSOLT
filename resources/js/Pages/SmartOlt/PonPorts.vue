@@ -142,7 +142,7 @@ const onlinePct = (port) => (port.onu_count ? Math.round(((port.online_onu_count
                             v-for="port in filteredPorts"
                             :key="port.if_index ?? port.name"
                             :href="onusRoute(port)"
-                            class="group block rounded-lg border p-4 transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyan-400/60"
+                            class="group block rounded-lg border p-4 transition focus-visible:outline-hidden focus-visible:ring-2 focus-visible:ring-cyan-400/60"
                             :class="isDown(port)
                                 ? 'border-rose-500/40 bg-rose-500/10 hover:border-rose-400/60 hover:bg-rose-500/15'
                                 : 'border-white/10 bg-canvas-3/40 hover:border-cyan-500/40 hover:bg-cyan-500/5'"

@@ -313,7 +313,7 @@ const viewOnMap = (onu) => {
                                 type="text"
                                 :placeholder="$t('cdataportonus.search_placeholder')"
                                 :aria-label="$t('cdataportonus.search_placeholder')"
-                                class="nos-filter-control !pl-9 !pr-9"
+                                class="nos-filter-control pl-9! pr-9!"
                             />
                             <button
                                 v-if="search"
@@ -371,7 +371,7 @@ const viewOnMap = (onu) => {
                                     </tr>
                                 </thead>
                                 <tbody class="divide-y divide-white/5">
-                                    <tr v-for="o in filtered" :key="o.onu_key" class="transition-colors hover:bg-white/[0.03]" :class="{ 'bg-cyan-500/10': isFocus(o) }">
+                                    <tr v-for="o in filtered" :key="o.onu_key" class="transition-colors hover:bg-white/3" :class="{ 'bg-cyan-500/10': isFocus(o) }">
                                         <td class="px-4 py-3">
                                             <div class="font-mono text-xs text-white">{{ o.interface }}</div>
                                             <div class="mt-0.5 text-xs text-slate-500">{{ o.type_name || o.vendor_id || '—' }}</div>
@@ -589,7 +589,7 @@ const viewOnMap = (onu) => {
                 <p class="mt-2 text-xs text-slate-500">{{ $t('cdataportonus.remote_modal_hint') }}</p>
                 <div class="mt-6 flex flex-col-reverse gap-3 sm:flex-row sm:justify-end">
                     <SecondaryButton type="button" @click="remoteOnu = null">{{ $t('common.cancel') }}</SecondaryButton>
-                    <SecondaryButton type="button" class="justify-center !border-amber-500/40 !text-amber-300 hover:!bg-amber-500/10" v-device-write @click="submitRemote(false)">
+                    <SecondaryButton type="button" class="justify-center border-amber-500/40! text-amber-300! hover:bg-amber-500/10!" v-device-write @click="submitRemote(false)">
                         {{ $t('cdataportonus.remote_disable') }}
                     </SecondaryButton>
                     <PrimaryButton type="button" class="justify-center" v-device-write @click="submitRemote(true)">
@@ -601,7 +601,7 @@ const viewOnMap = (onu) => {
 
         <!-- Modal ubah nama -->
         <div v-if="renameOnu" class="fixed inset-0 z-50 flex items-center justify-center p-4">
-            <div class="absolute inset-0 bg-black/60 backdrop-blur-sm" @click="renameOnu = null"></div>
+            <div class="absolute inset-0 bg-black/60 backdrop-blur-xs" @click="renameOnu = null"></div>
             <div class="relative w-full max-w-md rounded-xl border border-white/10 bg-slate-900/90 p-6 shadow-2xl backdrop-blur-xl">
                 <h3 class="text-base font-semibold text-white">{{ $t('cdataportonus.rename_modal_title') }}</h3>
                 <p class="mt-1 font-mono text-xs text-slate-400">{{ renameOnu.interface }}</p>

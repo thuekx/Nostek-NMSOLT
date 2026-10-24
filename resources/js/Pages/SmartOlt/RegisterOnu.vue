@@ -374,7 +374,7 @@ const submitC600 = async (execute) => {
                                     {{ copied ? $t('configonu.copied') : $t('registeronu.copy') }}
                                 </button>
                             </div>
-                            <pre data-theme="dark" class="nos-terminal max-h-[70vh] overflow-auto whitespace-pre-wrap break-words bg-slate-950/70 px-4 py-3 font-mono text-xs leading-relaxed text-emerald-300/90">{{ preview.script }}</pre>
+                            <pre data-theme="dark" class="nos-terminal max-h-[70vh] overflow-auto whitespace-pre-wrap wrap-break-word bg-slate-950/70 px-4 py-3 font-mono text-xs leading-relaxed text-emerald-300/90">{{ preview.script }}</pre>
                         </div>
                         <p class="mt-2 px-1 text-xs text-slate-500" v-html="$t('registeronu.preview_note')"></p>
                     </div>
@@ -417,7 +417,7 @@ const submitC600 = async (execute) => {
                                 </div>
                                 <div>
                                     <InputLabel :value="$t('registeronu.onu_type')" />
-                                    <select v-model="c600Form.onu_type" class="mt-1 block w-full rounded-md border-white/10 bg-canvas-3/40 font-mono text-sm shadow-sm focus:border-cyan-500 focus:ring-cyan-500">
+                                    <select v-model="c600Form.onu_type" class="mt-1 block w-full rounded-md border-white/10 bg-canvas-3/40 font-mono text-sm shadow-xs focus:border-cyan-500 focus:ring-cyan-500">
                                         <option value="" disabled>{{ $t('registeronu.c600_select') }}</option>
                                         <option v-for="p in withCurrent(onuTypeProfiles, c600Form.onu_type)" :key="p.id" :value="p.name">{{ p.name }}</option>
                                     </select>
@@ -441,7 +441,7 @@ const submitC600 = async (execute) => {
                                 </div>
                                 <div>
                                     <InputLabel :value="$t('registeronu.odp')" />
-                                    <select v-model="c600Form.odp_id" class="mt-1 block w-full rounded-md border-white/10 bg-canvas-3/40 font-mono text-sm shadow-sm focus:border-cyan-500 focus:ring-cyan-500">
+                                    <select v-model="c600Form.odp_id" class="mt-1 block w-full rounded-md border-white/10 bg-canvas-3/40 font-mono text-sm shadow-xs focus:border-cyan-500 focus:ring-cyan-500">
                                         <option :value="null">{{ $t('registeronu.odp_none') }}</option>
                                         <option v-for="odp in c600OdpOptions" :key="odp.id" :value="odp.id">{{ odp.name }}</option>
                                     </select>
@@ -469,7 +469,7 @@ const submitC600 = async (execute) => {
                                 </div>
                                 <div>
                                     <InputLabel :value="$t('registeronu.c600_internet_tcont')" />
-                                    <select v-model="c600Form.internet_tcont_profile" class="mt-1 block w-full rounded-md border-white/10 bg-canvas-3/40 font-mono text-sm shadow-sm focus:border-cyan-500 focus:ring-cyan-500">
+                                    <select v-model="c600Form.internet_tcont_profile" class="mt-1 block w-full rounded-md border-white/10 bg-canvas-3/40 font-mono text-sm shadow-xs focus:border-cyan-500 focus:ring-cyan-500">
                                         <option value="" disabled>{{ $t('registeronu.c600_select') }}</option>
                                         <option v-for="p in withCurrent(tcontProfiles, c600Form.internet_tcont_profile)" :key="p.id" :value="p.name">{{ p.name }}</option>
                                     </select>
@@ -482,7 +482,7 @@ const submitC600 = async (execute) => {
                                 </div>
                                 <div>
                                     <InputLabel :value="$t('registeronu.c600_mgmt_tcont')" />
-                                    <select v-model="c600Form.mgmt_tcont_profile" class="mt-1 block w-full rounded-md border-white/10 bg-canvas-3/40 font-mono text-sm shadow-sm focus:border-cyan-500 focus:ring-cyan-500">
+                                    <select v-model="c600Form.mgmt_tcont_profile" class="mt-1 block w-full rounded-md border-white/10 bg-canvas-3/40 font-mono text-sm shadow-xs focus:border-cyan-500 focus:ring-cyan-500">
                                         <option value="" disabled>{{ $t('registeronu.c600_select') }}</option>
                                         <option v-for="p in withCurrent(tcontProfiles, c600Form.mgmt_tcont_profile)" :key="p.id" :value="p.name">{{ p.name }}</option>
                                     </select>
@@ -565,7 +565,7 @@ const submitC600 = async (execute) => {
                                     <InputError class="mt-1.5" :message="c600Form.errors.acs_password" />
                                 </div>
                                 <label class="flex items-center gap-2 sm:col-span-2 text-sm text-slate-300">
-                                    <input v-model="c600Form.remote_ont_enabled" type="checkbox" class="h-4 w-4 rounded border-white/10 text-cyan-400 shadow-sm focus:ring-cyan-500" />
+                                    <input v-model="c600Form.remote_ont_enabled" type="checkbox" class="h-4 w-4 rounded-sm border-white/10 text-cyan-400 shadow-xs focus:ring-cyan-500" />
                                     {{ $t('registeronu.c600_remote_ont') }}
                                 </label>
                             </div>
@@ -670,7 +670,7 @@ const submitC600 = async (execute) => {
                             </div>
                             <div>
                                 <InputLabel for="odp_id" :value="$t('registeronu.odp')" />
-                                <select id="odp_id" v-model="form.odp_id" class="mt-1 block w-full rounded-md border-white/10 bg-canvas-3/40 text-sm shadow-sm focus:border-cyan-500 focus:ring-cyan-500">
+                                <select id="odp_id" v-model="form.odp_id" class="mt-1 block w-full rounded-md border-white/10 bg-canvas-3/40 text-sm shadow-xs focus:border-cyan-500 focus:ring-cyan-500">
                                     <option :value="null">{{ $t('registeronu.odp_none') }}</option>
                                     <option v-for="odp in simpleOdpOptions" :key="odp.id" :value="odp.id">{{ odp.name }}</option>
                                 </select>
@@ -697,7 +697,7 @@ const submitC600 = async (execute) => {
                                 <select
                                     id="onu_type"
                                     v-model="form.onu_type"
-                                    class="mt-1 block w-full rounded-md border-white/10 shadow-sm focus:border-cyan-500 focus:ring-cyan-500"
+                                    class="mt-1 block w-full rounded-md border-white/10 shadow-xs focus:border-cyan-500 focus:ring-cyan-500"
                                     required
                                 >
                                     <option v-for="profile in onuTypeProfiles" :key="profile.id" :value="profile.name">
@@ -711,7 +711,7 @@ const submitC600 = async (execute) => {
                                 <select
                                     id="tcont_profile"
                                     v-model="form.tcont_profile"
-                                    class="mt-1 block w-full rounded-md border-white/10 shadow-sm focus:border-cyan-500 focus:ring-cyan-500"
+                                    class="mt-1 block w-full rounded-md border-white/10 shadow-xs focus:border-cyan-500 focus:ring-cyan-500"
                                     required
                                 >
                                     <option v-for="profile in tcontProfiles" :key="profile.id" :value="profile.name">
@@ -730,7 +730,7 @@ const submitC600 = async (execute) => {
                                 <select
                                     id="vlan_profile"
                                     v-model="form.vlan_profile"
-                                    class="mt-1 block w-full rounded-md border-white/10 shadow-sm focus:border-cyan-500 focus:ring-cyan-500"
+                                    class="mt-1 block w-full rounded-md border-white/10 shadow-xs focus:border-cyan-500 focus:ring-cyan-500"
                                 >
                                     <option value="">{{ $t('registeronu.no_profile') }}</option>
                                     <option v-for="profile in vlanProfiles" :key="profile.id" :value="profile.name">
@@ -751,7 +751,7 @@ const submitC600 = async (execute) => {
                                         v-for="opt in serviceModes"
                                         :key="opt.value"
                                         type="button"
-                                        class="rounded-lg border px-4 py-2 text-sm font-medium transition-all duration-150 focus:outline-none focus:ring-2 focus:ring-cyan-400 focus:ring-offset-1"
+                                        class="rounded-lg border px-4 py-2 text-sm font-medium transition-all duration-150 focus:outline-hidden focus:ring-2 focus:ring-cyan-400 focus:ring-offset-1"
                                         :class="form.service_mode === opt.value
                                             ? 'bg-cyan-500 text-onaccent border-cyan-500'
                                             : 'bg-slate-900/40 backdrop-blur-xl border border-white/10 text-slate-200 hover:border-cyan-500/40'"
@@ -790,7 +790,7 @@ const submitC600 = async (execute) => {
                                         v-for="mode in ['pppoe', 'dhcp', 'static', 'bridge']"
                                         :key="mode"
                                         type="button"
-                                        class="rounded-lg border px-5 py-2 text-sm font-medium transition-all duration-150 focus:outline-none focus:ring-2 focus:ring-cyan-400 focus:ring-offset-1"
+                                        class="rounded-lg border px-5 py-2 text-sm font-medium transition-all duration-150 focus:outline-hidden focus:ring-2 focus:ring-cyan-400 focus:ring-offset-1"
                                         :class="form.wan_mode === mode
                                             ? 'bg-cyan-500 text-onaccent border-cyan-500'
                                             : 'bg-slate-900/40 backdrop-blur-xl border border-white/10 text-slate-200 hover:border-cyan-500/40'"
@@ -831,7 +831,7 @@ const submitC600 = async (execute) => {
                                     <select
                                         id="ip_profile"
                                         v-model="form.ip_profile"
-                                        class="mt-1 block w-full rounded-md border-white/10 shadow-sm focus:border-cyan-500 focus:ring-cyan-500"
+                                        class="mt-1 block w-full rounded-md border-white/10 shadow-xs focus:border-cyan-500 focus:ring-cyan-500"
                                         required
                                     >
                                         <option v-for="profile in ipProfiles" :key="profile.id" :value="profile.name">
@@ -869,7 +869,7 @@ const submitC600 = async (execute) => {
                             <!-- TR069 -->
                             <div class="rounded-lg border border-cyan-500/30 bg-slate-900/40 backdrop-blur-xl p-4">
                                 <label class="inline-flex cursor-pointer items-center gap-2.5">
-                                    <input v-model="form.tr069_enabled" type="checkbox" class="h-4 w-4 rounded border-white/10 text-cyan-400 shadow-sm focus:ring-cyan-500" />
+                                    <input v-model="form.tr069_enabled" type="checkbox" class="h-4 w-4 rounded-sm border-white/10 text-cyan-400 shadow-xs focus:ring-cyan-500" />
                                     <span class="text-sm font-semibold text-slate-200">TR069</span>
                                 </label>
                                 <div v-if="form.tr069_enabled" class="mt-4 space-y-4">
@@ -897,7 +897,7 @@ const submitC600 = async (execute) => {
                             <!-- Remote ONT -->
                             <div class="rounded-lg border border-cyan-500/30 bg-slate-900/40 backdrop-blur-xl p-4">
                                 <label class="inline-flex cursor-pointer items-center gap-2.5">
-                                    <input v-model="form.remote_ont_enabled" type="checkbox" class="h-4 w-4 rounded border-white/10 text-cyan-400 shadow-sm focus:ring-cyan-500" />
+                                    <input v-model="form.remote_ont_enabled" type="checkbox" class="h-4 w-4 rounded-sm border-white/10 text-cyan-400 shadow-xs focus:ring-cyan-500" />
                                     <span class="text-sm font-semibold text-slate-200">Remote ONT</span>
                                 </label>
                                 <div v-if="form.remote_ont_enabled" class="mt-4 grid gap-4 sm:grid-cols-3">
@@ -908,7 +908,7 @@ const submitC600 = async (execute) => {
                                     </div>
                                     <div>
                                         <InputLabel for="remote_ont_mode" value="Mode" />
-                                        <select id="remote_ont_mode" v-model="form.remote_ont_mode" class="mt-1 block w-full rounded-md border-white/10 shadow-sm focus:border-cyan-500 focus:ring-cyan-500">
+                                        <select id="remote_ont_mode" v-model="form.remote_ont_mode" class="mt-1 block w-full rounded-md border-white/10 shadow-xs focus:border-cyan-500 focus:ring-cyan-500">
                                             <option value="forward">Forward</option>
                                             <option value="discard">Discard</option>
                                         </select>
@@ -916,7 +916,7 @@ const submitC600 = async (execute) => {
                                     </div>
                                     <div>
                                         <InputLabel for="remote_ont_protocol" value="Protocol" />
-                                        <select id="remote_ont_protocol" v-model="form.remote_ont_protocol" class="mt-1 block w-full rounded-md border-white/10 shadow-sm focus:border-cyan-500 focus:ring-cyan-500">
+                                        <select id="remote_ont_protocol" v-model="form.remote_ont_protocol" class="mt-1 block w-full rounded-md border-white/10 shadow-xs focus:border-cyan-500 focus:ring-cyan-500">
                                             <option value="web">Web</option>
                                             <option value="telnet">Telnet</option>
                                             <option value="ssh">SSH</option>
@@ -999,14 +999,14 @@ const submitC600 = async (execute) => {
                                 </div>
                                 <div>
                                     <InputLabel for="adv_onu_type" value="ONU Type" />
-                                    <select id="adv_onu_type" v-model="advForm.onu_type" class="mt-1 block w-full rounded-md border-white/10 shadow-sm focus:border-cyan-500 focus:ring-cyan-500" required>
+                                    <select id="adv_onu_type" v-model="advForm.onu_type" class="mt-1 block w-full rounded-md border-white/10 shadow-xs focus:border-cyan-500 focus:ring-cyan-500" required>
                                         <option v-for="profile in onuTypeProfiles" :key="profile.id" :value="profile.name">{{ profile.name }}</option>
                                     </select>
                                     <InputError class="mt-1.5" :message="advForm.errors.onu_type" />
                                 </div>
                                 <div>
                                     <InputLabel for="adv_odp_id" :value="$t('registeronu.odp')" />
-                                    <select id="adv_odp_id" v-model="advForm.odp_id" class="mt-1 block w-full rounded-md border-white/10 shadow-sm focus:border-cyan-500 focus:ring-cyan-500">
+                                    <select id="adv_odp_id" v-model="advForm.odp_id" class="mt-1 block w-full rounded-md border-white/10 shadow-xs focus:border-cyan-500 focus:ring-cyan-500">
                                         <option :value="null">{{ $t('registeronu.odp_none') }}</option>
                                         <option v-for="odp in advOdpOptions" :key="odp.id" :value="odp.id">{{ odp.name }}</option>
                                     </select>

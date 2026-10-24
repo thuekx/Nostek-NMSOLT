@@ -30,7 +30,7 @@ const actions = [
                 :title="`${action.label} ONU`"
                 @click="emit('select', action.key)"
             >
-                <span :class="action.accent" class="!h-10 !w-10 transition-transform group-hover:scale-105">
+                <span :class="action.accent" class="h-10! w-10! transition-transform group-hover:scale-105">
                     <component :is="action.icon" class="h-4 w-4" />
                 </span>
                 <span class="text-xs font-semibold text-white">{{ action.label }}</span>

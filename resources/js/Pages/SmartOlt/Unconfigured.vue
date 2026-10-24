@@ -154,7 +154,7 @@ const bindTarget = ref(null);
                             </thead>
                             <tbody class="divide-y divide-white/5">
                                 <tr v-for="onu in snapshot.onus" :key="onu.serial_number"
-                                    class="transition-colors duration-150 hover:bg-white/[0.03]">
+                                    class="transition-colors duration-150 hover:bg-white/3">
                                     <td class="px-4 py-3 font-mono text-xs text-slate-300">{{ onu.serial_number }}</td>
                                     <td class="px-4 py-3 text-xs text-slate-300">{{ onu.model || '—' }}</td>
                                     <td class="px-4 py-3 text-xs text-slate-200">

@@ -13,7 +13,7 @@ const sizeClass = computed(() => (props.size === 'sm' ? 'min-h-[34px] gap-1.5 ro
 <template>
     <button
         :type="type"
-        class="nos-btn-secondary-base inline-flex items-center justify-center border border-slate-700/80 bg-slate-900/80 text-sm font-semibold text-slate-200 transition-colors duration-150 hover:bg-slate-800 hover:text-white focus:outline-none focus-visible:ring-2 focus-visible:ring-cyan-400/60 focus-visible:ring-offset-2 focus-visible:ring-offset-canvas disabled:cursor-not-allowed disabled:opacity-50"
+        class="nos-btn-secondary-base inline-flex items-center justify-center border border-slate-700/80 bg-slate-900/80 text-sm font-semibold text-slate-200 transition-colors duration-150 hover:bg-slate-800 hover:text-white focus:outline-hidden focus-visible:ring-2 focus-visible:ring-cyan-400/60 focus-visible:ring-offset-2 focus-visible:ring-offset-canvas disabled:cursor-not-allowed disabled:opacity-50"
         :class="sizeClass"
     >
         <slot />

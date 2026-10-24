@@ -51,6 +51,8 @@ def main() -> int:
         help="platform overlay: every data volume must be a bind mount under this directory",
     )
     args = parser.parse_args()
+    # The product package (nmsolt-ops.sh) passes core/with-acs; Maung staging passes base/acs.
+    product = args.profile in ("core", "with-acs")
     args.profile = {"core": "base", "with-acs": "acs"}.get(args.profile, args.profile)
 
     try:
@@ -129,8 +131,12 @@ def main() -> int:
     if not isinstance(environment, dict):
         fail(errors, "app environment is not a map")
     else:
-        if not is_false(environment.get("NMSOLT_DEVICE_WRITES_ENABLED")):
-            fail(errors, "NMSOLT_DEVICE_WRITES_ENABLED must remain false in staging")
+        writes = environment.get("NMSOLT_DEVICE_WRITES_ENABLED")
+        # WRITE-UI-1: the product package (core/with-acs) may hand the decision to admins
+        # ("admin" = off until switched on in the UI); Maung staging (base/acs) stays false.
+        if not (is_false(writes) or (product and str(writes).strip().lower() == "admin")):
+            fail(errors, "NMSOLT_DEVICE_WRITES_ENABLED must be false or admin" if product
+                 else "NMSOLT_DEVICE_WRITES_ENABLED must remain false in staging")
         if not is_false(environment.get("APP_DEBUG")):
             fail(errors, "APP_DEBUG must remain false in staging")
         if environment.get("QUEUE_CONNECTION") != "redis":

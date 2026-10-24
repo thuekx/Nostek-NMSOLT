@@ -132,6 +132,7 @@ scenario_with_acs() {
     printf 'NMSOLT_DEVICE_WRITES_ENABLED=admin\n' >> "${env}"
     run acs-config-writes-admin 0 -- "${g[@]}" config-check
     expect_line acs-config-writes-admin '^RESULT device_writes=PASS admin mode'
+    expect_line acs-config-writes-admin '^RESULT topology=PASS'
     printf 'NMSOLT_DEVICE_WRITES_ENABLED=true\n' >> "${env}"
     run acs-config-writes-true 1 -- "${g[@]}" config-check
     expect_line acs-config-writes-true '^RESULT device_writes=FAIL'

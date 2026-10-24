@@ -15,15 +15,6 @@ const props = defineProps({
     sparklineLabel: { type: String, default: 'Trend' },
 });
 
-const circleClass = computed(() => ({
-    sky: 'nos-circle-sky',
-    cyan: 'nos-circle-cyan',
-    emerald: 'nos-circle-emerald',
-    purple: 'nos-circle-purple',
-    red: 'nos-circle-red',
-    amber: 'nos-circle-amber',
-    slate: 'nos-circle-slate',
-}[props.accent] ?? 'nos-circle-sky'));
 
 // Dibaca dari token, jadi ikut tema: cyan-400 & slate-500 menggelap di tema
 // terang (stop 500 lainnya dipatok sama di kedua tema).
@@ -65,8 +56,8 @@ const sparkData = computed(() => {
         datasets: [{
             data: values,
             borderColor: accentHex.value,
-            backgroundColor: areaFill(accentHex.value, 0.45, 0),
-            borderWidth: 2,
+            backgroundColor: areaFill(accentHex.value, 0.25, 0),
+            borderWidth: 1.5,
             fill: 'start',
             cubicInterpolationMode: 'monotone',
             pointRadius: 0,
@@ -76,43 +67,29 @@ const sparkData = computed(() => {
 </script>
 
 <template>
-    <div class="nos-glass-card nos-glass-hover relative overflow-hidden">
-        <!-- Sparkline floats top-right, isolated from text flow -->
-        <div class="pointer-events-none absolute right-4 top-4 hidden h-16 w-36 sm:block lg:w-40">
+    <!-- UI-S1: kartu datar. Label + angka di kiri, ikon kecil kanan-atas, sparkline tipis di bawah. -->
+    <div class="nos-glass-card relative flex flex-col gap-3 overflow-hidden p-4!">
+        <div class="flex items-start justify-between gap-3">
+            <p class="text-[13px] font-medium text-muted-foreground">{{ label }}</p>
+            <component :is="icon" class="h-4 w-4 shrink-0" :style="{ color: accentHex }" aria-hidden="true" />
+        </div>
+        <p class="text-[1.75rem] font-semibold leading-none tracking-tight tabular-nums text-foreground">{{ value }}</p>
+
+        <div v-if="hasVariance" class="pointer-events-none h-10 w-full">
             <ChartCanvas
-                v-if="hasVariance"
                 type="line"
-                :height="64"
+                :height="40"
                 :data="sparkData"
                 :options="sparkOptions"
                 :label="sparklineLabel"
             />
-            <span
-                v-else
-                class="mt-8 block h-px w-full rounded-full opacity-60"
-                :style="{ background: `linear-gradient(to right, transparent, ${accentHex}, transparent)` }"
-                aria-hidden="true"
-            />
         </div>
 
-        <div class="flex items-start gap-4 sm:pr-40 lg:pr-44">
-            <span :class="circleClass">
-                <component :is="icon" class="h-6 w-6" />
-            </span>
-            <div class="min-w-0 flex-1">
-                <p class="text-xs font-medium uppercase tracking-wider text-slate-400">{{ label }}</p>
-                <p class="mt-1 text-3xl font-bold tabular-nums text-white sm:text-[2rem]">{{ value }}</p>
-            </div>
-        </div>
-
-        <div v-if="sublabels.length > 0" class="mt-4 flex flex-wrap items-center gap-x-4 gap-y-1.5 border-t border-white/5 pt-3 text-xs">
+        <div v-if="sublabels.length > 0" class="flex flex-wrap items-center gap-x-4 gap-y-1 border-t border-border pt-3 text-xs">
             <div v-for="sub in sublabels" :key="sub.label" class="flex items-center gap-1.5">
-                <span
-                    class="h-2 w-2 rounded-full"
-                    :style="{ backgroundColor: sub.color ?? '#64748b' }"
-                />
-                <span class="text-slate-400">{{ sub.label }}</span>
-                <span class="font-semibold text-slate-200">{{ sub.value }}</span>
+                <span class="h-2 w-2 rounded-full" :style="{ backgroundColor: sub.color ?? '#64748b' }" />
+                <span class="text-muted-foreground">{{ sub.label }}</span>
+                <span class="font-semibold tabular-nums text-foreground">{{ sub.value }}</span>
             </div>
         </div>
     </div>

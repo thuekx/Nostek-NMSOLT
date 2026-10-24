@@ -341,17 +341,17 @@
 :where(:root),
 [data-theme="dark"] {
   /* slate */
-  --nos-slate-50: 248 250 252;
-  --nos-slate-100: 241 245 249;
-  --nos-slate-200: 226 232 240;
-  --nos-slate-300: 203 213 225;
-  --nos-slate-400: 148 163 184;
-  --nos-slate-500: 100 116 139;
-  --nos-slate-600: 71 85 105;
-  --nos-slate-700: 51 65 85;
-  --nos-slate-800: 30 41 59;
-  --nos-slate-900: 15 23 42;
-  --nos-slate-950: 2 6 23;
+  --nos-slate-50: 246 247 249;
+  --nos-slate-100: 233 236 241;
+  --nos-slate-200: 214 220 228;
+  --nos-slate-300: 184 192 204;
+  --nos-slate-400: 139 149 165;
+  --nos-slate-500: 107 117 133;
+  --nos-slate-600: 75 85 99;
+  --nos-slate-700: 48 57 71;
+  --nos-slate-800: 30 37 48;
+  --nos-slate-900: 17 21 28;
+  --nos-slate-950: 8 10 14;
   /* gray */
   --nos-gray-50: 249 250 251;
   --nos-gray-100: 243 244 246;
@@ -497,29 +497,29 @@
   --nos-teal-900: 19 78 74;
   --nos-teal-950: 4 47 46;
   /* cyan */
-  --nos-cyan-50: 236 254 255;
-  --nos-cyan-100: 207 250 254;
-  --nos-cyan-200: 165 243 252;
-  --nos-cyan-300: 103 232 249;
-  --nos-cyan-400: 34 211 238;
-  --nos-cyan-500: 6 182 212;
-  --nos-cyan-600: 8 145 178;
-  --nos-cyan-700: 14 116 144;
-  --nos-cyan-800: 21 94 117;
-  --nos-cyan-900: 22 78 99;
-  --nos-cyan-950: 8 51 68;
+  --nos-cyan-50: 239 246 255;
+  --nos-cyan-100: 219 234 254;
+  --nos-cyan-200: 191 219 254;
+  --nos-cyan-300: 147 197 253;
+  --nos-cyan-400: 110 168 255;
+  --nos-cyan-500: 77 141 255;
+  --nos-cyan-600: 52 116 230;
+  --nos-cyan-700: 37 92 196;
+  --nos-cyan-800: 30 72 156;
+  --nos-cyan-900: 27 56 117;
+  --nos-cyan-950: 18 36 77;
   /* sky */
-  --nos-sky-50: 240 249 255;
-  --nos-sky-100: 224 242 254;
-  --nos-sky-200: 186 230 253;
-  --nos-sky-300: 125 211 252;
-  --nos-sky-400: 56 189 248;
-  --nos-sky-500: 14 165 233;
-  --nos-sky-600: 2 132 199;
-  --nos-sky-700: 3 105 161;
-  --nos-sky-800: 7 89 133;
-  --nos-sky-900: 12 74 110;
-  --nos-sky-950: 8 47 73;
+  --nos-sky-50: 239 246 255;
+  --nos-sky-100: 219 234 254;
+  --nos-sky-200: 191 219 254;
+  --nos-sky-300: 147 197 253;
+  --nos-sky-400: 110 168 255;
+  --nos-sky-500: 77 141 255;
+  --nos-sky-600: 52 116 230;
+  --nos-sky-700: 37 92 196;
+  --nos-sky-800: 30 72 156;
+  --nos-sky-900: 27 56 117;
+  --nos-sky-950: 18 36 77;
   /* blue */
   --nos-blue-50: 239 246 255;
   --nos-blue-100: 219 234 254;
@@ -614,15 +614,15 @@
 
   /* Permukaan opak kolom tabel menempel (sticky). Menggantikan heks
      arbitrer bg-[#0c1630] dkk yang sebelumnya melewati tema. */
-  --nos-surface-1: 12 22 48; /* #0c1630 sidebar, header, popover */
-  --nos-surface-2: 13 23 48; /* #0d1730 sel kolom aksi */
-  --nos-surface-3: 11 18 38; /* #0b1226 header kolom aksi */
-  --nos-surface-hover: 20 31 61; /* #141f3d hover baris */
+  --nos-surface-1: 17 21 28; /* #0c1630 sidebar, header, popover */
+  --nos-surface-2: 17 21 28; /* #0d1730 sel kolom aksi */
+  --nos-surface-3: 14 17 23; /* #0b1226 header kolom aksi */
+  --nos-surface-hover: 24 29 38; /* #141f3d hover baris */
 
   /* Kanvas halaman & dekorasinya. */
-  --nos-canvas: 11 19 41; /* #0b1329 */
-  --nos-canvas-2: 13 25 56; /* #0d1938 */
-  --nos-canvas-3: 8 14 31; /* #080e1f */
+  --nos-canvas: 11 14 19; /* #0b1329 */
+  --nos-canvas-2: 13 17 23; /* #0d1938 */
+  --nos-canvas-3: 9 11 16; /* #080e1f */
 
   /* Semantik (UI-T1): peran, bukan warna. Dipakai Components/ui. */
   --nos-background: 11 14 19;
@@ -842,29 +842,29 @@
   --nos-teal-900: 153 246 228;
   --nos-teal-950: 240 253 250;
   /* cyan */
-  --nos-cyan-50: 8 51 68;
-  --nos-cyan-100: 22 78 99;
-  --nos-cyan-200: 22 78 99;
-  --nos-cyan-300: 21 94 117;
-  --nos-cyan-400: 14 116 144;
-  --nos-cyan-500: 6 182 212;
-  --nos-cyan-600: 8 145 178;
-  --nos-cyan-700: 34 211 238;
-  --nos-cyan-800: 103 232 249;
-  --nos-cyan-900: 165 243 252;
-  --nos-cyan-950: 236 254 255;
+  --nos-cyan-50: 18 36 77;
+  --nos-cyan-100: 27 56 117;
+  --nos-cyan-200: 27 56 117;
+  --nos-cyan-300: 30 72 156;
+  --nos-cyan-400: 37 92 196;
+  --nos-cyan-500: 77 141 255;
+  --nos-cyan-600: 52 116 230;
+  --nos-cyan-700: 110 168 255;
+  --nos-cyan-800: 147 197 253;
+  --nos-cyan-900: 191 219 254;
+  --nos-cyan-950: 239 246 255;
   /* sky */
-  --nos-sky-50: 8 47 73;
-  --nos-sky-100: 12 74 110;
-  --nos-sky-200: 12 74 110;
-  --nos-sky-300: 7 89 133;
-  --nos-sky-400: 3 105 161;
-  --nos-sky-500: 14 165 233;
-  --nos-sky-600: 2 132 199;
-  --nos-sky-700: 56 189 248;
-  --nos-sky-800: 125 211 252;
-  --nos-sky-900: 186 230 253;
-  --nos-sky-950: 240 249 255;
+  --nos-sky-50: 18 36 77;
+  --nos-sky-100: 27 56 117;
+  --nos-sky-200: 27 56 117;
+  --nos-sky-300: 30 72 156;
+  --nos-sky-400: 37 92 196;
+  --nos-sky-500: 77 141 255;
+  --nos-sky-600: 52 116 230;
+  --nos-sky-700: 110 168 255;
+  --nos-sky-800: 147 197 253;
+  --nos-sky-900: 191 219 254;
+  --nos-sky-950: 239 246 255;
   /* blue */
   --nos-blue-50: 23 37 84;
   --nos-blue-100: 30 58 138;
@@ -965,9 +965,9 @@
   --nos-surface-hover: 238 242 247;
 
   /* Kanvas: biru-abu sangat muda, dipinjam dari Kas.light aplikasi HP. */
-  --nos-canvas: 245 247 251; /* #F5F7FB */
+  --nos-canvas: 246 247 249; /* #F5F7FB */
   --nos-canvas-2: 255 255 255;
-  --nos-canvas-3: 237 241 247;
+  --nos-canvas-3: 240 242 245;
 
   /* Semantik (UI-T1): peran, bukan warna. Dipakai Components/ui. */
   --nos-background: 246 247 249;
@@ -1862,4 +1862,73 @@
 [data-theme="dark"] [type='radio']:not(:checked) {
     background-color: rgb(var(--nos-slate-900) / 0.6);
     border-color: rgb(var(--nos-slate-500) / 0.6);
+}
+
+/* =====================================================================
+   UI-S1 — TAMPILAN DATAR (arah A, redesign Okt 2026)
+   =====================================================================
+   Sengaja di LUAR @layer: aturan tanpa layer menang atas semua utilitas
+   Tailwind dan utilitas nos-* lama tanpa perlu !important atau menyentuh
+   50 halaman. Kedua tema: kanvas datar, tanpa grid neon, pendar, blur, dan
+   halo; kartu = permukaan `card` + garis `border` + bayangan tipis.
+   Halaman yang sudah dimigrasi memakai komponen Components/ui langsung.
+   ===================================================================== */
+.nos-grid-pattern,
+.nos-top-light,
+.nos-ambient-glow {
+    display: none;
+}
+
+.nos-grid-stage {
+    background-color: rgb(var(--nos-background));
+    background-image: none;
+}
+
+[class*="backdrop-blur"] {
+    -webkit-backdrop-filter: none;
+    backdrop-filter: none;
+}
+
+.nos-glass-panel,
+.nos-glass-card,
+.nos-panel,
+.nos-card,
+.nos-filter,
+.nos-surface,
+.nos-table-card {
+    background-color: rgb(var(--nos-card));
+    border-color: rgb(var(--nos-border));
+    border-radius: 0.625rem;
+    box-shadow: 0 1px 2px rgb(0 0 0 / 0.12);
+}
+
+.nos-glass-hover:hover {
+    background-color: rgb(var(--nos-card));
+    border-color: rgb(var(--nos-input));
+    box-shadow: 0 1px 2px rgb(0 0 0 / 0.12);
+}
+
+.nos-popover,
+.nos-toast {
+    background-color: rgb(var(--nos-popover));
+    border-color: rgb(var(--nos-border));
+    box-shadow: 0 8px 24px rgb(0 0 0 / 0.18);
+}
+
+.nos-shell-sidebar,
+.nos-shell-bar {
+    background-color: rgb(var(--nos-card));
+    border-color: rgb(var(--nos-border));
+}
+
+/* Ikon judul kartu: kotak kecil membulat (gaya A), bukan lingkaran 48 px berpendar. */
+[class*="nos-circle-"] {
+    width: 2rem;
+    height: 2rem;
+    border-radius: 0.5rem;
+}
+
+[class*="nos-circle-"] > svg {
+    width: 1rem;
+    height: 1rem;
 }

@@ -3,7 +3,6 @@ import { computed, ref } from 'vue';
 import { Head, usePage } from '@inertiajs/vue3';
 import { useI18n } from 'vue-i18n';
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
-import HeroBanner from '@/Components/Dashboard/HeroBanner.vue';
 import StatCard from '@/Components/Dashboard/StatCard.vue';
 import PollingTrendCard from '@/Components/Dashboard/PollingTrendCard.vue';
 import OnuStatusDonut from '@/Components/Dashboard/OnuStatusDonut.vue';
@@ -13,6 +12,7 @@ import ProvisioningTimeline from '@/Components/Dashboard/ProvisioningTimeline.vu
 import RemoteActionsGrid from '@/Components/Dashboard/RemoteActionsGrid.vue';
 import OnuQuickActionModal from '@/Components/Dashboard/OnuQuickActionModal.vue';
 import { BellRing, Server, Wifi } from '@lucide/vue';
+import { formatRelative } from '@/lib/datetime';
 
 const props = defineProps({
     cards: { type: Object, required: true },
@@ -90,11 +90,20 @@ const onSelectAction = (action) => {
     <Head :title="t('nav.dashboard')" />
 
     <AuthenticatedLayout>
-        <div class="space-y-6 px-4 py-6 sm:px-6 lg:px-8">
-            <HeroBanner :title="t('dashboard.hero_title')" :subtitle="t('dashboard.hero_subtitle')" />
+        <div class="space-y-5 px-4 py-6 sm:px-6 lg:px-8">
+            <!-- UI-S1: judul ringkas + kesegaran data, bukan banner besar. -->
+            <div class="flex flex-wrap items-end justify-between gap-x-6 gap-y-1">
+                <div class="min-w-0">
+                    <h1 class="text-xl font-semibold tracking-tight text-foreground">{{ t('dashboard.hero_title') }}</h1>
+                    <p class="text-sm text-muted-foreground">{{ t('dashboard.hero_subtitle') }}</p>
+                </div>
+                <p class="text-xs tabular-nums text-muted-foreground" data-testid="dashboard-last-poll">
+                    {{ lastUpdated ? t('dashboard.last_poll', { time: formatRelative(lastUpdated) }) : t('dashboard.no_poll_yet') }}
+                </p>
+            </div>
 
             <!-- Stat cards -->
-            <div class="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
+            <div class="grid grid-cols-2 gap-3 sm:gap-4 lg:grid-cols-4">
                 <StatCard
                     v-for="card in heroCards"
                     :key="card.label"

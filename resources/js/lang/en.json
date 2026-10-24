@@ -238,8 +238,10 @@
         "col_status": "Status",
         "no_active_alarms": "No active alarms.",
         "remote_actions": "Remote ONU Actions",
-        "hero_title": "ZTE OLT Management & Provisioning Platform",
-        "hero_subtitle": "Monitor and manage OLT and ONU devices from one place.",
+        "hero_title": "Network summary",
+        "hero_subtitle": "OLTs, ONUs and alarms from the latest poll.",
+        "last_poll": "Last poll {time}",
+        "no_poll_yet": "No poll yet",
         "modal": {
             "reboot_title": "Reboot ONU",
             "reset_title": "Reset ONU",

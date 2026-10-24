@@ -44,7 +44,7 @@ Nostek-NMSOLT — STANDALONE NETWORK PLATFORM / API PROVIDER
 |   real-OLT counters VERIFIED (192.168.254.2, owner read-only); per-ONT: GenieACS ON HOLD,
 |   ZTE SNMP per-ONU counters measured, not accurate (not built);
 |   TRF-4 live per-ONT traffic card on the ONU page via read-only CLI
-+-- WRITE-UI-1 [SOURCE PASS, PR open, owner merges] admin switch for device writes in the UI
++-- WRITE-UI-1 [SOURCE PASS, PR #40 merged] admin switch for device writes in the UI
 |   (env false = hard off, admin = UI decides; global + timer, channel olt/acs, per-OLT block, audit)
 +-- NMS-08 [BLOCKED] API v1 read-only + OpenAPI
 |   +-- stable IDs, freshness, pagination, scopes, redaction, rate limits

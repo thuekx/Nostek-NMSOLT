@@ -130,6 +130,7 @@ const rebootOnu = async (onu) => {
         title: t('portonus.act_reboot'),
         message: t('cdataportonus.reboot_msg', { onu: onuLabel(onu) }),
         confirmLabel: 'Reboot',
+        impact: { oltId: props.olt.id, slot: props.slot, port: props.port, onuIds: [onu.onu_id] },
     });
     if (!ok) return;
     router.post(route('cdata-olt.onu.reboot', [props.olt.id, props.slot, props.port, onu.onu_id]), {}, { preserveScroll: true });
@@ -143,6 +144,7 @@ const toggleOnu = async (onu) => {
             ? t('cdataportonus.toggle_enable_msg', { onu: onuLabel(onu) })
             : t('cdataportonus.toggle_disable_msg', { onu: onuLabel(onu) }),
         confirmLabel: active ? 'Enable' : 'Disable',
+        impact: { oltId: props.olt.id, slot: props.slot, port: props.port, onuIds: [onu.onu_id] },
         variant: active ? 'primary' : 'danger',
     });
     if (!ok) return;
@@ -163,6 +165,7 @@ const deleteOnu = async (onu) => {
         title: t('portonus.act_delete'),
         message: t('cdataportonus.delete_msg', { onu: onuLabel(onu) }),
         confirmLabel: t('common.delete'),
+        impact: { oltId: props.olt.id, slot: props.slot, port: props.port, onuIds: [onu.onu_id] },
     });
     if (!ok) return;
     router.delete(route('cdata-olt.onu.delete', [props.olt.id, props.slot, props.port, onu.onu_id]), { preserveScroll: true });

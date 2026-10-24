@@ -339,6 +339,7 @@ const rebootOnu = async (onu) => {
         title: t('portonus.act_reboot'),
         message: t('portonus.reboot_msg', { interface: onu.interface }),
         confirmLabel: 'Reboot',
+        impact: { oltId: props.olt.id, slot: props.slot, port: props.port, onuIds: [onu.onu_id] },
     });
 
     if (!ok) {
@@ -363,6 +364,7 @@ const toggleOnu = async (onu) => {
             ? t('portonus.toggle_enable_msg', { interface: onu.interface })
             : t('portonus.toggle_disable_msg', { interface: onu.interface }),
         confirmLabel: active ? 'Enable' : 'Disable',
+        impact: { oltId: props.olt.id, slot: props.slot, port: props.port, onuIds: [onu.onu_id] },
         variant: active ? 'primary' : 'danger',
     });
 
@@ -386,6 +388,7 @@ const deleteOnu = async (onu) => {
         title: t('portonus.act_delete'),
         message: t('portonus.delete_msg', { interface: onu.interface, onuId: onu.onu_id }),
         confirmLabel: t('common.delete'),
+        impact: { oltId: props.olt.id, slot: props.slot, port: props.port, onuIds: [onu.onu_id] },
         variant: 'danger',
     });
 
@@ -409,6 +412,7 @@ const deleteSelected = async () => {
         title: t('portonus.delete_selected_title', { count: ids.length }),
         message: t('portonus.delete_selected_msg', { count: ids.length, ids: ids.join(', '), slot: props.slot, port: props.port }),
         confirmLabel: t('common.delete'),
+        impact: { oltId: props.olt.id, slot: props.slot, port: props.port, onuIds: ids },
         variant: 'danger',
     });
 

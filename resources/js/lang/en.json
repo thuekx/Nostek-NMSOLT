@@ -2248,5 +2248,16 @@
         "onu_alarms_empty": "No active alarm.",
         "port_wide": "Whole PON/ODP",
         "this_onu": "This ONU"
+    },
+    "impact": {
+        "title": "Impact",
+        "loading": "Counting what is affected…",
+        "error": "Impact preview unavailable. You can still continue.",
+        "summary": "{onus} ONUs affected, {online} online now",
+        "alarms": "{n} active alarms",
+        "no_odp": "no ODP",
+        "customers": "Customers",
+        "more": "and {n} more",
+        "stale": "OLT data is not current: these are the last known values."
     }
 }

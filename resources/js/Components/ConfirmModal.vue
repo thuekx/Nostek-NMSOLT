@@ -7,6 +7,7 @@
  */
 import { computed } from 'vue';
 import DangerButton from '@/Components/DangerButton.vue';
+import ImpactPreview from '@/Components/ImpactPreview.vue';
 import Modal from '@/Components/Modal.vue';
 import PrimaryButton from '@/Components/PrimaryButton.vue';
 import SecondaryButton from '@/Components/SecondaryButton.vue';
@@ -40,6 +41,7 @@ const look = computed(() => VARIANTS[props.state.variant] ?? VARIANTS.warning);
                 <div class="min-w-0 flex-1">
                     <h3 class="text-base font-semibold text-slate-100">{{ state.title }}</h3>
                     <p class="mt-1 whitespace-pre-line text-sm text-slate-400">{{ state.message }}</p>
+                    <ImpactPreview v-if="state.show && state.impact" :key="JSON.stringify(state.impact)" :target="state.impact" />
                 </div>
             </div>
 

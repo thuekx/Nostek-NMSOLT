@@ -232,6 +232,14 @@ dimigrasi per kelompok halaman; **halaman atau komponen baru memakai fondasi ini
   halaman port yang memakai `v-device-write`.
 - `RxGauge` menandai posisi RX di pita -32..-6 dBm; abu-abu bila data tidak segar.
 
+### Pratinjau dampak (UI-F6)
+
+- Setiap konfirmasi aksi tulis yang memutus pelanggan memberi `impact: { oltId, slot, port, onuIds? }`
+  ke `confirm()`; `ConfirmModal` lalu memuat `ImpactPreview` (GET `impact.port`): jumlah ONU, online,
+  ODP, nama pelanggan (maks 8), alarm aktif, catatan data tidak segar.
+- Pratinjau membantu, bukan gerbang: bila gagal dimuat, dialog tetap bisa dikonfirmasi. Gerbang
+  tetap `device.write` di server dan `v-device-write` di tombol.
+
 ## 3b. TAMPILAN BAKU KOMPONEN
 
 Ukuran dan varian di bawah diimplementasikan oleh komponen dasar (`PrimaryButton`,

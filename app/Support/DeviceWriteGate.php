@@ -3,6 +3,7 @@
 namespace App\Support;
 
 use App\Http\Middleware\EnsureDeviceWritesEnabled;
+use App\Models\DeviceWriteSetting;
 use Illuminate\Routing\Route;
 use Illuminate\Support\Facades\Route as Router;
 
@@ -14,30 +15,50 @@ use Illuminate\Support\Facades\Route as Router;
  */
 class DeviceWriteGate
 {
-    /** @var list<array{methods: list<string>, pattern: string, field: ?string}>|null */
+    /** @var list<array{methods: list<string>, pattern: string, field: ?string, channel: string, olt_segment: ?int}>|null */
     private static ?array $gated = null;
 
+    /** True when some write can run somewhere (drives the read-only banner and v-device-write). */
     public static function enabled(): bool
     {
-        return (bool) config('nostek.device_writes_enabled', false);
+        return DeviceWritePolicy::anyAllowed();
     }
 
     /**
-     * @return array{enabled: bool, gated: list<array{methods: list<string>, pattern: string, field: ?string}>}
+     * WRITE-UI-1: besides the overall flag the browser gets the channel switches and the
+     * blocked OLT ids, so a request to a switched-off channel or a blocked OLT is stopped
+     * client-side too (the server decides again on every request).
+     *
+     * @return array{enabled: bool, mode: string, expires_at: ?string, channels: array<string, bool>, blocked_olts: list<int>, gated: list<array{methods: list<string>, pattern: string, field: ?string, channel: string, olt_segment: ?int}>}
      */
     public static function sharedPayload(): array
     {
-        $enabled = self::enabled();
+        $mode = DeviceWritePolicy::mode();
+        $channels = [];
+        foreach (DeviceWriteSetting::CHANNELS as $channel) {
+            $channels[$channel] = DeviceWritePolicy::allows($channel);
+        }
+        $blocked = $mode === DeviceWritePolicy::MODE_ADMIN ? DeviceWritePolicy::blockedOltIds() : [];
+        $everythingOpen = ! in_array(false, $channels, true) && $blocked === [];
 
-        // Nothing to guard client-side when writes are allowed.
-        return ['enabled' => $enabled, 'gated' => $enabled ? [] : self::gatedRoutes()];
+        return [
+            'enabled' => in_array(true, $channels, true),
+            'mode' => $mode,
+            'expires_at' => $mode === DeviceWritePolicy::MODE_ADMIN ? DeviceWritePolicy::globalExpiresAt()?->toIso8601String() : null,
+            'channels' => $channels,
+            'blocked_olts' => $blocked,
+            // Nothing to guard client-side when every write is allowed.
+            'gated' => $everythingOpen ? [] : self::gatedRoutes(),
+        ];
     }
 
     /**
      * Every route behind the device-write middleware, as a path regex. `field` is set for
-     * routes that only mutate when that request field is truthy (preview vs execute).
+     * routes that only mutate when that request field is truthy (preview vs execute),
+     * `channel` is the write channel and `olt_segment` the path segment (0-based) holding
+     * the OLT id, when the route has one.
      *
-     * @return list<array{methods: list<string>, pattern: string, field: ?string}>
+     * @return list<array{methods: list<string>, pattern: string, field: ?string, channel: string, olt_segment: ?int}>
      */
     public static function gatedRoutes(): array
     {
@@ -56,17 +77,28 @@ class DeviceWriteGate
                 if ($name !== 'device.write' && $name !== EnsureDeviceWritesEnabled::class) {
                     continue;
                 }
+                [$channel, $field] = EnsureDeviceWritesEnabled::parseArgs($args === null ? [] : explode(',', $args));
 
                 $gated[] = [
                     'methods' => array_values(array_diff($route->methods(), ['HEAD'])),
                     'pattern' => self::pattern($route->uri()),
-                    'field' => $args !== null && $args !== '' ? $args : null,
+                    'field' => $field,
+                    'channel' => $channel,
+                    'olt_segment' => self::oltSegment($route->uri()),
                 ];
                 break;
             }
         }
 
         return self::$gated = $gated;
+    }
+
+    /** 0-based index of the `{olt}` segment in the browser path ("/smartolt/{olt}/…" → 1). */
+    public static function oltSegment(string $uri): ?int
+    {
+        $index = array_search('{olt}', explode('/', trim($uri, '/')), true);
+
+        return $index === false ? null : (int) $index;
     }
 
     /**

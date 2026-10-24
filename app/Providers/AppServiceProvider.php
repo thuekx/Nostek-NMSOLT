@@ -4,6 +4,7 @@ namespace App\Providers;
 
 use App\Models\AuditLog;
 use App\Support\AuditLogger;
+use App\Support\DeviceWritePolicy;
 use App\Support\Theme;
 use Illuminate\Auth\Events\Failed;
 use Illuminate\Auth\Events\Login;
@@ -11,6 +12,7 @@ use Illuminate\Auth\Events\Logout;
 use Illuminate\Cache\RateLimiting\Limit;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Event;
+use Illuminate\Support\Facades\Queue;
 use Illuminate\Support\Facades\RateLimiter;
 use Illuminate\Support\Facades\View;
 use Illuminate\Support\ServiceProvider;
@@ -31,6 +33,9 @@ class AppServiceProvider extends ServiceProvider
     public function boot(): void
     {
         $this->bootTheme();
+
+        // WRITE-UI-1: queue workers live long; every job must see the current admin switches.
+        Queue::before(fn () => DeviceWritePolicy::flush());
 
         // Rate limiter untuk grup rute API (dipakai middleware `throttle:api`).
         // 120 request/menit per token (atau per IP bila belum login).

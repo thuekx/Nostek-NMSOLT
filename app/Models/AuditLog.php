@@ -32,6 +32,8 @@ class AuditLog extends Model
 
     public const EVENT_DEVICE_WRITE_BLOCKED = 'device_write_blocked';
 
+    public const EVENT_DEVICE_WRITE_SETTING = 'device_write_setting_changed';
+
     protected $fillable = [
         'user_id',
         'user_name',

@@ -170,4 +170,5 @@ return [
     'cdata_vlan_tagged_ports' => 'VLAN :vlan di-tag ke :ports.',
     'cdata_vlan_tag_failed_some' => 'Sebagian port gagal di-tag — ',
     'cdata_config_unsaved' => 'Belum permanen: tekan Simpan Config agar tetap ada setelah OLT reboot.',
+    'device_writes_saved' => 'Pengaturan device writes disimpan.',
 ];

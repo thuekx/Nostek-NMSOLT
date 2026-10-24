@@ -67,6 +67,16 @@ credential retrieval, live OLT/ONT mutation or ACS write is authorized. Package
 tests must use rendered Compose validation, unit/feature tests and isolated
 synthetic fixtures until a separate runtime gate is approved.
 
+## WRITE-UI-1 result (2026-10-24)
+
+Owner request 2026-10-24: an admin must be able to switch device writes in the UI, without code
+or `.env` edits. Branch `step/write-ui-1-device-write-switch`: env value `admin` (new) hands the
+decision to Settings → Device writes (global switch with timer, channel olt/acs, per-OLT block,
+reason + audit). `false` stays a hard off and remains the default. Source only; the owner merges
+(device-write and security change, outside the NMSOLT self-merge rule). Rolling it out on a host
+needs one env change from `false` to `admin` through the deploy package; nothing is switched on
+by that change. See [NMS-02-SECURITY-MATRIX.md](NMS-02-SECURITY-MATRIX.md).
+
 ## NMS-07-A result (2026-10-22)
 
 Work package 1 (unified package contract) and the source half of work package 2

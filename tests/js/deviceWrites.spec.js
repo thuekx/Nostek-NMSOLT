@@ -108,3 +108,50 @@ describe('v-device-write', () => {
         expect(el.disabled).toBe(false);
     });
 });
+
+// WRITE-UI-1: admin mode shares channel switches and blocked OLTs; the gate list is sent
+// even while writes are on, and each entry is refused only for its channel or OLT.
+describe('admin switches (channels and blocked OLTs)', () => {
+    const admin = {
+        enabled: true,
+        mode: 'admin',
+        channels: { olt: true, acs: false },
+        blocked_olts: [7],
+        gated: [
+            { methods: ['POST'], pattern: '^/smartolt/[^/]+/ports/[^/]+/[^/]+/onus/[^/]+/reboot/?$', field: null, channel: 'olt', olt_segment: 1 },
+            { methods: ['POST'], pattern: '^/olts/[^/]+/onus/[^/]+/[^/]+/[^/]+/acs\\-wifi/?$', field: null, channel: 'acs', olt_segment: 1 },
+            { methods: ['POST'], pattern: '^/api/v1/olts/[^/]+/onus/[^/]+/[^/]+/[^/]+/reboot/?$', field: null, channel: 'olt', olt_segment: 3 },
+            { methods: ['POST'], pattern: '^/map/pins/[^/]+/reboot/?$', field: null, channel: 'olt', olt_segment: null },
+        ],
+    };
+
+    it('refuses a switched-off channel only', () => {
+        expect(isGatedRequest(admin, 'POST', '/olts/5/onus/1/1/1/acs-wifi', {})).toBe(true);
+        expect(isGatedRequest(admin, 'POST', '/smartolt/5/ports/1/2/onus/7/reboot', {})).toBe(false);
+    });
+
+    it('refuses a blocked OLT by its path segment, also under /api/v1', () => {
+        expect(isGatedRequest(admin, 'POST', '/smartolt/7/ports/1/2/onus/3/reboot', {})).toBe(true);
+        expect(isGatedRequest(admin, 'POST', '/smartolt/70/ports/1/2/onus/3/reboot', {})).toBe(false);
+        expect(isGatedRequest(admin, 'POST', '/api/v1/olts/7/onus/1/2/3/reboot', {})).toBe(true);
+        expect(isGatedRequest(admin, 'POST', '/api/v1/olts/5/onus/1/2/3/reboot', {})).toBe(false);
+        // Routes without an OLT in the path are left to the server.
+        expect(isGatedRequest(admin, 'POST', '/map/pins/7/reboot', {})).toBe(false);
+    });
+
+    it('refuses everything once the overall flag is off', () => {
+        expect(isGatedRequest({ ...admin, enabled: false }, 'POST', '/map/pins/1/reboot', {})).toBe(true);
+    });
+
+    it('locks a channel-specific control with v-device-write:acs', () => {
+        const directive = deviceWriteDirective(() => 'locked');
+        const wifi = document.createElement('button');
+        const reboot = document.createElement('button');
+        directive.mounted(wifi, { value: admin, arg: 'acs' });
+        directive.mounted(reboot, { value: admin });
+        expect(wifi.disabled).toBe(true);
+        expect(reboot.disabled).toBe(false);
+        expect(writesEnabled(admin, 'olt')).toBe(true);
+        expect(writesEnabled(admin, 'acs')).toBe(false);
+    });
+});

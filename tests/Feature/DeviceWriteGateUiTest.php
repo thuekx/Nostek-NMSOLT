@@ -68,7 +68,11 @@ class DeviceWriteGateUiTest extends TestCase
         config(['nostek.device_writes_enabled' => true]);
         $this->actingAs(User::factory()->admin()->create())
             ->get(route('dashboard'))
-            ->assertInertia(fn ($page) => $page->where('device_writes', ['enabled' => true, 'gated' => []]));
+            ->assertInertia(fn ($page) => $page
+                ->where('device_writes.enabled', true)
+                ->where('device_writes.mode', 'on')
+                ->where('device_writes.gated', [])
+            );
 
         auth()->logout();
         $this->get(route('login'))->assertInertia(fn ($page) => $page->where('device_writes', null));

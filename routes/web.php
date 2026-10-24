@@ -6,6 +6,7 @@ use App\Http\Controllers\CDataGponPortController;
 use App\Http\Controllers\CDataOltController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\DashboardSearchController;
+use App\Http\Controllers\DeviceWriteSettingsController;
 use App\Http\Controllers\GenieacsController;
 use App\Http\Controllers\HiosoOltController;
 use App\Http\Controllers\LocaleController;
@@ -100,6 +101,10 @@ Route::middleware('auth')->group(function () {
         Route::get('/audit-logs', [AuditLogController::class, 'index'])->name('audit-logs.index');
 
         Route::get('/settings', [SettingsController::class, 'edit'])->name('settings.edit');
+        // WRITE-UI-1: admin switches for device writes (only when NMSOLT_DEVICE_WRITES_ENABLED=admin).
+        Route::get('/settings/device-writes', [DeviceWriteSettingsController::class, 'index'])->name('settings.device-writes');
+        Route::put('/settings/device-writes', [DeviceWriteSettingsController::class, 'update'])->name('settings.device-writes.update');
+        Route::put('/settings/device-writes/olts/{olt}', [DeviceWriteSettingsController::class, 'updateOlt'])->whereNumber('olt')->name('settings.device-writes.olt');
         Route::post('/settings/api-tokens', [SettingsController::class, 'createApiToken'])->name('settings.api-tokens.store');
         Route::delete('/settings/api-tokens/{token}', [SettingsController::class, 'revokeApiToken'])->whereNumber('token')->name('settings.api-tokens.destroy');
         Route::post('/settings/general', [SettingsController::class, 'updateGeneral'])->name('settings.general.update');
@@ -218,7 +223,7 @@ Route::middleware('auth')->group(function () {
     // perangkat pelanggan, jadi dibatasi peran tulis (lebih ketat dari aksi ONU
     // lain yang hanya ber-`auth`) dan dicatat ke audit di controller.
     Route::post('/olts/{olt}/onus/{slot}/{port}/{onuId}/acs-wifi', [GenieacsController::class, 'updateWifi'])
-        ->middleware(['role:admin,operator,partner', 'device.write'])
+        ->middleware(['role:admin,operator,partner', 'device.write:acs'])
         ->whereNumber(['slot', 'port', 'onuId'])
         ->name('genieacs.onu.wifi');
     // Penyematan manual pasangan ONU↔device ACS. Pencariannya hanya membaca

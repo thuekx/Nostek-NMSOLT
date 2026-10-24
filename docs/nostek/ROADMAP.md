@@ -68,6 +68,10 @@ Non-destructive parallel work is allowed (documentation, API design, unit tests,
 
 On every session start: retrieve this file, status YAML and HANDOFF; validate GitHub main and open PR/CI; update the evidence before changing statuses. When a task passes, move to the next unblocked safe task in the same session. When work is blocked, work on independent safe tasks, not unrelated production systems. Never modify Maung-Wo-Inv/maung-crm or Nostek runtime without scoped approval/review. Do not fabricate tests or handoffs.
 
+## WRITE-UI-1 device-write admin switch checkpoint
+
+Owner request 2026-10-24. Env `NMSOLT_DEVICE_WRITES_ENABLED=admin` lets admins switch device writes in Settings → Device writes (global + timer, channel olt/acs, per-OLT block, reason + audit); `false` stays the default hard off. Source PR for the owner to merge; a host takes it with one env change to `admin` in the deploy package. See [NMS-02-SECURITY-MATRIX.md](NMS-02-SECURITY-MATRIX.md).
+
 ## NMS-07-A unified package checkpoint
 
 Branch `step/nms-07-a-unified-package`: core/with-acs/platform Compose, `scripts/nostek/nmsolt-ops.sh`, `monitor/checks.json` and the ops integration test (workspace 58/58 PASS with real PostgreSQL/Redis/MongoDB/GenieACS and a stand-in app). NMS-07 stays IN_PROGRESS until work packages B–E and the whole-phase evidence exist. See [NMS-07-UNIFIED-PACKAGE.md](NMS-07-UNIFIED-PACKAGE.md).

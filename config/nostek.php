@@ -10,11 +10,17 @@ return [
     | including queued execution and interactive Telnet access. Read-only
     | polling, previews and locally persisted inventory remain available.
     |
+    | NMSOLT_DEVICE_WRITES_ENABLED is the installation's upper limit (WRITE-UI-1):
+    |   false  read-only instance; nobody can enable writes from the UI (default)
+    |   admin  an admin switches writes on/off in Settings → Device writes
+    |          (global, per channel, per OLT, with reason, audit and auto-off)
+    |   true   legacy: writes always on, the UI switch is not used
+    | Read it through App\Support\DeviceWritePolicy, never directly.
+    |
     */
-    'device_writes_enabled' => filter_var(
-        env('NMSOLT_DEVICE_WRITES_ENABLED', false),
-        FILTER_VALIDATE_BOOL,
-    ),
+    'device_writes_enabled' => strtolower(trim((string) env('NMSOLT_DEVICE_WRITES_ENABLED', 'false'))) === 'admin'
+        ? 'admin'
+        : filter_var(env('NMSOLT_DEVICE_WRITES_ENABLED', false), FILTER_VALIDATE_BOOL),
 
     /*
     |--------------------------------------------------------------------------

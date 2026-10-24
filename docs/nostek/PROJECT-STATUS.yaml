@@ -32,6 +32,7 @@ status:
   NMS-06: VERIFIED
   NMS-07: IN_PROGRESS
   TRF-1: SOURCE_PASS_MERGED
+  WRITE-UI-1: SOURCE_PASS_PR_OPEN
   NMS-08: BLOCKED
   NMS-09: BLOCKED
   NMS-10: BLOCKED
@@ -40,6 +41,12 @@ status:
 deferred:
   mobile_flutter: "Excluded from initial commit; inherited mobile identity is not approved for distribution."
 latest_evidence:
+  WRITE-UI-1:
+    status: SOURCE_PASS_PR_OPEN
+    branch: step/write-ui-1-device-write-switch
+    request: "Owner 2026-10-24: admin must switch device writes in the NMSOLT UI without code or .env edits."
+    design: "Env NMSOLT_DEVICE_WRITES_ENABLED false (default, hard off) | admin (UI decides) | true (legacy, ops FAIL). Admin mode: global switch + auto-off timer, channel olt/acs, per-OLT block (block only), reason required, audit device_write_setting_changed. Middleware, Telegram reboot and queued jobs use DeviceWritePolicy."
+    merge: "Owner merges (device-write/security change). Host rollout needs one env change false -> admin in a deploy package; nothing writes until an admin switches it on."
   TRF-1:
     status: SOURCE_PASS_MERGED
     pr: "#35 merged 2026-10-22 (merge 488f1ed)"
@@ -108,7 +115,7 @@ environment:
   live_olt_write: PROHIBITED_WITHOUT_APPROVAL
 next_action:
   id: TRF-2-ONT-TRAFFIC
-  instruction: "NMS-07 PRs #24-#34 and TRF-1 PR #35 are merged (2026-10-22). NMS-07-A2 PR #36 is merged (build makes the GenieACS image, start refuses a missing local image). Per-ONT traffic: GenieACS ON HOLD (lab ACS only), ZTE SNMP per-ONU counters measured and not accurate on C320 V2.1.0; TRF-4 shows live per-ONT traffic on the ONU page from the read-only CLI (no history) (parseAcsTrafficMonitor exists, unused). PON counters VERIFIED on a real OLT (192.168.254.2). BLOCKED on the owner: real-OLT check of max-repetitions 25, the ZTE ONU traffic OID walk. NMS-07 evidence that needs a host stays open: real app image, queue latency under real workers (NET-1). The onu_state table was measured and not adopted (NMS-07-PERFORMANCE.md); do not re-add it without new evidence. Preserve LICENSE attribution and keep device writes disabled."
+  instruction: "NMS-07 PRs #24-#34 and TRF-1 PR #35 are merged (2026-10-22). NMS-07-A2 PR #36 is merged (build makes the GenieACS image, start refuses a missing local image). Per-ONT traffic: GenieACS ON HOLD (lab ACS only), ZTE SNMP per-ONU counters measured and not accurate on C320 V2.1.0; TRF-4 shows live per-ONT traffic on the ONU page from the read-only CLI (no history) (parseAcsTrafficMonitor exists, unused). PON counters VERIFIED on a real OLT (192.168.254.2). BLOCKED on the owner: real-OLT check of max-repetitions 25, the ZTE ONU traffic OID walk. NMS-07 evidence that needs a host stays open: real app image, queue latency under real workers (NET-1). The onu_state table was measured and not adopted (NMS-07-PERFORMANCE.md); do not re-add it without new evidence. WRITE-UI-1 (admin switch for device writes, env value admin) is a source PR for the owner to merge. Preserve LICENSE attribution and keep device writes disabled."
   owner: "executor"
   approval_required: false
 references:

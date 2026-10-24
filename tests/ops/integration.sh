@@ -125,6 +125,19 @@ scenario_with_acs() {
     run acs-config-check 0 -- "${g[@]}" config-check
     expect_line acs-config-check '^RESULT topology=PASS'
     expect_line acs-config-check '^RESULT acs_policy=PASS'
+    expect_line acs-config-check '^RESULT device_writes=PASS disabled'
+
+    # WRITE-UI-1: admin mode passes (UI switch decides, off by default); legacy true still fails.
+    cp "${env}" "${env}.orig"
+    printf 'NMSOLT_DEVICE_WRITES_ENABLED=admin\n' >> "${env}"
+    run acs-config-writes-admin 0 -- "${g[@]}" config-check
+    expect_line acs-config-writes-admin '^RESULT device_writes=PASS admin mode'
+    expect_line acs-config-writes-admin '^RESULT topology=PASS'
+    printf 'NMSOLT_DEVICE_WRITES_ENABLED=true\n' >> "${env}"
+    run acs-config-writes-true 1 -- "${g[@]}" config-check
+    expect_line acs-config-writes-true '^RESULT device_writes=FAIL'
+    mv "${env}.orig" "${env}"
+    chmod 600 "${env}"
     run acs-preflight-nodata 1 -- "${g[@]}" preflight
     expect_line acs-preflight-nodata '^RESULT data_dir_pg=FAIL missing'
     run acs-init-data 0 -- "${g[@]}" init-data

@@ -1,8 +1,7 @@
 <script setup>
 /*
- * Tombol aksi utama — tampilan baku (UI_DESIGN_SYSTEM, "Tampilan baku
- * lintas keluarga"): 44 px, rounded-xl, text-sm semibold tanpa uppercase, gradien
- * cyan -> sky. `size="sm"` = 34 px untuk kaki modal & bilah aksi massal.
+ * Tombol aksi utama: datar, token `primary` (UI-S2). 44 px di HP, 36 px di desktop;
+ * `size="sm"` = 32 px untuk kaki modal & bilah aksi massal.
  */
 import { computed } from 'vue';
 
@@ -11,13 +10,13 @@ const props = defineProps({
     size: { type: String, default: 'md' },
 });
 
-const sizeClass = computed(() => (props.size === 'sm' ? 'min-h-[34px] gap-1.5 rounded-lg px-3.5' : 'min-h-11 gap-2 rounded-xl px-5'));
+const sizeClass = computed(() => (props.size === 'sm' ? 'min-h-8 gap-1.5 rounded-md px-3' : 'min-h-11 gap-2 rounded-lg px-4 sm:min-h-9'));
 </script>
 
 <template>
     <button
         :type="type"
-        class="inline-flex items-center justify-center border border-transparent bg-linear-to-r from-cyan-500 to-sky-500 text-sm font-semibold text-onaccent shadow-md shadow-cyan-500/25 transition-all duration-150 hover:from-cyan-600 hover:to-sky-600 focus:outline-hidden focus-visible:ring-2 focus-visible:ring-cyan-400/60 focus-visible:ring-offset-2 focus-visible:ring-offset-canvas disabled:cursor-not-allowed disabled:opacity-50"
+        class="inline-flex items-center justify-center border border-transparent bg-primary text-sm font-medium text-primary-foreground shadow-xs transition-colors duration-150 hover:bg-primary/90 focus:outline-hidden focus-visible:ring-[3px] focus-visible:ring-ring/50 disabled:cursor-not-allowed disabled:opacity-50"
         :class="sizeClass"
     >
         <slot />

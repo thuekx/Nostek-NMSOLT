@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api\V1;
 
 use App\Http\Controllers\Controller;
+use App\Models\Scopes\PartnerOltScope;
 use App\Services\Dashboard\DashboardStatsService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\Cache;
@@ -24,37 +25,53 @@ class PublicStatusController extends Controller
     public function __invoke(): JsonResponse
     {
         $payload = Cache::remember('api.public.status', 30, function () {
-            $cards = $this->stats->statCards();
+            // UI-F1a: tamu hanya melihat OLT global organisasi instalasi, sama seperti bot
+            // Telegram global (bukan OLT organisasi lain atau OLT privat partner).
+            PartnerOltScope::restrictGuestToGlobalOlts();
 
-            $olts = collect($this->stats->oltStatuses())->map(fn (array $o) => [
-                'name' => $o['name'],
-                'reachable' => $o['reachable'],
-                'onu_total' => $o['onu_total'],
-                'onu_online' => $o['onu_online'],
-                'onu_offline' => $o['onu_offline'],
-                'last_polled_at' => $o['last_polled_at'],
-            ])->values()->all();
-
-            return [
-                'data' => [
-                    'olt' => [
-                        'total' => $cards['olt']['total'],
-                        'online' => $cards['olt']['online'],
-                        'offline' => $cards['olt']['offline'],
-                    ],
-                    'onu' => [
-                        'total' => $cards['onu']['total'],
-                        'online' => $cards['onu']['online'],
-                        'offline' => $cards['onu']['offline'],
-                    ],
-                    'online_share' => $cards['online_share'],
-                    'alarms' => ['active' => $cards['alarms']['total']],
-                    'olts' => $olts,
-                ],
-                'meta' => ['generated_at' => now()->toIso8601String()],
-            ];
+            try {
+                return $this->payload();
+            } finally {
+                PartnerOltScope::restrictGuestToGlobalOlts(false);
+            }
         });
 
         return response()->json($payload);
+    }
+
+    /**
+     * @return array<string, mixed>
+     */
+    private function payload(): array
+    {
+        $cards = $this->stats->statCards();
+
+        $olts = collect($this->stats->oltStatuses())->map(fn (array $o) => [
+            'name' => $o['name'],
+            'reachable' => $o['reachable'],
+            'onu_total' => $o['onu_total'],
+            'onu_online' => $o['onu_online'],
+            'onu_offline' => $o['onu_offline'],
+            'last_polled_at' => $o['last_polled_at'],
+        ])->values()->all();
+
+        return [
+            'data' => [
+                'olt' => [
+                    'total' => $cards['olt']['total'],
+                    'online' => $cards['olt']['online'],
+                    'offline' => $cards['olt']['offline'],
+                ],
+                'onu' => [
+                    'total' => $cards['onu']['total'],
+                    'online' => $cards['onu']['online'],
+                    'offline' => $cards['onu']['offline'],
+                ],
+                'online_share' => $cards['online_share'],
+                'alarms' => ['active' => $cards['alarms']['total']],
+                'olts' => $olts,
+            ],
+            'meta' => ['generated_at' => now()->toIso8601String()],
+        ];
     }
 }

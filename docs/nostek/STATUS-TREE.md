@@ -46,6 +46,17 @@ Nostek-NMSOLT — STANDALONE NETWORK PLATFORM / API PROVIDER
 |   TRF-4 live per-ONT traffic card on the ONU page via read-only CLI
 +-- WRITE-UI-1 [SOURCE PASS, PR #40 merged] admin switch for device writes in the UI
 |   (env false = hard off, admin = UI decides; global + timer, channel olt/acs, per-OLT block, audit)
++-- UI-F1 [DECIDED 2026-10-25] organisations + sites (docs/nostek/UI-F1-ORG-SITE-DESIGN.md v0.2, PR #49)
+|   +-- F1a [SOURCE PASS, PR open, owner merges] organizations/sites/organization_user, snmp_olts +
+|   |   audit_logs organization_id, backfill to one installation organisation, OrganizationScope on
+|   |   SnmpOlt and every snmp_olt_id model (other org = 404), installation settings only for the
+|   |   installation org, alarms/push/bot per org, public status = installation org; no visible change
+|   +-- F1b [SOURCE PASS, PR open, owner merges] /organization page (sites CRUD, OLT -> site), header picker
+|   |   Organisation > Site (desktop header, phone drawer; only when there is a choice), site filter on
+|   |   overview pages via `site.filter` (dashboard, OLT list, unconfigured, ONU monitor, Peta Fiber, map,
+|   |   ODP, alarms, field console); detail pages, forms and API are not filtered
+|   +-- F1c [NEXT] partners that own OLTs become organisations; per-organisation settings and bots
+|   +-- F1d [NEXT, launch gate] PostgreSQL RLS right after F1c (owner D3: no gap before launch)
 +-- UI-T1 [SOURCE PASS, PR #42 merged a47b020] redesign foundation: Tailwind v4 (CSS-first @theme), 23 semantic
 |   tokens (dark + light), shadcn-vue style kit on Reka UI (Components/ui), no visual change to
 |   existing pages (64 before/after screenshots)

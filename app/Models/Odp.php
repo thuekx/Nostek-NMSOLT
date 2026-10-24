@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Models\Scopes\OrganizationScope;
 use App\Models\Scopes\PartnerOltScope;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -11,6 +12,7 @@ class Odp extends Model
 {
     protected static function booted(): void
     {
+        static::addGlobalScope(new OrganizationScope);
         static::addGlobalScope(new PartnerOltScope);
     }
 

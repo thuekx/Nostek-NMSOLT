@@ -4,8 +4,10 @@ namespace App\Models;
 
 use App\Models\Concerns\Auditable;
 use App\Models\Scopes\DemoScope;
+use App\Models\Scopes\OrganizationScope;
 use App\Models\Scopes\PartnerOltScope;
 use App\Support\Freshness;
+use App\Support\OrganizationContext;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -64,8 +66,31 @@ class SnmpOlt extends Model
 
     protected static function booted(): void
     {
+        static::addGlobalScope(new OrganizationScope);
         static::addGlobalScope(new DemoScope);
         static::addGlobalScope(new PartnerOltScope);
+
+        // UI-F1: OLT baru masuk organisasi pembuatnya (console/seeder: organisasi instalasi).
+        // Sengaja tidak fillable: organisasi tidak pernah datang dari input form/API.
+        static::creating(function (SnmpOlt $olt) {
+            $olt->organization_id ??= app(OrganizationContext::class)->currentOrPrimaryId();
+        });
+    }
+
+    /**
+     * @return BelongsTo<Organization, $this>
+     */
+    public function organization(): BelongsTo
+    {
+        return $this->belongsTo(Organization::class);
+    }
+
+    /**
+     * @return BelongsTo<Site, $this>
+     */
+    public function site(): BelongsTo
+    {
+        return $this->belongsTo(Site::class);
     }
 
     /**

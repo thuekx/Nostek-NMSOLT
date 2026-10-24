@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Models\Scopes\OrganizationScope;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Support\Carbon;
@@ -13,6 +14,11 @@ use Illuminate\Support\Collection;
  */
 class OnuRxDaily extends Model
 {
+    protected static function booted(): void
+    {
+        static::addGlobalScope(new OrganizationScope);
+    }
+
     protected $table = 'onu_rx_daily';
 
     public $timestamps = false;

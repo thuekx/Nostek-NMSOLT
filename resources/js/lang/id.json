@@ -20,7 +20,8 @@
         "group_overview": "Ringkasan",
         "group_watch": "Pantauan",
         "network_tree": "Pohon jaringan",
-        "field_console": "Konsol lapangan"
+        "field_console": "Konsol lapangan",
+        "organization": "Organisasi & site"
     },
     "common": {
         "stale": "Basi",
@@ -2248,5 +2249,43 @@
         "onu_alarms_empty": "Tidak ada alarm aktif.",
         "port_wide": "Seluruh PON/ODP",
         "this_onu": "ONU ini"
+    },
+    "organization": {
+        "title": "Organisasi & site",
+        "subtitle": "Site (POP, datacenter, area) untuk mengelompokkan dan menyaring OLT. Batas akses tetap organisasi.",
+        "kind_isp": "ISP",
+        "kind_reseller": "Reseller",
+        "kind_demo": "Demo",
+        "cc_linked": "Tertaut ke Control Center",
+        "sites_title": "Site",
+        "sites_hint": "Kunci site sama dengan site key di Control Center, supaya keduanya bisa ditautkan.",
+        "no_sites": "Belum ada site. Tanpa site, semua halaman menampilkan seluruh organisasi seperti biasa.",
+        "site_kind_pop": "POP",
+        "site_kind_datacenter": "Datacenter",
+        "site_kind_area": "Area",
+        "olt_count": "{n} OLT",
+        "edit": "Ubah site",
+        "delete": "Hapus",
+        "cancel": "Batal",
+        "save": "Simpan",
+        "add_site": "Tambah site",
+        "delete_title": "Hapus site {name}?",
+        "delete_message": "Site ini belum berisi OLT.",
+        "delete_message_olts": "{n} OLT di site ini akan menjadi tanpa site. Data OLT tidak berubah.",
+        "field_name": "Nama",
+        "field_key": "Kunci (site key)",
+        "field_kind": "Jenis",
+        "field_region": "Wilayah",
+        "field_timezone": "Zona waktu",
+        "key_hint": "Kunci: huruf kecil, angka dan tanda minus, unik di organisasi ini (contoh: juwana, pati-kota).",
+        "olts_title": "OLT per site",
+        "olts_hint": "Semua OLT sudah punya site.",
+        "olts_unassigned": "{n} OLT belum punya site.",
+        "no_olts": "Belum ada OLT.",
+        "no_site": "Tanpa site",
+        "olt_site_label": "Site untuk {olt}",
+        "picker_org": "Organisasi",
+        "picker_site": "Site",
+        "all_sites": "Semua site"
     }
 }

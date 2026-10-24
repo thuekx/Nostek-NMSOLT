@@ -5,8 +5,10 @@ namespace App\Models;
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
 use App\Enums\UserRole;
 use App\Models\Concerns\Auditable;
+use App\Models\Scopes\OrganizationScope;
 use App\Models\Scopes\PartnerOltScope;
 use App\Services\Genieacs\GenieacsDeviceSyncService;
+use App\Support\OrganizationContext;
 use Database\Factories\UserFactory;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
@@ -29,6 +31,8 @@ class User extends Authenticatable
     protected $auditExclude = [
         'last_notifications_read_at',
         'email_verified_at',
+        // UI-F1b: site penyaring di header = preferensi tampilan, bukan aksi.
+        'current_site_id',
     ];
 
     /**
@@ -68,6 +72,53 @@ class User extends Authenticatable
             'password' => 'hashed',
             'role' => UserRole::class,
         ];
+    }
+
+    protected static function booted(): void
+    {
+        // UI-F1: user baru menjadi anggota organisasi pembuatnya (admin yang login), atau
+        // organisasi instalasi bila dibuat dari console/seeder. Tanpa keanggotaan user tidak
+        // melihat OLT apa pun ({@see OrganizationScope}).
+        static::created(function (User $user) {
+            $context = app(OrganizationContext::class);
+            $organizationId = $context->currentOrPrimaryId();
+
+            if ($organizationId === null) {
+                return;
+            }
+
+            DB::table('organization_user')->insertOrIgnore([
+                'organization_id' => $organizationId,
+                'user_id' => $user->id,
+                'role' => Organization::roleFor($user->role),
+                'created_at' => now(),
+                'updated_at' => now(),
+            ]);
+
+            DB::table('users')->where('id', $user->id)->update(['current_organization_id' => $organizationId]);
+            $user->setRawAttributes(['current_organization_id' => $organizationId] + $user->getAttributes(), true);
+            $context->forget($user);
+        });
+    }
+
+    /**
+     * @return BelongsToMany<Organization, $this>
+     */
+    public function organizations(): BelongsToMany
+    {
+        return $this->belongsToMany(Organization::class)->withPivot('role')->withTimestamps();
+    }
+
+    /** Organisasi yang sedang dipakai user ini (UI-F1); null = tanpa keanggotaan. */
+    public function currentOrganizationId(): ?string
+    {
+        return app(OrganizationContext::class)->organizationOf($this);
+    }
+
+    /** Apakah user ini anggota organisasi yang sedang berlaku (untuk binding {user}: lain = 404). */
+    public function sharesOrganizationWith(User $other): bool
+    {
+        return app(OrganizationContext::class)->isMember($other, $this->currentOrganizationId());
     }
 
     public function auditLabel(): string

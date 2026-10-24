@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Models\Scopes\OrganizationScope;
 use App\Models\Scopes\PartnerOltScope;
 use App\Services\OltPortLabelService;
 use Illuminate\Database\Eloquent\Model;
@@ -14,6 +15,7 @@ class OltPortLabel extends Model
 {
     protected static function booted(): void
     {
+        static::addGlobalScope(new OrganizationScope);
         static::addGlobalScope(new PartnerOltScope);
     }
 

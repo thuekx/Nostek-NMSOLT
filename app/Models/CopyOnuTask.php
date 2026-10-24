@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Jobs\CopyOnusToPortJob;
+use App\Models\Scopes\OrganizationScope;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
@@ -14,6 +15,11 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  */
 class CopyOnuTask extends Model
 {
+    protected static function booted(): void
+    {
+        static::addGlobalScope(new OrganizationScope);
+    }
+
     protected $fillable = [
         'snmp_olt_id',
         'created_by',

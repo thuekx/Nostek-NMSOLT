@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Models\Scopes\OrganizationScope;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Support\Carbon;
@@ -14,6 +15,11 @@ use Illuminate\Support\Facades\DB;
  */
 class PonTrafficSample extends Model
 {
+    protected static function booted(): void
+    {
+        static::addGlobalScope(new OrganizationScope);
+    }
+
     public $timestamps = false;
 
     protected $fillable = ['snmp_olt_id', 'slot', 'port', 'in_bps', 'out_bps', 'polled_at'];
